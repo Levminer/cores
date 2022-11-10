@@ -4,12 +4,13 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap rescap">
+  xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10"
+  IgnorableNamespaces="uap rescap iot">
 
   <Identity
     Name="83b79910-b1cf-44c3-9253-a7ba10a088b0"
     Publisher="CN=Levente Lőrik"
-    Version="1.0.0.0" />
+    Version="0.1.0.0" />
 
   <Properties>
     <DisplayName>Cores</DisplayName>
@@ -43,6 +44,8 @@
   </Applications>
 
   <Capabilities>
-    <rescap:Capability Name="runFullTrust" />
+	<rescap:Capability Name="runFullTrust" />
+	<rescap:Capability Name="allowElevation" />
+    <iot:Capability Name="systemManagement"/>
   </Capabilities>
 </Package>
