@@ -1,5 +1,6 @@
 ﻿using cores;
 using Microsoft.UI.Xaml;
+using Microsoft.Web.WebView2.Core;
 using System;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -13,32 +14,20 @@ public sealed partial class MainWindow : Window {
 	public MainWindow() {
 		InitializeComponent();
 
-		// Set titlebar
-		SetTitleBar(AppTitleBar);
-		ExtendsContentIntoTitleBar = true;
-
 		// Set Mica
 		var mica = new Mica(this);
 		mica.TrySetSystemBackdrop();
+
+		Init();
 	}
 
-	private void mainNavigation_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args) {
-		if (args.IsSettingsSelected) {
-			// contentFrame5.Navigate(typeof(SampleSettingsPage));
-		} else {
-			var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
-			var selectedItemTag = ((string)selectedItem.Tag);
-			sender.Header = selectedItem.Content;
+	private async void Init() {
+		await webView.EnsureCoreWebView2Async();
 
-			var pageName = $"Cores.Views.{selectedItemTag}";
-			Type pageType = Type.GetType(pageName);
-			mainContent.Navigate(pageType);
-		}
-	}
+		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
+			"appassets", "assets", CoreWebView2HostResourceAccessKind.Allow);
 
-	private void mainNavigation_Loaded(object sender, RoutedEventArgs e) {
-		var pageName = "Cores.Views.CPUView";
-		Type pageType = Type.GetType(pageName);
-		mainContent.Navigate(pageType);
+		webView.Source = new Uri("http://appassets/dist/index.html");
+		webView.CoreWebView2.OpenDevToolsWindow();
 	}
 }
