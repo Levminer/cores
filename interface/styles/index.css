@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body */
+body {
+	color: white;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background-color: rgb(10, 10, 10);
+	/* background: url("../../images/mica.png"); */
+	line-height: normal;
+	font-family: system-ui, Arial;
+	/* user-select: none; */
+	outline: none !important;
+}
+
+/* headings */
+h1 {
+	font-size: 64px;
+	font-weight: 700;
+}
+
+/* main card */
+h2 {
+	font-size: 32px;
+	font-weight: 700;
+}
+
+h3 {
+	font-size: 24px;
+	color: #d3cfcf;
+}
+
+/* secondary card */
+h4 {
+	font-size: 24px;
+	font-weight: 500;
+}
+
+h5 {
+	font-size: 18px;
+	color: #d3cfcf;
+}
+
+/* backdrops */
+.transparent-900 {
+	background-color: hsla(0, 0%, 100%, 5.12%);
+}
+
+.transparent-800 {
+	background-color: hsla(0, 0%, 100%, 3.26%);
+}
+
+.transparent-input:hover {
+	background-color: hsla(0, 0%, 100%, 15%);
+}
+
+.transparent-input:focus {
+	background-color: hsla(0, 0%, 100%, 15%);
+}
+
+.transparent-900-hover:hover {
+	background-color: hsla(0, 0%, 100%, 5%);
+}
+
+.transparentHover:hover {
+	background-color: hsla(0, 0%, 100%, 5%);
+}
+
+.gauge-delta-number {
+	visibility: hidden;
+}
