@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: ["./interface/**/*.{svelte,ts,js}"],
+	content: ["./interface/**/*.{svelte,ts,js}", "./index.html"],
 	theme: {
 		extend: {
 			colors: {
@@ -41,4 +41,4 @@ module.exports = {
 			strategy: "class",
 		}),
 	],
-};
+}
