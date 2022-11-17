@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 namespace Cores;
 
 public partial class App : Application {
+	private Window m_window;
 	internal static HardwareInfo GlobalHardwareInfo;
 
 	public App() {
@@ -16,6 +17,4 @@ public partial class App : Application {
 		m_window = new MainWindow();
 		m_window.Activate();
 	}
-
-	private Window m_window;
 }

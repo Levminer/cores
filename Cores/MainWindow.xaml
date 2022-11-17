@@ -9,7 +9,6 @@
 	mc:Ignorable="d">
 
 	<Grid>
-
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
@@ -19,12 +18,15 @@
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
+		<TextBlock x:Name="text" Text="I am a TextBlock" />
+
 		<controls:WebView2
 			x:Name="webView"
 			Grid.Row="1"
 			Grid.ColumnSpan="2"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
+			DefaultBackgroundColor="Transparent"
 			Source="https://www.microsoft.com" />
 
 	</Grid>
