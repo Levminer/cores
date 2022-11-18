@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+	.button {
+		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white py-4 px-6 text-xl font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+	}
+
+	.smallButton {
+		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white py-2 px-3 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+	}
+
+	.menuButton {
+		@apply transparent-900-hover mx-3 mt-0 mb-3 flex h-20 w-20 flex-col items-center justify-center rounded-xl font-medium outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
+	}
+
+	.selectedMenuButton {
+		@apply mx-3 mb-3 flex h-20 w-20 flex-col items-center justify-center rounded-xl bg-white font-medium !text-black outline-none duration-200 ease-linear hover:bg-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
+	}
+
+	.select {
+		@apply form-select cursor-pointer rounded-2xl !border-white py-4 text-xl font-medium text-black !ring-transparent duration-200 ease-linear hover:bg-gray-200 focus-visible:!ring-4 focus-visible:!ring-popup-magenta;
+	}
+
+	.input {
+		@apply transparent-900 transparent-input rounded-xl p-4 text-xl text-white outline-none duration-200 ease-linear;
+	}
+
+	.dialog {
+		@apply mx-auto w-2/4 select-none rounded-2xl bg-gray-700 p-10 text-white;
+	}
+
+	.focusRing {
+		@apply outline-none focus-visible:ring-4 focus-visible:ring-popup-magenta;
+	}
+
+	.checkbox {
+		@apply focusRing form-checkbox relative -top-0.5 transform cursor-pointer rounded-full border-2 text-black outline-none duration-200 ease-in focus:ring-transparent motion-reduce:transform-none motion-reduce:transition-none;
+	}
+}
+
 /* body */
 body {
 	color: white;
@@ -70,6 +108,7 @@ h5 {
 	background-color: hsla(0, 0%, 100%, 5%);
 }
 
-.gauge-delta-number {
+.gauge-delta {
 	visibility: hidden;
 }
+

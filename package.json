@@ -8,7 +8,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite interface",
-		"build": "node scripts/build.js"
+		"build": "vite build interface"
 	},
 	"devDependencies": {
 		"@carbon/charts-svelte": "^1.6.1",
