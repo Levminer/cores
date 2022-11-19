@@ -26,7 +26,6 @@
 			Grid.ColumnSpan="2"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
-			DefaultBackgroundColor="Transparent"
 			Source="https://www.microsoft.com" />
 
 	</Grid>

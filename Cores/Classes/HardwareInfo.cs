@@ -3,10 +3,35 @@ using System.Collections.Generic;
 
 namespace cores;
 
+public class CPUTempI {
+	public string name {
+		get; set;
+	}
+	public string value {
+		get; set;
+	}
+	public string min {
+		get; set;
+	}
+	public string max {
+		get; set;
+	}
+}
+
+public class RAMI {
+	public string name {
+		get; set;
+	}
+	public string value {
+		get; set;
+	}
+}
+
 public class HardwareInfo {
 	public HardwareUpdater refresher = new();
-	public List<ISensor> CPUTemp = new();
+	public List<CPUTempI> CPUTemp = new();
 	public List<ISensor> CPULoad = new();
+	public List<RAMI> RAM = new();
 	public string CPUName;
 	public string GPUName;
 	public Computer computer = new() {
@@ -41,12 +66,28 @@ public class HardwareInfo {
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
-				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu") {
-					CPUTemp.Add(sensor[j]);
+				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
+					var temp = new CPUTempI {
+						value = sensor[j].Value.ToString(),
+						min = sensor[j].Min.ToString(),
+						max = sensor[j].Max.ToString(),
+						name = sensor[j].Name.ToString(),
+					};
+
+					CPUTemp.Add(temp);
 				}
 
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString() == "Cpu") {
 					CPULoad.Add(sensor[j]);
+				}
+
+				if (computerHardware[i].HardwareType.ToString() == "Memory") {
+					var temp = new RAMI {
+						name = sensor[j].Name.ToString(),
+						value = sensor[j].Value.ToString(),
+					};
+
+					RAM.Add(temp);
 				}
 			}
 		}

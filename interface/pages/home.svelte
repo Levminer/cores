@@ -1,11 +1,10 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
-	<p id="test" class="bg-red-500">{"{}"}</p>
+	<p id="test" class="hidden">{"{}"}</p>
 
 	<div class="flex justify-evenly items-center gap-5 mx-5">
 		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
-					class="!mx-auto flex justify-center items-center"
 					data={CPUData}
 					options={{
 						height: "150px",
@@ -51,7 +50,7 @@
 			<div class="mt-10">
 				<h2>RAM</h2>
 				<div class="mt-5">
-					<h3>mem</h3>
+					<h3>{RAM}</h3>
 				</div>
 			</div>
 		</div>
@@ -86,6 +85,7 @@
 
 	<div class="flex justify-evenly items-center gap-5 mx-5 mt-10 pb-20">
 		<div class="rounded-xl p-10 text-lef transparent-800 w-1/3 text-white">
+			<h3 class="mb-5">CPU Temperature: {AVGTemp} C</h3>
 			{#each CPUTemp as { value, min, max }, i}
 				<h5>Core #{i}</h5>
 				<MeterChart
@@ -146,6 +146,8 @@
 
 	$: CPUName = "CPUName"
 	$: GPUName = "GPUName"
+	$: RAM = "8GB/16GB"
+	$: AVGTemp = 50
 	$: CPUTemp = [
 		{
 			value: 50,
@@ -192,15 +194,23 @@
 			CPUData[0].value = parseInt(input.CPULoadLast)
 			RAMData[0].value = parseInt(input.RAM[2].value)
 
+			//RAM = `${input.RAM}`
+
 			CPUTemp = []
 
+			let temp = 0
+
 			for (let i = 0; i < input.CPUTemp.length; i++) {
+				temp += parseInt(input.CPUTemp[i].value)
+
 				CPUTemp.push({
 					value: parseInt(input.CPUTemp[i].value),
 					min: parseInt(input.CPUTemp[i].min),
 					max: parseInt(input.CPUTemp[i].max),
 				})
 			}
+
+			AVGTemp = Math.trunc(temp / input.CPUTemp.length)
 		}
 	}
 

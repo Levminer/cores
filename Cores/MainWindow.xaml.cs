@@ -2,15 +2,12 @@
 using Microsoft.UI.Xaml;
 using Microsoft.Web.WebView2.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using System.Text.Json;
 
 namespace Cores;
-/// <summary>
-/// An empty window that can be used on its own or navigated to within a Frame.
-/// </summary>
+
 public sealed partial class MainWindow : Window {
 	private readonly DispatcherTimer dispatcherTimer;
 
@@ -47,7 +44,6 @@ public sealed partial class MainWindow : Window {
 		//webView.Source = new Uri("http://appassets/dist/index.html");
 		webView.Source = new Uri("http://localhost:3000/");
 		webView.CoreWebView2.OpenDevToolsWindow();
-		webView.DefaultBackgroundColor = Windows.UI.Color.FromArgb(0, 1, 0, 0);
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;
 	}
@@ -57,26 +53,18 @@ public sealed partial class MainWindow : Window {
 	}
 
 	public async void Send() {
-		var CPUTemp = App.GlobalHardwareInfo.CPUTemp;
+		var test = JsonSerializer.Serialize(new Data());
 
-		var temp = "";
+		text.Text = test;
 
-		for (int i = 0; i < CPUTemp.Count; i++) {
-			// $"\n{hardver[i].Name}, value: {hardver[i].Value}, type {hardver[i].SensorType} - {hardver[i].Identifier} Min: {hardver[i].Min} Max: {hardver[i].Max}"
-			if (CPUTemp[i].Name.StartsWith("CPU Core")) {
-				temp += $"\nCore {i}: {CPUTemp[i].Value} Min: {CPUTemp[i].Min} Max: {CPUTemp[i].Max}";
-			} else {
-				break;
-			}
-		}
-
-		temp += App.GlobalHardwareInfo.GPUName;
-
-		text.Text = temp;
-
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#test').textContent = `{temp}`");
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#CPUName').textContent = `{App.GlobalHardwareInfo.CPUName}`");
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#GPUName').textContent = `{App.GlobalHardwareInfo.GPUName}`");
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#CPULoad').textContent = `{App.GlobalHardwareInfo.CPULoad.Last().Value}`");
+		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#test').textContent = `{test}`");
 	}
+}
+
+public class Data {
+	public string CPUName { get; set; } = App.GlobalHardwareInfo.CPUName;
+	public string CPULoadLast { get; set; } = App.GlobalHardwareInfo.CPULoad.Last().Value.ToString();
+	public string GPUName { get; set; } = App.GlobalHardwareInfo.GPUName;
+	public List<CPUTempI> CPUTemp { get; set; } = App.GlobalHardwareInfo.CPUTemp;
+	public List<RAMI> RAM { get; set; } = App.GlobalHardwareInfo.RAM;
 }
