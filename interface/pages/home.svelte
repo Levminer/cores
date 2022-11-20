@@ -50,7 +50,7 @@
 			<div class="mt-10">
 				<h2>RAM</h2>
 				<div class="mt-5">
-					<h3>{RAM}</h3>
+					<h3>Generic Memory</h3>
 				</div>
 			</div>
 		</div>
@@ -83,9 +83,9 @@
 		</div>
 	</div>
 
-	<div class="flex justify-evenly items-center gap-5 mx-5 mt-10 pb-20">
-		<div class="rounded-xl p-10 text-lef transparent-800 w-1/3 text-white">
-			<h3 class="mb-5">CPU Temperature: {AVGTemp} C</h3>
+	<div class="flex justify-evenly gap-5 mx-5 mt-10 pb-20">
+		<div class="rounded-xl p-10 text-left transparent-800 w-1/3 text-white">
+			<h3 class="mb-5">CPU Temperature: {AvgCPUTemp} °C</h3>
 			{#each CPUTemp as { value, min, max }, i}
 				<h5>Core #{i}</h5>
 				<MeterChart
@@ -128,8 +128,9 @@
 				/>{/each}
 		</div>
 
-		<div class="rounded-xl p-10 text-center transparent-800 w-1/3">
-			<h1>yo</h1>
+		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
+			<h3 class="mb-5">Used memory: {RAM}</h3>
+			<h3 class="mb-5">Used virtual memory: {VRAM}</h3>
 		</div>
 
 		<div class="rounded-xl p-10 text-center transparent-800 w-1/3">
@@ -143,11 +144,13 @@
 	import { ChartTheme } from "@carbon/charts/interfaces"
 	import { onDestroy, onMount } from "svelte"
 	let interval: NodeJS.Timer
+	let first = false
 
 	$: CPUName = "CPUName"
 	$: GPUName = "GPUName"
 	$: RAM = "8GB/16GB"
-	$: AVGTemp = 50
+	$: VRAM = "10GB/20GB"
+	$: AvgCPUTemp = 50
 	$: CPUTemp = [
 		{
 			value: 50,
@@ -189,35 +192,47 @@
 		console.log(input)
 
 		if (Object.keys(input).length !== 0) {
-			CPUName = input.CPUName
-			GPUName = input.GPUName
-			CPUData[0].value = parseInt(input.CPULoadLast)
-			RAMData[0].value = parseInt(input.RAM[2].value)
+			if (first == false) {
+				CPUName = input.CPUName
+				GPUName = input.GPUName
 
-			//RAM = `${input.RAM}`
+				first = true
+			}
 
-			CPUTemp = []
+			CPUData[0].value = Math.round(input.CPULoadLast)
+			RAMData[0].value = Math.round(input.RAM[2].value)
+
+			let usedRAM = input.RAM[0].value
+			let availableRAM = input.RAM[1].value
+
+			let usedVRAM = input.RAM[3].value
+			let availableVRAM = input.RAM[4].value
+
+			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)}GB`
+			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)}GB`
 
 			let temp = 0
 
 			for (let i = 0; i < input.CPUTemp.length; i++) {
-				temp += parseInt(input.CPUTemp[i].value)
+				temp += input.CPUTemp[i].value
 
-				CPUTemp.push({
-					value: parseInt(input.CPUTemp[i].value),
-					min: parseInt(input.CPUTemp[i].min),
-					max: parseInt(input.CPUTemp[i].max),
-				})
+				CPUTemp[i] = {
+					value: input.CPUTemp[i].value,
+					min: input.CPUTemp[i].min,
+					max: input.CPUTemp[i].max,
+				}
 			}
 
-			AVGTemp = Math.trunc(temp / input.CPUTemp.length)
+			AvgCPUTemp = Math.trunc(temp / input.CPUTemp.length)
 		}
 	}
 
 	onMount(() => {
+		init()
+
 		interval = setInterval(() => {
 			init()
-		}, 1000)
+		}, 2500)
 	})
 
 	onDestroy(() => {

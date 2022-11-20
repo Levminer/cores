@@ -7,13 +7,13 @@ public class CPUTempI {
 	public string name {
 		get; set;
 	}
-	public string value {
+	public float value {
 		get; set;
 	}
-	public string min {
+	public float min {
 		get; set;
 	}
-	public string max {
+	public float max {
 		get; set;
 	}
 }
@@ -22,7 +22,7 @@ public class RAMI {
 	public string name {
 		get; set;
 	}
-	public string value {
+	public float value {
 		get; set;
 	}
 }
@@ -54,6 +54,10 @@ public class HardwareInfo {
 	public void GetInfo() {
 		var computerHardware = computer.Hardware;
 
+		CPUTemp.Clear();
+		CPULoad.Clear();
+		RAM.Clear();
+
 		for (int i = 0; i < computerHardware.Count; i++) {
 			var sensor = computerHardware[i].Sensors;
 
@@ -68,9 +72,9 @@ public class HardwareInfo {
 			for (int j = 0; j < sensor.Length; j++) {
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
 					var temp = new CPUTempI {
-						value = sensor[j].Value.ToString(),
-						min = sensor[j].Min.ToString(),
-						max = sensor[j].Max.ToString(),
+						value = float.Parse(sensor[j].Value.ToString()),
+						min = float.Parse(sensor[j].Min.ToString()),
+						max = float.Parse(sensor[j].Max.ToString()),
 						name = sensor[j].Name.ToString(),
 					};
 
@@ -84,7 +88,7 @@ public class HardwareInfo {
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
 					var temp = new RAMI {
 						name = sensor[j].Name.ToString(),
-						value = sensor[j].Value.ToString(),
+						value = float.Parse(sensor[j].Value.ToString()),
 					};
 
 					RAM.Add(temp);
@@ -95,6 +99,7 @@ public class HardwareInfo {
 
 	public void Refresh() {
 		refresher.VisitComputer(computer);
+		GetInfo();
 	}
 
 	public void Stop() {

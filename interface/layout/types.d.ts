@@ -4,18 +4,18 @@
 declare global {
 	interface RAM {
 		name: string
-		value: string
+		value: number
 	}
 
 	interface CPUTemp {
-		value: string
-		min: string
-		max: string
+		value: number
+		min: number
+		max: number
 	}
 
 	interface HardwareInfo {
 		CPUName: string
-		CPULoadLast: string
+		CPULoadLast: number
 		GPUName: string
 		CPUTemp: CPUTemp[]
 		RAM: RAM[]

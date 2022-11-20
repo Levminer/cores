@@ -63,7 +63,7 @@ public sealed partial class MainWindow : Window {
 
 public class Data {
 	public string CPUName { get; set; } = App.GlobalHardwareInfo.CPUName;
-	public string CPULoadLast { get; set; } = App.GlobalHardwareInfo.CPULoad.Last().Value.ToString();
+	public float CPULoadLast { get; set; } = float.Parse(App.GlobalHardwareInfo.CPULoad.Last().Value.ToString());
 	public string GPUName { get; set; } = App.GlobalHardwareInfo.GPUName;
 	public List<CPUTempI> CPUTemp { get; set; } = App.GlobalHardwareInfo.CPUTemp;
 	public List<RAMI> RAM { get; set; } = App.GlobalHardwareInfo.RAM;
