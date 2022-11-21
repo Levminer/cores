@@ -2,8 +2,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.Web.WebView2.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 namespace Cores;
@@ -24,7 +22,7 @@ public sealed partial class MainWindow : Window {
 		// Refresh hardware info
 		dispatcherTimer = new DispatcherTimer();
 		dispatcherTimer.Tick += dispatcherTimer_Tick;
-		dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+		dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
 		dispatcherTimer.Start();
 	}
 
@@ -41,9 +39,8 @@ public sealed partial class MainWindow : Window {
 		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
 			"appassets", "assets", CoreWebView2HostResourceAccessKind.Allow);
 
-		//webView.Source = new Uri("http://appassets/dist/index.html");
+		// webView.Source = new Uri("http://appassets/assets/index.html");
 		webView.Source = new Uri("http://localhost:3000/");
-		webView.CoreWebView2.OpenDevToolsWindow();
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;
 	}
@@ -53,18 +50,10 @@ public sealed partial class MainWindow : Window {
 	}
 
 	public async void Send() {
-		var test = JsonSerializer.Serialize(new Data());
+		var test = JsonSerializer.Serialize(App.GlobalHardwareInfo.API);
 
 		text.Text = test;
 
 		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#test').textContent = `{test}`");
 	}
-}
-
-public class Data {
-	public string CPUName { get; set; } = App.GlobalHardwareInfo.CPUName;
-	public float CPULoadLast { get; set; } = float.Parse(App.GlobalHardwareInfo.CPULoad.Last().Value.ToString());
-	public string GPUName { get; set; } = App.GlobalHardwareInfo.GPUName;
-	public List<CPUTempI> CPUTemp { get; set; } = App.GlobalHardwareInfo.CPUTemp;
-	public List<RAMI> RAM { get; set; } = App.GlobalHardwareInfo.RAM;
 }

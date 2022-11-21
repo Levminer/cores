@@ -193,37 +193,37 @@
 
 		if (Object.keys(input).length !== 0) {
 			if (first == false) {
-				CPUName = input.CPUName
-				GPUName = input.GPUName
+				CPUName = input.CPU.name
+				GPUName = input.GPU.name
 
 				first = true
 			}
 
-			CPUData[0].value = Math.round(input.CPULoadLast)
-			RAMData[0].value = Math.round(input.RAM[2].value)
+			CPUData[0].value = Math.round(input.CPU.lastLoad)
+			RAMData[0].value = Math.round(input.RAM.load[2].value)
 
-			let usedRAM = input.RAM[0].value
-			let availableRAM = input.RAM[1].value
+			let usedRAM = input.RAM.load[0].value
+			let availableRAM = input.RAM.load[1].value
 
-			let usedVRAM = input.RAM[3].value
-			let availableVRAM = input.RAM[4].value
+			let usedVRAM = input.RAM.load[3].value
+			let availableVRAM = input.RAM.load[4].value
 
 			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)}GB`
 			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)}GB`
 
 			let temp = 0
 
-			for (let i = 0; i < input.CPUTemp.length; i++) {
-				temp += input.CPUTemp[i].value
+			for (let i = 0; i < input.CPU.temperature.length; i++) {
+				temp += input.CPU.temperature[i].value
 
 				CPUTemp[i] = {
-					value: input.CPUTemp[i].value,
-					min: input.CPUTemp[i].min,
-					max: input.CPUTemp[i].max,
+					value: input.CPU.temperature[i].value,
+					min: input.CPU.temperature[i].min,
+					max: input.CPU.temperature[i].max,
 				}
 			}
 
-			AvgCPUTemp = Math.trunc(temp / input.CPUTemp.length)
+			AvgCPUTemp = Math.trunc(temp / input.CPU.temperature.length)
 		}
 	}
 

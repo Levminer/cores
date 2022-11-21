@@ -1,10 +1,11 @@
 ﻿using cores;
 using Microsoft.UI.Xaml;
+using WinUIEx;
 
 namespace Cores;
 
 public partial class App : Application {
-	private Window m_window;
+	private Window MainWindow;
 	internal static HardwareInfo GlobalHardwareInfo;
 
 	public App() {
@@ -14,7 +15,13 @@ public partial class App : Application {
 	}
 
 	protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {
-		m_window = new MainWindow();
-		m_window.Activate();
+		MainWindow = new MainWindow();
+		MainWindow.Activate();
+		MainWindow.Maximize();
+		MainWindow.Title = "Cores";
+
+		var windowManager = WinUIEx.WindowManager.Get(MainWindow);
+		windowManager.MinWidth = 1000;
+		windowManager.MinHeight = 600;
 	}
 }
