@@ -1,7 +1,7 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
 	<p id="test" class="hidden">{"{}"}</p>
 
-	<div class="flex justify-evenly items-center gap-5 mx-5">
+	<div class="flex justify-evenly gap-5 mx-5">
 		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
@@ -58,7 +58,7 @@
 		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
-					data={CPUData}
+					data={GPUData}
 					options={{
 						height: "150px",
 						width: "100%",
@@ -84,7 +84,7 @@
 	</div>
 
 	<div class="flex justify-evenly gap-5 mx-5 mt-10 pb-20">
-		<div class="rounded-xl p-10 text-left transparent-800 w-1/3 text-white">
+		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
 			<h3 class="mb-5">CPU Temperature: {AvgCPUTemp} °C</h3>
 			{#each CPUTemp as { value, min, max }, i}
 				<h5>Core #{i}</h5>
@@ -133,8 +133,8 @@
 			<h3 class="mb-5">Used virtual memory: {VRAM}</h3>
 		</div>
 
-		<div class="rounded-xl p-10 text-center transparent-800 w-1/3">
-			<h1>yo</h1>
+		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
+			<h3 class="mb-5">GPU Temperature: {GPUTemp} °C</h3>
 		</div>
 	</div>
 </div>
@@ -148,6 +148,7 @@
 
 	$: CPUName = "CPUName"
 	$: GPUName = "GPUName"
+	$: GPUTemp = 50
 	$: RAM = "8GB/16GB"
 	$: VRAM = "10GB/20GB"
 	$: AvgCPUTemp = 50
@@ -165,6 +166,17 @@
 	]
 
 	$: CPUData = [
+		{
+			group: "value",
+			value: 10,
+		},
+		{
+			group: "delta",
+			value: 1,
+		},
+	]
+
+	$: GPUData = [
 		{
 			group: "value",
 			value: 10,
@@ -199,9 +211,12 @@
 				first = true
 			}
 
+			// Load graphs
 			CPUData[0].value = Math.round(input.CPU.lastLoad)
+			GPUData[0].value = Math.round(input.GPU.lastLoad)
 			RAMData[0].value = Math.round(input.RAM.load[2].value)
 
+			// RAM
 			let usedRAM = input.RAM.load[0].value
 			let availableRAM = input.RAM.load[1].value
 
@@ -211,6 +226,7 @@
 			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)}GB`
 			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)}GB`
 
+			// CPU temperature
 			let temp = 0
 
 			for (let i = 0; i < input.CPU.temperature.length; i++) {
@@ -224,6 +240,7 @@
 			}
 
 			AvgCPUTemp = Math.trunc(temp / input.CPU.temperature.length)
+			GPUTemp = input.GPU.temperature[0].value
 		}
 	}
 

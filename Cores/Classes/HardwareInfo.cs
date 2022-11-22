@@ -27,7 +27,7 @@ public class CPUAPI {
 		get; set;
 	}
 
-	public List<ISensor> Load = new();
+	public List<ISensor> load = new();
 
 	public float lastLoad {
 		get; set;
@@ -84,7 +84,8 @@ public class HardwareInfo {
 		var computerHardware = computer.Hardware;
 
 		API.CPU.temperature.Clear();
-		API.CPU.Load.Clear();
+		API.CPU.load.Clear();
+		API.GPU.load.Clear();
 		API.RAM.load.Clear();
 		API.GPU.temperature.Clear();
 
@@ -101,6 +102,7 @@ public class HardwareInfo {
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
+				// CPU temperature
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
 					var temp = new CostumSensor {
 						value = float.Parse(sensor[j].Value.ToString()),
@@ -112,6 +114,7 @@ public class HardwareInfo {
 					API.CPU.temperature.Add(temp);
 				}
 
+				// GPU temperature
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new CostumSensor {
 						name = sensor[j].Name.ToString(),
@@ -121,10 +124,21 @@ public class HardwareInfo {
 					API.GPU.temperature.Add(temp);
 				}
 
+				// CPU load
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString() == "Cpu") {
-					API.CPU.Load.Add(sensor[j]);
+					API.CPU.load.Add(sensor[j]);
 				}
 
+				// GPU load
+				if (sensor[j].SensorType.ToString() == "Load" &&
+					computerHardware[i].HardwareType.ToString().Contains("Gpu") &&
+					!sensor[j].Name.Contains("Power") &&
+					!sensor[j].Name.Contains("Core") &&
+					!sensor[j].Name.Contains("Controller")) {
+					API.GPU.load.Add(sensor[j]);
+				}
+
+				// Memory load
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
 					var temp = new CostumSensor {
 						name = sensor[j].Name.ToString(),
@@ -136,7 +150,8 @@ public class HardwareInfo {
 			}
 		}
 
-		API.CPU.lastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
+		API.CPU.lastLoad = float.Parse(API.CPU.load.Last().Value.ToString());
+		API.GPU.lastLoad = float.Parse(API.GPU.load.Max(t => t.Value).Value.ToString());
 	}
 
 	public void Refresh() {
