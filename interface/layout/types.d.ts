@@ -2,23 +2,34 @@
 /// <reference types="svelte" />
 
 declare global {
-	interface RAM {
+	interface Load {
 		name: string
 		value: number
 	}
 
-	interface CPUTemp {
+	interface Temp {
+		name?: string
 		value: number
 		min: number
 		max: number
 	}
 
 	interface HardwareInfo {
-		CPUName: string
-		CPULoadLast: number
-		GPUName: string
-		CPUTemp: CPUTemp[]
-		RAM: RAM[]
+		CPU: {
+			name: string
+			temperature: Temp[]
+			lastLoad: number
+		}
+
+		GPU: {
+			name: string
+			temperature: Temp[]
+			lastLoad: number
+		}
+
+		RAM: {
+			load: Load[]
+		}
 	}
 }
 

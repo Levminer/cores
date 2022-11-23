@@ -1,6 +1,4 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
-	<p id="test" class="hidden">{"{}"}</p>
-
 	<div class="flex justify-evenly gap-5 mx-5">
 		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
@@ -23,7 +21,7 @@
 			<div class="mt-10">
 				<h2>CPU</h2>
 				<div class="mt-5">
-					<h3>{CPUName}</h3>
+					<h3>{$hardwareInfo.CPU.name}</h3>
 				</div>
 			</div>
 		</div>
@@ -77,7 +75,7 @@
 			<div class="mt-10">
 				<h2>GPU</h2>
 				<div class="mt-5">
-					<h3>{GPUName}</h3>
+					<h3>{$hardwareInfo.GPU.name}</h3>
 				</div>
 			</div>
 		</div>
@@ -86,7 +84,7 @@
 	<div class="flex justify-evenly gap-5 mx-5 mt-10 pb-20">
 		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
 			<h3 class="mb-5">CPU Temperature: {AvgCPUTemp} °C</h3>
-			{#each CPUTemp as { value, min, max }, i}
+			{#each $hardwareInfo.CPU.temperature as { value, min, max }, i}
 				<h5>Core #{i}</h5>
 				<MeterChart
 					data={[
@@ -143,27 +141,15 @@
 	import { GaugeChart, MeterChart } from "@carbon/charts-svelte"
 	import { ChartTheme } from "@carbon/charts/interfaces"
 	import { onDestroy, onMount } from "svelte"
+	import { hardwareInfo, setHardwareInfo } from "../stores/hardwareInfo"
 	let interval: NodeJS.Timer
-	let first = false
 
-	$: CPUName = "CPUName"
-	$: GPUName = "GPUName"
+	$: hardwareInfo
+
 	$: GPUTemp = 50
 	$: RAM = "8GB/16GB"
 	$: VRAM = "10GB/20GB"
 	$: AvgCPUTemp = 50
-	$: CPUTemp = [
-		{
-			value: 50,
-			min: 40,
-			max: 60,
-		},
-		{
-			value: 55,
-			min: 45,
-			max: 65,
-		},
-	]
 
 	$: CPUData = [
 		{
@@ -199,17 +185,12 @@
 	]
 
 	const init = () => {
-		const input: HardwareInfo = JSON.parse(document.querySelector("#test").textContent)
-
-		console.log(input)
+		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 
 		if (Object.keys(input).length !== 0) {
-			if (first == false) {
-				CPUName = input.CPU.name
-				GPUName = input.GPU.name
+			setHardwareInfo(input)
 
-				first = true
-			}
+			console.log(input)
 
 			// Load graphs
 			CPUData[0].value = Math.round(input.CPU.lastLoad)
@@ -231,12 +212,6 @@
 
 			for (let i = 0; i < input.CPU.temperature.length; i++) {
 				temp += input.CPU.temperature[i].value
-
-				CPUTemp[i] = {
-					value: input.CPU.temperature[i].value,
-					min: input.CPU.temperature[i].min,
-					max: input.CPU.temperature[i].max,
-				}
 			}
 
 			AvgCPUTemp = Math.trunc(temp / input.CPU.temperature.length)

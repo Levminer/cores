@@ -53,6 +53,7 @@ body {
 	font-family: system-ui, Arial;
 	/* user-select: none; */
 	outline: none !important;
+	overflow: hidden;
 }
 
 /* headings */
@@ -111,4 +112,3 @@ h5 {
 .gauge-delta {
 	visibility: hidden;
 }
-
