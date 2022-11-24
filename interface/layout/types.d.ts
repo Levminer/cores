@@ -14,6 +14,12 @@ declare global {
 		max: number
 	}
 
+	interface Disk {
+		name: string
+		temperature: number
+		usedSpace: number
+	}
+
 	interface HardwareInfo {
 		CPU: {
 			name: string
@@ -29,6 +35,14 @@ declare global {
 
 		RAM: {
 			load: Load[]
+		}
+
+		OS: {
+			name: string
+		}
+
+		STORAGE: {
+			disks: Disk[]
 		}
 	}
 }

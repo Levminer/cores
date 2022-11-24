@@ -33,6 +33,20 @@ const defaultHardwareInfo: HardwareInfo = {
 	RAM: {
 		load: [],
 	},
+
+	OS: {
+		name: "Windows 11",
+	},
+
+	STORAGE: {
+		disks: [
+			{
+				name: "Disk",
+				temperature: 20,
+				usedSpace: 50,
+			},
+		],
+	},
 }
 
 // export const hardwareInfo = writable<HardwareInfo>(defaultHardwareInfo)
