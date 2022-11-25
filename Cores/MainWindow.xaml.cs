@@ -54,6 +54,6 @@ public sealed partial class MainWindow : Window {
 
 		text.Text = test;
 
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#test').textContent = `{test}`");
+		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{test}`");
 	}
 }

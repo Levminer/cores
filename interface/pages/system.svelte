@@ -10,6 +10,7 @@
 			<h3>CPU: {$hardwareInfo.CPU.name}</h3>
 			<h3>RAM: {($hardwareInfo.RAM.load[0].value + $hardwareInfo.RAM.load[1].value).toFixed(1)} GB</h3>
 			<h3>GPU: {$hardwareInfo.GPU.name}</h3>
+			<h3>MB: {$hardwareInfo.MB.name}</h3>
 			<h3>OS: {$hardwareInfo.OS.name}</h3>
 		</div>
 

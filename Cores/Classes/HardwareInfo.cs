@@ -1,65 +1,13 @@
-﻿using LibreHardwareMonitor.Hardware;
-using System.Collections.Generic;
+﻿using Cores;
+using LibreHardwareMonitor.Hardware;
 using System.Linq;
+using HI = Hardware.Info;
 
 namespace cores;
 
-public class CostumSensor {
-	public string name {
-		get; set;
-	}
-
-	public float value {
-		get; set;
-	}
-
-	public float min {
-		get; set;
-	}
-
-	public float max {
-		get; set;
-	}
-}
-
-public class CPUAPI {
-	public string name {
-		get; set;
-	}
-
-	public List<ISensor> load = new();
-
-	public float lastLoad {
-		get; set;
-	}
-
-	public List<CostumSensor> temperature {
-		get; set;
-	} = new();
-}
-
-public class RAMAPI {
-	public List<CostumSensor> load {
-		get; set;
-	} = new();
-}
-
-public class API {
-	public CPUAPI CPU {
-		get; set;
-	} = new();
-
-	public CPUAPI GPU {
-		get; set;
-	} = new();
-
-	public RAMAPI RAM {
-		get; set;
-	} = new();
-}
-
 public class HardwareInfo {
 	public HardwareUpdater refresher = new();
+	public HI.IHardwareInfo HwInfo = new HI.HardwareInfo();
 	public Computer computer = new() {
 		IsCpuEnabled = true,
 		IsGpuEnabled = true,
@@ -73,7 +21,6 @@ public class HardwareInfo {
 	} = new();
 
 	public HardwareInfo() {
-
 		computer.Open();
 		computer.Accept(refresher);
 
@@ -88,10 +35,13 @@ public class HardwareInfo {
 		API.GPU.load.Clear();
 		API.RAM.load.Clear();
 		API.GPU.temperature.Clear();
+		API.STORAGE.disks.Clear();
 
+		var diskID = -1;
 
 		for (int i = 0; i < computerHardware.Count; i++) {
 			var sensor = computerHardware[i].Sensors;
+			var diskLoad = false;
 
 			if (computerHardware[i].HardwareType.ToString() == "Cpu") {
 				API.CPU.name = computerHardware[i].Name;
@@ -99,6 +49,19 @@ public class HardwareInfo {
 
 			if (computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 				API.GPU.name = computerHardware[i].Name;
+			}
+
+			if (computerHardware[i].HardwareType.ToString() == "Storage") {
+				var temp = new Disk {
+					name = computerHardware[i].Name,
+				};
+
+				API.STORAGE.disks.Add(temp);
+				diskID++;
+			}
+
+			if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
+				API.MB.name = computerHardware[i].Name;
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
@@ -140,18 +103,33 @@ public class HardwareInfo {
 
 				// Memory load
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
-					var temp = new CostumSensor {
+					var temp = new NameValue {
 						name = sensor[j].Name.ToString(),
 						value = float.Parse(sensor[j].Value.ToString()),
 					};
 
 					API.RAM.load.Add(temp);
 				}
+
+				// Disk info
+				if (computerHardware[i].HardwareType.ToString() == "Storage") {
+					if (sensor[j].SensorType.ToString() == "Temperature") {
+						API.STORAGE.disks[diskID].temperature = float.Parse(sensor[j].Value.ToString());
+					} else if (sensor[j].SensorType.ToString() == "Load" && diskLoad == false) {
+						API.STORAGE.disks[diskID].usedSpace = float.Parse(sensor[j].Value.ToString());
+						diskLoad = true;
+					}
+				}
 			}
 		}
 
 		API.CPU.lastLoad = float.Parse(API.CPU.load.Last().Value.ToString());
 		API.GPU.lastLoad = float.Parse(API.GPU.load.Max(t => t.Value).Value.ToString());
+
+		// HwInfo
+		HwInfo.RefreshOperatingSystem();
+
+		API.OS.name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
 	}
 
 	public void Refresh() {

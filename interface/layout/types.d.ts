@@ -44,6 +44,10 @@ declare global {
 		STORAGE: {
 			disks: Disk[]
 		}
+
+		MB: {
+			name: string
+		}
 	}
 }
 

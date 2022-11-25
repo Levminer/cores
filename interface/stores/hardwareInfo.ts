@@ -19,7 +19,7 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 
 	GPU: {
-		name: "CPUName",
+		name: "GPUName",
 		lastLoad: 15,
 		temperature: [
 			{
@@ -47,6 +47,10 @@ const defaultHardwareInfo: HardwareInfo = {
 			},
 		],
 	},
+
+	MB: {
+		name: "MBName"
+	}
 }
 
 // export const hardwareInfo = writable<HardwareInfo>(defaultHardwareInfo)
