@@ -1,6 +1,6 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
-	<div class="flex justify-evenly gap-5 mx-5">
-		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+	<div class="flex justify-evenly gap-5 mx-10 pt-10">
+		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
 					data={CPUData}
@@ -26,7 +26,7 @@
 			</div>
 		</div>
 
-		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
 					data={RAMData}
@@ -53,7 +53,7 @@
 			</div>
 		</div>
 
-		<div class="mt-20 rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
 				<GaugeChart
 					data={GPUData}
@@ -81,58 +81,91 @@
 		</div>
 	</div>
 
-	<div class="flex justify-evenly gap-5 mx-5 mt-10 pb-20">
-		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
-			<h3 class="mb-5">CPU Temperature: {AvgCPUTemp} °C</h3>
-			{#each $hardwareInfo.CPU.temperature as { value, min, max }, i}
-				<h5>Core #{i}</h5>
-				<MeterChart
-					data={[
-						{
-							group: "Min",
-							value: min,
-						},
-						{
-							group: "Current",
-							value: value,
-						},
-						{
-							group: "Max",
-							value: max,
-						},
-					]}
-					options={{
-						height: "50px",
-						toolbar: {
-							enabled: false,
-						},
-						legend: {
-							enabled: false,
-						},
-						meter: {
-							proportional: {
-								unit: "C",
-								total: 300,
+	<div class="flex gap-5 justify-evenly mx-10 mt-10 pb-10">
+		<!-- CPU info -->
+		<div class="text-left w-1/3">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
+					<h2>CPU Temperature</h2>
+				</div>
+				<h3 class="mb-5">Avg. Temperature: {AvgCPUTemp} °C</h3>
+				{#each $hardwareInfo.CPU.temperature as { value, min, max }, i}
+					<h5>Core #{i}</h5>
+					<MeterChart
+						data={[
+							{
+								group: "Min",
+								value: min,
 							},
-							showLabels: false,
-						},
-						color: {
-							pairing: {
-								option: 2,
+							{
+								group: "Current",
+								value: value,
 							},
-						},
-						theme: ChartTheme.G100,
-					}}
-				/>{/each}
+							{
+								group: "Max",
+								value: max,
+							},
+						]}
+						options={{
+							height: "50px",
+							toolbar: {
+								enabled: false,
+							},
+							legend: {
+								enabled: false,
+							},
+							meter: {
+								proportional: {
+									unit: "C",
+									total: 300,
+								},
+								showLabels: false,
+							},
+							color: {
+								pairing: {
+									option: 2,
+								},
+							},
+							theme: ChartTheme.G100,
+						}}
+					/>{/each}
+			</div>
 		</div>
 
-		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
-			<h3 class="mb-5">Used memory: {RAM}</h3>
-			<h3 class="mb-5">Used virtual memory: {VRAM}</h3>
+		<!-- RAM info -->
+		<div class="text-left w-1/3">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
+						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
+					</svg>
+					<h2>RAM Usage</h2>
+				</div>
+				<h3>Used memory: {RAM}</h3>
+				<h3>Used virtual memory: {VRAM}</h3>
+			</div>
 		</div>
 
-		<div class="rounded-xl p-10 text-left transparent-800 w-1/3">
-			<h3 class="mb-5">GPU Temperature: {GPUTemp} °C</h3>
+		<!-- GPU info -->
+		<div class="text-left w-1/3">
+			<div class="p-10 transparent-800 rounded-xl mb-10">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
+					<h2>GPU Temperature</h2>
+				</div>
+				<h3>GPU Temperature: {GPUTemp} °C</h3>
+			</div>
+
+			<div class="p-10 transparent-800 rounded-xl">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
+					<h2>GPU Fans</h2>
+				</div>
+				{#each $hardwareInfo.GPU.fans as { value }, i}
+					<h3>Fan #{i}: {value}%</h3>
+				{/each}
+			</div>
 		</div>
 	</div>
 </div>

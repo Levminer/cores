@@ -31,6 +31,7 @@ declare global {
 			name: string
 			temperature: Temp[]
 			lastLoad: number
+			fans: Load[]
 		}
 
 		RAM: {

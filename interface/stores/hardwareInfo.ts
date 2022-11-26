@@ -28,6 +28,7 @@ const defaultHardwareInfo: HardwareInfo = {
 				max: 60,
 			},
 		],
+		fans: [],
 	},
 
 	RAM: {
@@ -49,8 +50,8 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 
 	MB: {
-		name: "MBName"
-	}
+		name: "MBName",
+	},
 }
 
 // export const hardwareInfo = writable<HardwareInfo>(defaultHardwareInfo)
