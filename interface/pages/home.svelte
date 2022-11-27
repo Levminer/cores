@@ -2,21 +2,7 @@
 	<div class="flex justify-evenly gap-5 mx-10 pt-10">
 		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
-				<GaugeChart
-					data={CPUData}
-					options={{
-						height: "150px",
-						toolbar: {
-							enabled: false,
-						},
-						color: {
-							scale: {
-								value: "#00a2ed",
-							},
-						},
-						theme: ChartTheme.G100,
-					}}
-				/>
+				<GaugeChart data={CPUData} i={0} />
 			</div>
 			<div class="mt-10">
 				<h2>CPU</h2>
@@ -28,22 +14,7 @@
 
 		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
-				<GaugeChart
-					data={RAMData}
-					options={{
-						height: "150px",
-						width: "100%",
-						toolbar: {
-							enabled: false,
-						},
-						color: {
-							scale: {
-								value: "#00a2ed",
-							},
-						},
-						theme: ChartTheme.G100,
-					}}
-				/>
+				<GaugeChart data={RAMData} i={1} />
 			</div>
 			<div class="mt-10">
 				<h2>RAM</h2>
@@ -55,22 +26,7 @@
 
 		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
 			<div>
-				<GaugeChart
-					data={GPUData}
-					options={{
-						height: "150px",
-						width: "100%",
-						toolbar: {
-							enabled: false,
-						},
-						color: {
-							scale: {
-								value: "#00a2ed",
-							},
-						},
-						theme: ChartTheme.G100,
-					}}
-				/>
+				<GaugeChart data={GPUData} i={2} />
 			</div>
 			<div class="mt-10">
 				<h2>GPU</h2>
@@ -107,28 +63,7 @@
 								value: max,
 							},
 						]}
-						options={{
-							height: "50px",
-							toolbar: {
-								enabled: false,
-							},
-							legend: {
-								enabled: false,
-							},
-							meter: {
-								proportional: {
-									unit: "C",
-									total: 300,
-								},
-								showLabels: false,
-							},
-							color: {
-								pairing: {
-									option: 2,
-								},
-							},
-							theme: ChartTheme.G100,
-						}}
+						{i}
 					/>{/each}
 			</div>
 		</div>
@@ -142,8 +77,8 @@
 					</svg>
 					<h2>RAM Usage</h2>
 				</div>
-				<h3>Used memory: {RAM}</h3>
-				<h3>Used virtual memory: {VRAM}</h3>
+				<h3>Memory: {RAM}</h3>
+				<h3>Virtual memory: {VRAM}</h3>
 			</div>
 		</div>
 
@@ -163,7 +98,7 @@
 					<h2>GPU Fans</h2>
 				</div>
 				{#each $hardwareInfo.GPU.fans as { value }, i}
-					<h3>Fan #{i}: {value}%</h3>
+					<h3>Fan #{i}: {value} RPM</h3>
 				{/each}
 			</div>
 		</div>
@@ -171,17 +106,17 @@
 </div>
 
 <script lang="ts">
-	import { GaugeChart, MeterChart } from "@carbon/charts-svelte"
-	import { ChartTheme } from "@carbon/charts/interfaces"
 	import { onDestroy, onMount } from "svelte"
 	import { hardwareInfo, setHardwareInfo } from "../stores/hardwareInfo"
 	let interval: NodeJS.Timer
+	import GaugeChart from "../components/gaugeChart.svelte"
+	import MeterChart from "../components/meterChart.svelte"
 
 	$: hardwareInfo
 
 	$: GPUTemp = 50
-	$: RAM = "8GB/16GB"
-	$: VRAM = "10GB/20GB"
+	$: RAM = "8GB/16 GB"
+	$: VRAM = "10GB/20 GB"
 	$: AvgCPUTemp = 50
 
 	$: CPUData = [
@@ -237,8 +172,8 @@
 			let usedVRAM = input.RAM.load[3].value
 			let availableVRAM = input.RAM.load[4].value
 
-			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)}GB`
-			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)}GB`
+			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)} GB`
+			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)} GB`
 
 			// CPU temperature
 			let temp = 0
@@ -257,7 +192,7 @@
 
 		interval = setInterval(() => {
 			init()
-		}, 2500)
+		}, 1000)
 	})
 
 	onDestroy(() => {
