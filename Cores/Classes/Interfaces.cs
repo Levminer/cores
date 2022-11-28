@@ -61,6 +61,12 @@ public class CPUAPI {
 	} = new();
 }
 
+public class GPUAPI : CPUAPI {
+	public List<NameValue> fans {
+		get; set;
+	} = new();
+}
+
 public class RAMAPI {
 	public List<NameValue> load {
 		get; set;
@@ -90,7 +96,7 @@ public class API {
 		get; set;
 	} = new();
 
-	public CPUAPI GPU {
+	public GPUAPI GPU {
 		get; set;
 	} = new();
 
