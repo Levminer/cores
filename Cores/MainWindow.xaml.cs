@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.Web.WebView2.Core;
 using System;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace Cores;
@@ -39,8 +40,9 @@ public sealed partial class MainWindow : Window {
 		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
 			"appassets", "assets", CoreWebView2HostResourceAccessKind.Allow);
 
-		// webView.Source = new Uri("http://appassets/assets/index.html");
-		webView.Source = new Uri("http://localhost:3000/");
+		if (Debugger.IsAttached) {
+			webView.Source = new Uri("http://localhost:3000");
+		}
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;
 	}
@@ -52,7 +54,7 @@ public sealed partial class MainWindow : Window {
 	public async void Send() {
 		var test = JsonSerializer.Serialize(App.GlobalHardwareInfo.API);
 
-		text.Text = test;
+		// text.Text = test;
 
 		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{test}`");
 	}

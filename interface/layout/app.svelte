@@ -19,4 +19,9 @@
 	import Settings from "../pages/settings.svelte"
 	import System from "../pages/system.svelte"
 	import RouteTransition from "../components/routeTransition.svelte"
+	import { onMount } from "svelte"
+
+	onMount(()=>{
+		router.goto("/")
+	})
 </script>
