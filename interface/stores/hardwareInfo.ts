@@ -32,7 +32,20 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 
 	RAM: {
-		load: [],
+		load: [
+			{
+				name: "1",
+				value: 10,
+			},
+			{
+				name: "1",
+				value: 10,
+			},
+			{
+				name: "1",
+				value: 10,
+			},
+		],
 	},
 
 	OS: {
