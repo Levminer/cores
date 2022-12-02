@@ -1,10 +1,10 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
 	<div class="flex justify-evenly gap-5 mx-10 pt-10">
-		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
-			<div>
-				<GaugeChart data={CPUData} i={0} />
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+			<div class="w-full">
+				<GaugeChart load={$hardwareInfo.CPU.lastLoad} />
 			</div>
-			<div class="mt-10">
+			<div>
 				<h2>CPU</h2>
 				<div class="mt-5">
 					<h3>{$hardwareInfo.CPU.name}</h3>
@@ -46,7 +46,9 @@
 					<h2>CPU Temperature</h2>
 				</div>
 				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
-				<TestChart data={CPUTemps} categories={CPUCategories} />
+				<div>
+					<MeterChart temps={CPUTemps} categories={CPUCategories} />
+				</div>
 			</div>
 		</div>
 
@@ -101,38 +103,19 @@
 	$: VRAM = "10GB/20 GB"
 	$: AvgCPUTemp = 50
 
-	$: CPUData = [
+	$: CPUTemps = [
 		{
-			group: "value",
-			value: 10,
+			data: [30, 35],
 		},
 		{
-			group: "delta",
-			value: 1,
-		},
-	]
-
-	$: GPUData = [
-		{
-			group: "value",
-			value: 10,
+			data: [40, 45],
 		},
 		{
-			group: "delta",
-			value: 1,
+			data: [50, 55],
 		},
 	]
 
-	$: RAMData = [
-		{
-			group: "value",
-			value: 10,
-		},
-		{
-			group: "delta",
-			value: 1,
-		},
-	]
+	$: CPUCategories = ["Core #0 (45 °C)", "Core #1 (45 °C)"]
 
 	const init = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
@@ -141,11 +124,6 @@
 			setHardwareInfo(input)
 
 			console.log(input)
-
-			// Load graphs
-			CPUData[0].value = Math.round(input.CPU.lastLoad)
-			GPUData[0].value = Math.round(input.GPU.lastLoad)
-			RAMData[0].value = Math.round(input.RAM.load[2].value)
 
 			// RAM
 			let usedRAM = input.RAM.load[0].value
@@ -166,6 +144,15 @@
 
 			AvgCPUTemp = Math.trunc(temp / input.CPU.temperature.length)
 			GPUTemp = input.GPU.temperature[0].value
+
+			// CPU graph
+			for (let i = 0; i < input.CPU.temperature.length; i++) {
+				CPUTemps[0].data[i] = input.CPU.temperature[i].min
+				CPUTemps[1].data[i] = input.CPU.temperature[i].value
+				CPUTemps[2].data[i] = input.CPU.temperature[i].max
+
+				CPUCategories[i] = `Core #${i} (${input.CPU.temperature[i].value} °C)`
+			}
 		}
 	}
 

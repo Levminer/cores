@@ -1,4 +1,3 @@
-<!-- <canvas id="gaugeChart{i}" /> -->
 <Doughnut {data} {options} plugins={pluginTest} />
 
 <script lang="ts">
@@ -62,7 +61,7 @@
 		datasets: [
 			{
 				data: [percentage, total],
-				backgroundColor: ["#0077FF", "#262626"],
+				backgroundColor: ["#00bbf9", "#262626"],
 			},
 		],
 	}
