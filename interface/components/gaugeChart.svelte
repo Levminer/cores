@@ -1,34 +1,69 @@
-<div id="gaugeChart{i}" style="width: 100%; height: 100%;" />
+<!-- <canvas id="gaugeChart{i}" /> -->
+<Doughnut {data} {options} plugins={pluginTest} />
 
 <script lang="ts">
-	import { ChartTheme } from "@carbon/charts/interfaces"
-	import { GaugeChart } from "@carbon/charts"
-	import { onMount } from "svelte"
+	import { Chart, registerables } from "chart.js"
+	import type { ChartOptions } from "chart.js"
+	import { Doughnut } from "svelte-chartjs"
 
-	export let data
-    export let i
+	export let load
 
-	onMount(() => {
-		const options = {
-			height: "150px",
-			toolbar: {
+	Chart.register(...registerables)
+
+	let options: ChartOptions<"doughnut"> = {
+		responsive: true,
+		maintainAspectRatio: false,
+		rotation: 270,
+		circumference: 180,
+		cutout: "90%",
+		plugins: {
+			legend: {
+				display: false,
+			},
+			tooltip: {
 				enabled: false,
 			},
-			color: {
-				scale: {
-					value: "#00a2ed",
-				},
+		},
+		elements: {
+			arc: {
+				borderWidth: 0,
 			},
-			theme: ChartTheme.G100,
-		}
+		},
+	}
 
-		var chart = new GaugeChart(document.getElementById(`gaugeChart${i}`), {
-			data,
-			options,
-		})
+	let pluginTest = [
+		{
+			id: "text",
+			beforeDraw: function (chart, a, b) {
+				var width = chart.width,
+					height = chart.height,
+					ctx = chart.ctx
 
-		setInterval(() => {
-			chart.model.setData(data)
-		}, 1000)
-	})
+				ctx.restore()
+				var fontSize = (height / 114).toFixed(2)
+				ctx.font = fontSize + "em sans-serif"
+				ctx.textBaseline = "middle"
+				ctx.fillStyle = "white"
+
+				var text = percentage.toString() + "%",
+					textX = Math.round((width - ctx.measureText(text).width) / 2),
+					textY = (height + 30) / 2
+
+				ctx.fillText(text, textX, textY)
+				ctx.save()
+			},
+		},
+	]
+
+	$: percentage = parseInt(load)
+	$: total = percentage - 100
+
+	$: data = {
+		datasets: [
+			{
+				data: [percentage, total],
+				backgroundColor: ["#0077FF", "#262626"],
+			},
+		],
+	}
 </script>

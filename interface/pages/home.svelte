@@ -12,11 +12,11 @@
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
-			<div>
-				<GaugeChart data={RAMData} i={1} />
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+			<div class="w-full">
+				<GaugeChart load={$hardwareInfo.RAM.load[2].value} />
 			</div>
-			<div class="mt-10">
+			<div>
 				<h2>RAM</h2>
 				<div class="mt-5">
 					<h3>Generic Memory</h3>
@@ -24,11 +24,11 @@
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
-			<div>
-				<GaugeChart data={GPUData} i={2} />
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+			<div class="w-full">
+				<GaugeChart load={$hardwareInfo.GPU.lastLoad} />
 			</div>
-			<div class="mt-10">
+			<div>
 				<h2>GPU</h2>
 				<div class="mt-5">
 					<h3>{$hardwareInfo.GPU.name}</h3>
@@ -45,26 +45,8 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>CPU Temperature</h2>
 				</div>
-				<h3 class="mb-5">Avg. Temperature: {AvgCPUTemp} °C</h3>
-				{#each $hardwareInfo.CPU.temperature as { value, min, max }, i}
-					<h5>Core #{i}</h5>
-					<MeterChart
-						data={[
-							{
-								group: "Min",
-								value: min,
-							},
-							{
-								group: "Current",
-								value: value,
-							},
-							{
-								group: "Max",
-								value: max,
-							},
-						]}
-						{i}
-					/>{/each}
+				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
+				<TestChart data={CPUTemps} categories={CPUCategories} />
 			</div>
 		</div>
 
