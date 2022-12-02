@@ -92,9 +92,22 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte"
 	import { hardwareInfo, setHardwareInfo } from "../stores/hardwareInfo"
-	let interval: NodeJS.Timer
 	import GaugeChart from "../components/gaugeChart.svelte"
 	import MeterChart from "../components/meterChart.svelte"
+
+	let observer: MutationObserver
+
+	// Watch for changes in the DOM
+	observer = new MutationObserver(() => {
+		init()
+	})
+
+	// Start observing the target
+	observer.observe(document.querySelector("#api"), {
+		attributes: true,
+		childList: true,
+		characterData: true,
+	})
 
 	$: hardwareInfo
 
@@ -158,13 +171,9 @@
 
 	onMount(() => {
 		init()
-
-		interval = setInterval(() => {
-			init()
-		}, 1000)
 	})
 
 	onDestroy(() => {
-		clearInterval(interval)
+		observer.disconnect()
 	})
 </script>
