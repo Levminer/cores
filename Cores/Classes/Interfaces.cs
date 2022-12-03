@@ -1,5 +1,6 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using System.Collections.Generic;
+using HI = Hardware.Info;
 
 namespace Cores;
 
@@ -69,6 +70,10 @@ public class GPUAPI : CPUAPI {
 
 public class RAMAPI {
 	public List<NameValue> load {
+		get; set;
+	} = new();
+
+	public List<HI.Memory> modules {
 		get; set;
 	} = new();
 }

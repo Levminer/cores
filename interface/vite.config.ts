@@ -4,7 +4,6 @@ import sveltePreprocess from "svelte-preprocess"
 
 export default defineConfig({
 	plugins: [svelte({ preprocess: sveltePreprocess() })],
-	optimizeDeps: { include: ["@carbon/charts"] },
 	base: "",
 	server: {
 		port: 3000,

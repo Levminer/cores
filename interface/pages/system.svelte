@@ -7,11 +7,11 @@
 				</svg>
 				<h2 class="mb-5">System</h2>
 			</div>
-			<h3>CPU: {$hardwareInfo.CPU.name}</h3>
-			<h3>RAM: {($hardwareInfo.RAM.load[0].value + $hardwareInfo.RAM.load[1].value).toFixed(1)} GB</h3>
-			<h3>GPU: {$hardwareInfo.GPU.name}</h3>
-			<h3>MB: {$hardwareInfo.MB.name}</h3>
-			<h3>OS: {$hardwareInfo.OS.name}</h3>
+			<h3>CPU: {$hardwareInfo.cpu.name}</h3>
+			<h3>RAM: {($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value).toFixed(1)} GB</h3>
+			<h3>GPU: {$hardwareInfo.gpu.name}</h3>
+			<h3>MB: {$hardwareInfo.mb.name}</h3>
+			<h3>OS: {$hardwareInfo.os.name}</h3>
 		</div>
 
 		<div class="my-20 rounded-xl p-10 text-left w-1/3 flex flex-col transparent-800">
@@ -19,7 +19,7 @@
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /><line x1="6" y1="16" x2="6.01" y2="16" /><line x1="10" y1="16" x2="10.01" y2="16" /></svg>
 				<h2 class="mb-5">Disks</h2>
 			</div>
-			{#each $hardwareInfo.STORAGE.disks as { name, temperature, usedSpace }}
+			{#each $hardwareInfo.storage.disks as { name, temperature, usedSpace }}
 				<div class="mb-5">
 					<h3>Name: {name}</h3>
 					<h3>Temperature: {temperature} °C</h3>

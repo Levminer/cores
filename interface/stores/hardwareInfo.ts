@@ -1,7 +1,7 @@
 import { writable, get } from "svelte/store"
 
 const defaultHardwareInfo: HardwareInfo = {
-	CPU: {
+	cpu: {
 		name: "CPUName",
 		lastLoad: 15,
 		temperature: [
@@ -18,7 +18,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		],
 	},
 
-	GPU: {
+	gpu: {
 		name: "GPUName",
 		lastLoad: 15,
 		temperature: [
@@ -31,7 +31,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		fans: [],
 	},
 
-	RAM: {
+	ram: {
 		load: [
 			{
 				name: "1",
@@ -46,13 +46,14 @@ const defaultHardwareInfo: HardwareInfo = {
 				value: 10,
 			},
 		],
+		modules: [],
 	},
 
-	OS: {
+	os: {
 		name: "Windows 11",
 	},
 
-	STORAGE: {
+	storage: {
 		disks: [
 			{
 				name: "Disk",
@@ -62,7 +63,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		],
 	},
 
-	MB: {
+	mb: {
 		name: "MBName",
 	},
 }

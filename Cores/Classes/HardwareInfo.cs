@@ -139,8 +139,10 @@ public class HardwareInfo {
 
 		// HwInfo
 		HwInfo.RefreshOperatingSystem();
+		HwInfo.RefreshMemoryList();
 
 		API.OS.name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
+		API.RAM.modules = HwInfo.MemoryList;
 	}
 
 	public void Refresh() {

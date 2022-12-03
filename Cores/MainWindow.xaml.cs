@@ -52,7 +52,12 @@ public sealed partial class MainWindow : Window {
 	}
 
 	public async void Send() {
-		var test = JsonSerializer.Serialize(App.GlobalHardwareInfo.API);
+		var serializeOptions = new JsonSerializerOptions {
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			WriteIndented = true
+		};
+
+		var test = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, serializeOptions);
 
 		// text.Text = test;
 

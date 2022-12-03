@@ -20,33 +20,46 @@ declare global {
 		usedSpace: number
 	}
 
+	interface RAMModule {
+		bankLabel: string
+		capacity: number
+		formFactor: number
+		manufacturer: string
+		maxVoltage: number
+		minVoltage: number
+		partNumber: string
+		serialNumber: string
+		speed: number
+	}
+
 	interface HardwareInfo {
-		CPU: {
+		cpu: {
 			name: string
 			temperature: Temp[]
 			lastLoad: number
 		}
 
-		GPU: {
+		gpu: {
 			name: string
 			temperature: Temp[]
 			lastLoad: number
 			fans: Load[]
 		}
 
-		RAM: {
+		ram: {
 			load: Load[]
+			modules: RAMModule[]
 		}
 
-		OS: {
+		os: {
 			name: string
 		}
 
-		STORAGE: {
+		storage: {
 			disks: Disk[]
 		}
 
-		MB: {
+		mb: {
 			name: string
 		}
 	}
