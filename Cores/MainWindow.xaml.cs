@@ -38,10 +38,10 @@ public sealed partial class MainWindow : Window {
 		await webView.EnsureCoreWebView2Async();
 
 		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
-			"appassets", "assets", CoreWebView2HostResourceAccessKind.Allow);
+			"app.example", "assets", CoreWebView2HostResourceAccessKind.Allow);
 
-		if (Debugger.IsAttached) {
-			webView.Source = new Uri("http://localhost:3000");
+		if (!Debugger.IsAttached) {
+			webView.Source = new Uri("http://app.example/assets/index.html");
 		}
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;

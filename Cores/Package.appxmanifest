@@ -5,16 +5,17 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10"
-  IgnorableNamespaces="uap rescap iot">
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  IgnorableNamespaces="uap rescap iot mp">
 
   <Identity
-    Name="83b79910-b1cf-44c3-9253-a7ba10a088b0"
-    Publisher="CN=Levente Lőrik"
+    Name="16050Levminer.Cores-Hardwaremonitor"
+    Publisher="CN=B765AB4D-AD3E-473D-BE98-14C9D93F7EA7"
     Version="0.1.0.0" />
 
   <Properties>
-    <DisplayName>Cores</DisplayName>
-    <PublisherDisplayName>Levente Lőrik</PublisherDisplayName>
+    <DisplayName>Cores - Hardware monitor</DisplayName>
+    <PublisherDisplayName>Levminer</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,13 +33,15 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Cores"
+        DisplayName="Cores - Hardware monitor"
         Description="Cores"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
@@ -48,4 +51,6 @@
 	<rescap:Capability Name="allowElevation" />
     <iot:Capability Name="systemManagement"/>
   </Capabilities>
+
+  <mp:PhoneIdentity PhonePublisherId="00000000-0000-0000-0000-000000000000" PhoneProductId="b46c0fe0-12fb-448d-8d8b-de8d009509fb"/>
 </Package>

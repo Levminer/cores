@@ -26,6 +26,6 @@
 			Grid.ColumnSpan="2"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
-			Source="http://appassets/assets/index.html" />
+			Source="http://localhost:3000" />
 	</Grid>
 </Window>
