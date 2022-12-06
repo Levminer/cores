@@ -126,8 +126,6 @@
 		characterData: true,
 	})
 
-	$: hardwareInfo
-
 	$: GPUTemp = 50
 	$: RAM = "8GB/16 GB"
 	$: VRAM = "10GB/20 GB"
@@ -135,17 +133,17 @@
 
 	$: CPUTemps = [
 		{
-			data: [30, 35],
+			data: $hardwareInfo.cpu.temperature.map((temp) => temp.min),
 		},
 		{
-			data: [40, 45],
+			data: $hardwareInfo.cpu.temperature.map((temp) => temp.value),
 		},
 		{
-			data: [50, 55],
+			data: $hardwareInfo.cpu.temperature.map((temp) => temp.max),
 		},
 	]
 
-	$: CPUCategories = ["Core #0 (45 °C)", "Core #1 (45 °C)"]
+	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
 
 	const init = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
@@ -174,15 +172,6 @@
 
 			AvgCPUTemp = Math.trunc(temp / input.cpu.temperature.length)
 			GPUTemp = input.gpu.temperature[0].value
-
-			// CPU graph
-			for (let i = 0; i < input.cpu.temperature.length; i++) {
-				CPUTemps[0].data[i] = input.cpu.temperature[i].min
-				CPUTemps[1].data[i] = input.cpu.temperature[i].value
-				CPUTemps[2].data[i] = input.cpu.temperature[i].max
-
-				CPUCategories[i] = `Core #${i} (${input.cpu.temperature[i].value} °C)`
-			}
 		}
 	}
 
