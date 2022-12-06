@@ -175,10 +175,6 @@
 		}
 	}
 
-	onMount(() => {
-		init()
-	})
-
 	onDestroy(() => {
 		observer.disconnect()
 	})

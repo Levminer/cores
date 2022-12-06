@@ -11,10 +11,13 @@
 
 	let options: ChartOptions<"doughnut"> = {
 		responsive: true,
-		maintainAspectRatio: false,
+		maintainAspectRatio: true,
 		rotation: 270,
 		circumference: 180,
 		cutout: "90%",
+		hover: {
+			mode: null,
+		},
 		plugins: {
 			legend: {
 				display: false,
@@ -26,6 +29,13 @@
 		elements: {
 			arc: {
 				borderWidth: 0,
+			},
+		},
+		animation: {
+			onComplete: (context) => {
+				if (context.initial) {
+					options.animation = false
+				}
 			},
 		},
 	}

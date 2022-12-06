@@ -26,13 +26,35 @@
 		responsive: true,
 		maintainAspectRatio: false,
 		indexAxis: "y",
-
+		animation: {
+			onComplete: (context) => {
+				if (context.initial) {
+					options.animation = false
+				}
+			},
+		},
 		plugins: {
 			stacked100: {
 				enable: true,
+				replaceTooltipLabel: false,
 			},
 			legend: {
 				display: false,
+			},
+			tooltip: {
+				callbacks: {
+					label: (tooltipItem) => {
+						const data = tooltipItem.chart.data
+						const datasetIndex = tooltipItem.datasetIndex
+						const index = tooltipItem.dataIndex
+						const datasetLabel = data.datasets[datasetIndex].label || ""
+
+						// @ts-ignore
+						const originalValue = data.originalData[datasetIndex][index]
+
+						return `${datasetLabel}: ${originalValue} °C`
+					},
+				},
 			},
 		},
 		scales: {
