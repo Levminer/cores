@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 dist
+build.json
+Cores/Assets/assets

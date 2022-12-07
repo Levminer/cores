@@ -51,7 +51,7 @@ body {
 	/* background: url("../../images/mica.png"); */
 	line-height: normal;
 	font-family: system-ui, Arial;
-	/* user-select: none; */
+	user-select: none;
 	outline: none !important;
 	overflow: hidden;
 }

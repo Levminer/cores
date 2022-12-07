@@ -7,8 +7,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite interface",
-		"build": "vite build interface"
+		"dev": "node scripts/buildNumber.cjs alpha true && vite interface",
+		"build": "node scripts/buildNumber.cjs alpha false && vite build interface"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^1.2.0",

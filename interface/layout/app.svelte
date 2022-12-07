@@ -2,6 +2,8 @@
 	<Navigation />
 
 	<div class="w-full overflow-hidden overflow-y-scroll">
+		<BuildNumber />
+
 		<div class="top" />
 
 		<RouteTransition>
@@ -19,9 +21,11 @@
 	import Settings from "../pages/settings.svelte"
 	import System from "../pages/system.svelte"
 	import RouteTransition from "../components/routeTransition.svelte"
+	import BuildNumber from "../components/buildNumber.svelte"
+
 	import { onMount } from "svelte"
 
-	onMount(()=>{
+	onMount(() => {
 		router.goto("/")
 	})
 </script>
