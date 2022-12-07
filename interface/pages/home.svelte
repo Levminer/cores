@@ -93,7 +93,7 @@
 				<h3>GPU Temperature: {GPUTemp} °C</h3>
 			</div>
 
-			<div class="p-10 transparent-800 rounded-xl">
+			<div class="p-10 transparent-800 rounded-xl mb-10">
 				<div class="flex items-baseline gap-3 mb-5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
 					<h2>GPU Fans</h2>
@@ -101,6 +101,16 @@
 				{#each $hardwareInfo.gpu.fans as { value }, i}
 					<h3>Fan #{i}: {value} RPM</h3>
 				{/each}
+			</div>
+
+			<div class="p-10 transparent-800 rounded-xl">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
+						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
+					</svg>
+					<h2>GPU Memory Usage</h2>
+				</div>
+				<h3>GPU Memory: {GPUMemory} GB</h3>
 			</div>
 		</div>
 	</div>
@@ -127,9 +137,10 @@
 	})
 
 	$: GPUTemp = 50
-	$: RAM = "8GB/16 GB"
-	$: VRAM = "10GB/20 GB"
+	$: RAM = "8/16 GB"
+	$: VRAM = "10/20 GB"
 	$: AvgCPUTemp = 50
+	$: GPUMemory = "2/6 GB"
 
 	$: CPUTemps = [
 		{
@@ -162,6 +173,7 @@
 
 			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)} GB`
 			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)} GB`
+			GPUMemory = `${($hardwareInfo.gpu.memory[4].value / 1024).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value / 1024} GB`
 
 			// CPU temperature
 			let temp = 0

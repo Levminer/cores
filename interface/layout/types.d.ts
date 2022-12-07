@@ -44,6 +44,7 @@ declare global {
 			temperature: Temp[]
 			lastLoad: number
 			fans: Load[]
+			memory: Load[]
 		}
 
 		ram: {

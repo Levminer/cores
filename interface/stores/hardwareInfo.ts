@@ -29,6 +29,7 @@ const defaultHardwareInfo: HardwareInfo = {
 			},
 		],
 		fans: [],
+		memory: [],
 	},
 
 	ram: {

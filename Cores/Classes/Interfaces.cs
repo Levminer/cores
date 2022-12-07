@@ -66,6 +66,10 @@ public class GPUAPI : CPUAPI {
 	public List<NameValue> fans {
 		get; set;
 	} = new();
+
+	public List<NameValue> memory {
+		get; set;
+	} = new();
 }
 
 public class RAMAPI {

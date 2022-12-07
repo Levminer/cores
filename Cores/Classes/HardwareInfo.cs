@@ -37,6 +37,7 @@ public class HardwareInfo {
 		API.GPU.temperature.Clear();
 		API.STORAGE.disks.Clear();
 		API.GPU.fans.Clear();
+		API.GPU.memory.Clear();
 
 		var diskID = -1;
 
@@ -103,13 +104,23 @@ public class HardwareInfo {
 				}
 
 				// GPU Fan
-				if (sensor[j].SensorType.ToString() == "Fan") {
+				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new NameValue {
 						name = sensor[j].Name.ToString(),
 						value = float.Parse(sensor[j].Value.ToString()),
 					};
 
 					API.GPU.fans.Add(temp);
+				}
+
+				// GPU Memory 
+				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+					var temp = new NameValue {
+						name = sensor[j].Name.ToString(),
+						value = float.Parse(sensor[j].Value.ToString()),
+					};
+
+					API.GPU.memory.Add(temp);
 				}
 
 				// Memory load
