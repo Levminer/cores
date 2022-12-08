@@ -18,6 +18,7 @@ declare global {
 		name: string
 		temperature: number
 		usedSpace: number
+		size: number
 	}
 
 	interface RAMModule {
@@ -54,16 +55,18 @@ declare global {
 			modules: RAMModule[]
 		}
 
-		os: {
-			name: string
-		}
+		system: {
+			os: {
+				name: string
+			}
 
-		storage: {
-			disks: Disk[]
-		}
+			storage: {
+				disks: Disk[]
+			}
 
-		mb: {
-			name: string
+			motherboard: {
+				name: string
+			}
 		}
 	}
 }

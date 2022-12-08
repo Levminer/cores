@@ -41,22 +41,25 @@ const defaultHardwareInfo: HardwareInfo = {
 		modules: [],
 	},
 
-	os: {
-		name: "Windows 11",
-	},
+	system: {
+		os: {
+			name: "Windows 11",
+		},
 
-	storage: {
-		disks: [
-			{
-				name: "Disk",
-				temperature: 20,
-				usedSpace: 50,
-			},
-		],
-	},
+		storage: {
+			disks: [
+				{
+					name: "Disk",
+					temperature: 20,
+					usedSpace: 50,
+					size: 250,
+				},
+			],
+		},
 
-	mb: {
-		name: "MBName",
+		motherboard: {
+			name: "MBName",
+		},
 	},
 }
 

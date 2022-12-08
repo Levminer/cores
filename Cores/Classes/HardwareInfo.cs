@@ -1,5 +1,6 @@
 ﻿using Cores;
 using LibreHardwareMonitor.Hardware;
+using System;
 using System.Linq;
 using HI = Hardware.Info;
 
@@ -35,7 +36,7 @@ public class HardwareInfo {
 		API.GPU.load.Clear();
 		API.RAM.load.Clear();
 		API.GPU.temperature.Clear();
-		API.STORAGE.disks.Clear();
+		API.System.Storage.disks.Clear();
 		API.GPU.fans.Clear();
 		API.GPU.memory.Clear();
 		API.CPU.power.Clear();
@@ -60,12 +61,12 @@ public class HardwareInfo {
 					name = computerHardware[i].Name,
 				};
 
-				API.STORAGE.disks.Add(temp);
+				API.System.Storage.disks.Add(temp);
 				diskID++;
 			}
 
 			if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
-				API.MB.name = computerHardware[i].Name;
+				API.System.Motherboard.name = computerHardware[i].Name;
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
@@ -146,9 +147,9 @@ public class HardwareInfo {
 				// Disk info
 				if (computerHardware[i].HardwareType.ToString() == "Storage") {
 					if (sensor[j].SensorType.ToString() == "Temperature") {
-						API.STORAGE.disks[diskID].temperature = float.Parse(sensor[j].Value.ToString());
+						API.System.Storage.disks[diskID].temperature = float.Parse(sensor[j].Value.ToString());
 					} else if (sensor[j].SensorType.ToString() == "Load" && diskLoad == false) {
-						API.STORAGE.disks[diskID].usedSpace = float.Parse(sensor[j].Value.ToString());
+						API.System.Storage.disks[diskID].usedSpace = float.Parse(sensor[j].Value.ToString());
 						diskLoad = true;
 					}
 				}
@@ -161,8 +162,14 @@ public class HardwareInfo {
 		// HwInfo
 		HwInfo.RefreshOperatingSystem();
 		HwInfo.RefreshMemoryList();
+		HwInfo.RefreshDriveList();
 
-		API.OS.name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
+		// Drive info
+		for (int i = 0; i < HwInfo.DriveList.Count; i++) {
+			API.System.Storage.disks[i].size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
+		}
+
+		API.System.OS.name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
 		API.RAM.modules = HwInfo.MemoryList;
 	}
 

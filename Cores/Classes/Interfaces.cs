@@ -43,6 +43,10 @@ public class Disk {
 	public float usedSpace {
 		get; set;
 	}
+
+	public int size {
+		get; set;
+	}
 }
 
 public class CPUAPI {
@@ -105,6 +109,20 @@ public class MBAPI {
 	}
 }
 
+public class SystemAPI {
+	public OSAPI OS {
+		get; set;
+	} = new();
+
+	public STORAGEAPI Storage {
+		get; set;
+	} = new();
+
+	public MBAPI Motherboard {
+		get; set;
+	} = new();
+}
+
 public class API {
 	public CPUAPI CPU {
 		get; set;
@@ -118,15 +136,7 @@ public class API {
 		get; set;
 	} = new();
 
-	public OSAPI OS {
-		get; set;
-	} = new();
-
-	public STORAGEAPI STORAGE {
-		get; set;
-	} = new();
-
-	public MBAPI MB {
+	public SystemAPI System {
 		get; set;
 	} = new();
 }
