@@ -1,35 +1,26 @@
 import { writable, get } from "svelte/store"
 
+let defaultSensor = {
+	value: 50,
+	min: 40,
+	max: 60,
+}
+
 const defaultHardwareInfo: HardwareInfo = {
 	cpu: {
 		name: "CPUName",
 		lastLoad: 15,
-		temperature: [
-			{
-				value: 50,
-				min: 40,
-				max: 60,
-			},
-			{
-				value: 50,
-				min: 40,
-				max: 60,
-			},
-		],
+		temperature: [defaultSensor, defaultSensor],
+		power: [defaultSensor, defaultSensor],
 	},
 
 	gpu: {
 		name: "GPUName",
 		lastLoad: 15,
-		temperature: [
-			{
-				value: 50,
-				min: 40,
-				max: 60,
-			},
-		],
+		temperature: [defaultSensor, defaultSensor],
 		fans: [],
 		memory: [],
+		power: [defaultSensor],
 	},
 
 	ram: {

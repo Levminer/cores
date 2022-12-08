@@ -31,6 +31,7 @@ public sealed partial class MainWindow : Window {
 		System.Threading.Tasks.Task.Run(() => {
 			App.GlobalHardwareInfo.Refresh();
 		});
+
 		Send();
 	}
 

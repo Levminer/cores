@@ -7,7 +7,7 @@ declare global {
 		value: number
 	}
 
-	interface Temp {
+	interface Sensor {
 		name?: string
 		value: number
 		min: number
@@ -35,16 +35,18 @@ declare global {
 	interface HardwareInfo {
 		cpu: {
 			name: string
-			temperature: Temp[]
+			temperature: Sensor[]
 			lastLoad: number
+			power: Sensor[]
 		}
 
 		gpu: {
 			name: string
-			temperature: Temp[]
+			temperature: Sensor[]
 			lastLoad: number
 			fans: Load[]
 			memory: Load[]
+			power: Sensor[]
 		}
 
 		ram: {

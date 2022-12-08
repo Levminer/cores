@@ -22,8 +22,4 @@ const file = {
 	dev: mode,
 }
 
-if (!existsSync("core/target/release")) {
-	mkdirSync("core/target/release", { recursive: true })
-}
-
 writeFileSync("build.json", JSON.stringify(file, null, "\t"))

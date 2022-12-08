@@ -40,7 +40,7 @@
 	<div class="flex gap-5 justify-evenly mx-10 mt-10 pb-10">
 		<!-- CPU info -->
 		<div class="text-left w-1/3">
-			<div class="transparent-800 rounded-xl p-10">
+			<div class="transparent-800 rounded-xl p-10 mb-10">
 				<div class="flex items-baseline gap-3 mb-5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>CPU Temperature</h2>
@@ -49,6 +49,17 @@
 				<div>
 					<MeterChart temps={CPUTemps} categories={CPUCategories} />
 				</div>
+			</div>
+
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge" viewBox="0 0 16 16">
+						<path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z" />
+					</svg>
+					<h2>CPU Power usage</h2>
+				</div>
+				<h3>CPU Package: {Math.round($hardwareInfo.cpu.power[0].value)} W</h3>
+				<h3>CPU Cores: {Math.round($hardwareInfo.cpu.power[1].value)} W</h3>
 			</div>
 		</div>
 
@@ -90,7 +101,8 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>GPU Temperature</h2>
 				</div>
-				<h3>GPU Temperature: {GPUTemp} °C</h3>
+				<h3>GPU Temperature: {$hardwareInfo.gpu.temperature[0].value} °C</h3>
+				<h3>GPU Hot Spot: {Math.round($hardwareInfo.gpu.temperature[1].value)} °C</h3>
 			</div>
 
 			<div class="p-10 transparent-800 rounded-xl mb-10">
@@ -103,7 +115,7 @@
 				{/each}
 			</div>
 
-			<div class="p-10 transparent-800 rounded-xl">
+			<div class="p-10 transparent-800 rounded-xl mb-10">
 				<div class="flex items-baseline gap-3 mb-5">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
 						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
@@ -111,6 +123,16 @@
 					<h2>GPU Memory Usage</h2>
 				</div>
 				<h3>GPU Memory: {GPUMemory} GB</h3>
+			</div>
+
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="flex items-baseline gap-3 mb-5">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge" viewBox="0 0 16 16">
+						<path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z" />
+					</svg>
+					<h2>GPU Power usage</h2>
+				</div>
+				<h3>GPU Package: {Math.round($hardwareInfo.gpu.power[0].value)} W</h3>
 			</div>
 		</div>
 	</div>
@@ -136,7 +158,6 @@
 		characterData: true,
 	})
 
-	$: GPUTemp = 50
 	$: RAM = "8/16 GB"
 	$: VRAM = "10/20 GB"
 	$: AvgCPUTemp = 50
@@ -183,7 +204,6 @@
 			}
 
 			AvgCPUTemp = Math.trunc(temp / input.cpu.temperature.length)
-			GPUTemp = input.gpu.temperature[0].value
 		}
 	}
 

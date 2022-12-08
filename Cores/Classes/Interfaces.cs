@@ -1,10 +1,9 @@
-﻿using LibreHardwareMonitor.Hardware;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HI = Hardware.Info;
 
 namespace Cores;
 
-public class NameValue {
+public class Load {
 	public string name {
 		get; set;
 	}
@@ -14,7 +13,7 @@ public class NameValue {
 	}
 }
 
-public class CostumSensor {
+public class Sensor {
 	public string name {
 		get; set;
 	}
@@ -51,29 +50,35 @@ public class CPUAPI {
 		get; set;
 	}
 
-	public List<ISensor> load = new();
+	public List<Load> load {
+		get; set;
+	} = new();
 
 	public float lastLoad {
 		get; set;
 	}
 
-	public List<CostumSensor> temperature {
+	public List<Sensor> temperature {
+		get; set;
+	} = new();
+
+	public List<Load> power {
 		get; set;
 	} = new();
 }
 
 public class GPUAPI : CPUAPI {
-	public List<NameValue> fans {
+	public List<Load> fans {
 		get; set;
 	} = new();
 
-	public List<NameValue> memory {
+	public List<Load> memory {
 		get; set;
 	} = new();
 }
 
 public class RAMAPI {
-	public List<NameValue> load {
+	public List<Load> load {
 		get; set;
 	} = new();
 
