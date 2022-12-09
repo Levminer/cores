@@ -7,6 +7,12 @@ declare global {
 		value: number
 	}
 
+	interface Monitors {
+		name: string
+		resolution: string
+		refreshRate: string
+	}
+
 	interface Sensor {
 		name?: string
 		value: number
@@ -66,6 +72,10 @@ declare global {
 
 			motherboard: {
 				name: string
+			}
+
+			monitor: {
+				monitors: Monitors[]
 			}
 		}
 	}

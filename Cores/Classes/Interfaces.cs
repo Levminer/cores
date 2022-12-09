@@ -4,135 +4,159 @@ using HI = Hardware.Info;
 namespace Cores;
 
 public class Load {
-	public string name {
+	public string Name {
 		get; set;
 	}
 
-	public float value {
+	public float Value {
 		get; set;
 	}
 }
 
 public class Sensor {
-	public string name {
+	public string Name {
 		get; set;
 	}
 
-	public float value {
+	public float Value {
 		get; set;
 	}
 
-	public float min {
+	public float Min {
 		get; set;
 	}
 
-	public float max {
+	public float Max {
 		get; set;
 	}
 }
 
 public class Disk {
-	public string name {
+	public string Name {
 		get; set;
 	}
 
-	public float temperature {
+	public float Temperature {
 		get; set;
 	}
 
-	public float usedSpace {
+	public float UsedSpace {
 		get; set;
 	}
 
-	public int size {
-		get; set;
-	}
-}
-
-public class CPUAPI {
-	public string name {
-		get; set;
-	}
-
-	public List<Load> load {
-		get; set;
-	} = new();
-
-	public float lastLoad {
-		get; set;
-	}
-
-	public List<Sensor> temperature {
-		get; set;
-	} = new();
-
-	public List<Load> power {
-		get; set;
-	} = new();
-}
-
-public class GPUAPI : CPUAPI {
-	public List<Load> fans {
-		get; set;
-	} = new();
-
-	public List<Load> memory {
-		get; set;
-	} = new();
-}
-
-public class RAMAPI {
-	public List<Load> load {
-		get; set;
-	} = new();
-
-	public List<HI.Memory> modules {
-		get; set;
-	} = new();
-}
-
-public class OSAPI {
-	public string name {
+	public int Size {
 		get; set;
 	}
 }
 
-public class STORAGEAPI {
-	public List<Disk> disks {
+public class Monitor {
+	public string Name {
+		get; set;
+	}
+
+	public string Resolution {
+		get; set;
+	}
+
+	public string RefreshRate {
+		get; set;
+	}
+}
+
+public class CPUInfo {
+	public string Name {
+		get; set;
+	}
+
+	public List<Load> Load {
+		get; set;
+	} = new();
+
+	public float LastLoad {
+		get; set;
+	}
+
+	public List<Sensor> Temperature {
+		get; set;
+	} = new();
+
+	public List<Load> Power {
 		get; set;
 	} = new();
 }
 
-public class MBAPI {
-	public string name {
+public class GPUInfo : CPUInfo {
+	public List<Load> Fans {
+		get; set;
+	} = new();
+
+	public List<Load> Memory {
+		get; set;
+	} = new();
+}
+
+public class RAMInfo {
+	public List<Load> Load {
+		get; set;
+	} = new();
+
+	public List<HI.Memory> Modules {
+		get; set;
+	} = new();
+}
+
+public class OSInfo {
+	public string Name {
 		get; set;
 	}
+}
+
+public class StorageInfo {
+	public List<Disk> Disks {
+		get; set;
+	} = new();
+}
+
+public class MotherboardInfo {
+	public string Name {
+		get; set;
+	}
+}
+
+public class MonitorInfo {
+	public List<Monitor> Monitors {
+		get; set;
+	} = new();
 }
 
 public class SystemAPI {
-	public OSAPI OS {
+	public OSInfo OS {
 		get; set;
 	} = new();
 
-	public STORAGEAPI Storage {
+	public StorageInfo Storage {
 		get; set;
 	} = new();
 
-	public MBAPI Motherboard {
+	public MotherboardInfo Motherboard {
+		get; set;
+	} = new();
+
+	public MonitorInfo Monitor {
 		get; set;
 	} = new();
 }
 
 public class API {
-	public CPUAPI CPU {
+	public CPUInfo CPU {
 		get; set;
 	} = new();
 
-	public GPUAPI GPU {
+	public GPUInfo GPU {
 		get; set;
 	} = new();
 
-	public RAMAPI RAM {
+	public RAMInfo RAM {
 		get; set;
 	} = new();
 

@@ -1,7 +1,8 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
 	<div class="flex justify-evenly gap-5 mx-10 pt-10 pb-10">
 		<div class="text-left w-2/3">
-			<div class="rounded-xl p-10 transparent-800">
+			<!-- System -->
+			<div class="rounded-xl p-10 transparent-800 mb-10">
 				<div class="flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pc-display" viewBox="0 0 16 16">
 						<path d="M8 1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V1Zm1 13.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0ZM9.5 1a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5ZM9 3.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5ZM1.5 2A1.5 1.5 0 0 0 0 3.5v7A1.5 1.5 0 0 0 1.5 12H6v2h-.5a.5.5 0 0 0 0 1H7v-4H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H7V2H1.5Z" />
@@ -13,6 +14,21 @@
 				<h3>GPU: {$hardwareInfo.gpu.name}</h3>
 				<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
 				<h3>OS: {$hardwareInfo.system.os.name}</h3>
+			</div>
+
+			<!-- Monitors -->
+			<div class="rounded-xl p-10 transparent-800 w-1/2">
+				<div class="flex items-baseline gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+					<h2>Monitors</h2>
+				</div>
+				{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
+					<div class="mt-5">
+						<h3>Name: {name}</h3>
+						<h3>Resolution: {resolution}</h3>
+						<h3>Refresh rate: {refreshRate} Hz</h3>
+					</div>
+				{/each}
 			</div>
 		</div>
 

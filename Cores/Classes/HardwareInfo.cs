@@ -2,6 +2,8 @@
 using LibreHardwareMonitor.Hardware;
 using System;
 using System.Linq;
+using WindowsDisplayAPI;
+using WindowsDisplayAPI.DisplayConfig;
 using HI = Hardware.Info;
 
 namespace cores;
@@ -31,16 +33,17 @@ public class HardwareInfo {
 	public void GetInfo() {
 		var computerHardware = computer.Hardware;
 
-		API.CPU.temperature.Clear();
-		API.CPU.load.Clear();
-		API.GPU.load.Clear();
-		API.RAM.load.Clear();
-		API.GPU.temperature.Clear();
-		API.System.Storage.disks.Clear();
-		API.GPU.fans.Clear();
-		API.GPU.memory.Clear();
-		API.CPU.power.Clear();
-		API.GPU.power.Clear();
+		API.CPU.Temperature.Clear();
+		API.CPU.Load.Clear();
+		API.GPU.Load.Clear();
+		API.RAM.Load.Clear();
+		API.GPU.Temperature.Clear();
+		API.System.Storage.Disks.Clear();
+		API.GPU.Fans.Clear();
+		API.GPU.Memory.Clear();
+		API.CPU.Power.Clear();
+		API.GPU.Power.Clear();
+		API.System.Monitor.Monitors.Clear();
 
 		var diskID = -1;
 
@@ -49,128 +52,147 @@ public class HardwareInfo {
 			var diskLoad = false;
 
 			if (computerHardware[i].HardwareType.ToString() == "Cpu") {
-				API.CPU.name = computerHardware[i].Name;
+				API.CPU.Name = computerHardware[i].Name;
 			}
 
 			if (computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-				API.GPU.name = computerHardware[i].Name;
+				API.GPU.Name = computerHardware[i].Name;
 			}
 
 			if (computerHardware[i].HardwareType.ToString() == "Storage") {
 				var temp = new Disk {
-					name = computerHardware[i].Name,
+					Name = computerHardware[i].Name,
 				};
 
-				API.System.Storage.disks.Add(temp);
+				API.System.Storage.Disks.Add(temp);
 				diskID++;
 			}
 
 			if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
-				API.System.Motherboard.name = computerHardware[i].Name;
+				API.System.Motherboard.Name = computerHardware[i].Name;
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
 				// CPU temperature
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
 					var temp = new Sensor {
-						value = float.Parse(sensor[j].Value.ToString()),
-						min = float.Parse(sensor[j].Min.ToString()),
-						max = float.Parse(sensor[j].Max.ToString()),
-						name = sensor[j].Name.ToString(),
+						Value = float.Parse(sensor[j].Value.ToString()),
+						Min = float.Parse(sensor[j].Min.ToString()),
+						Max = float.Parse(sensor[j].Max.ToString()),
+						Name = sensor[j].Name.ToString(),
 					};
 
-					API.CPU.temperature.Add(temp);
+					API.CPU.Temperature.Add(temp);
 				}
 
 				// GPU temperature
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new Sensor {
-						name = sensor[j].Name.ToString(),
-						value = float.Parse(sensor[j].Value.ToString()),
-						min = float.Parse(sensor[j].Min.ToString()),
-						max = float.Parse(sensor[j].Max.ToString()),
+						Name = sensor[j].Name.ToString(),
+						Value = float.Parse(sensor[j].Value.ToString()),
+						Min = float.Parse(sensor[j].Min.ToString()),
+						Max = float.Parse(sensor[j].Max.ToString()),
 					};
 
-					API.GPU.temperature.Add(temp);
+					API.GPU.Temperature.Add(temp);
 				}
 
 				// CPU power
 				if (sensor[j].SensorType.ToString() == "Power" && computerHardware[i].HardwareType.ToString() == "Cpu") {
-					API.CPU.power.Add(new Load { name = sensor[j].Name.ToString(), value = float.Parse(sensor[j].Value.ToString()) });
+					API.CPU.Power.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// CPU load
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString() == "Cpu") {
-					API.CPU.load.Add(new Load { name = sensor[j].Name.ToString(), value = float.Parse(sensor[j].Value.ToString()) });
+					API.CPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// GPU load
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
-					API.GPU.load.Add(new Load { name = sensor[j].Name.ToString(), value = float.Parse(sensor[j].Value.ToString()) });
+					API.GPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// GPU Fan
 				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new Load {
-						name = sensor[j].Name.ToString(),
-						value = float.Parse(sensor[j].Value.ToString()),
+						Name = sensor[j].Name.ToString(),
+						Value = float.Parse(sensor[j].Value.ToString()),
 					};
 
-					API.GPU.fans.Add(temp);
+					API.GPU.Fans.Add(temp);
 				}
 
 				// GPU Memory 
 				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new Load {
-						name = sensor[j].Name.ToString(),
-						value = float.Parse(sensor[j].Value.ToString()),
+						Name = sensor[j].Name.ToString(),
+						Value = float.Parse(sensor[j].Value.ToString()),
 					};
 
-					API.GPU.memory.Add(temp);
+					API.GPU.Memory.Add(temp);
 				}
 
 				// CPU power
 				if (sensor[j].SensorType.ToString() == "Power" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.power.Add(new Load { name = sensor[j].Name.ToString(), value = float.Parse(sensor[j].Value.ToString()) });
+					API.GPU.Power.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// Memory load
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
 					var temp = new Load {
-						name = sensor[j].Name.ToString(),
-						value = float.Parse(sensor[j].Value.ToString()),
+						Name = sensor[j].Name.ToString(),
+						Value = float.Parse(sensor[j].Value.ToString()),
 					};
 
-					API.RAM.load.Add(temp);
+					API.RAM.Load.Add(temp);
 				}
 
 				// Disk info
 				if (computerHardware[i].HardwareType.ToString() == "Storage") {
 					if (sensor[j].SensorType.ToString() == "Temperature") {
-						API.System.Storage.disks[diskID].temperature = float.Parse(sensor[j].Value.ToString());
+						API.System.Storage.Disks[diskID].Temperature = float.Parse(sensor[j].Value.ToString());
 					} else if (sensor[j].SensorType.ToString() == "Load" && diskLoad == false) {
-						API.System.Storage.disks[diskID].usedSpace = float.Parse(sensor[j].Value.ToString());
+						API.System.Storage.Disks[diskID].UsedSpace = float.Parse(sensor[j].Value.ToString());
 						diskLoad = true;
 					}
 				}
 			}
 		}
 
-		API.CPU.lastLoad = float.Parse(API.CPU.load.Last().value.ToString());
-		API.GPU.lastLoad = API.GPU.load.Max(t => t.value);
+		API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
+		try {
+			API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
+		}
+		catch (Exception) {
+			// error
+		}
 
 		// HwInfo
 		HwInfo.RefreshOperatingSystem();
 		HwInfo.RefreshMemoryList();
 		HwInfo.RefreshDriveList();
+		HwInfo.RefreshVideoControllerList();
 
 		// Drive info
 		for (int i = 0; i < HwInfo.DriveList.Count; i++) {
-			API.System.Storage.disks[i].size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
+			API.System.Storage.Disks[i].Size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
 		}
 
-		API.System.OS.name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
-		API.RAM.modules = HwInfo.MemoryList;
+		API.System.OS.Name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
+		API.RAM.Modules = HwInfo.MemoryList;
+
+		// Monitors
+		var displayNames = PathDisplayTarget.GetDisplayTargets().ToArray();
+		var displayInfo = Display.GetDisplays().ToArray();
+
+		for (int i = 0; i < displayNames.Length; i++) {
+			API.System.Monitor.Monitors.Add(new Monitor {
+				Name = displayNames[i].FriendlyName,
+				RefreshRate = Convert.ToString(displayInfo[i].CurrentSetting.Frequency),
+				Resolution = $"{displayInfo[i].CurrentSetting.Resolution.Width}x{displayInfo[i].CurrentSetting.Resolution.Height}",
+			});
+		}
+
 	}
 
 	public void Refresh() {
