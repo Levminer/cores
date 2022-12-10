@@ -4,7 +4,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace Cores;
 
@@ -56,13 +58,42 @@ public sealed partial class MainWindow : Window {
 		}
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;
+		webView.WebMessageReceived += WebView_WebMessageReceived;
+		webView.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
 	}
 
 	public void EventHandler(object target, CoreWebView2DOMContentLoadedEventArgs arg) {
 		Send();
 	}
 
+	// Open links in browser
+	public void WebView_NewWindowRequested(object sender, CoreWebView2NewWindowRequestedEventArgs args) {
+		Process.Start(new ProcessStartInfo(args.Uri) { UseShellExecute = true });
+		args.Handled = true;
+	}
+
+	// About dialog
+	public async void WebView_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs args) {
+		var res = args.TryGetWebMessageAsString();
+		aboutDialogText.Text = res;
+
+		var dialogResult = await aboutDialog.ShowAsync();
+
+		if (dialogResult.ToString() == "Primary") {
+			var content = new DataPackage();
+			content.SetText(res);
+
+			Clipboard.SetContent(content);
+		}
+	}
+
+	// Send API info to the interface
 	public async void Send() {
+		var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
+		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
+
 		var serializeOptions = new JsonSerializerOptions {
 			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 			WriteIndented = true

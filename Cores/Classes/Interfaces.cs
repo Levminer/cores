@@ -109,6 +109,14 @@ public class OSInfo {
 	public string Name {
 		get; set;
 	}
+
+	public string WebView {
+		get; set;
+	}
+
+	public string App {
+		get; set;
+	}
 }
 
 public class StorageInfo {

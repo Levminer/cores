@@ -64,6 +64,8 @@ declare global {
 		system: {
 			os: {
 				name: string
+				app: string
+				webView: string
 			}
 
 			storage: {

@@ -23,6 +23,7 @@
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
 	<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+	<Version>0.1.0</Version>
 	<!--<WindowsPackageType>None</WindowsPackageType>-->
 	<!--<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>-->
   </PropertyGroup>

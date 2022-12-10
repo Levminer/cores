@@ -44,6 +44,8 @@ const defaultHardwareInfo: HardwareInfo = {
 	system: {
 		os: {
 			name: "Windows 11",
+			app: "app",
+			webView: "webview",
 		},
 
 		storage: {
@@ -59,6 +61,10 @@ const defaultHardwareInfo: HardwareInfo = {
 
 		motherboard: {
 			name: "MBName",
+		},
+
+		monitor: {
+			monitors: [],
 		},
 	},
 }

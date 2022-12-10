@@ -18,6 +18,15 @@
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
+		<ContentDialog x:Name="aboutDialog"
+           CloseButtonText="Close" PrimaryButtonText="Copy" PrimaryButtonStyle="{StaticResource AccentButtonStyle}" Title="About Cores">
+			<StackPanel>
+				<TextBlock x:Name="aboutDialogText" TextWrapping="WrapWholeWords">
+					About
+				</TextBlock>
+			</StackPanel>
+		</ContentDialog>
+
 		<Grid x:Name="AppTitleBar">
 		<Image Source="Assets/icon.ico"
            HorizontalAlignment="Left" 
