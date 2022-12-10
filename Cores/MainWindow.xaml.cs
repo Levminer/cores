@@ -1,4 +1,5 @@
 ﻿using cores;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.Web.WebView2.Core;
 using System;
@@ -13,9 +14,18 @@ public sealed partial class MainWindow : Window {
 	public MainWindow() {
 		InitializeComponent();
 
+		// Set titlebar
+		if (AppWindowTitleBar.IsCustomizationSupported()) {
+			ExtendsContentIntoTitleBar = true;
+			SetTitleBar(AppTitleBar);
+
+		} else {
+			AppTitleBar.Visibility = Visibility.Collapsed;
+		}
+
 		// Set Mica
-		var mica = new Mica(this);
-		// mica.TrySetSystemBackdrop();
+		var mica = new MicaBackrop(this);
+		mica.TrySetSystemBackdrop();
 
 		// Webview setup
 		Init();
@@ -58,10 +68,8 @@ public sealed partial class MainWindow : Window {
 			WriteIndented = true
 		};
 
-		var test = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, serializeOptions);
+		var JSON = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, serializeOptions);
 
-		// text.Text = test;
-
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{test}`");
+		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{JSON}`");
 	}
 }

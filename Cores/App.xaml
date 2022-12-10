@@ -10,6 +10,8 @@
 				<!--  Other merged dictionaries here  -->
 			</ResourceDictionary.MergedDictionaries>
 			<!--  Other app resources here  -->
+			<SolidColorBrush x:Key="WindowCaptionBackground" Color="Transparent" />
+			<StaticResource x:Key="WindowCaptionBackgroundDisabled" ResourceKey="SystemControlBackgroundTransparentRevealBorderBrush" />
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>
