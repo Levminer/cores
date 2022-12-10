@@ -2,7 +2,6 @@
 using LibreHardwareMonitor.Hardware;
 using System;
 using System.Linq;
-using WindowsDisplayAPI;
 using WindowsDisplayAPI.DisplayConfig;
 using HI = Hardware.Info;
 
@@ -183,13 +182,14 @@ public class HardwareInfo {
 
 		// Monitors
 		var displayNames = PathDisplayTarget.GetDisplayTargets().ToArray();
-		var displayInfo = Display.GetDisplays().ToArray();
 
 		for (int i = 0; i < displayNames.Length; i++) {
+			var displaySettings = displayNames[i].ToDisplayDevice().GetPreferredSetting();
+
 			API.System.Monitor.Monitors.Add(new Monitor {
 				Name = displayNames[i].FriendlyName,
-				RefreshRate = Convert.ToString(displayInfo[i].CurrentSetting.Frequency),
-				Resolution = $"{displayInfo[i].CurrentSetting.Resolution.Width}x{displayInfo[i].CurrentSetting.Resolution.Height}",
+				RefreshRate = Convert.ToString(displaySettings.Frequency),
+				Resolution = $"{displaySettings.Resolution.Width}x{displaySettings.Resolution.Height}",
 			});
 		}
 
