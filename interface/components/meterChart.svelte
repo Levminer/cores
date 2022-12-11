@@ -6,12 +6,12 @@
 	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
 
-	export let temps
+	export let readings: Sensor[]
 	export let categories
 
-	console.log(temps)
-
 	Chart.register(...registerables, ChartjsPluginStacked100)
+
+	$: temps = [{ data: readings.map((temp) => temp.min) }, { data: readings.map((temp) => temp.value) }, { data: readings.map((temp) => temp.max) }]
 
 	$: data = {
 		labels: categories,
@@ -64,7 +64,7 @@
 			},
 			y: {
 				grid: { display: false },
-				ticks: { display: true },
+				ticks: { display: true, crossAlign: "far" },
 			},
 		},
 	}

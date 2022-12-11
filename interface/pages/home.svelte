@@ -47,7 +47,7 @@
 				</div>
 				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
 				<div>
-					<MeterChart temps={CPUTemps} categories={CPUCategories} />
+					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} />
 				</div>
 			</div>
 
@@ -101,8 +101,10 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>GPU Temperature</h2>
 				</div>
-				<h3>GPU Temperature: {$hardwareInfo.gpu.temperature[0].value} °C</h3>
-				<h3>GPU Hot Spot: {Math.round($hardwareInfo.gpu.temperature[1].value)} °C</h3>
+				<h3>Avg. Temperature: {AvgGPUTemp} °C</h3>
+				<div class="h-20">
+					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} />
+				</div>
 			</div>
 
 			<div class="p-10 transparent-800 rounded-xl mb-10">
@@ -160,22 +162,12 @@
 
 	$: RAM = "8/16 GB"
 	$: VRAM = "10/20 GB"
-	$: AvgCPUTemp = 50
 	$: GPUMemory = "2/6 GB"
-
-	$: CPUTemps = [
-		{
-			data: $hardwareInfo.cpu.temperature.map((temp) => temp.min),
-		},
-		{
-			data: $hardwareInfo.cpu.temperature.map((temp) => temp.value),
-		},
-		{
-			data: $hardwareInfo.cpu.temperature.map((temp) => temp.max),
-		},
-	]
+	$: AvgCPUTemp = Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)
+	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
 
 	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
+	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
 
 	const init = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
@@ -195,15 +187,6 @@
 			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)} GB`
 			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)} GB`
 			GPUMemory = `${($hardwareInfo.gpu.memory[4].value / 1024).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value / 1024} GB`
-
-			// CPU temperature
-			let temp = 0
-
-			for (let i = 0; i < input.cpu.temperature.length; i++) {
-				temp += input.cpu.temperature[i].value
-			}
-
-			AvgCPUTemp = Math.trunc(temp / input.cpu.temperature.length)
 		}
 	}
 

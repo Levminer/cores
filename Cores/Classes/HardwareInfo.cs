@@ -88,9 +88,9 @@ public class HardwareInfo {
 				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					var temp = new Sensor {
 						Name = sensor[j].Name.ToString(),
-						Value = float.Parse(sensor[j].Value.ToString()),
-						Min = float.Parse(sensor[j].Min.ToString()),
-						Max = float.Parse(sensor[j].Max.ToString()),
+						Value = (float)Math.Truncate(float.Parse(sensor[j].Value.ToString())),
+						Min = (float)Math.Truncate(float.Parse(sensor[j].Min.ToString())),
+						Max = (float)Math.Truncate(float.Parse(sensor[j].Max.ToString())),
 					};
 
 					API.GPU.Temperature.Add(temp);
