@@ -1,7 +1,7 @@
 {
 	"name": "cores",
-	"version": "0.0.1",
-	"description": "-",
+	"version": "0.1.0",
+	"description": "Hardware monitor",
 	"author": "Levminer",
 	"license": "GPL-3.0",
 	"private": true,
@@ -11,19 +11,19 @@
 		"build": "node scripts/buildNumber.cjs alpha false && vite build interface"
 	},
 	"devDependencies": {
-		"@sveltejs/vite-plugin-svelte": "^1.2.0",
+		"@sveltejs/vite-plugin-svelte": "^2.0.1",
 		"@tailwindcss/forms": "^0.5.3",
 		"autoprefixer": "^10.4.13",
 		"postcss": "^8.4.19",
-		"svelte": "^3.53.1",
-		"svelte-preprocess": "^4.10.7",
+		"svelte": "^3.54.0",
+		"svelte-preprocess": "^5.0.0",
 		"tailwindcss": "^3.2.4",
 		"tinro": "^0.6.12",
-		"typescript": "^4.8.4",
-		"vite": "^3.2.4"
+		"typescript": "^4.9.4",
+		"vite": "^4.0.0"
 	},
 	"dependencies": {
-		"chart.js": "^3.9.1",
+		"chart.js": "^4.0.1",
 		"chartjs-plugin-stacked100": "^1.2.1",
 		"svelte-chartjs": "^3.1.0"
 	}
