@@ -109,6 +109,24 @@ h5 {
 	background-color: hsla(0, 0%, 100%, 5%);
 }
 
-.gauge-delta {
-	visibility: hidden;
+/* scrollbar */
+::-webkit-scrollbar-track {
+	background-color: #000000;
+}
+
+::-webkit-scrollbar {
+	width: 12px;
+	background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgb(40, 40, 40);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgb(50, 50, 50);
+}
+
+::-webkit-scrollbar-corner {
+	background-color: #000000;
 }
