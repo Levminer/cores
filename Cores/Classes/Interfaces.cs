@@ -117,6 +117,10 @@ public class OSInfo {
 	public string App {
 		get; set;
 	}
+
+	public string Runtime {
+		get; set;
+	}
 }
 
 public class StorageInfo {

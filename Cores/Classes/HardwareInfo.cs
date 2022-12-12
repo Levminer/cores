@@ -177,7 +177,11 @@ public class HardwareInfo {
 			API.System.Storage.Disks[i].Size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
 		}
 
-		API.System.OS.Name = $"{HwInfo.OperatingSystem.Name} {HwInfo.OperatingSystem.Version}";
+		// OS name
+		var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLower();
+		API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
+
+		// RAM modules
 		API.RAM.Modules = HwInfo.MemoryList;
 
 		// Monitors
