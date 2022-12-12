@@ -45,7 +45,7 @@
 
 		let RAM = `${Math.round(usedRAM + availableRAM)} GB`
 
-		let message = `Cores: ${$hardwareInfo.system.os.app} \n\nInterface: ${build.version} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${RAM} \n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+		let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${RAM} RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
 
 		// @ts-ignore
 		window.chrome.webview.postMessage(message)

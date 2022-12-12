@@ -66,6 +66,7 @@ declare global {
 				name: string
 				app: string
 				webView: string
+				runtime: string
 			}
 
 			storage: {
