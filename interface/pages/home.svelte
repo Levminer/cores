@@ -1,6 +1,6 @@
 <div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
 	<div class="flex justify-evenly gap-5 mx-10 pt-10">
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
@@ -9,10 +9,20 @@
 				<div class="mt-5">
 					<h3>{$hardwareInfo.cpu.name}</h3>
 				</div>
+				<div class="mt-3 flex justify-center">
+					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+				</div>
+				<div>
+					{#if loadGraphs}
+						{#await loadGraphs then { default: ProgressBar }}
+							<ProgressBar pop={true} load={$hardwareInfo.cpu.load} />
+						{/await}
+					{/if}
+				</div>
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
@@ -21,10 +31,28 @@
 				<div class="mt-5">
 					<h3>Generic Memory</h3>
 				</div>
+				<div class="mt-3 flex justify-center">
+					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+				</div>
+				<div>
+					{#if loadGraphs}
+						{#await loadGraphs then { default: ProgressBar }}
+							<ProgressBar
+								pop={false}
+								load={$hardwareInfo.ram.load.filter((load, i) => {
+									console.log(load, i)
+									if (i == 2 || i == 5) {
+										return load
+									}
+								})}
+							/>
+						{/await}
+					{/if}
+				</div>
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col items-center justify-center">
+		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
@@ -32,6 +60,16 @@
 				<h2>GPU</h2>
 				<div class="mt-5">
 					<h3>{$hardwareInfo.gpu.name}</h3>
+				</div>
+				<div class="mt-3 flex justify-center">
+					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+				</div>
+				<div>
+					{#if loadGraphs}
+						{#await loadGraphs then { default: ProgressBar }}
+							<ProgressBar pop={false} load={$hardwareInfo.gpu.load} />
+						{/await}
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -143,8 +181,24 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte"
 	import { hardwareInfo, setHardwareInfo } from "../stores/hardwareInfo"
+	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import GaugeChart from "../components/gaugeChart.svelte"
 	import MeterChart from "../components/meterChart.svelte"
+
+	let loadGraphs = null
+	let loadGraphsShown = false
+
+	const showLoadGraphs = () => {
+		if (!loadGraphsShown) {
+			loadGraphs = import("../components/loadChart.svelte")
+
+			loadGraphsShown = true
+		} else {
+			loadGraphs = null
+
+			loadGraphsShown = false
+		}
+	}
 
 	let observer: MutationObserver
 
