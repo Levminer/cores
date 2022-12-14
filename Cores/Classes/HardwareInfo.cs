@@ -2,12 +2,13 @@
 using LibreHardwareMonitor.Hardware;
 using System;
 using System.Linq;
-using WindowsDisplayAPI.DisplayConfig;
+using WindowsDisplayAPI;
 using HI = Hardware.Info;
 
 namespace cores;
 
 public class HardwareInfo {
+	public bool firstRun = true;
 	public HardwareUpdater refresher = new();
 	public HI.IHardwareInfo HwInfo = new HI.HardwareInfo();
 	public Computer computer = new() {
@@ -37,12 +38,10 @@ public class HardwareInfo {
 		API.GPU.Load.Clear();
 		API.RAM.Load.Clear();
 		API.GPU.Temperature.Clear();
-		API.System.Storage.Disks.Clear();
 		API.GPU.Fans.Clear();
 		API.GPU.Memory.Clear();
 		API.CPU.Power.Clear();
 		API.GPU.Power.Clear();
-		API.System.Monitor.Monitors.Clear();
 
 		var diskID = -1;
 
@@ -50,25 +49,32 @@ public class HardwareInfo {
 			var sensor = computerHardware[i].Sensors;
 			var diskLoad = false;
 
-			if (computerHardware[i].HardwareType.ToString() == "Cpu") {
-				API.CPU.Name = computerHardware[i].Name;
+			// Get component names
+			if (firstRun) {
+				if (computerHardware[i].HardwareType.ToString() == "Cpu") {
+					API.CPU.Name = computerHardware[i].Name;
+				}
+
+				if (computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+					API.GPU.Name = computerHardware[i].Name;
+				}
+
+				if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
+					API.System.Motherboard.Name = computerHardware[i].Name;
+				}
 			}
 
-			if (computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-				API.GPU.Name = computerHardware[i].Name;
-			}
-
+			// Get disk names and IDs
 			if (computerHardware[i].HardwareType.ToString() == "Storage") {
 				var temp = new Disk {
 					Name = computerHardware[i].Name,
 				};
 
-				API.System.Storage.Disks.Add(temp);
-				diskID++;
-			}
+				if (firstRun) {
+					API.System.Storage.Disks.Add(temp);
+				}
 
-			if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
-				API.System.Motherboard.Name = computerHardware[i].Name;
+				diskID++;
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
@@ -159,44 +165,45 @@ public class HardwareInfo {
 		}
 
 		API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
-		try {
-			API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
+		API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
+
+
+		if (firstRun) {
+			// HwInfo
+			HwInfo.RefreshOperatingSystem();
+			HwInfo.RefreshMemoryList();
+			HwInfo.RefreshDriveList();
+			HwInfo.RefreshVideoControllerList();
+			HwInfo.RefreshCPUList(false);
+
+			// CPU info
+			API.CPU.Info = HwInfo.CpuList;
+
+			// Drive info
+			for (int i = 0; i < HwInfo.DriveList.Count; i++) {
+				API.System.Storage.Disks[i].Size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
+			}
+
+			// OS name
+			var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLower();
+			API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
+
+			// RAM modules
+			API.RAM.Modules = HwInfo.MemoryList;
+
+			// Monitors
+			var displays = Display.GetDisplays().ToArray();
+
+			for (int i = 0; i < displays.Length; i++) {
+				API.System.Monitor.Monitors.Add(new Monitor {
+					Name = displays[i].ToPathDisplayTarget().FriendlyName,
+					RefreshRate = Convert.ToString(displays[i].CurrentSetting.Frequency),
+					Resolution = $"{displays[i].CurrentSetting.Resolution.Width}x{displays[i].CurrentSetting.Resolution.Height}",
+				});
+			}
 		}
-		catch (Exception) {
-			// error
-		}
 
-		// HwInfo
-		HwInfo.RefreshOperatingSystem();
-		HwInfo.RefreshMemoryList();
-		HwInfo.RefreshDriveList();
-		HwInfo.RefreshVideoControllerList();
-
-		// Drive info
-		for (int i = 0; i < HwInfo.DriveList.Count; i++) {
-			API.System.Storage.Disks[i].Size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
-		}
-
-		// OS name
-		var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLower();
-		API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
-
-		// RAM modules
-		API.RAM.Modules = HwInfo.MemoryList;
-
-		// Monitors
-		var displayNames = PathDisplayTarget.GetDisplayTargets().ToArray();
-
-		for (int i = 0; i < displayNames.Length; i++) {
-			var displaySettings = displayNames[i].ToDisplayDevice().GetPreferredSetting();
-
-			API.System.Monitor.Monitors.Add(new Monitor {
-				Name = displayNames[i].FriendlyName,
-				RefreshRate = Convert.ToString(displaySettings.Frequency),
-				Resolution = $"{displaySettings.Resolution.Width}x{displaySettings.Resolution.Height}",
-			});
-		}
-
+		firstRun = false;
 	}
 
 	public void Refresh() {

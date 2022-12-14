@@ -83,6 +83,10 @@ public class CPUInfo {
 	public List<Load> Power {
 		get; set;
 	} = new();
+
+	public List<HI.CPU> Info {
+		get; set;
+	} = new();
 }
 
 public class GPUInfo : CPUInfo {
