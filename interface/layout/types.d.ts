@@ -39,12 +39,33 @@ declare global {
 		speed: number
 	}
 
+	interface CPUInfo {
+		caption: string
+		currentClockSpeed: number
+		description: string
+		l2CacheSize: number
+		l3CacheSize: number
+		manufacturer: string
+		maxClockSpeed: number
+		name: string
+		numberOfCores: number
+		numberOfLogicalProcessors: number
+		processorId: string
+		secondLevelAddressTranslationExtensions: boolean
+		socketDesignation: string
+		virtualizationFirmwareEnabled: boolean
+		vMMonitorModeExtensions: boolean
+		percentProcessorTime: number
+	}
+
 	interface HardwareInfo {
 		cpu: {
 			name: string
 			temperature: Sensor[]
 			lastLoad: number
 			power: Sensor[]
+			load: Load[]
+			info: CPUInfo[]
 		}
 
 		gpu: {
@@ -54,6 +75,7 @@ declare global {
 			fans: Load[]
 			memory: Load[]
 			power: Sensor[]
+			load: Load[]
 		}
 
 		ram: {
@@ -80,6 +102,17 @@ declare global {
 			monitor: {
 				monitors: Monitors[]
 			}
+		}
+	}
+
+	interface HardwareStatistics {
+		cpu: {
+			temperature: {
+				value: number[]
+				min: number[]
+				max: number[]
+			}
+			power: number[]
 		}
 	}
 }
