@@ -34,6 +34,7 @@
 			},
 		},
 		plugins: {
+			// @ts-ignore
 			stacked100: {
 				enable: true,
 				replaceTooltipLabel: false,

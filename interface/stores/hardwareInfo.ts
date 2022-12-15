@@ -12,6 +12,8 @@ const defaultHardwareInfo: HardwareInfo = {
 		lastLoad: 15,
 		temperature: [defaultSensor, defaultSensor],
 		power: [defaultSensor, defaultSensor],
+		load: [],
+		info: [],
 	},
 
 	gpu: {
@@ -21,6 +23,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		fans: [],
 		memory: [],
 		power: [defaultSensor],
+		load: [],
 	},
 
 	ram: {
@@ -46,6 +49,7 @@ const defaultHardwareInfo: HardwareInfo = {
 			name: "Windows 11",
 			app: "app",
 			webView: "webview",
+			runtime: "runtime",
 		},
 
 		storage: {
@@ -69,7 +73,6 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 }
 
-// export const hardwareInfo = writable<HardwareInfo>(defaultHardwareInfo)
 export const hardwareInfo = writable<HardwareInfo>(sessionStorage.hardwareInfo ? JSON.parse(sessionStorage.hardwareInfo) : defaultHardwareInfo)
 
 hardwareInfo.subscribe((data) => {
