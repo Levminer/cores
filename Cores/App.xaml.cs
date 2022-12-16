@@ -19,6 +19,7 @@ public partial class App : Application {
 		MainWindow.Activate();
 		MainWindow.Maximize();
 		MainWindow.Title = "Cores";
+		MainWindow.SetIcon("Assets/icon.ico");
 
 		var windowManager = WinUIEx.WindowManager.Get(MainWindow);
 		windowManager.MinWidth = 1000;

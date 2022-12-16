@@ -93,7 +93,7 @@ public sealed partial class MainWindow : Window {
 
 		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
-		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.221116.1";
+		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.221209.1";
 
 		var serializeOptions = new JsonSerializerOptions {
 			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

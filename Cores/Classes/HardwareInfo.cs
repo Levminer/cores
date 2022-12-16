@@ -1,6 +1,7 @@
 ﻿using Cores;
 using LibreHardwareMonitor.Hardware;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using WindowsDisplayAPI;
 using HI = Hardware.Info;
@@ -164,8 +165,13 @@ public class HardwareInfo {
 			}
 		}
 
-		API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
-		API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
+		try {
+			API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
+			API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
+		}
+		catch (Exception) {
+			Debug.WriteLine("Error");
+		}
 
 
 		if (firstRun) {
