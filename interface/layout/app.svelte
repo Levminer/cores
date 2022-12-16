@@ -41,7 +41,8 @@
 			const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 
 			if (Object.keys(input).length !== 0) {
-				if ($hardwareStatistics.cpu.temperature.max.length > 50) {
+				// Shift the array if it's longer than 60s
+				if ($hardwareStatistics.cpu.temperature.max.length > 60) {
 					$hardwareStatistics.cpu.temperature.max.shift()
 					$hardwareStatistics.cpu.temperature.min.shift()
 					$hardwareStatistics.cpu.temperature.value.shift()
@@ -49,12 +50,15 @@
 					$hardwareStatistics.cpu.power.shift()
 				}
 
-				$hardwareStatistics.cpu.temperature.max.push(input.cpu.temperature[0].max)
-				$hardwareStatistics.cpu.temperature.min.push(input.cpu.temperature[0].min)
-				$hardwareStatistics.cpu.temperature.value.push(input.cpu.temperature[0].value)
+				// CPU temperatures (60s)
+				$hardwareStatistics.cpu.temperature.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
 
+				// CPU power usage (60s)
 				$hardwareStatistics.cpu.power.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
 
+				// Update the sessionStorage
 				const data: HardwareStatistics = {
 					cpu: {
 						temperature: {

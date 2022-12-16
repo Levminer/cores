@@ -6,20 +6,19 @@
 	import { Line } from "svelte-chartjs"
 
 	export let statistics: number[]
+	export let type: string
 
 	Chart.register(...registerables)
 
 	let labels = []
 
-	for (let i = 0; i < statistics.length; i++) {
-		labels.push(`${i}`)
+	for (let i = 0; i < 59; i++) {
+		labels.push(`${59 - i}s ago`)
 	}
 
 	$: data = {
 		labels: labels,
-		datasets: [
-			{ label: "Value", data: statistics, backgroundColor: ["#ffd60a"], borderColor: "#ffd60a" },
-		],
+		datasets: [{ label: type, data: statistics, backgroundColor: ["#ffd60a"], borderColor: "#ffd60a" }],
 	}
 
 	let options: ChartOptions<"line"> = {
@@ -28,6 +27,39 @@
 				if (context.initial) {
 					options.animation = false
 				}
+			},
+		},
+		scales: {
+			y: {
+				ticks: {
+					callback: (value) => {
+						return `${value} W`
+					},
+				},
+			},
+			x: {
+				ticks: {
+					display: false,
+				},
+			},
+		},
+		plugins: {
+			tooltip: {
+				callbacks: {
+					label: (tooltipItem) => {
+						const data = tooltipItem.chart.data
+						const datasetIndex = tooltipItem.datasetIndex
+						const index = tooltipItem.dataIndex
+						const datasetLabel = data.datasets[datasetIndex].label || ""
+
+						const originalValue = data.datasets[datasetIndex].data[index]
+
+						return `${datasetLabel}: ${originalValue} W`
+					},
+				},
+			},
+			legend: {
+				position: "bottom",
 			},
 		},
 	}

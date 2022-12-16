@@ -16,9 +16,9 @@
 	$: data = {
 		labels: categories,
 		datasets: [
-			{ label: "Min", data: temps[0].data, backgroundColor: ["#00bbf9"] },
-			{ label: "Current", data: temps[1].data, backgroundColor: ["#f15bb5"] },
-			{ label: "Max", data: temps[2].data, backgroundColor: ["#9b5de5"] },
+			{ label: "Min temperature", data: temps[0].data, backgroundColor: ["#00bbf9"] },
+			{ label: "Current temperature", data: temps[1].data, backgroundColor: ["#f15bb5"] },
+			{ label: "Max temperature", data: temps[2].data, backgroundColor: ["#9b5de5"] },
 		],
 	}
 

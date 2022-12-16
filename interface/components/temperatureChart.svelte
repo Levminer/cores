@@ -11,16 +11,16 @@
 
 	let labels = []
 
-	for (let i = 0; i < statistics.min.length; i++) {
-		labels.push(`${i}`)
+	for (let i = 0; i < 59; i++) {
+		labels.push(`${59 - i}s ago`)
 	}
 
 	$: data = {
 		labels: labels,
 		datasets: [
-			{ label: "Min", data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9" },
-			{ label: "Current", data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5" },
-			{ label: "Max", data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5" },
+			{ label: "Min temperature", data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9" },
+			{ label: "Current temperature", data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5" },
+			{ label: "Max temperature", data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5" },
 		],
 	}
 
@@ -30,6 +30,39 @@
 				if (context.initial) {
 					options.animation = false
 				}
+			},
+		},
+		scales: {
+			y: {
+				ticks: {
+					callback: (value) => {
+						return `${value} °C`
+					},
+				},
+			},
+			x: {
+				ticks: {
+					display: false,
+				},
+			},
+		},
+		plugins: {
+			tooltip: {
+				callbacks: {
+					label: (tooltipItem) => {
+						const data = tooltipItem.chart.data
+						const datasetIndex = tooltipItem.datasetIndex
+						const index = tooltipItem.dataIndex
+						const datasetLabel = data.datasets[datasetIndex].label || ""
+
+						const originalValue = data.datasets[datasetIndex].data[index]
+
+						return `${datasetLabel}: ${originalValue} °C`
+					},
+				},
+			},
+			legend: {
+				position: "bottom",
 			},
 		},
 	}
