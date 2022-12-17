@@ -40,7 +40,7 @@
 		maintainAspectRatio: false,
 		indexAxis: "y",
 		animation: {
-			onComplete: (context) => {
+			onProgress: (context) => {
 				if (context.initial) {
 					options.animation = false
 				}

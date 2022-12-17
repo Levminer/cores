@@ -26,11 +26,12 @@
 
 	let options: ChartOptions<"line"> = {
 		animation: {
-			onComplete: (context) => {
+			onProgress: (context) => {
 				if (context.initial) {
 					options.animation = false
 				}
 			},
+			duration: 0,
 		},
 		scales: {
 			y: {
