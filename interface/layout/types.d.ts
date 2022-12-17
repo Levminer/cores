@@ -113,6 +113,7 @@ declare global {
 				max: number[]
 			}
 			power: number[]
+			load: number[]
 		}
 	}
 }

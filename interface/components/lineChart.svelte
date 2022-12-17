@@ -7,18 +7,16 @@
 
 	export let statistics: number[]
 	export let type: string
+	export let unit: string
+	export let color: string
 
 	Chart.register(...registerables)
 
-	let labels = []
-
-	for (let i = 0; i < 59; i++) {
-		labels.push(`${59 - i}s ago`)
-	}
+	$: labels = statistics.map((_, i) => `${statistics.length - 1 - i}s ago`)
 
 	$: data = {
 		labels: labels,
-		datasets: [{ label: type, data: statistics, backgroundColor: ["#ffd60a"], borderColor: "#ffd60a" }],
+		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color }],
 	}
 
 	let options: ChartOptions<"line"> = {
@@ -34,7 +32,7 @@
 			y: {
 				ticks: {
 					callback: (value) => {
-						return `${value} W`
+						return `${value}${unit}`
 					},
 				},
 			},
@@ -55,7 +53,7 @@
 
 						const originalValue = data.datasets[datasetIndex].data[index]
 
-						return `${datasetLabel}: ${originalValue} W`
+						return `${datasetLabel}: ${originalValue}${unit}`
 					},
 				},
 			},

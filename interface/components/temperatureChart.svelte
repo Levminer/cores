@@ -9,11 +9,7 @@
 
 	Chart.register(...registerables)
 
-	let labels = []
-
-	for (let i = 0; i < 59; i++) {
-		labels.push(`${59 - i}s ago`)
-	}
+	$: labels = statistics.value.map((_, i) => `${statistics.value.length - 1 - i}s ago`)
 
 	$: data = {
 		labels: labels,
