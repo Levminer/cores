@@ -48,6 +48,8 @@
 					$hardwareStatistics.cpu.temperature.value.shift()
 
 					$hardwareStatistics.cpu.power.shift()
+
+					$hardwareStatistics.cpu.load.shift()
 				}
 
 				// CPU temperatures (60s)
@@ -58,6 +60,9 @@
 				// CPU power usage (60s)
 				$hardwareStatistics.cpu.power.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
 
+				// AVG CPU threads load (60s)
+				$hardwareStatistics.cpu.load.push(Math.round(input.cpu.lastLoad))
+
 				// Update the sessionStorage
 				const data: HardwareStatistics = {
 					cpu: {
@@ -67,6 +72,7 @@
 							value: $hardwareStatistics.cpu.temperature.value,
 						},
 						power: $hardwareStatistics.cpu.power,
+						load: $hardwareStatistics.cpu.load,
 					},
 				}
 

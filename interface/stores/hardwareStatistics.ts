@@ -7,7 +7,8 @@ const defaultHardwareStatistics: HardwareStatistics = {
 			min: [],
 			max: [],
 		},
-		power : []
+		power: [],
+		load: [],
 	},
 }
 
@@ -23,6 +24,6 @@ export const getHardwareStatistics = (): HardwareStatistics => {
 	return get(hardwareStatistics)
 }
 
-export const setHardwareStatistics= (newState: HardwareStatistics) => {
+export const setHardwareStatistics = (newState: HardwareStatistics) => {
 	hardwareStatistics.set(newState)
 }

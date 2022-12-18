@@ -1,6 +1,6 @@
-<div class="transparent-900 m-10 rounded-xl w-4/5 mx-auto">
-	<div class="flex justify-evenly gap-5 mx-10 pt-10">
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl">
+	<div class="mx-10 flex justify-evenly gap-5 pt-10">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
@@ -10,7 +10,7 @@
 					<h3>{$hardwareInfo.cpu.name}</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
@@ -32,7 +32,7 @@
 					<h3>Generic Memory</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -40,7 +40,6 @@
 							<ProgressBar
 								pop={false}
 								load={$hardwareInfo.ram.load.filter((load, i) => {
-									console.log(load, i)
 									if (i == 2 || i == 5) {
 										return load
 									}
@@ -52,7 +51,7 @@
 			</div>
 		</div>
 
-		<div class="rounded-xl p-10 pt-0 text-center transparent-800 w-1/3 flex flex-col">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
 			<div class="w-full">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
@@ -62,7 +61,7 @@
 					<h3>{$hardwareInfo.gpu.name}</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "rotate-180 transform mb-3" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -75,11 +74,11 @@
 		</div>
 	</div>
 
-	<div class="flex gap-5 justify-evenly mx-10 mt-10 pb-10">
+	<div class="mx-10 mt-5 flex justify-evenly gap-5 pb-10">
 		<!-- CPU info -->
-		<div class="text-left w-1/3">
-			<div class="transparent-800 rounded-xl p-10 mb-10">
-				<div class="flex items-baseline gap-3 mb-5">
+		<div class="flex w-1/3 flex-col gap-5 text-left">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>CPU Temperature</h2>
 				</div>
@@ -90,21 +89,20 @@
 			</div>
 
 			<div class="transparent-800 rounded-xl p-10">
-				<div class="flex items-baseline gap-3 mb-5">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge" viewBox="0 0 16 16">
-						<path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z" />
-					</svg>
+				<div class="mb-5 flex items-baseline gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>CPU Power usage</h2>
 				</div>
-				<h3>CPU Package: {Math.round($hardwareInfo.cpu.power[0].value)} W</h3>
-				<h3>CPU Cores: {Math.round($hardwareInfo.cpu.power[1].value)} W</h3>
+				{#each $hardwareInfo.cpu.power as { name, value }}
+					<h3>{name}: {Math.round(value)} W</h3>
+				{/each}
 			</div>
 		</div>
 
 		<!-- RAM info -->
-		<div class="text-left w-1/3">
-			<div class="transparent-800 rounded-xl p-10 mb-10">
-				<div class="flex items-baseline gap-3 mb-5">
+		<div class="flex w-1/3 flex-col gap-5 text-left">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
 						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
 					</svg>
@@ -133,9 +131,9 @@
 		</div>
 
 		<!-- GPU info -->
-		<div class="text-left w-1/3">
-			<div class="p-10 transparent-800 rounded-xl mb-10">
-				<div class="flex items-baseline gap-3 mb-5">
+		<div class="flex w-1/3 flex-col gap-5 text-left">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>GPU Temperature</h2>
 				</div>
@@ -145,8 +143,8 @@
 				</div>
 			</div>
 
-			<div class="p-10 transparent-800 rounded-xl mb-10">
-				<div class="flex items-baseline gap-3 mb-5">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
 					<h2>GPU Fans</h2>
 				</div>
@@ -155,8 +153,8 @@
 				{/each}
 			</div>
 
-			<div class="p-10 transparent-800 rounded-xl mb-10">
-				<div class="flex items-baseline gap-3 mb-5">
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
 						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
 					</svg>
@@ -166,10 +164,8 @@
 			</div>
 
 			<div class="transparent-800 rounded-xl p-10">
-				<div class="flex items-baseline gap-3 mb-5">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-lightning-charge" viewBox="0 0 16 16">
-						<path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09zM4.157 8.5H7a.5.5 0 0 1 .478.647L6.11 13.59l5.732-6.09H9a.5.5 0 0 1-.478-.647L9.89 2.41 4.157 8.5z" />
-					</svg>
+				<div class="mb-5 flex items-baseline gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>GPU Power usage</h2>
 				</div>
 				<h3>GPU Package: {Math.round($hardwareInfo.gpu.power[0].value)} W</h3>
@@ -228,8 +224,6 @@
 
 		if (Object.keys(input).length !== 0) {
 			setHardwareInfo(input)
-
-			console.log(input)
 
 			// RAM
 			let usedRAM = input.ram.load[0].value
