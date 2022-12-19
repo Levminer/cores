@@ -6,4 +6,9 @@ module.exports = {
 	singleQuote: false,
 	semi: false,
 	svelteSortOrder: "options-markup-scripts-styles",
+	"plugins": [
+		"prettier-plugin-svelte",
+		"prettier-plugin-tailwindcss"
+	  ],
+	  "pluginSearchDirs": false
 }
