@@ -11,6 +11,7 @@ declare global {
 		name: string
 		resolution: string
 		refreshRate: string
+		primary: boolean
 	}
 
 	interface Sensor {
@@ -76,11 +77,12 @@ declare global {
 			memory: Load[]
 			power: Sensor[]
 			load: Load[]
+			info: any[]
 		}
 
 		ram: {
 			load: Load[]
-			modules: RAMModule[]
+			info: RAMModule[]
 		}
 
 		system: {

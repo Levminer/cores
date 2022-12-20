@@ -120,7 +120,7 @@
 					</svg>
 					<h2>RAM Modules</h2>
 				</div>
-				{#each $hardwareInfo.ram.modules as { bankLabel, manufacturer, speed, partNumber, serialNumber, capacity }}
+				{#each $hardwareInfo.ram.info as { bankLabel, manufacturer, speed, partNumber, serialNumber, capacity }}
 					<div class="mt-5">
 						<h3>Bank: {bankLabel}</h3>
 						<h3>Speed: {speed} MHz</h3>

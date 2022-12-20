@@ -11,6 +11,7 @@
 			<Route path="/settings"><Settings /></Route>
 			<Route path="/system"><System /></Route>
 			<Route path="/cpu"><CPU /></Route>
+			<Route path="/gpu"><GPU /></Route>
 		</RouteTransition>
 	</div>
 </div>
@@ -24,6 +25,7 @@
 	import RouteTransition from "../components/routeTransition.svelte"
 	import BuildNumber from "../components/buildNumber.svelte"
 	import CPU from "../pages/cpu.svelte"
+	import GPU from "../pages/gpu.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
 

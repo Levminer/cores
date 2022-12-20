@@ -41,7 +41,7 @@ const defaultHardwareInfo: HardwareInfo = {
 				value: 10,
 			},
 		],
-		modules: [],
+		info: [],
 	},
 
 	system: {
