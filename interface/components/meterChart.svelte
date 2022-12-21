@@ -32,6 +32,10 @@
 	// Resize chart to fit all data
 	onMount(() => {
 		document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+
+		if (readings.length < 2) {
+			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 55 + "px"
+		}
 	})
 
 	afterUpdate(() => {

@@ -97,9 +97,10 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>CPU Power usage</h2>
 				</div>
-				{#each $hardwareInfo.cpu.power as { name, value }}
-					<h3>{name}: {Math.round(value)} W</h3>
-				{/each}
+				<h3>Power usage: {CPUPowerUsage} W</h3>
+				<div>
+					<MeterChart readings={$hardwareInfo.cpu.power} categories={CPUPowerCategories} i={3} type={{ name: "power usage", unit: "W" }} />
+				</div>
 			</div>
 		</div>
 
@@ -172,7 +173,10 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>GPU Power usage</h2>
 				</div>
-				<h3>GPU Package: {Math.round($hardwareInfo.gpu.power[0].value)} W</h3>
+				<h3>Power usage: {GPUPowerUsage} W</h3>
+				<div>
+					<MeterChart readings={$hardwareInfo.gpu.power} categories={GPUPowerCategories} i={4} type={{ name: "power usage", unit: "W" }} />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -217,13 +221,19 @@
 	$: RAM = "8/16 GB"
 	$: VRAM = "10/20 GB"
 	$: GPUMemory = "2/6 GB"
+
 	$: AvgCPUTemp = Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)
-	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
 	$: AvgCPUClock = Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length)
+	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
+
+	$: CPUPowerUsage = $hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)
+	$: GPUPowerUsage = $hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)
 
 	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
-	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
 	$: CPUClockCategories = $hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)
+	$: CPUPowerCategories = $hardwareInfo.cpu.power.map((temp, i) => `${temp.name} (${temp.value} W)`)
+	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
+	$: GPUPowerCategories = $hardwareInfo.gpu.power.map((temp) => `${temp.name} (${temp.value} W)`)
 
 	const init = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)

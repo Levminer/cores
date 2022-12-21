@@ -80,7 +80,7 @@ public class CPUInfo {
 		get; set;
 	} = new();
 
-	public List<Load> Power {
+	public List<Sensor> Power {
 		get; set;
 	} = new();
 
