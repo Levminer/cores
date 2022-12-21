@@ -1,13 +1,19 @@
-<Bar {data} {options} />
+<div class="meterChart{i}">
+	<Bar {data} {options} />
+</div>
 
 <script lang="ts">
 	import { Chart, registerables } from "chart.js"
 	import ChartjsPluginStacked100 from "chartjs-plugin-stacked100"
 	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
+	import { afterUpdate, onMount } from "svelte"
 
 	export let readings: Sensor[]
-	export let categories
+	export let categories: string[]
+	export let i: number
+
+	let lastCategories: string[] = categories
 
 	Chart.register(...registerables, ChartjsPluginStacked100)
 
@@ -22,6 +28,20 @@
 		],
 	}
 
+	// Resize chart to fit all data
+	onMount(() => {
+		document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+	})
+
+	afterUpdate(() => {
+		if (categories.length > lastCategories.length) {
+			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+
+			lastCategories = categories
+		}
+	})
+
+	// Chart options
 	let options: ChartOptions<"bar"> = {
 		responsive: true,
 		maintainAspectRatio: false,

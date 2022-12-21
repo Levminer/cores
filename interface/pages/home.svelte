@@ -15,7 +15,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar pop={true} load={$hardwareInfo.cpu.load} />
+							<ProgressBar load={$hardwareInfo.cpu.load} i={0} />
 						{/await}
 					{/if}
 				</div>
@@ -37,14 +37,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar
-								pop={false}
-								load={$hardwareInfo.ram.load.filter((load, i) => {
-									if (i == 2 || i == 5) {
-										return load
-									}
-								})}
-							/>
+							<ProgressBar load={[$hardwareInfo.ram.load[5]]} i={1} />
 						{/await}
 					{/if}
 				</div>
@@ -66,7 +59,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar pop={false} load={$hardwareInfo.gpu.load} />
+							<ProgressBar load={$hardwareInfo.gpu.load} i={2} />
 						{/await}
 					{/if}
 				</div>
@@ -84,7 +77,7 @@
 				</div>
 				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} />
+					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} i={0} />
 				</div>
 			</div>
 
@@ -138,8 +131,8 @@
 					<h2>GPU Temperature</h2>
 				</div>
 				<h3>Avg. Temperature: {AvgGPUTemp} °C</h3>
-				<div class="h-20">
-					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} />
+				<div>
+					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} i={1} />
 				</div>
 			</div>
 

@@ -1,4 +1,4 @@
-<div class="h-44">
+<div class="loadChart{i}">
 	<Bar {data} {options} />
 </div>
 
@@ -8,20 +8,19 @@
 	import type { ChartOptions, ChartDataset } from "chart.js"
 	import { Bar } from "svelte-chartjs"
 	import { hardwareInfo } from "../stores/hardwareInfo"
+	import { onMount } from "svelte"
 
 	export let load: Load[]
-	export let pop: boolean
+	export let i: number
 
 	Chart.register(...registerables, ChartjsPluginStacked100)
 
-	if (pop) {
-		load.pop()
-	}
-
+	// Clean up the labels
 	let categories = load.map((load) => load.name.replaceAll("CPU", "").replaceAll("D3D", ""))
 
-	if (categories.length < $hardwareInfo.cpu.load.length - 1) {
-		categories = [...categories, ...Array($hardwareInfo.cpu.load.length - 1).fill("")]
+	// Add empty labels to match the number of cores
+	if (categories.length < $hardwareInfo.cpu.load.length) {
+		categories = [...categories, ...Array($hardwareInfo.cpu.load.length - categories.length).fill("")]
 	}
 
 	$: loads = load.map((load) => Math.trunc(load.value))
@@ -35,6 +34,12 @@
 		],
 	}
 
+	// Resize chart to fit all data
+	onMount(() => {
+		document.querySelector<HTMLDivElement>(`.loadChart${i}`).style.height = $hardwareInfo.cpu.load.length * 20 + "px"
+	})
+
+	// Chart options
 	let options: ChartOptions<"bar"> = {
 		responsive: true,
 		maintainAspectRatio: false,
