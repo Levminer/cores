@@ -20,6 +20,7 @@ public class HardwareInfo {
 		IsControllerEnabled = true,
 		IsStorageEnabled = true
 	};
+
 	public API API {
 		get; set;
 	} = new();
@@ -36,13 +37,17 @@ public class HardwareInfo {
 
 		API.CPU.Temperature.Clear();
 		API.CPU.Load.Clear();
+		API.CPU.Power.Clear();
+		API.CPU.Clock.Clear();
+
 		API.GPU.Load.Clear();
-		API.RAM.Load.Clear();
 		API.GPU.Temperature.Clear();
 		API.GPU.Fans.Clear();
 		API.GPU.Memory.Clear();
-		API.CPU.Power.Clear();
 		API.GPU.Power.Clear();
+		API.GPU.Clock.Clear();
+
+		API.RAM.Load.Clear();
 
 		var diskID = -1;
 
@@ -113,44 +118,48 @@ public class HardwareInfo {
 					API.CPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
+				// CPU clock
+				if (sensor[j].SensorType.ToString() == "Clock" && computerHardware[i].HardwareType.ToString() == "Cpu" && !sensor[j].Name.Contains("Bus")) {
+					API.CPU.Clock.Add(new Sensor {
+						Name = sensor[j].Name.ToString(),
+						Value = (float)Math.Round((float)sensor[j].Value),
+						Min = (float)Math.Round((float)sensor[j].Min),
+						Max = (float)Math.Round((float)sensor[j].Max),
+					});
+				}
+
 				// GPU load
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
 					API.GPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
-				// GPU Fan
+				// GPU fan
 				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					var temp = new Load {
-						Name = sensor[j].Name.ToString(),
-						Value = float.Parse(sensor[j].Value.ToString()),
-					};
-
-					API.GPU.Fans.Add(temp);
+					API.GPU.Fans.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// GPU Memory 
 				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					var temp = new Load {
-						Name = sensor[j].Name.ToString(),
-						Value = float.Parse(sensor[j].Value.ToString()),
-					};
-
-					API.GPU.Memory.Add(temp);
+					API.GPU.Memory.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
-				// CPU power
+				// GPU power
 				if (sensor[j].SensorType.ToString() == "Power" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Power.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
-				// Memory load
-				if (computerHardware[i].HardwareType.ToString() == "Memory") {
-					var temp = new Load {
+				// GPU clock
+				if (sensor[j].SensorType.ToString() == "Clock" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+					API.GPU.Clock.Add(new Sensor {
 						Name = sensor[j].Name.ToString(),
 						Value = float.Parse(sensor[j].Value.ToString()),
-					};
+						Value = (float)Math.Round((float)sensor[j].Value),
+						Min = (float)Math.Round((float)sensor[j].Min),
+						Max = (float)Math.Round((float)sensor[j].Max),
+					});
 
-					API.RAM.Load.Add(temp);
+				// Memory load
+				if (computerHardware[i].HardwareType.ToString() == "Memory") {
 				}
 
 				// Disk info
@@ -167,6 +176,7 @@ public class HardwareInfo {
 
 		try {
 			API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
+			API.CPU.Load.RemoveAt(API.CPU.Load.Count - 1);
 			API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
 		}
 		catch (Exception) {

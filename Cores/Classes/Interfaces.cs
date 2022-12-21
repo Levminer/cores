@@ -84,6 +84,10 @@ public class CPUInfo {
 		get; set;
 	} = new();
 
+	public List<Sensor> Clock {
+		get; set;
+	} = new();
+
 	public List<HI.CPU> Info {
 		get; set;
 	} = new();
@@ -97,6 +101,10 @@ public class GPUInfo : CPUInfo {
 	public List<Load> Memory {
 		get; set;
 	} = new();
+
+	new public List<HI.VideoController> Info {
+		get; set;
+	} = new();
 }
 
 public class RAMInfo {
@@ -104,7 +112,7 @@ public class RAMInfo {
 		get; set;
 	} = new();
 
-	public List<HI.Memory> Modules {
+	public List<HI.Memory> Info {
 		get; set;
 	} = new();
 }

@@ -77,7 +77,18 @@
 				</div>
 				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} i={0} />
+					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} i={0} type={{ name: "temperature", unit: "°C" }} />
+				</div>
+			</div>
+
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+					<h2>CPU Clock speed</h2>
+				</div>
+				<h3>Avg. Clock speed: {(AvgCPUClock / 1000).toFixed(1)} GHz</h3>
+				<div>
+					<MeterChart readings={$hardwareInfo.cpu.clock} categories={CPUClockCategories} i={2} type={{ name: "clock speed", unit: "MHz" }} />
 				</div>
 			</div>
 
@@ -132,7 +143,7 @@
 				</div>
 				<h3>Avg. Temperature: {AvgGPUTemp} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} i={1} />
+					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} i={1} type={{ name: "temperature", unit: "°C" }} />
 				</div>
 			</div>
 
@@ -208,9 +219,11 @@
 	$: GPUMemory = "2/6 GB"
 	$: AvgCPUTemp = Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)
 	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
+	$: AvgCPUClock = Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length)
 
 	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
 	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
+	$: CPUClockCategories = $hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)
 
 	const init = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)

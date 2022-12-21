@@ -12,6 +12,7 @@
 	export let readings: Sensor[]
 	export let categories: string[]
 	export let i: number
+	export let type: { name: string; unit: string }
 
 	let lastCategories: string[] = categories
 
@@ -22,9 +23,9 @@
 	$: data = {
 		labels: categories,
 		datasets: [
-			{ label: "Min temperature", data: temps[0].data, backgroundColor: ["#00bbf9"] },
-			{ label: "Current temperature", data: temps[1].data, backgroundColor: ["#f15bb5"] },
-			{ label: "Max temperature", data: temps[2].data, backgroundColor: ["#9b5de5"] },
+			{ label: `Min ${type.name}`, data: temps[0].data, backgroundColor: ["#00bbf9"] },
+			{ label: `Current ${type.name}`, data: temps[1].data, backgroundColor: ["#f15bb5"] },
+			{ label: `Max ${type.name}`, data: temps[2].data, backgroundColor: ["#9b5de5"] },
 		],
 	}
 
@@ -73,7 +74,7 @@
 						// @ts-ignore
 						const originalValue = data.originalData[datasetIndex][index]
 
-						return `${datasetLabel}: ${originalValue} °C`
+						return `${datasetLabel}: ${originalValue} ${type.unit}`
 					},
 				},
 			},
