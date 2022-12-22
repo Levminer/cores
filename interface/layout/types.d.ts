@@ -59,6 +59,17 @@ declare global {
 		percentProcessorTime: number
 	}
 
+	interface NetworkInterface {
+		name: string
+		description: string
+		macAddress: string
+		ipAddress: string
+		mask: string
+		gateway: string
+		dns: string
+		speed: string
+	}
+
 	interface HardwareInfo {
 		cpu: {
 			name: string
@@ -105,6 +116,10 @@ declare global {
 
 			monitor: {
 				monitors: Monitors[]
+			}
+
+			network: {
+				interfaces: NetworkInterface[]
 			}
 		}
 	}

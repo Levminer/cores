@@ -16,19 +16,38 @@
 				<h3>OS: {$hardwareInfo.system.os.name}</h3>
 			</div>
 
-			<!-- Monitors -->
-			<div class="transparent-800 w-1/2 rounded-xl p-10">
-				<div class="flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
-					<h2>Monitors</h2>
-				</div>
-				{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
-					<div class="mt-5">
-						<h3>Name: {name}</h3>
-						<h3>Resolution: {resolution}</h3>
-						<h3>Refresh rate: {refreshRate} Hz</h3>
+			<div class="flex gap-5 sm:flex-wrap">
+				<!-- Monitors -->
+				<div class="transparent-800 w-1/2 sm:w-full rounded-xl p-10">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+						<h2>Monitors</h2>
 					</div>
-				{/each}
+					{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
+						<div class="mt-5">
+							<h3>Name: {name}</h3>
+							<h3>Resolution: {resolution}</h3>
+							<h3>Refresh rate: {refreshRate} Hz</h3>
+						</div>
+					{/each}
+				</div>
+
+				<!-- Interfaces -->
+				<div class="transparent-800 w-1/2 sm:w-full rounded-xl p-10">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" /><rect x="16" y="16" width="6" height="6" /><rect x="2" y="16" width="6" height="6" /><path d="M5 16v-4h14v4" /><path d="M12 12V8" /></svg>
+						<h2>Interfaces</h2>
+					</div>
+					{#each $hardwareInfo.system.network.interfaces as { name, description, ipAddress, mask, gateway, dns, speed, macAddress }}
+						<div class="mt-5">
+							<h3>Name: {name}</h3>
+							<h3>Description: {description}</h3>
+							<h3>Address: {ipAddress} ({mask})</h3>
+							<h3>Gateway: {gateway} ({dns})</h3>
+							<h3>Speed: {speed} Mbit/s</h3>
+						</div>
+					{/each}
+				</div>
 			</div>
 		</div>
 

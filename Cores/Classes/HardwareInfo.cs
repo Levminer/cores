@@ -3,6 +3,7 @@ using LibreHardwareMonitor.Hardware;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
 using WindowsDisplayAPI;
 using HI = Hardware.Info;
 
@@ -208,16 +209,20 @@ public class HardwareInfo {
 			}
 		}
 
+		// Last loads
 		try {
 			API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
 			API.CPU.Load.RemoveAt(API.CPU.Load.Count - 1);
+
 			API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
 		}
 		catch (Exception) {
 			Debug.WriteLine("Error");
 		}
 
+		// BIOS
 
+		// HWInfo, monitors, network interfaces
 		if (firstRun) {
 			// HwInfo
 			HwInfo.RefreshOperatingSystem();
@@ -233,11 +238,11 @@ public class HardwareInfo {
 			API.GPU.Info = HwInfo.VideoControllerList;
 
 			// OS name
-			var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLower();
+			var arch = System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString().ToLower();
 			API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
 
 			// RAM modules
-			API.RAM.Modules = HwInfo.MemoryList;
+			API.RAM.Info = HwInfo.MemoryList;
 
 			// Monitors
 			var displays = Display.GetDisplays().ToArray();
@@ -247,7 +252,33 @@ public class HardwareInfo {
 					Name = displays[i].ToPathDisplayTarget().FriendlyName,
 					RefreshRate = Convert.ToString(displays[i].CurrentSetting.Frequency),
 					Resolution = $"{displays[i].CurrentSetting.Resolution.Width}x{displays[i].CurrentSetting.Resolution.Height}",
+					Primary = displays[i].IsGDIPrimary
 				});
+			}
+
+			// Network interfaces
+			foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
+
+				if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
+					var temp = new NetInterface {
+						Name = ni.Name,
+						Description = ni.Description,
+						MACAddress = ni.GetPhysicalAddress().ToString(),
+						Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString(),
+						DNS = ni.GetIPProperties().DnsAddresses[0].ToString(),
+						Speed = (ni.Speed / 1000 / 1000).ToString()
+					};
+
+					foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
+						if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+							temp.IPAddress = ip.Address.ToString();
+							temp.Mask = ip.IPv4Mask.ToString();
+						}
+					}
+
+					API.System.Network.Interfaces.Add(temp);
+				}
+
 			}
 		}
 
@@ -271,8 +302,9 @@ public class HardwareUpdater : IVisitor {
 
 	public void VisitHardware(IHardware hardware) {
 		hardware.Update();
-		foreach (IHardware subHardware in hardware.SubHardware)
+		foreach (IHardware subHardware in hardware.SubHardware) {
 			subHardware.Accept(this);
+		}
 	}
 
 	public void VisitSensor(ISensor sensor) {

@@ -61,6 +61,37 @@ public class Monitor {
 	public string RefreshRate {
 		get; set;
 	}
+
+	public bool Primary {
+		get; set;
+	}
+}
+
+public class NetInterface {
+	public string Name {
+		get; set;
+	}
+	public string Description {
+		get; set;
+	}
+	public string MACAddress {
+		get; set;
+	}
+	public string IPAddress {
+		get; set;
+	}
+	public string Mask {
+		get; set;
+	}
+	public string Gateway {
+		get; set;
+	}
+	public string DNS {
+		get; set;
+	}
+	public string Speed {
+		get; set;
+	}
 }
 
 public class CPUInfo {
@@ -157,6 +188,12 @@ public class MonitorInfo {
 	} = new();
 }
 
+public class NetworkInfo {
+	public List<NetInterface> Interfaces {
+		get; set;
+	} = new();
+}
+
 public class SystemAPI {
 	public OSInfo OS {
 		get; set;
@@ -171,6 +208,10 @@ public class SystemAPI {
 	} = new();
 
 	public MonitorInfo Monitor {
+		get; set;
+	} = new();
+
+	public NetworkInfo Network {
 		get; set;
 	} = new();
 }
