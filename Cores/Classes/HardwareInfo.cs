@@ -77,11 +77,23 @@ public class HardwareInfo {
 					Name = computerHardware[i].Name,
 				};
 
+				diskID++;
+
 				if (firstRun) {
 					API.System.Storage.Disks.Add(temp);
-				}
 
-				diskID++;
+					// Get disk size
+					var report = computerHardware[i].GetReport().Split("\n");
+					long size = 0;
+
+					foreach (var line in report) {
+						if (line.Contains("Size")) {
+							size = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+						}
+					}
+
+					API.System.Storage.Disks[diskID].Size = (int)size;
+				}
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
@@ -217,10 +229,8 @@ public class HardwareInfo {
 			// CPU info
 			API.CPU.Info = HwInfo.CpuList;
 
-			// Drive info
-			for (int i = 0; i < HwInfo.DriveList.Count; i++) {
-				API.System.Storage.Disks[i].Size = Convert.ToInt32(HwInfo.DriveList[i].Size / 1024 / 1024 / 1024);
-			}
+			// GPU info
+			API.GPU.Info = HwInfo.VideoControllerList;
 
 			// OS name
 			var arch = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString().ToLower();
