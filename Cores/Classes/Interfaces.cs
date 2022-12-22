@@ -88,6 +88,10 @@ public class CPUInfo {
 		get; set;
 	} = new();
 
+	public List<Sensor> Voltage {
+		get; set;
+	} = new();
+
 	public List<HI.CPU> Info {
 		get; set;
 	} = new();

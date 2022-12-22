@@ -68,6 +68,7 @@ declare global {
 			load: Load[]
 			info: CPUInfo[]
 			clock: Sensor[]
+			voltage: Sensor[]
 		}
 
 		gpu: {

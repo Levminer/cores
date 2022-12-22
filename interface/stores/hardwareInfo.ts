@@ -14,6 +14,8 @@ const defaultHardwareInfo: HardwareInfo = {
 		power: [defaultSensor, defaultSensor],
 		load: [],
 		info: [],
+		clock: [defaultSensor, defaultSensor],
+		voltage: [defaultSensor, defaultSensor],
 	},
 
 	gpu: {
@@ -24,6 +26,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		memory: [],
 		power: [defaultSensor],
 		load: [],
+		info: [],
 	},
 
 	ram: {

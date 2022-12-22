@@ -39,6 +39,7 @@ public class HardwareInfo {
 		API.CPU.Load.Clear();
 		API.CPU.Power.Clear();
 		API.CPU.Clock.Clear();
+		API.CPU.Voltage.Clear();
 
 		API.GPU.Load.Clear();
 		API.GPU.Temperature.Clear();
@@ -133,6 +134,16 @@ public class HardwareInfo {
 					});
 				}
 
+				// CPU voltage
+				if (sensor[j].SensorType.ToString() == "Voltage" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.Contains("#")) {
+					API.CPU.Voltage.Add(new Sensor {
+						Name = sensor[j].Name.ToString(),
+						Value = (float)Math.Round((float)sensor[j].Value, 3),
+						Min = (float)Math.Round((float)sensor[j].Min, 3),
+						Max = (float)Math.Round((float)sensor[j].Max, 3),
+					});
+				}
+
 				// GPU load
 				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
 					API.GPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
@@ -170,6 +181,7 @@ public class HardwareInfo {
 
 				// Memory load
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
+					API.RAM.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
 				}
 
 				// Disk info
