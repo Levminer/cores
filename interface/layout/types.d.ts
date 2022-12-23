@@ -121,6 +121,12 @@ declare global {
 			network: {
 				interfaces: NetworkInterface[]
 			}
+
+			bios: {
+				vendor: string
+				version: string
+				date: string
+			}
 		}
 	}
 

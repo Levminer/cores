@@ -94,6 +94,20 @@ public class NetInterface {
 	}
 }
 
+public class BIOSInfo {
+	public string Vendor {
+		get; set;
+	}
+
+	public string Version {
+		get; set;
+	}
+
+	public string Date {
+		get; set;
+	}
+}
+
 public class CPUInfo {
 	public string Name {
 		get; set;
@@ -214,6 +228,10 @@ public class SystemAPI {
 	public NetworkInfo Network {
 		get; set;
 	} = new();
+
+	public BIOSInfo BIOS {
+		get; set;
+	}
 }
 
 public class API {

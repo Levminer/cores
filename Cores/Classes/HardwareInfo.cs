@@ -220,8 +220,6 @@ public class HardwareInfo {
 			Debug.WriteLine("Error");
 		}
 
-		// BIOS
-
 		// HWInfo, monitors, network interfaces
 		if (firstRun) {
 			// HwInfo
@@ -255,6 +253,13 @@ public class HardwareInfo {
 					Primary = displays[i].IsGDIPrimary
 				});
 			}
+
+			// BIOS info
+			API.System.BIOS = new BIOSInfo {
+				Vendor = computer.SMBios.Bios.Vendor,
+				Version = computer.SMBios.Bios.Version,
+				Date = computer.SMBios.Bios.Date.Value.ToShortDateString(),
+			};
 
 			// Network interfaces
 			foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
