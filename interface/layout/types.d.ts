@@ -141,6 +141,13 @@ declare global {
 			power: number[]
 			load: number[]
 		}
+
+		ram: {
+			usage: {
+				physical: number[]
+				virtual: number[]
+			}
+		}
 	}
 }
 

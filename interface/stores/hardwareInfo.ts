@@ -6,6 +6,11 @@ let defaultSensor = {
 	max: 60,
 }
 
+let defaultLoad = {
+	name: "sample",
+	value: 10,
+}
+
 const defaultHardwareInfo: HardwareInfo = {
 	cpu: {
 		name: "CPUName",
@@ -30,20 +35,7 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 
 	ram: {
-		load: [
-			{
-				name: "1",
-				value: 10,
-			},
-			{
-				name: "1",
-				value: 10,
-			},
-			{
-				name: "1",
-				value: 10,
-			},
-		],
+		load: [defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad],
 		info: [],
 	},
 
@@ -62,6 +54,7 @@ const defaultHardwareInfo: HardwareInfo = {
 					temperature: 20,
 					usedSpace: 50,
 					size: 250,
+					health: "N/A",
 				},
 			],
 		},

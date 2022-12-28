@@ -10,6 +10,13 @@ const defaultHardwareStatistics: HardwareStatistics = {
 		power: [],
 		load: [],
 	},
+
+	ram: {
+		usage: {
+			physical: [],
+			virtual: [],
+		},
+	},
 }
 
 export const hardwareStatistics = writable<HardwareStatistics>(sessionStorage.hardwareStatistics ? JSON.parse(sessionStorage.hardwareStatistics) : defaultHardwareStatistics)
