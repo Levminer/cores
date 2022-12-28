@@ -86,14 +86,20 @@ public class HardwareInfo {
 					// Get disk size
 					var report = computerHardware[i].GetReport().Split("\n");
 					long size = 0;
+					string health = "N/A";
 
 					foreach (var line in report) {
 						if (line.Contains("Size")) {
 							size = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
 						}
+
+						if (line.Contains("E7")) {
+							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
+						}
 					}
 
 					API.System.Storage.Disks[diskID].Size = (int)size;
+					API.System.Storage.Disks[diskID].Health = health;
 				}
 			}
 
@@ -225,7 +231,6 @@ public class HardwareInfo {
 			// HwInfo
 			HwInfo.RefreshOperatingSystem();
 			HwInfo.RefreshMemoryList();
-			HwInfo.RefreshDriveList();
 			HwInfo.RefreshVideoControllerList();
 			HwInfo.RefreshCPUList(false);
 

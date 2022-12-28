@@ -47,6 +47,10 @@ public class Disk {
 	public int Size {
 		get; set;
 	}
+
+	public string Health {
+		get; set;
+	}
 }
 
 public class Monitor {

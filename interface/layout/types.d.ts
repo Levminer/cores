@@ -26,6 +26,7 @@ declare global {
 		temperature: number
 		usedSpace: number
 		size: number
+		health: string
 	}
 
 	interface RAMModule {
