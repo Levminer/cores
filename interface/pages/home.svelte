@@ -1,7 +1,7 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-1 sm:w-full">
 	<div class="mx-10 flex justify-evenly gap-5 pt-10">
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="w-full">
+			<div class="flex w-full justify-center">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
 			<div>
@@ -23,7 +23,7 @@
 		</div>
 
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="w-full">
+			<div class="flex w-full justify-center">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
 			<div>
@@ -45,7 +45,7 @@
 		</div>
 
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="w-full">
+			<div class="flex w-full justify-center">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
 			<div>
@@ -75,7 +75,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>CPU Temperature</h2>
 				</div>
-				<h3>Avg. Temperature: {AvgCPUTemp} °C</h3>
+				<h3>Avg. temperature: {AvgCPUTemp} °C</h3>
 				<div>
 					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} i={0} type={{ name: "temperature", unit: "°C" }} />
 				</div>
@@ -86,7 +86,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
 					<h2>CPU Clock speed</h2>
 				</div>
-				<h3>Avg. Clock speed: {(AvgCPUClock / 1000).toFixed(1)} GHz</h3>
+				<h3>Avg. clock speed: {(AvgCPUClock / 1000).toFixed(1)} GHz</h3>
 				<div>
 					<MeterChart readings={$hardwareInfo.cpu.clock} categories={CPUClockCategories} i={2} type={{ name: "clock speed", unit: "MHz" }} />
 				</div>
@@ -97,17 +97,18 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>CPU Power usage</h2>
 				</div>
-				<h3>Power usage: {CPUPowerUsage} W</h3>
+				<h3>Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.power} categories={CPUPowerCategories} i={3} type={{ name: "power usage", unit: "W" }} />
+					<MeterChart readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)} categories={$hardwareInfo.cpu.power.filter((power) => power.value !== 0).map((temp) => `${temp.name} (${temp.value} W)`)} i={3} type={{ name: "power usage", unit: "W" }} />
 				</div>
 			</div>
 
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
 					<h2>CPU Voltage</h2>
 				</div>
+				<h3>Avg. voltage: {($hardwareInfo.cpu.voltage.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.voltage.length).toFixed(1)} V</h3>
 				<div>
 					<MeterChart readings={$hardwareInfo.cpu.voltage} categories={CPUVoltageCategories} i={5} type={{ name: "voltage", unit: "V" }} />
 				</div>
@@ -123,8 +124,8 @@
 					</svg>
 					<h2>RAM Usage</h2>
 				</div>
-				<h3>Memory: {RAM}</h3>
-				<h3>Virtual memory: {VRAM}</h3>
+				<h3>Memory: {`${$hardwareInfo.ram.load[0].value.toFixed(1)}/${($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value).toFixed(1)} GB`}</h3>
+				<h3>Virtual memory: {`${$hardwareInfo.ram.load[3].value.toFixed(1)}/${($hardwareInfo.ram.load[3].value + $hardwareInfo.ram.load[4].value).toFixed(1)} GB`}</h3>
 			</div>
 
 			<div class="transparent-800 rounded-xl p-10">
@@ -152,7 +153,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>GPU Temperature</h2>
 				</div>
-				<h3>Avg. Temperature: {AvgGPUTemp} °C</h3>
+				<h3>Avg. temperature: {AvgGPUTemp} °C</h3>
 				<div>
 					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} i={1} type={{ name: "temperature", unit: "°C" }} />
 				</div>
@@ -161,7 +162,7 @@
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
-					<h2>GPU Fans</h2>
+					<h2>GPU Fan Speed</h2>
 				</div>
 				{#each $hardwareInfo.gpu.fans as { value }, i}
 					<h3>Fan #{i}: {value} RPM</h3>
@@ -175,7 +176,18 @@
 					</svg>
 					<h2>GPU Memory Usage</h2>
 				</div>
-				<h3>GPU Memory: {GPUMemory} GB</h3>
+				<h3>GPU memory: {`${($hardwareInfo.gpu.memory[4].value / 1024).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value / 1024} GB`} GB</h3>
+			</div>
+
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+					<h2>GPU Clock speed</h2>
+				</div>
+				<h3>Avg. clock speed: {(Math.round($hardwareInfo.gpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.clock.length) / 1000).toFixed(1)} GHz</h3>
+				<div>
+					<MeterChart readings={$hardwareInfo.gpu.clock} categories={$hardwareInfo.gpu.clock.map((temp, i) => `${temp.name} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={6} type={{ name: "clock speed", unit: "MHz" }} />
+				</div>
 			</div>
 
 			<div class="transparent-800 rounded-xl p-10">
@@ -183,7 +195,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
 					<h2>GPU Power usage</h2>
 				</div>
-				<h3>Power usage: {GPUPowerUsage} W</h3>
+				<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
 					<MeterChart readings={$hardwareInfo.gpu.power} categories={GPUPowerCategories} i={4} type={{ name: "power usage", unit: "W" }} />
 				</div>
@@ -218,7 +230,7 @@
 
 	// Watch for changes in the DOM
 	observer = new MutationObserver(() => {
-		init()
+		updateHardwareInfo()
 	})
 
 	// Start observing the target
@@ -228,40 +240,21 @@
 		characterData: true,
 	})
 
-	$: RAM = "8/16 GB"
-	$: VRAM = "10/20 GB"
-	$: GPUMemory = "2/6 GB"
-
 	$: AvgCPUTemp = Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)
 	$: AvgCPUClock = Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length)
 	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
 
-	$: CPUPowerUsage = $hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)
-	$: GPUPowerUsage = $hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)
-
 	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
 	$: CPUClockCategories = $hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)
-	$: CPUPowerCategories = $hardwareInfo.cpu.power.map((temp, i) => `${temp.name} (${temp.value} W)`)
 	$: CPUVoltageCategories = $hardwareInfo.cpu.voltage.map((temp, i) => `${temp.name} (${temp.value} V)`)
 	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
 	$: GPUPowerCategories = $hardwareInfo.gpu.power.map((temp) => `${temp.name} (${temp.value} W)`)
 
-	const init = () => {
+	const updateHardwareInfo = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 
 		if (Object.keys(input).length !== 0) {
 			setHardwareInfo(input)
-
-			// RAM
-			let usedRAM = input.ram.load[0].value
-			let availableRAM = input.ram.load[1].value
-
-			let usedVRAM = input.ram.load[3].value
-			let availableVRAM = input.ram.load[4].value
-
-			RAM = `${usedRAM.toFixed(1)}/${(usedRAM + availableRAM).toFixed(1)} GB`
-			VRAM = `${usedVRAM.toFixed(1)}/${(usedVRAM + availableVRAM).toFixed(1)} GB`
-			GPUMemory = `${($hardwareInfo.gpu.memory[4].value / 1024).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value / 1024} GB`
 		}
 	}
 
