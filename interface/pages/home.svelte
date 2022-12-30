@@ -1,4 +1,4 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-1 sm:w-full">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full">
 	<div class="mx-10 flex justify-evenly gap-5 pt-10">
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
 			<div class="flex w-full justify-center">

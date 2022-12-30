@@ -92,6 +92,7 @@ declare global {
 			power: Sensor[]
 			load: Load[]
 			info: any[]
+			clock: Sensor[]
 		}
 
 		ram: {

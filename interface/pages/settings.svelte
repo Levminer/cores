@@ -1,8 +1,8 @@
-<div class="transparent-900 m-auto my-20 w-4/5 rounded-2xl p-10 text-left">
-	<h1 class="px-10">About</h1>
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full p-10">
+	<h1 class="mb-10">About</h1>
 
-	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl p-10">
-		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
+	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl gap-5">
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
 				<h2>Feedback</h2>
 				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (cores@levminer.com).</h3>
@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<div class="transparent-800 mb-5 flex w-full flex-row items-center justify-between rounded-xl p-5 text-left">
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
 				<h2>About Cores</h2>
 				<h3>Information about your Cores build and your computer.</h3>

@@ -1,6 +1,6 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl">
-	<div class="mx-10 flex gap-5 pb-10 pt-10">
-		<div class="flex w-3/5 flex-col justify-start gap-5">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full">
+	<div class="mx-10 flex gap-5 pb-10 pt-10 sm:flex-wrap">
+		<div class="flex w-3/5 flex-col justify-start gap-5 sm:w-full">
 			<!-- cpu info -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
 				<div class="mb-5 flex items-baseline gap-3">
@@ -13,7 +13,7 @@
 				<h3>Family: {$hardwareInfo.cpu.info[0].caption}</h3>
 				<h3>Name: {$hardwareInfo.cpu.name}</h3>
 				<h3>Socket: {$hardwareInfo.cpu.info[0].socketDesignation}</h3>
-				<h3>Base speed: {$hardwareInfo.cpu.info[0].currentClockSpeed / 1000} GHz</h3>
+				<h3>Base speed: {($hardwareInfo.cpu.info[0].currentClockSpeed / 1000).toFixed(1)} GHz</h3>
 				<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].numberOfCores} C/{$hardwareInfo.cpu.info[0].numberOfLogicalProcessors} T</h3>
 			</div>
 			<!-- cpu temp -->
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 
-		<div class="flex w-2/5 flex-col justify-start gap-5">
+		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
 			<!-- cpu power usage -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
 				<div class="mb-5 flex items-baseline gap-3">
@@ -50,7 +50,7 @@
 					<h2>Average CPU Load</h2>
 				</div>
 				<div>
-					<LineChart statistics={$hardwareStatistics.cpu.load} type={"Load"} unit={"%"} color={"#00bbf9"} />
+					<UsageChart statistics={$hardwareStatistics.cpu.load} type={"Load"} unit={"%"} color={"#00bbf9"} />
 				</div>
 			</div>
 		</div>
@@ -60,6 +60,7 @@
 <script lang="ts">
 	import TemperatureChart from "../components/temperatureChart.svelte"
 	import LineChart from "../components/lineChart.svelte"
+	import UsageChart from "../components/usageChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
 </script>

@@ -14,9 +14,9 @@
 	$: data = {
 		labels: labels,
 		datasets: [
-			{ label: "Min temperature", data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9" },
-			{ label: "Current temperature", data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5" },
-			{ label: "Max temperature", data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5" },
+			{ label: "Min temperature", data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
+			{ label: "Current temperature", data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
+			{ label: "Max temperature", data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
 		],
 	}
 

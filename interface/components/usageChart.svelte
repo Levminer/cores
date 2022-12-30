@@ -16,7 +16,7 @@
 
 	$: data = {
 		labels: labels,
-		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color, tension: 0.5, fill: true, pointHitRadius: 15}],
+		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color, tension: 0.3, fill: true, pointHitRadius: 15}],
 	}
 
 	let options: ChartOptions<"line"> = {

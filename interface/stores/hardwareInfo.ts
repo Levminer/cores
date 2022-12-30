@@ -28,10 +28,11 @@ const defaultHardwareInfo: HardwareInfo = {
 		lastLoad: 15,
 		temperature: [defaultSensor, defaultSensor],
 		fans: [],
-		memory: [],
+		memory: [defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad],
 		power: [defaultSensor],
 		load: [],
 		info: [],
+		clock: [defaultSensor, defaultSensor],
 	},
 
 	ram: {

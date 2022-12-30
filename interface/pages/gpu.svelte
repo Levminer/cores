@@ -1,4 +1,4 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full">
 	<div class="mx-10 flex gap-5 pb-10 pt-10">
 		<div class="flex w-3/5 flex-col justify-start gap-5">
 			<!-- cpu info -->

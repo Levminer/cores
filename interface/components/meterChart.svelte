@@ -43,6 +43,13 @@
 			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
 
 			lastCategories = categories
+		} else {
+			// potential bottleneck
+			if (readings.length < 2) {
+				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 55 + "px"
+			} else {
+				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+			}
 		}
 	})
 
