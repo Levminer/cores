@@ -1,7 +1,7 @@
 <div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full">
-	<div class="mx-10 flex justify-evenly gap-5 pt-10">
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="flex w-full justify-center">
+	<div class="mx-10 flex justify-evenly gap-5 pt-10 sm:flex-wrap">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+			<div class="mx-auto flex w-full justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
 			<div>
@@ -22,8 +22,8 @@
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="flex w-full justify-center">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+			<div class="mx-auto flex w-full justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
 			<div>
@@ -44,8 +44,8 @@
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center">
-			<div class="flex w-full justify-center">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+			<div class="mx-auto flex w-full justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
 			<div>
@@ -67,9 +67,9 @@
 		</div>
 	</div>
 
-	<div class="mx-10 mt-5 flex justify-evenly gap-5 pb-10">
+	<div class="mx-10 mt-5 flex gap-5 pb-10 sm:flex-wrap">
 		<!-- CPU info -->
-		<div class="flex w-1/3 flex-col gap-5 text-left">
+		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
@@ -116,7 +116,7 @@
 		</div>
 
 		<!-- RAM info -->
-		<div class="flex w-1/3 flex-col gap-5 text-left">
+		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
@@ -147,7 +147,7 @@
 		</div>
 
 		<!-- GPU info -->
-		<div class="flex w-1/3 flex-col gap-5 text-left">
+		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="mb-5 flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>

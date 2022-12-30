@@ -1,6 +1,6 @@
 <div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full">
-	<div class="mx-10 flex justify-evenly gap-5 pt-10 pb-10">
-		<div class="w-2/3 text-left">
+	<div class="mx-10 flex justify-evenly gap-5 pt-10 pb-10 sm:flex-wrap">
+		<div class="w-2/3 text-left sm:w-full">
 			<!-- System -->
 			<div class="transparent-800 mb-5 rounded-xl p-10">
 				<div class="flex items-baseline gap-3">
@@ -51,7 +51,7 @@
 			</div>
 		</div>
 
-		<div class="flex w-1/3 gap-5 text-left flex-col">
+		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<!-- Disk info -->
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="flex items-baseline gap-3">
