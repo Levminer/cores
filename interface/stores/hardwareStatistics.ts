@@ -17,6 +17,15 @@ const defaultHardwareStatistics: HardwareStatistics = {
 			virtual: [],
 		},
 	},
+
+	gpu: {
+		temperature: {
+			value: [],
+			min: [],
+			max: [],
+		},
+		power: []
+	}
 }
 
 export const hardwareStatistics = writable<HardwareStatistics>(sessionStorage.hardwareStatistics ? JSON.parse(sessionStorage.hardwareStatistics) : defaultHardwareStatistics)

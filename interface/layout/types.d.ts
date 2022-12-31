@@ -149,6 +149,15 @@ declare global {
 				virtual: number[]
 			}
 		}
+
+		gpu: {
+			temperature: {
+				value: number[]
+				min: number[]
+				max: number[]
+			}
+			power: number[]
+		}
 	}
 }
 

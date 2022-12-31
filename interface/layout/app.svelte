@@ -57,6 +57,12 @@
 
 					$hardwareStatistics.ram.usage.physical.shift()
 					$hardwareStatistics.ram.usage.virtual.shift()
+
+					$hardwareStatistics.gpu.temperature.max.shift()
+					$hardwareStatistics.gpu.temperature.min.shift()
+					$hardwareStatistics.gpu.temperature.value.shift()
+
+					$hardwareStatistics.gpu.power.shift()
 				}
 
 				// CPU temperatures (60s)
@@ -73,6 +79,14 @@
 				// RAM usage (60s)
 				$hardwareStatistics.ram.usage.physical.push(Math.round(input.ram.load[2].value))
 				$hardwareStatistics.ram.usage.virtual.push(Math.round(input.ram.load[5].value))
+
+				// GPU temperatures (60s)
+				$hardwareStatistics.gpu.temperature.max.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.max, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.min.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.min, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.value.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.value, 0) / input.gpu.temperature.length))
+
+				// GPU power usage (60s)
+				$hardwareStatistics.gpu.power.push(Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)))
 
 				// Update the sessionStorage
 				const data: HardwareStatistics = {
@@ -91,7 +105,16 @@
 							physical: $hardwareStatistics.ram.usage.physical,
 							virtual: $hardwareStatistics.ram.usage.virtual,
 						},
-					}
+					},
+
+					gpu: {
+						temperature: {
+							max: $hardwareStatistics.gpu.temperature.max,
+							min: $hardwareStatistics.gpu.temperature.min,
+							value: $hardwareStatistics.gpu.temperature.value,
+						},
+						power: $hardwareStatistics.gpu.power,
+					},
 				}
 
 				setHardwareStatistics(data)

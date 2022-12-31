@@ -16,6 +16,7 @@
 				<h3>Base speed: {($hardwareInfo.cpu.info[0].currentClockSpeed / 1000).toFixed(1)} GHz</h3>
 				<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].numberOfCores} C/{$hardwareInfo.cpu.info[0].numberOfLogicalProcessors} T</h3>
 			</div>
+			
 			<!-- cpu temp -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
 				<div class="mb-5 flex items-baseline gap-3">
