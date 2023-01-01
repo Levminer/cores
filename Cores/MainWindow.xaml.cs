@@ -11,7 +11,7 @@ using Windows.ApplicationModel.DataTransfer;
 namespace Cores;
 
 public sealed partial class MainWindow : Window {
-	private readonly DispatcherTimer dispatcherTimer;
+	private readonly DispatcherTimer APIRefresher;
 
 	public MainWindow() {
 		InitializeComponent();
@@ -32,14 +32,13 @@ public sealed partial class MainWindow : Window {
 		// Webview setup
 		Init();
 
-		// Refresh hardware info
-		dispatcherTimer = new DispatcherTimer();
-		dispatcherTimer.Tick += dispatcherTimer_Tick;
-		dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
-		dispatcherTimer.Start();
+		APIRefresher = new DispatcherTimer();
+		APIRefresher.Tick += RefreshAPI;
+		APIRefresher.Interval = new TimeSpan(0, 0, 1);
+		APIRefresher.Start();
 	}
 
-	public void dispatcherTimer_Tick(object sender, object e) {
+	public void RefreshAPI(object sender, object e) {
 		System.Threading.Tasks.Task.Run(() => {
 			App.GlobalHardwareInfo.Refresh();
 		});
