@@ -34,7 +34,7 @@ public sealed partial class MainWindow : Window {
 
 		APIRefresher = new DispatcherTimer();
 		APIRefresher.Tick += RefreshAPI;
-		APIRefresher.Interval = new TimeSpan(0, 0, 1);
+		APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.settings.Interval);
 		APIRefresher.Start();
 	}
 
@@ -43,7 +43,7 @@ public sealed partial class MainWindow : Window {
 			App.GlobalHardwareInfo.Refresh();
 		});
 
-		Send();
+		SendAPI();
 	}
 
 	private async void Init() {
@@ -62,7 +62,14 @@ public sealed partial class MainWindow : Window {
 	}
 
 	public void EventHandler(object target, CoreWebView2DOMContentLoadedEventArgs arg) {
-		Send();
+		SendAPI();
+
+		var data = new Message() {
+			Name = "settings",
+			Content = JsonSerializer.Serialize(App.GlobalSettings.settings, App.SerializerOptions)
+		};
+
+		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(data, App.SerializerOptions));
 	}
 
 	// Open links in browser
@@ -73,33 +80,38 @@ public sealed partial class MainWindow : Window {
 
 	// About dialog
 	public async void WebView_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs args) {
-		var res = args.TryGetWebMessageAsString();
-		aboutDialogText.Text = res;
+		var content = JsonSerializer.Deserialize<Message>(args.WebMessageAsJson, App.SerializerOptions);
+		Debug.WriteLine($"Message: {content.Name}");
 
-		var dialogResult = await aboutDialog.ShowAsync();
+		switch (content.Name) {
+			case "about":
+				aboutDialogText.Text = content.Content;
 
-		if (dialogResult.ToString() == "Primary") {
-			var content = new DataPackage();
-			content.SetText(res);
+				var dialogResult = await aboutDialog.ShowAsync();
 
-			Clipboard.SetContent(content);
+				if (dialogResult.ToString() == "Primary") {
+					var data = new DataPackage();
+					data.SetText(content.Content);
+
+					Clipboard.SetContent(data);
+				}
+				break;
+
+			case "newSettings":
+				App.GlobalSettings.SetSettings(content.Content);
+				break;
 		}
 	}
 
 	// Send API info to the interface
-	public async void Send() {
+	public async void SendAPI() {
 		var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
 		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
 		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.221209.1";
 
-		var serializeOptions = new JsonSerializerOptions {
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-			WriteIndented = true
-		};
-
-		var JSON = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, serializeOptions);
+		var JSON = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, App.SerializerOptions);
 
 		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{JSON}`");
 	}
