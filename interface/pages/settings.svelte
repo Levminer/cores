@@ -1,7 +1,23 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl sm:m-3 sm:w-full p-10">
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl p-10 sm:m-3 sm:w-full">
+	<h1 class="mb-10">General</h1>
+
+	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+			<div>
+				<h2>Refresh interval</h2>
+				<h3>How often does Cores refreshes the sensors and displays the data. Restart required.</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<Select options={["1s", "2s", "3s", "5s", "15s"]} setting={"interval"} values={[1, 2, 3, 5, 15]} />
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl p-10 sm:m-3 sm:w-full">
 	<h1 class="mb-10">About</h1>
 
-	<div class="mx-auto flex flex-col items-center justify-center rounded-2xl gap-5">
+	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
 				<h2>Feedback</h2>
@@ -38,6 +54,7 @@
 <script lang="ts">
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import build from "../../build.json"
+	import Select from "../components/select.svelte"
 
 	const about = () => {
 		let usedRAM = $hardwareInfo.ram.load[0].value
@@ -48,6 +65,6 @@
 		let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${RAM} RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
 
 		// @ts-ignore
-		window.chrome.webview.postMessage(message)
+		window.chrome.webview.postMessage({ name: "about", content: message })
 	}
 </script>

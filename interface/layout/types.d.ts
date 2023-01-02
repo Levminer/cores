@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 /// <reference types="svelte" />
 
+import type { settings } from "stores/settings"
+
 declare global {
 	interface Load {
 		name: string
@@ -158,6 +160,10 @@ declare global {
 			}
 			power: number[]
 		}
+	}
+
+	interface LibSettings {
+		interval: number
 	}
 }
 

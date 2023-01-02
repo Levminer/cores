@@ -1,7 +1,7 @@
 <div class="flex h-screen">
 	<Navigation />
 
-	<div class="w-full overflow-hidden overflow-y-scroll">
+	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
 
 		<div class="top" />
@@ -30,6 +30,7 @@
 	import RAM from "../pages/ram.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
+	import { setSettings, settings } from "../stores/settings"
 
 	// Navigate to the home page on load (webview bug)
 	onMount(() => {
@@ -39,6 +40,15 @@
 	// Update hardware statistics
 	onMount(() => {
 		let observer: MutationObserver
+
+		// @ts-ignore
+		window.chrome.webview.addEventListener("message", (arg) => {
+			if (arg.data.name === "settings") {
+				console.log("New settings")
+
+				$settings = JSON.parse(arg.data.content)
+			}
+		})
 
 		// Watch for changes in the DOM
 		observer = new MutationObserver(() => {
