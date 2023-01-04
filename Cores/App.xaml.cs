@@ -1,5 +1,6 @@
 ﻿using cores;
 using Microsoft.UI.Xaml;
+using System;
 using System.Text.Json;
 using WinUIEx;
 
@@ -22,15 +23,40 @@ public partial class App : Application {
 		GlobalSettings.GetSettings();
 	}
 
-	protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {
+	protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {
+		// Single instance
+		var appArgs = Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().GetActivatedEventArgs();
+
+		// Get or register the main instance
+		var mainInstance = Microsoft.Windows.AppLifecycle.AppInstance.FindOrRegisterForKey("main");
+
+		// If the main instance isn't this current instance
+		if (!mainInstance.IsCurrent) {
+			// Redirect activation to that instance
+			await mainInstance.RedirectActivationToAsync(appArgs);
+
+			// And exit our instance and stop
+			System.Diagnostics.Process.GetCurrentProcess().Kill();
+			return;
+		}
+
+		// Otherwise, register for activation redirection
+		Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().Activated += App_Activated;
+
+		// Create the main window
 		MainWindow = new MainWindow();
 		MainWindow.Activate();
 		MainWindow.Maximize();
 		MainWindow.Title = "Cores";
 		MainWindow.SetIcon("Assets/icon.ico");
 
-		var windowManager = WinUIEx.WindowManager.Get(MainWindow);
+		var windowManager = WindowManager.Get(MainWindow);
 		windowManager.MinWidth = 1000;
 		windowManager.MinHeight = 600;
+	}
+
+	private void App_Activated(object sender, Microsoft.Windows.AppLifecycle.AppActivationArguments e) {
+		MainWindow.Maximize();
+		MainWindow.SetForegroundWindow();
 	}
 }
