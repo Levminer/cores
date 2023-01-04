@@ -20,6 +20,19 @@
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
+				<h2>Debug report</h2>
+				<h3>Debug information about your computer. Include this report with your feedback.</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<button class="button" on:click={debug}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2H4" /><polyline points="14 2 14 8 20 8" /><circle cx="6" cy="14" r="3" /><path d="M6 10v1" /><path d="M6 17v1" /><path d="M10 14H9" /><path d="M3 14H2" /><path d="m9 11-.88.88" /><path d="M3.88 16.12 3 17" /><path d="m9 17-.88-.88" /><path d="M3.88 11.88 3 11" /></svg>
+					Save
+				</button>
+			</div>
+		</div>
+
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+			<div>
 				<h2>Feedback</h2>
 				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (cores@levminer.com).</h3>
 			</div>
@@ -56,15 +69,46 @@
 	import build from "../../build.json"
 	import Select from "../components/select.svelte"
 
+	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+
 	const about = () => {
-		let usedRAM = $hardwareInfo.ram.load[0].value
-		let availableRAM = $hardwareInfo.ram.load[1].value
-
-		let RAM = `${Math.round(usedRAM + availableRAM)} GB`
-
-		let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${RAM} RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
-
 		// @ts-ignore
 		window.chrome.webview.postMessage({ name: "about", content: message })
+	}
+
+	const debug = async () => {
+		// @ts-ignore
+		window.chrome.webview.postMessage({ name: "debug", content: message })
+
+		// @ts-ignore
+		window.chrome.webview.addEventListener(
+			"message",
+			async (arg) => {
+				// save file dialog
+				try {
+					const handle = await window.showSaveFilePicker({
+						types: [
+							{
+								description: "Text file",
+								accept: { "text/plain": [".txt"] },
+							},
+						],
+						suggestedName: `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}`,
+					})
+
+					if (handle.kind == "file") {
+						// write file
+						handle.createWritable().then((writable) => {
+							writable.write(arg.data.content).then(() => {
+								writable.close()
+							})
+						})
+					}
+				} catch (error) {
+					console.log("failed to save file", error)
+				}
+			},
+			{ once: true }
+		)
 	}
 </script>

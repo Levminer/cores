@@ -20,7 +20,6 @@ public sealed partial class MainWindow : Window {
 		if (AppWindowTitleBar.IsCustomizationSupported()) {
 			ExtendsContentIntoTitleBar = true;
 			SetTitleBar(AppTitleBar);
-
 		} else {
 			AppTitleBar.Visibility = Visibility.Collapsed;
 		}
@@ -64,12 +63,12 @@ public sealed partial class MainWindow : Window {
 	public void EventHandler(object target, CoreWebView2DOMContentLoadedEventArgs arg) {
 		SendAPI();
 
-		var data = new Message() {
+		var message = new Message() {
 			Name = "settings",
 			Content = JsonSerializer.Serialize(App.GlobalSettings.settings, App.SerializerOptions)
 		};
 
-		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(data, App.SerializerOptions));
+		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, App.SerializerOptions));
 	}
 
 	// Open links in browser
@@ -99,6 +98,16 @@ public sealed partial class MainWindow : Window {
 
 			case "newSettings":
 				App.GlobalSettings.SetSettings(content.Content);
+				break;
+
+			case "debug":
+
+				var message = new Message() {
+					Name = "debug",
+					Content = $"{content.Content}\n{App.GlobalHardwareInfo.computer.GetReport()}"
+				};
+
+				webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, App.SerializerOptions));
 				break;
 		}
 	}
