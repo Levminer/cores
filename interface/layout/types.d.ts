@@ -137,9 +137,17 @@ declare global {
 	interface HardwareStatistics {
 		cpu: {
 			temperature: {
-				value: number[]
-				min: number[]
-				max: number[]
+				seconds: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
+
+				minutes: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
 			}
 			power: number[]
 			load: number[]

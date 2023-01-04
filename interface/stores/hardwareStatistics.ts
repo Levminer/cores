@@ -3,9 +3,17 @@ import { writable, get } from "svelte/store"
 const defaultHardwareStatistics: HardwareStatistics = {
 	cpu: {
 		temperature: {
-			value: [],
-			min: [],
-			max: [],
+			seconds: {
+				value: [],
+				min: [],
+				max: [],
+			},
+
+			minutes: {
+				value: [],
+				min: [],
+				max: [],
+			},
 		},
 		power: [],
 		load: [],
@@ -24,14 +32,14 @@ const defaultHardwareStatistics: HardwareStatistics = {
 			min: [],
 			max: [],
 		},
-		power: []
-	}
+		power: [],
+	},
 }
 
 export const hardwareStatistics = writable<HardwareStatistics>(sessionStorage.hardwareStatistics ? JSON.parse(sessionStorage.hardwareStatistics) : defaultHardwareStatistics)
 
 hardwareStatistics.subscribe((data) => {
-	// console.log("HardwareStatistics changed: ", data)
+	console.log("HardwareStatistics changed: ", data)
 
 	sessionStorage.setItem("hardwareStatistics", JSON.stringify(data))
 })

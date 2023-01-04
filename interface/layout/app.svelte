@@ -30,7 +30,7 @@
 	import RAM from "../pages/ram.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
-	import { setSettings, settings } from "../stores/settings"
+	import { settings } from "../stores/settings"
 
 	// Navigate to the home page on load (webview bug)
 	onMount(() => {
@@ -41,7 +41,7 @@
 	onMount(() => {
 		let observer: MutationObserver
 
-		// @ts-ignore
+		// @ts-ignore - Receive settings from the webview
 		window.chrome.webview.addEventListener("message", (arg) => {
 			if (arg.data.name === "settings") {
 				console.log("New settings")
@@ -50,16 +50,20 @@
 			}
 		})
 
+		// 60s date comparison
+		const date = new Date()
+		date.setSeconds(date.getSeconds() + 60)
+
 		// Watch for changes in the DOM
 		observer = new MutationObserver(() => {
 			const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 
 			if (Object.keys(input).length !== 0) {
-				// Shift the array if it's longer than 60s
-				if ($hardwareStatistics.cpu.temperature.max.length > 60) {
-					$hardwareStatistics.cpu.temperature.max.shift()
-					$hardwareStatistics.cpu.temperature.min.shift()
-					$hardwareStatistics.cpu.temperature.value.shift()
+				// Shift the array if it's longer than 60
+				if ($hardwareStatistics.cpu.temperature.seconds.max.length > 60) {
+					$hardwareStatistics.cpu.temperature.seconds.max.shift()
+					$hardwareStatistics.cpu.temperature.seconds.min.shift()
+					$hardwareStatistics.cpu.temperature.seconds.value.shift()
 
 					$hardwareStatistics.cpu.power.shift()
 
@@ -75,10 +79,26 @@
 					$hardwareStatistics.gpu.power.shift()
 				}
 
+				// Shift the array if it's longer than 60
+				if ($hardwareStatistics.cpu.temperature.minutes.max.length > 60) {
+					$hardwareStatistics.cpu.temperature.minutes.max.shift()
+					$hardwareStatistics.cpu.temperature.minutes.min.shift()
+					$hardwareStatistics.cpu.temperature.minutes.value.shift()
+				}
+
+				// 60 minute statistics
+				if (date.getSeconds() === new Date().getSeconds()) {
+					$hardwareStatistics.cpu.temperature.minutes.max.push(Math.round($hardwareStatistics.cpu.temperature.seconds.max.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.max.length))
+					$hardwareStatistics.cpu.temperature.minutes.min.push(Math.round($hardwareStatistics.cpu.temperature.seconds.min.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.min.length))
+					$hardwareStatistics.cpu.temperature.minutes.value.push(Math.round($hardwareStatistics.cpu.temperature.seconds.value.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.value.length))
+
+					date.setSeconds(date.getSeconds() + 60)
+				}
+
 				// CPU temperatures (60s)
-				$hardwareStatistics.cpu.temperature.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
-				$hardwareStatistics.cpu.temperature.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
-				$hardwareStatistics.cpu.temperature.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.seconds.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.seconds.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.seconds.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
 
 				// CPU power usage (60s)
 				$hardwareStatistics.cpu.power.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
@@ -102,9 +122,17 @@
 				const data: HardwareStatistics = {
 					cpu: {
 						temperature: {
-							max: $hardwareStatistics.cpu.temperature.max,
-							min: $hardwareStatistics.cpu.temperature.min,
-							value: $hardwareStatistics.cpu.temperature.value,
+							seconds: {
+								max: $hardwareStatistics.cpu.temperature.seconds.max,
+								min: $hardwareStatistics.cpu.temperature.seconds.min,
+								value: $hardwareStatistics.cpu.temperature.seconds.value,
+							},
+
+							minutes: {
+								max: $hardwareStatistics.cpu.temperature.minutes.max,
+								min: $hardwareStatistics.cpu.temperature.minutes.min,
+								value: $hardwareStatistics.cpu.temperature.minutes.value,
+							},
 						},
 						power: $hardwareStatistics.cpu.power,
 						load: $hardwareStatistics.cpu.load,
