@@ -20,12 +20,17 @@
 
 			<!-- gpu temperature -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
-					<h2>Average GPU Temperature</h2>
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
+						<h2>Average GPU Temperature</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+					</div>
 				</div>
 				<div>
-					<TemperatureChart statistics={$hardwareStatistics.gpu.temperature} />
+					<TemperatureChart statistics={minutes ? $hardwareStatistics.gpu.temperature.minutes : $hardwareStatistics.gpu.temperature.seconds} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -44,12 +49,17 @@
 
 			<!-- cpu power usage -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
-					<h2>GPU Power Usage</h2>
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
+						<h2>GPU Power Usage</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60m" : "Last 60s"}</h5>
+					</div>
 				</div>
 				<div>
-					<LineChart statistics={$hardwareStatistics.gpu.power} type={"Power usage"} unit={" W"} color={"#ffd60a"} />
+					<LineChart statistics={minutes ? $hardwareStatistics.gpu.power.minutes : $hardwareStatistics.gpu.power.seconds} type={"Power usage"} unit={" W"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -61,6 +71,8 @@
 	import LineChart from "../components/lineChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
+
+	let minutes = false
 
 	// get gpu driver date
 	let driver = $hardwareInfo.gpu.info[0].driverDate.slice(0, 8)

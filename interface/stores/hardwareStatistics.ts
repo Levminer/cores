@@ -15,24 +15,46 @@ const defaultHardwareStatistics: HardwareStatistics = {
 				max: [],
 			},
 		},
-		power: [],
-		load: [],
+		power: {
+			seconds: [],
+			minutes: [],
+		},
+		load: {
+			seconds: [],
+			minutes: [],
+		},
 	},
 
 	ram: {
-		usage: {
-			physical: [],
-			virtual: [],
+		physicalUsage: {
+			seconds: [],
+			minutes: [],
+		},
+
+		virtualUsage: {
+			seconds: [],
+			minutes: [],
 		},
 	},
 
 	gpu: {
 		temperature: {
-			value: [],
-			min: [],
-			max: [],
+			seconds: {
+				value: [],
+				min: [],
+				max: [],
+			},
+
+			minutes: {
+				value: [],
+				min: [],
+				max: [],
+			},
 		},
-		power: [],
+		power: {
+			seconds: [],
+			minutes: [],
+		},
 	},
 }
 

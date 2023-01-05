@@ -64,19 +64,16 @@
 					$hardwareStatistics.cpu.temperature.seconds.max.shift()
 					$hardwareStatistics.cpu.temperature.seconds.min.shift()
 					$hardwareStatistics.cpu.temperature.seconds.value.shift()
+					$hardwareStatistics.cpu.power.seconds.shift()
+					$hardwareStatistics.cpu.load.seconds.shift()
 
-					$hardwareStatistics.cpu.power.shift()
+					$hardwareStatistics.ram.physicalUsage.seconds.shift()
+					$hardwareStatistics.ram.virtualUsage.seconds.shift()
 
-					$hardwareStatistics.cpu.load.shift()
-
-					$hardwareStatistics.ram.usage.physical.shift()
-					$hardwareStatistics.ram.usage.virtual.shift()
-
-					$hardwareStatistics.gpu.temperature.max.shift()
-					$hardwareStatistics.gpu.temperature.min.shift()
-					$hardwareStatistics.gpu.temperature.value.shift()
-
-					$hardwareStatistics.gpu.power.shift()
+					$hardwareStatistics.gpu.temperature.seconds.max.shift()
+					$hardwareStatistics.gpu.temperature.seconds.min.shift()
+					$hardwareStatistics.gpu.temperature.seconds.value.shift()
+					$hardwareStatistics.gpu.power.seconds.shift()
 				}
 
 				// Shift the array if it's longer than 60
@@ -84,6 +81,16 @@
 					$hardwareStatistics.cpu.temperature.minutes.max.shift()
 					$hardwareStatistics.cpu.temperature.minutes.min.shift()
 					$hardwareStatistics.cpu.temperature.minutes.value.shift()
+					$hardwareStatistics.cpu.power.minutes.shift()
+					$hardwareStatistics.cpu.load.minutes.shift()
+
+					$hardwareStatistics.ram.physicalUsage.minutes.shift()
+					$hardwareStatistics.ram.virtualUsage.minutes.shift()
+
+					$hardwareStatistics.gpu.temperature.minutes.max.shift()
+					$hardwareStatistics.gpu.temperature.minutes.min.shift()
+					$hardwareStatistics.gpu.temperature.minutes.value.shift()
+					$hardwareStatistics.gpu.power.minutes.shift()
 				}
 
 				// 60 minute statistics
@@ -91,32 +98,34 @@
 					$hardwareStatistics.cpu.temperature.minutes.max.push(Math.round($hardwareStatistics.cpu.temperature.seconds.max.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.max.length))
 					$hardwareStatistics.cpu.temperature.minutes.min.push(Math.round($hardwareStatistics.cpu.temperature.seconds.min.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.min.length))
 					$hardwareStatistics.cpu.temperature.minutes.value.push(Math.round($hardwareStatistics.cpu.temperature.seconds.value.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.value.length))
+					$hardwareStatistics.cpu.power.minutes.push(Math.round($hardwareStatistics.cpu.power.seconds.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.power.seconds.length))
+					$hardwareStatistics.cpu.load.minutes.push(Math.round($hardwareStatistics.cpu.load.seconds.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.load.seconds.length))
+
+					$hardwareStatistics.ram.physicalUsage.minutes.push(Math.round($hardwareStatistics.ram.physicalUsage.seconds.reduce((a, b) => a + b, 0) / $hardwareStatistics.ram.physicalUsage.seconds.length))
+					$hardwareStatistics.ram.virtualUsage.minutes.push(Math.round($hardwareStatistics.ram.virtualUsage.seconds.reduce((a, b) => a + b, 0) / $hardwareStatistics.ram.virtualUsage.seconds.length))
+
+					$hardwareStatistics.gpu.temperature.minutes.max.push(Math.round($hardwareStatistics.gpu.temperature.seconds.max.reduce((a, b) => a + b, 0) / $hardwareStatistics.gpu.temperature.seconds.max.length))
+					$hardwareStatistics.gpu.temperature.minutes.min.push(Math.round($hardwareStatistics.gpu.temperature.seconds.min.reduce((a, b) => a + b, 0) / $hardwareStatistics.gpu.temperature.seconds.min.length))
+					$hardwareStatistics.gpu.temperature.minutes.value.push(Math.round($hardwareStatistics.gpu.temperature.seconds.value.reduce((a, b) => a + b, 0) / $hardwareStatistics.gpu.temperature.seconds.value.length))
+					$hardwareStatistics.gpu.power.minutes.push(Math.round($hardwareStatistics.gpu.power.seconds.reduce((a, b) => a + b, 0) / $hardwareStatistics.gpu.power.seconds.length))
 
 					date.setSeconds(date.getSeconds() + 60)
 				}
 
-				// CPU temperatures (60s)
+				// 60 second statistics
 				$hardwareStatistics.cpu.temperature.seconds.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
 				$hardwareStatistics.cpu.temperature.seconds.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
 				$hardwareStatistics.cpu.temperature.seconds.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.power.seconds.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
+				$hardwareStatistics.cpu.load.seconds.push(Math.round(input.cpu.lastLoad))
 
-				// CPU power usage (60s)
-				$hardwareStatistics.cpu.power.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
+				$hardwareStatistics.ram.physicalUsage.seconds.push(Math.round(input.ram.load[2].value))
+				$hardwareStatistics.ram.virtualUsage.seconds.push(Math.round(input.ram.load[5].value))
 
-				// AVG CPU threads load (60s)
-				$hardwareStatistics.cpu.load.push(Math.round(input.cpu.lastLoad))
-
-				// RAM usage (60s)
-				$hardwareStatistics.ram.usage.physical.push(Math.round(input.ram.load[2].value))
-				$hardwareStatistics.ram.usage.virtual.push(Math.round(input.ram.load[5].value))
-
-				// GPU temperatures (60s)
-				$hardwareStatistics.gpu.temperature.max.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.max, 0) / input.gpu.temperature.length))
-				$hardwareStatistics.gpu.temperature.min.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.min, 0) / input.gpu.temperature.length))
-				$hardwareStatistics.gpu.temperature.value.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.value, 0) / input.gpu.temperature.length))
-
-				// GPU power usage (60s)
-				$hardwareStatistics.gpu.power.push(Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)))
+				$hardwareStatistics.gpu.temperature.seconds.max.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.max, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.seconds.min.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.min, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.seconds.value.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.value, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.power.seconds.push(Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)))
 
 				// Update the sessionStorage
 				const data: HardwareStatistics = {
@@ -134,24 +143,46 @@
 								value: $hardwareStatistics.cpu.temperature.minutes.value,
 							},
 						},
-						power: $hardwareStatistics.cpu.power,
-						load: $hardwareStatistics.cpu.load,
+						power: {
+							seconds: $hardwareStatistics.cpu.power.seconds,
+							minutes: $hardwareStatistics.cpu.power.minutes,
+						},
+						load: {
+							seconds: $hardwareStatistics.cpu.load.seconds,
+							minutes: $hardwareStatistics.cpu.load.minutes,
+						},
 					},
 
 					ram: {
-						usage: {
-							physical: $hardwareStatistics.ram.usage.physical,
-							virtual: $hardwareStatistics.ram.usage.virtual,
+						physicalUsage: {
+							seconds: $hardwareStatistics.ram.physicalUsage.seconds,
+							minutes: $hardwareStatistics.ram.physicalUsage.minutes,
+						},
+
+						virtualUsage: {
+							seconds: $hardwareStatistics.ram.virtualUsage.seconds,
+							minutes: $hardwareStatistics.ram.virtualUsage.minutes,
 						},
 					},
 
 					gpu: {
 						temperature: {
-							max: $hardwareStatistics.gpu.temperature.max,
-							min: $hardwareStatistics.gpu.temperature.min,
-							value: $hardwareStatistics.gpu.temperature.value,
+							seconds: {
+								max: $hardwareStatistics.gpu.temperature.seconds.max,
+								min: $hardwareStatistics.gpu.temperature.seconds.min,
+								value: $hardwareStatistics.gpu.temperature.seconds.value,
+							},
+
+							minutes: {
+								max: $hardwareStatistics.gpu.temperature.minutes.max,
+								min: $hardwareStatistics.gpu.temperature.minutes.min,
+								value: $hardwareStatistics.gpu.temperature.minutes.value,
+							},
 						},
-						power: $hardwareStatistics.gpu.power,
+						power: {
+							seconds: $hardwareStatistics.gpu.power.seconds,
+							minutes: $hardwareStatistics.gpu.power.minutes,
+						},
 					},
 				}
 

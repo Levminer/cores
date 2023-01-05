@@ -149,24 +149,46 @@ declare global {
 					max: number[]
 				}
 			}
-			power: number[]
-			load: number[]
+			power: {
+				seconds: number[]
+				minutes: number[]
+			}
+			load: {
+				seconds: number[]
+				minutes: number[]
+			}
 		}
 
 		ram: {
-			usage: {
-				physical: number[]
-				virtual: number[]
+			physicalUsage: {
+				seconds: number[]
+				minutes: number[]
+			}
+
+			virtualUsage: {
+				seconds: number[]
+				minutes: number[]
 			}
 		}
 
 		gpu: {
 			temperature: {
-				value: number[]
-				min: number[]
-				max: number[]
+				seconds: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
+
+				minutes: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
 			}
-			power: number[]
+			power: {
+				seconds: number[]
+				minutes: number[]
+			}
 		}
 	}
 

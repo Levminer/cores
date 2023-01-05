@@ -6,10 +6,11 @@
 	import { Line } from "svelte-chartjs"
 
 	export let statistics: { min: number[]; value: number[]; max: number[] }
+	export let time: string
 
 	Chart.register(...registerables)
 
-	$: labels = statistics.value.map((_, i) => `${statistics.value.length - 1 - i}s ago`)
+	$: labels = statistics.value.map((_, i) => `${statistics.value.length - 1 - i}${time} ago`)
 
 	$: data = {
 		labels: labels,

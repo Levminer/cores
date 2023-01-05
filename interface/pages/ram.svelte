@@ -36,23 +36,33 @@
 		<div class="flex w-full flex-row justify-start gap-5 sm:flex-wrap">
 			<!-- ram usage -->
 			<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>
-					<h2>RAM usage</h2>
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>
+						<h2>RAM usage</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+					</div>
 				</div>
 				<div>
-					<UsageChart statistics={$hardwareStatistics.ram.usage.physical} type={"Usage"} unit={"%"} color={"#00bbf9"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.ram.physicalUsage.minutes : $hardwareStatistics.ram.physicalUsage.seconds} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 
 			<!-- virtual ram usage -->
 			<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>
-					<h2>Virtual RAM usage</h2>
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>
+						<h2>Virtual RAM usage</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+					</div>
 				</div>
 				<div>
-					<UsageChart statistics={$hardwareStatistics.ram.usage.virtual} type={"Usage"} unit={"%"} color={"#00bbf9"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.ram.virtualUsage.minutes : $hardwareStatistics.ram.virtualUsage.seconds} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -65,4 +75,6 @@
 	import UsageChart from "../components/usageChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
+
+	let minutes = false
 </script>
