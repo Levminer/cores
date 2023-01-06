@@ -67,6 +67,16 @@ const defaultHardwareInfo: HardwareInfo = {
 		monitor: {
 			monitors: [],
 		},
+
+		network: {
+			interfaces: [],
+		},
+
+		bios: {
+			version: "1.0",
+			date: "2023. 01. 01",
+			vendor: "Vendor",
+		},
 	},
 }
 

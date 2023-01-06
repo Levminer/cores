@@ -10,7 +10,7 @@
 					<h3>{$hardwareInfo.cpu.name}</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -32,7 +32,7 @@
 					<h3>Generic Memory</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -54,7 +54,7 @@
 					<h3>{$hardwareInfo.gpu.name}</h3>
 				</div>
 				<div class="mt-3 flex justify-center">
-					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+					<svg class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`} on:click={showLoadGraphs} on:keydown={showLoadGraphs} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
 				</div>
 				<div>
 					{#if loadGraphs}
@@ -75,9 +75,9 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>CPU Temperature</h2>
 				</div>
-				<h3>Avg. temperature: {AvgCPUTemp} °C</h3>
+				<h3>Avg. temperature: {Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={CPUCategories} i={0} type={{ name: "temperature", unit: "°C" }} />
+					<MeterChart readings={$hardwareInfo.cpu.temperature} categories={$hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)} i={0} type={{ name: "temperature", unit: "°C" }} />
 				</div>
 			</div>
 
@@ -86,9 +86,9 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
 					<h2>CPU Clock speed</h2>
 				</div>
-				<h3>Avg. clock speed: {(AvgCPUClock / 1000).toFixed(1)} GHz</h3>
+				<h3>Avg. clock speed: {(Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length) / 1000).toFixed(1)} GHz</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.clock} categories={CPUClockCategories} i={2} type={{ name: "clock speed", unit: "MHz" }} />
+					<MeterChart readings={$hardwareInfo.cpu.clock} categories={$hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={2} type={{ name: "clock speed", unit: "MHz" }} />
 				</div>
 			</div>
 
@@ -110,7 +110,7 @@
 				</div>
 				<h3>Avg. voltage: {($hardwareInfo.cpu.voltage.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.voltage.length).toFixed(1)} V</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.voltage} categories={CPUVoltageCategories} i={5} type={{ name: "voltage", unit: "V" }} />
+					<MeterChart readings={$hardwareInfo.cpu.voltage} categories={$hardwareInfo.cpu.voltage.map((temp, i) => `${temp.name} (${temp.value} V)`)} i={5} type={{ name: "voltage", unit: "V" }} />
 				</div>
 			</div>
 		</div>
@@ -153,9 +153,9 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
 					<h2>GPU Temperature</h2>
 				</div>
-				<h3>Avg. temperature: {AvgGPUTemp} °C</h3>
+				<h3>Avg. temperature: {Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={GPUCategories} i={1} type={{ name: "temperature", unit: "°C" }} />
+					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)} i={1} type={{ name: "temperature", unit: "°C" }} />
 				</div>
 			</div>
 
@@ -197,7 +197,7 @@
 				</div>
 				<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.power} categories={GPUPowerCategories} i={4} type={{ name: "power usage", unit: "W" }} />
+					<MeterChart readings={$hardwareInfo.gpu.power} categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name} (${temp.value} W)`)} i={4} type={{ name: "power usage", unit: "W" }} />
 				</div>
 			</div>
 		</div>
@@ -214,6 +214,7 @@
 	let loadGraphs = null
 	let loadGraphsShown = false
 
+	// Show load graphs
 	const showLoadGraphs = () => {
 		if (!loadGraphsShown) {
 			loadGraphs = import("../components/loadChart.svelte")
@@ -233,23 +234,14 @@
 		updateHardwareInfo()
 	})
 
-	// Start observing the target
+	// Watch for API changes
 	observer.observe(document.querySelector("#api"), {
 		attributes: true,
 		childList: true,
 		characterData: true,
 	})
 
-	$: AvgCPUTemp = Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)
-	$: AvgCPUClock = Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length)
-	$: AvgGPUTemp = Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)
-
-	$: CPUCategories = $hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)
-	$: CPUClockCategories = $hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)
-	$: CPUVoltageCategories = $hardwareInfo.cpu.voltage.map((temp, i) => `${temp.name} (${temp.value} V)`)
-	$: GPUCategories = $hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)
-	$: GPUPowerCategories = $hardwareInfo.gpu.power.map((temp) => `${temp.name} (${temp.value} W)`)
-
+	// Update hardware info
 	const updateHardwareInfo = () => {
 		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 

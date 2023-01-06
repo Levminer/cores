@@ -36,7 +36,7 @@
 
 	// Resize chart to fit all data
 	onMount(() => {
-		document.querySelector<HTMLDivElement>(`.loadChart${i}`).style.height = $hardwareInfo.cpu.load.length * 20 + "px"
+		document.querySelector<HTMLDivElement>(`.loadChart${i}`).style.height = $hardwareInfo.cpu.load.length * 25 + "px"
 	})
 
 	// Chart options

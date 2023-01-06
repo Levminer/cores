@@ -9,10 +9,11 @@
 	export let type: string
 	export let unit: string
 	export let color: string
+	export let time: string
 
 	Chart.register(...registerables)
 
-	$: labels = statistics.map((_, i) => `${statistics.length - 1 - i}s ago`)
+	$: labels = statistics.map((_, i) => `${statistics.length - 1 - i}${time} ago`)
 
 	$: data = {
 		labels: labels,
