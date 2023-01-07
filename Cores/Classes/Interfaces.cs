@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LibreHardwareMonitor.Hardware;
+using System.Collections.Generic;
 using HI = Hardware.Info;
 
 namespace Cores;
@@ -175,7 +176,7 @@ public class RAMInfo {
 		get; set;
 	} = new();
 
-	public List<HI.Memory> Info {
+	public List<MemoryDevice> Info {
 		get; set;
 	} = new();
 }

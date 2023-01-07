@@ -245,7 +245,11 @@ public class HardwareInfo {
 			API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
 
 			// RAM modules
-			API.RAM.Info = HwInfo.MemoryList;
+			for (int i = 0; i < computer.SMBios.MemoryDevices.Length; i++) {
+				if (computer.SMBios.MemoryDevices[i].Speed != 0) {
+					API.RAM.Info.Add(computer.SMBios.MemoryDevices[i]);
+				}
+			}
 
 			// Monitors
 			var displays = Display.GetDisplays().ToArray();

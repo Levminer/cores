@@ -9,13 +9,13 @@
 					</svg>
 					<h2>RAM Info</h2>
 				</div>
-				{#each $hardwareInfo.ram.info as { manufacturer, speed, capacity, bankLabel, maxVoltage, minVoltage }}
+				{#each $hardwareInfo.ram.info as { manufacturerName, configuredSpeed, configuredVoltage, size, bankLocator, }}
 					<div class="mt-5">
-						<h3>Vendor: {manufacturer}</h3>
-						<h3>Bank: {bankLabel}</h3>
-						<h3>Speed: {speed} MHz</h3>
-						<h3>Max/Min voltage: {maxVoltage} V/{minVoltage} V</h3>
-						<h3>Capacity: {capacity / 1024 / 1024 / 1024} GB</h3>
+						<h3>Vendor: {manufacturerName}</h3>
+						<h3>Bank: {bankLocator}</h3>
+						<h3>Speed: {configuredSpeed} MHz</h3>
+						<h3>Voltage: {configuredVoltage / 1000} V</h3>
+						<h3>Capacity: {size / 1024} GB</h3>
 					</div>
 				{/each}
 			</div>

@@ -32,15 +32,16 @@ declare global {
 	}
 
 	interface RAMModule {
-		bankLabel: string
-		capacity: number
-		formFactor: number
-		manufacturer: string
-		maxVoltage: number
-		minVoltage: number
+		bankLocator: string
+		deviceLocator: string
+		manufacturerName: string
 		partNumber: string
 		serialNumber: string
+		size: number
 		speed: number
+		configuredSpeed: number
+		configuredVoltage: number
+		type: number
 	}
 
 	interface CPUInfo {

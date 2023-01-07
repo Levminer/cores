@@ -136,11 +136,11 @@
 					</svg>
 					<h2>RAM Modules</h2>
 				</div>
-				{#each $hardwareInfo.ram.info as { bankLabel, manufacturer, speed, partNumber, serialNumber, capacity }}
+				{#each $hardwareInfo.ram.info as { bankLocator, configuredSpeed, size }}
 					<div class="mt-5">
-						<h3>Bank: {bankLabel}</h3>
-						<h3>Speed: {speed} MHz</h3>
-						<h3>Capacity: {capacity / 1024 / 1024 / 1024} GB</h3>
+						<h3>Bank: {bankLocator}</h3>
+						<h3>Speed: {configuredSpeed} MHz</h3>
+						<h3>Capacity: {size / 1024} GB</h3>
 					</div>
 				{/each}
 			</div>
