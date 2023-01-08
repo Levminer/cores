@@ -9,11 +9,13 @@
 					</svg>
 					<h2 class="mb-5">System</h2>
 				</div>
-				<h3>CPU: {$hardwareInfo.cpu.name}</h3>
-				<h3>RAM: {($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value).toFixed(1)} GB</h3>
-				<h3>GPU: {$hardwareInfo.gpu.name}</h3>
-				<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
-				<h3>OS: {$hardwareInfo.system.os.name}</h3>
+				<div class="select-text">
+					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
+					<h3>RAM: {($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value).toFixed(1)} GB</h3>
+					<h3>GPU: {$hardwareInfo.gpu.name}</h3>
+					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
+					<h3>OS: {$hardwareInfo.system.os.name}</h3>
+				</div>
 			</div>
 
 			<div class="flex gap-5 sm:flex-wrap">
@@ -24,7 +26,7 @@
 						<h2>Monitors</h2>
 					</div>
 					{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
-						<div class="mt-5">
+						<div class="mt-5 select-text">
 							<h3>Name: {name}</h3>
 							<h3>Resolution: {resolution}</h3>
 							<h3>Refresh rate: {refreshRate} Hz</h3>
@@ -39,7 +41,7 @@
 						<h2>Interfaces</h2>
 					</div>
 					{#each $hardwareInfo.system.network.interfaces as { name, description, ipAddress, mask, gateway, dns, speed, macAddress }}
-						<div class="mt-5">
+						<div class="mt-5 select-text">
 							<h3>Name: {name}</h3>
 							<h3>Description: {description}</h3>
 							<h3>Address: {ipAddress} ({mask})</h3>
@@ -59,7 +61,7 @@
 					<h2>Disks</h2>
 				</div>
 				{#each $hardwareInfo.system.storage.disks as { name, temperature, usedSpace, size, health }}
-					<div class="mt-5">
+					<div class="mt-5 select-text">
 						<h3>Name: {name}</h3>
 						<h3>Temperature: {temperature} °C</h3>
 						<h3>Health: {health}%</h3>
@@ -74,7 +76,7 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2" /><rect x="9" y="9" width="6" height="6" /><line x1="9" y1="2" x2="9" y2="4" /><line x1="15" y1="2" x2="15" y2="4" /><line x1="9" y1="21" x2="9" y2="22" /><line x1="15" y1="20" x2="15" y2="22" /><line x1="20" y1="9" x2="22" y2="9" /><line x1="20" y1="14" x2="22" y2="14" /><line x1="2" y1="9" x2="4" y2="9" /><line x1="2" y1="14" x2="4" y2="14" /></svg>
 					<h2>BIOS</h2>
 				</div>
-				<div class="mt-5">
+				<div class="mt-5 select-text">
 					<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
 					<h3>Version: {$hardwareInfo.system.bios.version}</h3>
 					<h3>Date: {$hardwareInfo.system.bios.date}</h3>

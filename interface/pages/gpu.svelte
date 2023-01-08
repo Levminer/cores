@@ -11,11 +11,13 @@
 					</svg>
 					<h2>GPU Info</h2>
 				</div>
-				<h3>Vendor: {$hardwareInfo.gpu.info[0].manufacturer}</h3>
-				<h3>Name: {$hardwareInfo.gpu.name}</h3>
-				<h3>GPU memory: {Math.round($hardwareInfo.gpu.memory[2].value / 1024)} GB</h3>
-				<h3>Driver date: {driverDate}</h3>
-				<h3>Primary monitor: {primaryMonitor.resolution} {primaryMonitor.refreshRate} Hz</h3>
+				<div class="select-text">
+					<h3>Vendor: {$hardwareInfo.gpu.info[0].manufacturer}</h3>
+					<h3>Name: {$hardwareInfo.gpu.name}</h3>
+					<h3>GPU memory: {Math.round($hardwareInfo.gpu.memory[2].value / 1024)} GB</h3>
+					<h3>Driver date: {driverDate}</h3>
+					<h3>Primary monitor: {primaryMonitor.resolution} {primaryMonitor.refreshRate} Hz</h3>
+				</div>
 			</div>
 
 			<!-- gpu temperature -->

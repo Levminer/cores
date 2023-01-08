@@ -10,7 +10,7 @@
 					<h2>RAM Info</h2>
 				</div>
 				{#each $hardwareInfo.ram.info as { manufacturerName, configuredSpeed, configuredVoltage, size, bankLocator, }}
-					<div class="mt-5">
+					<div class="mt-5 select-text">
 						<h3>Vendor: {manufacturerName}</h3>
 						<h3>Bank: {bankLocator}</h3>
 						<h3>Speed: {configuredSpeed} MHz</h3>
