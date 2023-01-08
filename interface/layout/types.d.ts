@@ -45,22 +45,25 @@ declare global {
 	}
 
 	interface CPUInfo {
-		caption: string
-		currentClockSpeed: number
-		description: string
-		l2CacheSize: number
-		l3CacheSize: number
-		manufacturer: string
-		maxClockSpeed: number
-		name: string
-		numberOfCores: number
-		numberOfLogicalProcessors: number
-		processorId: string
-		secondLevelAddressTranslationExtensions: boolean
+		characteristics: ProcessorCharacteristics
+		coreCount: number
+		coreEnabled: number
+		currentSpeed: number
+		externalClock: number
+		family: ProcessorFamily
+		handle: number
+		id: number
+		l1CacheHandle: number
+		l2CacheHandle: number
+		l3CacheHandle: number
+		manufacturerName: string
+		maxSpeed: number
+		processorType: ProcessorType
+		serial: string
+		socket: ProcessorSocket
 		socketDesignation: string
-		virtualizationFirmwareEnabled: boolean
-		vMMonitorModeExtensions: boolean
-		percentProcessorTime: number
+		threadCount: number
+		version: string
 	}
 
 	interface NetworkInterface {

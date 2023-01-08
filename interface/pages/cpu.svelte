@@ -9,12 +9,13 @@
 					</svg>
 					<h2>CPU Info</h2>
 				</div>
-				<h3>Vendor: {$hardwareInfo.cpu.info[0].manufacturer}</h3>
-				<h3>Family: {$hardwareInfo.cpu.info[0].caption}</h3>
-				<h3>Name: {$hardwareInfo.cpu.name}</h3>
-				<h3>Socket: {$hardwareInfo.cpu.info[0].socketDesignation}</h3>
-				<h3>Base speed: {($hardwareInfo.cpu.info[0].currentClockSpeed / 1000).toFixed(1)} GHz</h3>
-				<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].numberOfCores} C/{$hardwareInfo.cpu.info[0].numberOfLogicalProcessors} T</h3>
+				<div class="select-text">
+					<h3>Vendor: {$hardwareInfo.cpu.info[0].manufacturerName.replaceAll("(R)", "").replaceAll("Corporation", "")}</h3>
+					<h3>Name: {$hardwareInfo.cpu.name}</h3>
+					<h3>Socket: {$hardwareInfo.cpu.info[0].socketDesignation}</h3>
+					<h3>Max speed: {($hardwareInfo.cpu.info[0].maxSpeed / 1000).toFixed(1)} GHz</h3>
+					<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].coreCount} C/{$hardwareInfo.cpu.info[0].threadCount} T</h3>
+				</div>
 			</div>
 
 			<!-- cpu temp -->

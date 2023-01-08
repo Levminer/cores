@@ -152,7 +152,7 @@ public class CPUInfo {
 		get; set;
 	} = new();
 
-	public List<HI.CPU> Info {
+	public List<ProcessorInformation> Info {
 		get; set;
 	} = new();
 }

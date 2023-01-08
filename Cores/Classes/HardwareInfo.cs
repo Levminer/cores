@@ -230,12 +230,10 @@ public class HardwareInfo {
 		if (firstRun) {
 			// HwInfo
 			HwInfo.RefreshOperatingSystem();
-			HwInfo.RefreshMemoryList();
 			HwInfo.RefreshVideoControllerList();
-			HwInfo.RefreshCPUList(false);
 
 			// CPU info
-			API.CPU.Info = HwInfo.CpuList;
+			API.CPU.Info.Add(computer.SMBios.Processors.ToList()[0]);
 
 			// GPU info
 			API.GPU.Info = HwInfo.VideoControllerList;
