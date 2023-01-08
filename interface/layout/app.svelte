@@ -93,6 +93,21 @@
 					$hardwareStatistics.gpu.power.minutes.shift()
 				}
 
+				// 60 second statistics
+				$hardwareStatistics.cpu.temperature.seconds.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.seconds.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.temperature.seconds.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
+				$hardwareStatistics.cpu.power.seconds.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
+				$hardwareStatistics.cpu.load.seconds.push(Math.round(input.cpu.lastLoad))
+
+				$hardwareStatistics.ram.physicalUsage.seconds.push(Math.round(input.ram.load[2].value))
+				$hardwareStatistics.ram.virtualUsage.seconds.push(Math.round(input.ram.load[5].value))
+
+				$hardwareStatistics.gpu.temperature.seconds.max.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.max, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.seconds.min.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.min, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.temperature.seconds.value.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.value, 0) / input.gpu.temperature.length))
+				$hardwareStatistics.gpu.power.seconds.push(Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)))
+
 				// 60 minute statistics
 				if (date.getSeconds() === new Date().getSeconds()) {
 					$hardwareStatistics.cpu.temperature.minutes.max.push(Math.round($hardwareStatistics.cpu.temperature.seconds.max.reduce((a, b) => a + b, 0) / $hardwareStatistics.cpu.temperature.seconds.max.length))
@@ -111,21 +126,6 @@
 
 					date.setSeconds(date.getSeconds() + 60)
 				}
-
-				// 60 second statistics
-				$hardwareStatistics.cpu.temperature.seconds.max.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.max, 0) / input.cpu.temperature.length))
-				$hardwareStatistics.cpu.temperature.seconds.min.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.min, 0) / input.cpu.temperature.length))
-				$hardwareStatistics.cpu.temperature.seconds.value.push(Math.round(input.cpu.temperature.reduce((a, b) => a + b.value, 0) / input.cpu.temperature.length))
-				$hardwareStatistics.cpu.power.seconds.push(Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)))
-				$hardwareStatistics.cpu.load.seconds.push(Math.round(input.cpu.lastLoad))
-
-				$hardwareStatistics.ram.physicalUsage.seconds.push(Math.round(input.ram.load[2].value))
-				$hardwareStatistics.ram.virtualUsage.seconds.push(Math.round(input.ram.load[5].value))
-
-				$hardwareStatistics.gpu.temperature.seconds.max.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.max, 0) / input.gpu.temperature.length))
-				$hardwareStatistics.gpu.temperature.seconds.min.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.min, 0) / input.gpu.temperature.length))
-				$hardwareStatistics.gpu.temperature.seconds.value.push(Math.round(input.gpu.temperature.reduce((a, b) => a + b.value, 0) / input.gpu.temperature.length))
-				$hardwareStatistics.gpu.power.seconds.push(Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)))
 
 				// Update the sessionStorage
 				const data: HardwareStatistics = {
