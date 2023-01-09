@@ -161,6 +161,23 @@ declare global {
 				seconds: number[]
 				minutes: number[]
 			}
+			voltage: {
+				seconds: number[]
+				minutes: number[]
+			}
+			clock: {
+				seconds: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
+
+				minutes: {
+					value: number[]
+					min: number[]
+					max: number[]
+				}
+			}
 		}
 
 		ram: {

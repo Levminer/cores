@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<div>
-					<TemperatureChart statistics={minutes ? $hardwareStatistics.gpu.temperature.minutes : $hardwareStatistics.gpu.temperature.seconds} time={minutes ? "m" : "s"} />
+					<MultiLineChart statistics={minutes ? $hardwareStatistics.gpu.temperature.minutes : $hardwareStatistics.gpu.temperature.seconds} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -69,7 +69,7 @@
 </div>
 
 <script lang="ts">
-	import TemperatureChart from "../components/temperatureChart.svelte"
+	import MultiLineChart from "../components/multiLineChart.svelte"
 	import LineChart from "../components/lineChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"

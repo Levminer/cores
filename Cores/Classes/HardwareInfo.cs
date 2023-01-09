@@ -157,9 +157,9 @@ public class HardwareInfo {
 				if (sensor[j].SensorType.ToString() == "Voltage" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.Contains("#")) {
 					API.CPU.Voltage.Add(new Sensor {
 						Name = sensor[j].Name.ToString(),
-						Value = (float)Math.Round((float)sensor[j].Value, 3),
-						Min = (float)Math.Round((float)sensor[j].Min, 3),
-						Max = (float)Math.Round((float)sensor[j].Max, 3),
+						Value = (float)Math.Round((float)sensor[j].Value, 2),
+						Min = (float)Math.Round((float)sensor[j].Min, 2),
+						Max = (float)Math.Round((float)sensor[j].Max, 2),
 					});
 				}
 

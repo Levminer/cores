@@ -7,6 +7,7 @@
 
 	export let statistics: { min: number[]; value: number[]; max: number[] }
 	export let time: string
+	export let unit: string = "°C"
 
 	Chart.register(...registerables)
 
@@ -34,7 +35,7 @@
 			y: {
 				ticks: {
 					callback: (value) => {
-						return `${value} °C`
+						return `${value} ${unit}`
 					},
 				},
 			},
@@ -55,7 +56,7 @@
 
 						const originalValue = data.datasets[datasetIndex].data[index]
 
-						return `${datasetLabel}: ${originalValue} °C`
+						return `${datasetLabel}: ${originalValue} ${unit}`
 					},
 				},
 			},

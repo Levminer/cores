@@ -70,7 +70,7 @@
 </div>
 
 <script lang="ts">
-	import TemperatureChart from "../components/temperatureChart.svelte"
+	import TemperatureChart from "../components/multiLineChart.svelte"
 	import LineChart from "../components/lineChart.svelte"
 	import UsageChart from "../components/usageChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"

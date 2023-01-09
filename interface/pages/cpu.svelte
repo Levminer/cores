@@ -31,7 +31,24 @@
 				</div>
 
 				<div>
-					<TemperatureChart statistics={minutes ? $hardwareStatistics.cpu.temperature.minutes : $hardwareStatistics.cpu.temperature.seconds} time={minutes ? "m" : "s"} />
+					<MultiLineChart statistics={minutes ? $hardwareStatistics.cpu.temperature.minutes : $hardwareStatistics.cpu.temperature.seconds} time={minutes ? "m" : "s"} />
+				</div>
+			</div>
+
+			<!-- clock speed -->
+			<div class="transparent-800 rounded-xl p-10 text-left">
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+						<h2>Average Clock speed</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+					</div>
+				</div>
+
+				<div>
+					<MultiLineChart unit={"Mhz"} statistics={minutes ? $hardwareStatistics.cpu.clock.minutes : $hardwareStatistics.cpu.clock.seconds} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -73,12 +90,29 @@
 					<UsageChart statistics={minutes ? $hardwareStatistics.cpu.load.minutes : $hardwareStatistics.cpu.load.seconds} type={"Load"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
+
+			<!-- cpu voltage -->
+			<div class="transparent-800 rounded-xl p-10 text-left">
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+						<h2>CPU Voltage</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60m" : "Last 60s"}</h5>
+					</div>
+				</div>
+
+				<div>
+					<LineChart statistics={minutes ? $hardwareStatistics.cpu.voltage.minutes : $hardwareStatistics.cpu.voltage.seconds} type={"Voltage"} unit={" V"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
 <script lang="ts">
-	import TemperatureChart from "../components/temperatureChart.svelte"
+	import MultiLineChart from "../components/multiLineChart.svelte"
 	import LineChart from "../components/lineChart.svelte"
 	import UsageChart from "../components/usageChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"

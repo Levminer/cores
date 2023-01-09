@@ -23,6 +23,23 @@ const defaultHardwareStatistics: HardwareStatistics = {
 			seconds: [],
 			minutes: [],
 		},
+		clock: {
+			seconds: {
+				value: [],
+				min: [],
+				max: [],
+			},
+
+			minutes: {
+				value: [],
+				min: [],
+				max: [],
+			},
+		},
+		voltage: {
+			seconds: [],
+			minutes: [],
+		},
 	},
 
 	ram: {
