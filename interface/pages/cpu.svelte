@@ -48,7 +48,7 @@
 				</div>
 
 				<div>
-					<MultiLineChart unit={"Mhz"} statistics={minutes ? $hardwareStatistics.cpu.clock.minutes : $hardwareStatistics.cpu.clock.seconds} time={minutes ? "m" : "s"} />
+					<MultiLineChart name="Clock speed" unit={"Mhz"} statistics={minutes ? $hardwareStatistics.cpu.clock.minutes : $hardwareStatistics.cpu.clock.seconds} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,7 @@
 	export let statistics: { min: number[]; value: number[]; max: number[] }
 	export let time: string
 	export let unit: string = "°C"
+	export let name: string = "Temperature"
 
 	Chart.register(...registerables)
 
@@ -16,9 +17,9 @@
 	$: data = {
 		labels: labels,
 		datasets: [
-			{ label: "Min temperature", data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
-			{ label: "Current temperature", data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
-			{ label: "Max temperature", data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
+			{ label: `Min ${name}`, data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
+			{ label: `Current ${name}`, data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
+			{ label: `Max ${name}`, data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
 		],
 	}
 
