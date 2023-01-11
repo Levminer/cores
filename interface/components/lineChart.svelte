@@ -35,6 +35,7 @@
 					callback: (value) => {
 						return `${value}${unit}`
 					},
+					precision: 2,
 				},
 			},
 			x: {
