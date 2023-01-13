@@ -30,14 +30,6 @@
 	}
 
 	// Resize chart to fit all data
-	onMount(() => {
-		document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
-
-		if (readings.length < 2) {
-			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 55 + "px"
-		}
-	})
-
 	afterUpdate(() => {
 		if (categories.length > lastCategories.length) {
 			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
@@ -47,6 +39,8 @@
 			// potential bottleneck
 			if (readings.length < 2) {
 				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 55 + "px"
+			} else if (readings.length < 3) {
+				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 45 + "px"
 			} else {
 				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
 			}
