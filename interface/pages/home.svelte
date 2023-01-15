@@ -99,7 +99,7 @@
 				</div>
 				<h3>Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)} categories={$hardwareInfo.cpu.power.filter((power) => power.value !== 0).map((temp) => `${temp.name} (${temp.value} W)`)} i={3} type={{ name: "power usage", unit: "W" }} />
+					<MeterChart readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)} categories={$hardwareInfo.cpu.power.filter((power) => power.value !== 0).map((temp) => `${temp.name.replaceAll("CPU", "")} (${temp.value} W)`)} i={3} type={{ name: "power usage", unit: "W" }} />
 				</div>
 			</div>
 
@@ -110,7 +110,7 @@
 				</div>
 				<h3>Avg. voltage: {($hardwareInfo.cpu.voltage.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.voltage.length).toFixed(1)} V</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.cpu.voltage} categories={$hardwareInfo.cpu.voltage.map((temp, i) => `${temp.name} (${temp.value} V)`)} i={5} type={{ name: "voltage", unit: "V" }} />
+					<MeterChart readings={$hardwareInfo.cpu.voltage} categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i} (${temp.value} V)`)} i={5} type={{ name: "voltage", unit: "V" }} />
 				</div>
 			</div>
 		</div>
@@ -155,7 +155,7 @@
 				</div>
 				<h3>Avg. temperature: {Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)} °C</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name} (${temp.value} °C)`)} i={1} type={{ name: "temperature", unit: "°C" }} />
+					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} °C)`)} i={1} type={{ name: "temperature", unit: "°C" }} />
 				</div>
 			</div>
 
@@ -186,7 +186,7 @@
 				</div>
 				<h3>Avg. clock speed: {(Math.round($hardwareInfo.gpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.clock.length) / 1000).toFixed(1)} GHz</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.clock} categories={$hardwareInfo.gpu.clock.map((temp, i) => `${temp.name} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={6} type={{ name: "clock speed", unit: "MHz" }} />
+					<MeterChart readings={$hardwareInfo.gpu.clock} categories={$hardwareInfo.gpu.clock.map((temp) => `${temp.name.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={6} type={{ name: "clock speed", unit: "MHz" }} />
 				</div>
 			</div>
 
@@ -197,7 +197,7 @@
 				</div>
 				<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
-					<MeterChart readings={$hardwareInfo.gpu.power} categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name} (${temp.value} W)`)} i={4} type={{ name: "power usage", unit: "W" }} />
+					<MeterChart readings={$hardwareInfo.gpu.power} categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} W)`)} i={4} type={{ name: "power usage", unit: "W" }} />
 				</div>
 			</div>
 		</div>
