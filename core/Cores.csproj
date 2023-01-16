@@ -24,7 +24,7 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
 	<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
 	<Version>0.6.0</Version>
-	<!--<WindowsPackageType>None</WindowsPackageType>-->
+	<WindowsPackageType>None</WindowsPackageType>
 	<!--<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>-->
   </PropertyGroup>
 
@@ -54,6 +54,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="lib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <!-- 

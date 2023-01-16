@@ -170,12 +170,22 @@ public class HardwareInfo {
 
 				// GPU fan
 				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Fans.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
+					API.GPU.Fans.Add(new Sensor {
+						Name = sensor[j].Name.ToString(),
+						Value = (float)Math.Round((float)sensor[j].Value, 1),
+						Min = (float)Math.Round((float)sensor[j].Min, 1),
+						Max = (float)Math.Round((float)sensor[j].Max, 1),
+					});
 				}
 
 				// GPU Memory 
 				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Memory.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
+					API.GPU.Memory.Add(new Sensor {
+						Name = sensor[j].Name.ToString(),
+						Value = (float)Math.Round((float)sensor[j].Value, 1),
+						Min = (float)Math.Round((float)sensor[j].Min, 1),
+						Max = (float)Math.Round((float)sensor[j].Max, 1),
+					});
 				}
 
 				// GPU power
@@ -200,7 +210,12 @@ public class HardwareInfo {
 
 				// Memory load
 				if (computerHardware[i].HardwareType.ToString() == "Memory") {
-					API.RAM.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
+					API.RAM.Load.Add(new Sensor {
+						Name = sensor[j].Name.ToString(),
+						Value = (float)Math.Round((float)sensor[j].Value, 1),
+						Min = (float)Math.Round((float)sensor[j].Min, 1),
+						Max = (float)Math.Round((float)sensor[j].Max, 1),
+					});
 				}
 
 				// Disk info

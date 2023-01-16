@@ -158,11 +158,11 @@ public class CPUInfo {
 }
 
 public class GPUInfo : CPUInfo {
-	public List<Load> Fans {
+	public List<Sensor> Fans {
 		get; set;
 	} = new();
 
-	public List<Load> Memory {
+	public List<Sensor> Memory {
 		get; set;
 	} = new();
 
@@ -172,7 +172,7 @@ public class GPUInfo : CPUInfo {
 }
 
 public class RAMInfo {
-	public List<Load> Load {
+	public List<Sensor> Load {
 		get; set;
 	} = new();
 

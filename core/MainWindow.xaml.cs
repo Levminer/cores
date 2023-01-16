@@ -5,6 +5,7 @@ using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using Windows.ApplicationModel.DataTransfer;
 
@@ -12,6 +13,9 @@ namespace Cores;
 
 public sealed partial class MainWindow : Window {
 	private readonly DispatcherTimer APIRefresher;
+
+	[DllImport("lib.dll")]
+	private static extern string dialog(string name);
 
 	public MainWindow() {
 		InitializeComponent();
@@ -101,6 +105,9 @@ public sealed partial class MainWindow : Window {
 				break;
 
 			case "debug":
+
+				var res = dialog("tes123t");
+				Debug.WriteLine(res);
 
 				var message = new Message() {
 					Name = "debug",
