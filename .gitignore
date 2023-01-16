@@ -364,4 +364,7 @@ FodyWeavers.xsd
 
 dist
 build.json
-Cores/Assets/assets
+core/Assets/assets
+cli
+library/target
+core/lib.dll
