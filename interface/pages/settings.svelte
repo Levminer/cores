@@ -77,38 +77,9 @@
 	}
 
 	const debug = async () => {
+		// let name = `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}.txt`
+
 		// @ts-ignore
 		window.chrome.webview.postMessage({ name: "debug", content: message })
-
-		// @ts-ignore
-		window.chrome.webview.addEventListener(
-			"message",
-			async (arg) => {
-				// save file dialog
-				try {
-					const handle = await window.showSaveFilePicker({
-						types: [
-							{
-								description: "Text file",
-								accept: { "text/plain": [".txt"] },
-							},
-						],
-						suggestedName: `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}`,
-					})
-
-					if (handle.kind == "file") {
-						// write file
-						handle.createWritable().then((writable) => {
-							writable.write(arg.data.content).then(() => {
-								writable.close()
-							})
-						})
-					}
-				} catch (error) {
-					console.log("failed to save file", error)
-				}
-			},
-			{ once: true }
-		)
 	}
 </script>

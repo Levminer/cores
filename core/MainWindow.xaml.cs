@@ -106,15 +106,13 @@ public sealed partial class MainWindow : Window {
 
 			case "debug":
 
-				var res = dialog("tes123t");
-				Debug.WriteLine(res);
+				var path = dialog("cores-debug");
 
-				var message = new Message() {
-					Name = "debug",
-					Content = $"{content.Content}\n{App.GlobalHardwareInfo.computer.GetReport()}"
-				};
+				var contents = $"{content.Content}\n{App.GlobalHardwareInfo.computer.GetReport()}";
 
-				webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, App.SerializerOptions));
+				// write to file
+				System.IO.File.WriteAllText(path, contents);
+
 				break;
 		}
 	}
