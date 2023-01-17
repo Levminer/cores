@@ -182,9 +182,9 @@ public class HardwareInfo {
 				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Memory.Add(new Sensor {
 						Name = sensor[j].Name.ToString(),
-						Value = (float)Math.Round((float)sensor[j].Value, 1),
-						Min = (float)Math.Round((float)sensor[j].Min, 1),
-						Max = (float)Math.Round((float)sensor[j].Max, 1),
+						Value = (float)Math.Round((float)sensor[j].Value / 1024, 1),
+						Min = (float)Math.Round((float)sensor[j].Min / 1024, 1),
+						Max = (float)Math.Round((float)sensor[j].Max / 1024, 1),
 					});
 				}
 
