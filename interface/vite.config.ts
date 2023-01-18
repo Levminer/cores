@@ -25,6 +25,6 @@ export default defineConfig({
 			},
 		},
 		emptyOutDir: true,
-		outDir: "../Cores/Assets/assets",
+		outDir: "../core/Assets/assets",
 	},
 })

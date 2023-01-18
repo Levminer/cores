@@ -1,6 +1,7 @@
 import { writable, get } from "svelte/store"
 
 let defaultSensor = {
+	name: "sample",
 	value: 50,
 	min: 40,
 	max: 60,
@@ -28,7 +29,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		lastLoad: 15,
 		temperature: [defaultSensor, defaultSensor],
 		fans: [],
-		memory: [defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad],
+		memory: [defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor],
 		power: [defaultSensor],
 		load: [],
 		info: [],
@@ -36,7 +37,7 @@ const defaultHardwareInfo: HardwareInfo = {
 	},
 
 	ram: {
-		load: [defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad, defaultLoad],
+		load: [defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor],
 		info: [],
 	},
 

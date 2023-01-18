@@ -62,8 +62,6 @@
 
 	let active: string | undefined
 
-	console.log($settings)
-
 	if (active === undefined) {
 		let index = values.indexOf($settings[setting])
 		active = options[index]

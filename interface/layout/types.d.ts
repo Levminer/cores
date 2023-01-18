@@ -93,16 +93,16 @@ declare global {
 			name: string
 			temperature: Sensor[]
 			lastLoad: number
-			fans: Load[]
-			memory: Load[]
+			fans: Sensor[]
+			memory: Sensor[]
 			power: Sensor[]
 			load: Load[]
-			info: any[]
+			info: string
 			clock: Sensor[]
 		}
 
 		ram: {
-			load: Load[]
+			load: Sensor[]
 			info: RAMModule[]
 		}
 

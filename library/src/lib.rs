@@ -1,7 +1,8 @@
+use powershell_script;
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::os::raw::c_char;
-use std::path::PathBuf;
+use std::process::Command;
 use wfd::DialogParams;
 
 #[no_mangle]
@@ -29,4 +30,50 @@ pub extern "C" fn dialog(c_buf: *const c_char) -> *const c_char {
     };
 
     return CString::new(res).unwrap().into_raw();
+}
+
+#[no_mangle]
+pub extern "C" fn getGPUInfo() -> *const c_char {
+    let driver = powershell_script::run(
+        "Get-WmiObject -class Win32_VideoController | Select -Expand DriverDate",
+    )
+    .unwrap()
+    .stdout()
+    .unwrap();
+
+    return CString::new(driver.trim()).unwrap().into_raw();
+}
+
+#[no_mangle]
+pub extern "C" fn getOSInfo() -> *const c_char {
+    let caption = powershell_script::run(
+        "Get-WmiObject -class Win32_OperatingSystem | Select -Expand Caption",
+    )
+    .unwrap()
+    .stdout()
+    .unwrap();
+
+    let version = powershell_script::run(
+        "Get-WmiObject -class Win32_OperatingSystem | Select -Expand Version",
+    )
+    .unwrap()
+    .stdout()
+    .unwrap();
+
+    let mut arch = std::env::consts::ARCH;
+
+    arch = match arch {
+        "x86_64" => "x64",
+        "aarch64" => "arm64",
+        _ => arch,
+    };
+
+    let returning = format!(
+        "{} {} {}",
+        caption.replace("Microsoft", "").trim(),
+        arch,
+        version.trim(),
+    );
+
+    return CString::new(returning).unwrap().into_raw();
 }

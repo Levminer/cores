@@ -4,15 +4,14 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using WindowsDisplayAPI;
-using HI = Hardware.Info;
 
 namespace cores;
 
 public class HardwareInfo {
 	public bool firstRun = true;
 	public HardwareUpdater refresher = new();
-	public HI.IHardwareInfo HwInfo = new HI.HardwareInfo();
 	public Computer computer = new() {
 		IsCpuEnabled = true,
 		IsGpuEnabled = true,
@@ -21,6 +20,12 @@ public class HardwareInfo {
 		IsControllerEnabled = true,
 		IsStorageEnabled = true
 	};
+
+	[DllImport("lib.dll")]
+	private static extern string getOSInfo();
+
+	[DllImport("lib.dll")]
+	private static extern string getGPUInfo();
 
 	public API API {
 		get; set;
@@ -243,19 +248,14 @@ public class HardwareInfo {
 
 		// HWInfo, monitors, network interfaces
 		if (firstRun) {
-			// HwInfo
-			HwInfo.RefreshOperatingSystem();
-			HwInfo.RefreshVideoControllerList();
-
 			// CPU info
 			API.CPU.Info.Add(computer.SMBios.Processors.ToList()[0]);
 
 			// GPU info
-			API.GPU.Info = HwInfo.VideoControllerList;
+			API.GPU.Info = getGPUInfo();
 
-			// OS name
-			var arch = System.Runtime.InteropServices.RuntimeInformation.OSArchitecture.ToString().ToLower();
-			API.System.OS.Name = $"{HwInfo.OperatingSystem.Name.Replace("Microsoft", "")} {arch} {HwInfo.OperatingSystem.Version}";
+			// OS info
+			API.System.OS.Name = getOSInfo();
 
 			// RAM modules
 			for (int i = 0; i < computer.SMBios.MemoryDevices.Length; i++) {

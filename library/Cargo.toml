@@ -7,7 +7,12 @@ edition = "2021"
 
 [lib]
 name="lib"
-crate-type = ["dylib"]
+crate-type = ["dylib", "rlib"]
+
+[[bin]]
+name = "bin"
+path = "src/main.rs"
 
 [dependencies]
+powershell_script = "1.0.4"
 wfd = "0.1.7"

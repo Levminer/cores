@@ -1,6 +1,5 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using System.Collections.Generic;
-using HI = Hardware.Info;
 
 namespace Cores;
 
@@ -166,9 +165,9 @@ public class GPUInfo : CPUInfo {
 		get; set;
 	} = new();
 
-	new public List<HI.VideoController> Info {
+	new public string Info {
 		get; set;
-	} = new();
+	}
 }
 
 public class RAMInfo {

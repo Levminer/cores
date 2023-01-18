@@ -12,9 +12,9 @@
 					<h2>GPU Info</h2>
 				</div>
 				<div class="select-text">
-					<h3>Vendor: {$hardwareInfo.gpu.info[0].manufacturer}</h3>
+					<h3>Vendor: {$hardwareInfo.gpu.name.split(" ")[0]}</h3>
 					<h3>Name: {$hardwareInfo.gpu.name}</h3>
-					<h3>GPU memory: {Math.round($hardwareInfo.gpu.memory[2].value / 1024)} GB</h3>
+					<h3>GPU memory: {Math.round($hardwareInfo.gpu.memory[2].value)} GB</h3>
 					<h3>Driver date: {driverDate}</h3>
 					<h3>Primary monitor: {primaryMonitor.resolution} {primaryMonitor.refreshRate} Hz</h3>
 				</div>
@@ -46,7 +46,10 @@
 					</svg>
 					<h2>GPU Memory Usage</h2>
 				</div>
-				<h3>GPU memory: {`${($hardwareInfo.gpu.memory[4].value / 1024).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value / 1024} GB`} GB</h3>
+				<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
+				<div>
+					<MeterChart readings={[$hardwareInfo.gpu.memory[0]]} categories={["GPU memory usage"]} i={10} type={{ name: "GPU memory usage", unit: "GB" }} />
+				</div>
 			</div>
 
 			<!-- cpu power usage -->
@@ -73,11 +76,12 @@
 	import LineChart from "../components/lineChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
+	import MeterChart from "../components/meterChart.svelte"
 
 	let minutes = false
 
 	// get gpu driver date
-	let driver = $hardwareInfo.gpu.info[0].driverDate.slice(0, 8)
+	let driver = $hardwareInfo.gpu.info.slice(0, 8)
 	let driverDate = `${driver.slice(0, 4)}.${driver.slice(4, 6)}.${driver.slice(6, 8)}.`
 
 	// get primary monitor
