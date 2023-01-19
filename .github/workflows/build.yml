@@ -49,8 +49,8 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
-            - name: "Dotnet restore"
-              run: dotnet restore
+            - name: "nuget restore"
+              run: nuget restore $env:Solution_Name
 
             # Create the unpackaged app
             - name: Build unpackaged app
