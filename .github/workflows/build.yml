@@ -51,7 +51,7 @@ jobs:
 
             # Create the unpackaged app
             - name: Build unpackaged app
-              run: msbuild /t:Publish /p:WindowsPackageType=None /p:Platform=x64
+              run: msbuild /t:Publish /p:WindowsPackageType=None /p:Platform=x64 /p:Configuration=$env:Configuration /t:Restore
               env:
                   Configuration: ${{ matrix.configuration }}
 
