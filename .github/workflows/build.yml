@@ -1,0 +1,67 @@
+name: .NET Core Desktop
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                configuration: [Release]
+
+        runs-on: windows-latest
+
+        env:
+            Solution_Name: Cores
+            Project_Directory: core
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: Setup
+              run: npm run build:interface && npm run build:library
+
+            - name: File Regex Replace
+              uses: mingjun97/file-regex-replace@v1
+              with:
+                  regex: 'Version="([0-9\.]*)"'
+                  replacement: 'Version="0.${{ github.run_number }}.${{ github.run_attempt }}.0"'
+                  include: Package.appxmanifest
+
+            # Install the .NET Core workload
+            - name: Install .NET Core
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: 5.0.x
+
+            # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+            - name: Setup MSBuild.exe
+              uses: microsoft/setup-msbuild@v1.0.2
+
+            # Restore the application to populate the obj folder with RuntimeIdentifiers
+            - name: Restore the application
+              run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            # Create the unpackaged app
+            - name: Build unpackaged app
+              run: msbuild /t:Publish /p:WindowsPackageType=None /p:Platform=x64
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            - name: Create ZIP of unpackaged app
+              run: Compress-Archive core/bin/x64/Release/net6.0-windows10.0.19041.0/publish/* 'cores-unpackaged-0.${{ github.run_number }}.${{ github.run_attempt }}.0.zip'
+
+            - name: Upload unpackaged app
+              uses: actions/upload-artifact@v2
+              with:
+                  name: "Unpackaged app"
+                  path: "cores-unpackaged-0.${{ github.run_number }}.${{ github.run_attempt }}.0.zip"
