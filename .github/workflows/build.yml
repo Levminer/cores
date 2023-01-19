@@ -14,7 +14,7 @@ jobs:
         runs-on: windows-latest
 
         env:
-            Solution_Name: Cores
+            Solution_Name: Cores.sln
             Project_Directory: core
 
         steps:
