@@ -49,6 +49,9 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
+            - name: "Dotnet restore"
+              run: dotnet restore
+
             # Create the unpackaged app
             - name: Build unpackaged app
               run: msbuild /t:Publish /p:WindowsPackageType=None /p:Platform=x64 /p:Configuration=$env:Configuration /t:Restore
