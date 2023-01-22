@@ -71,7 +71,7 @@ jobs:
                   Appx_Bundle: Never
                   Appx_Bundle_Platforms: x64
                   Appx_Package_Build_Mode: SideloadOnly
-                  Appx_Package_Dir: core/bin/msix/
+                  Appx_Package_Dir: /bin/msix/
                   Configuration: ${{ matrix.configuration }}
 
             - name: Upload packaged app
