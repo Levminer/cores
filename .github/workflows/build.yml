@@ -66,13 +66,17 @@ jobs:
 
             # Create the app package by building and packaging the Windows Application Packaging project
             - name: Create the app package
-              run: msbuild /t:Publish /p:WindowsPackageType=MSIX /p:Platform=x64 /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:PackageCertificateKeyFile=Cores_TemporaryKey.pfx /p:GenerateAppxPackageOnBuild=true /t:Restore
+              run: msbuild /t:Publish /p:WindowsPackageType=MSIX /p:Platform=x64 /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /t:Restore /p:PackageCertificateKeyFile=$env:SigningCertificate /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
               env:
                 Appx_Bundle: Never
                 Appx_Bundle_Platforms: x64
                 Appx_Package_Build_Mode: SideloadOnly
                 Appx_Package_Dir: core/bin/msix/
                 Configuration: ${{ matrix.configuration }}
+
+            # Remove the .pfx
+            - name: Remove the .pfx
+              run: Remove-Item -path $env:Wap_Project_Directory/$env:SigningCertificate
 
             - name: Upload packaged app
               uses: actions/upload-artifact@v2
