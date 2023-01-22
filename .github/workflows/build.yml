@@ -56,6 +56,13 @@ jobs:
               with:
                   name: "cores-latest-windows-x64-exe"
                   path: "core/bin/exe"
+          
+            # Decode the base 64 encoded pfx and save the Signing_Certificate
+            - name: Decode the pfx
+              run: |
+                $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+                $certificatePath = Join-Path -Path $env:Project_Directory -ChildPath Cores_TemporaryKey.pfx
+                [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
 
             # Create the app package by building and packaging the Windows Application Packaging project
             - name: Create the app package
