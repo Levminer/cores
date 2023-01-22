@@ -26,13 +26,6 @@ jobs:
             - name: Setup
               run: npm ci && npm run build:interface && npm run build:library
 
-            - name: File Regex Replace
-              uses: mingjun97/file-regex-replace@v1
-              with:
-                  regex: 'Version="([0-9\.]*)"'
-                  replacement: 'Version="0.${{ github.run_number }}.${{ github.run_attempt }}.0"'
-                  include: Package.appxmanifest
-
             # Install the .NET Core workload
             - name: Install .NET Core
               uses: actions/setup-dotnet@v1
@@ -61,5 +54,5 @@ jobs:
             - name: Upload unpackaged app
               uses: actions/upload-artifact@v2
               with:
-                  name: "Unpackaged app"
+                  name: "cores-latest-windows-x64.zip"
                   path: "core/bin/exe"
