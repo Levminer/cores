@@ -18,7 +18,7 @@
 </div>
 
 <script lang="ts">
-	import { Route, router } from "tinro"
+	import { Route, router } from "@baileyherbert/tinro"
 	import Navigation from "../components/navigation.svelte"
 	import Home from "../pages/home.svelte"
 	import Settings from "../pages/settings.svelte"

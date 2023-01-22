@@ -32,7 +32,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		memory: [defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor],
 		power: [defaultSensor],
 		load: [],
-		info: [],
+		info: "",
 		clock: [defaultSensor, defaultSensor],
 	},
 

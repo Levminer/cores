@@ -45,5 +45,5 @@
 </div>
 
 <script lang="ts">
-	import { active } from "tinro"
+	import { active } from "@baileyherbert/tinro"
 </script>
