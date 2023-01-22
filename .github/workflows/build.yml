@@ -59,7 +59,7 @@ jobs:
 
             # Create the app package by building and packaging the Windows Application Packaging project
             - name: Create the app package
-              run: msbuild /t:Publish /p:WindowsPackageType=MSIX/p:Platform=x64 /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /t:Restore
+              run: msbuild /t:Publish /p:WindowsPackageType=MSIX /p:Platform=x64 /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /t:Restore
               env:
                 Appx_Bundle: Never
                 Appx_Bundle_Platforms: x64
