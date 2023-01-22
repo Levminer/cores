@@ -1,0 +1,82 @@
+name: Build
+
+on: push
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                configuration: [Release]
+
+        runs-on: windows-latest
+
+        env:
+            Solution_Name: Cores.sln
+            Project_Directory: core
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: Setup
+              run: npm ci && npm run build:interface && npm run build:library
+
+            # Install the .NET Core workload
+            - name: Install .NET Core
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: 6.0.x
+
+            # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+            - name: Setup MSBuild.exe
+              uses: microsoft/setup-msbuild@v1.0.2
+
+            # Restore the application to populate the obj folder with RuntimeIdentifiers
+            - name: Restore the application
+              run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            - name: "nuget restore"
+              run: nuget restore $env:Solution_Name
+
+            # Create the unpackaged app
+            - name: Build unpackaged app
+              run: msbuild /t:Publish /p:WindowsPackageType=None /p:Platform=x64 /p:Configuration=$env:Configuration /t:Restore
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            - name: Upload unpackaged app
+              uses: actions/upload-artifact@v2
+              with:
+                  name: "cores-latest-windows-x64-exe"
+                  path: "core/bin/exe"
+
+            # Decode the base 64 encoded pfx and save the Signing_Certificate
+            - name: Decode the pfx
+              run: |
+                  $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+                  $certificatePath = Join-Path -Path $env:Project_Directory -ChildPath Cores_TemporaryKey.pfx
+                  [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+
+            # Create the app package by building and packaging the Windows Application Packaging project
+            - name: Create the app package
+              run: msbuild /t:Publish /p:WindowsPackageType=MSIX /p:Platform=x64 /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /t:Restore /p:PackageCertificateKeyFile=Cores_TemporaryKey.pfx
+              env:
+                  Appx_Bundle: Never
+                  Appx_Bundle_Platforms: x64
+                  Appx_Package_Build_Mode: StoreUpload
+                  Appx_Package_Dir: bin/msix/
+                  Configuration: ${{ matrix.configuration }}
+
+            # Remove the .pfx
+            - name: Remove the .pfx
+              run: Remove-Item -path core/Cores_TemporaryKey.pfx
+
+            - name: Upload packaged app
+              uses: actions/upload-artifact@v2
+              with:
+                  name: "cores-latest-windows-x64-msix"
+                  path: "core/bin/msix"
