@@ -46,7 +46,7 @@
 					</div>
 				</div>
 				<div>
-					<UsageChart statistics={minutes ? $hardwareStatistics.ram.physicalUsage.minutes : $hardwareStatistics.ram.physicalUsage.seconds} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage) : $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage)} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 
@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div>
-					<UsageChart statistics={minutes ? $hardwareStatistics.ram.virtualUsage.minutes : $hardwareStatistics.ram.virtualUsage.seconds} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage) : $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage)} type={"Usage"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>

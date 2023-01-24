@@ -31,7 +31,7 @@
 				</div>
 
 				<div>
-					<MultiLineChart statistics={minutes ? $hardwareStatistics.cpu.temperature.minutes : $hardwareStatistics.cpu.temperature.seconds} time={minutes ? "m" : "s"} />
+					<MultiLineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.temperature) : $hardwareStatistics.seconds.map((value) => value.cpu.temperature)} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 
@@ -48,7 +48,7 @@
 				</div>
 
 				<div>
-					<MultiLineChart name="Clock speed" unit={"Mhz"} statistics={minutes ? $hardwareStatistics.cpu.clock.minutes : $hardwareStatistics.cpu.clock.seconds} time={minutes ? "m" : "s"} />
+					<MultiLineChart name="Clock speed" unit={"Mhz"} statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.clock) : $hardwareStatistics.seconds.map((value) => value.cpu.clock)} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
@@ -67,7 +67,7 @@
 				</div>
 
 				<div>
-					<LineChart statistics={minutes ? $hardwareStatistics.cpu.power.minutes : $hardwareStatistics.cpu.power.seconds} type={"Power usage"} unit={" W"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.power) : $hardwareStatistics.seconds.map((value) => value.cpu.power)} type={"Power usage"} unit={" W"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 
@@ -87,7 +87,7 @@
 				</div>
 
 				<div>
-					<UsageChart statistics={minutes ? $hardwareStatistics.cpu.load.minutes : $hardwareStatistics.cpu.load.seconds} type={"Load"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.load) : $hardwareStatistics.seconds.map((value) => value.cpu.load)} type={"Load"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 
@@ -104,7 +104,7 @@
 				</div>
 
 				<div>
-					<LineChart statistics={minutes ? $hardwareStatistics.cpu.voltage.minutes : $hardwareStatistics.cpu.voltage.seconds} type={"Voltage"} unit={" V"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.voltage) : $hardwareStatistics.seconds.map((value) => value.cpu.voltage)} type={"Voltage"} unit={" V"} color={"#ffd60a"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>

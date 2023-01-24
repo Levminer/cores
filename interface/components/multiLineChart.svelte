@@ -5,21 +5,25 @@
 	import type { ChartOptions } from "chart.js"
 	import { Line } from "svelte-chartjs"
 
-	export let statistics: { min: number[]; value: number[]; max: number[] }
+	export let statistics: Sensor[]
 	export let time: string
 	export let unit: string = "°C"
 	export let name: string = "Temperature"
 
 	Chart.register(...registerables)
 
-	$: labels = statistics.value.map((_, i) => `${statistics.value.length - 1 - i}${time} ago`)
+	$: min = statistics.map((value) => value.min)
+	$: max = statistics.map((value) => value.max)
+	$: value = statistics.map((value) => value.value)
+
+	$: labels = value.map((_, i) => `${value.length - 1 - i}${time} ago`)
 
 	$: data = {
 		labels: labels,
 		datasets: [
-			{ label: `Min ${name}`, data: statistics.min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
-			{ label: `Current ${name}`, data: statistics.value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
-			{ label: `Max ${name}`, data: statistics.max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
+			{ label: `Min ${name}`, data: min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
+			{ label: `Current ${name}`, data: value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
+			{ label: `Max ${name}`, data: max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
 		],
 	}
 

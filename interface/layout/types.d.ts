@@ -138,79 +138,32 @@ declare global {
 		}
 	}
 
-	interface HardwareStatistics {
+	interface Stats {
 		cpu: {
-			temperature: {
-				seconds: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-
-				minutes: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-			}
-			power: {
-				seconds: number[]
-				minutes: number[]
-			}
-			load: {
-				seconds: number[]
-				minutes: number[]
-			}
-			voltage: {
-				seconds: number[]
-				minutes: number[]
-			}
-			clock: {
-				seconds: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-
-				minutes: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-			}
-		}
-
-		ram: {
-			physicalUsage: {
-				seconds: number[]
-				minutes: number[]
-			}
-
-			virtualUsage: {
-				seconds: number[]
-				minutes: number[]
-			}
+			temperature: Sensor
+			clock: Sensor
+			load: number
+			power: number
+			voltage: number
 		}
 
 		gpu: {
-			temperature: {
-				seconds: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-
-				minutes: {
-					value: number[]
-					min: number[]
-					max: number[]
-				}
-			}
-			power: {
-				seconds: number[]
-				minutes: number[]
-			}
+			temperature: Sensor
+			clock: Sensor
+			fan: Sensor
+			load: number
+			power: number
 		}
+
+		ram: {
+			physicalUsage: number
+			virtualUsage: number
+		}
+	}
+
+	interface HardwareStatistics {
+		seconds: Stats[]
+		minutes: Stats[]
 	}
 
 	interface LibSettings {
