@@ -49,7 +49,7 @@ public class HardwareInfo {
 
 		API.GPU.Load.Clear();
 		API.GPU.Temperature.Clear();
-		API.GPU.Fans.Clear();
+		API.GPU.Fan.Clear();
 		API.GPU.Memory.Clear();
 		API.GPU.Power.Clear();
 		API.GPU.Clock.Clear();
@@ -175,7 +175,7 @@ public class HardwareInfo {
 
 				// GPU fan
 				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Fans.Add(new Sensor {
+					API.GPU.Fan.Add(new Sensor {
 						Name = sensor[j].Name.ToString(),
 						Value = (float)Math.Round((float)sensor[j].Value, 1),
 						Min = (float)Math.Round((float)sensor[j].Min, 1),

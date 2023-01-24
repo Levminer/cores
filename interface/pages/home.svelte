@@ -162,9 +162,9 @@
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
 					<h2>GPU Fan Speed</h2>
 				</div>
-				<h3>Avg. fan speed: {Math.round($hardwareInfo.gpu.fans.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.fans.length)} RPM</h3>
+				<h3>Avg. fan speed: {Math.round($hardwareInfo.gpu.fan.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.fan.length)} RPM</h3>
 				<div>
-					<MeterChart categories={$hardwareInfo.gpu.fans.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)} readings={$hardwareInfo.gpu.fans} i={7} type={{ name: "fan speed", unit: "RPM" }} />
+					<MeterChart categories={$hardwareInfo.gpu.fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)} readings={$hardwareInfo.gpu.fan} i={7} type={{ name: "fan speed", unit: "RPM" }} />
 				</div>
 			</div>
 
@@ -175,7 +175,7 @@
 					</svg>
 					<h2>GPU Memory Usage</h2>
 				</div>
-				<h3>GPU memory: {`${($hardwareInfo.gpu.memory[0].value).toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
+				<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
 				<div>
 					<MeterChart readings={[$hardwareInfo.gpu.memory[0]]} categories={["GPU memory usage"]} i={10} type={{ name: "GPU memory usage", unit: "GB" }} />
 				</div>

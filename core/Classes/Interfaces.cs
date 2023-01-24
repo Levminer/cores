@@ -157,7 +157,7 @@ public class CPUInfo {
 }
 
 public class GPUInfo : CPUInfo {
-	public List<Sensor> Fans {
+	public List<Sensor> Fan {
 		get; set;
 	} = new();
 

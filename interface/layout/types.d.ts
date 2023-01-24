@@ -93,7 +93,7 @@ declare global {
 			name: string
 			temperature: Sensor[]
 			lastLoad: number
-			fans: Sensor[]
+			fan: Sensor[]
 			memory: Sensor[]
 			power: Sensor[]
 			load: Load[]
@@ -150,7 +150,7 @@ declare global {
 		gpu: {
 			temperature: Sensor
 			clock: Sensor
-			fan: Sensor
+			fan: number
 			load: number
 			power: number
 		}

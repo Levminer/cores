@@ -28,7 +28,7 @@ const defaultHardwareInfo: HardwareInfo = {
 		name: "GPUName",
 		lastLoad: 15,
 		temperature: [defaultSensor, defaultSensor],
-		fans: [],
+		fan: [],
 		memory: [defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor],
 		power: [defaultSensor],
 		load: [],

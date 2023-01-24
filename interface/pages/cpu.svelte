@@ -48,7 +48,7 @@
 				</div>
 
 				<div>
-					<MultiLineChart name="Clock speed" unit={"Mhz"} statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.clock) : $hardwareStatistics.seconds.map((value) => value.cpu.clock)} time={minutes ? "m" : "s"} />
+					<MultiLineChart name="Clock Speed" unit={"Mhz"} statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.clock) : $hardwareStatistics.seconds.map((value) => value.cpu.clock)} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>

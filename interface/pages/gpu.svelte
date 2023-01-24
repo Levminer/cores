@@ -35,10 +35,26 @@
 					<MultiLineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.temperature) : $hardwareStatistics.seconds.map((value) => value.gpu.temperature)} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
+
+			<!-- gpu clock -->
+			<div class="transparent-800 rounded-xl p-10 text-left">
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
+						<h2>Average GPU Clock</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+					</div>
+				</div>
+				<div>
+					<MultiLineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.clock) : $hardwareStatistics.seconds.map((value) => value.gpu.clock)} time={minutes ? "m" : "s"} unit="Mhz" name="Clock Speed" />
+				</div>
+			</div>
 		</div>
 
 		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
-			<!-- cpu power usage -->
+			<!-- gpu power usage -->
 			<div class="transparent-800 rounded-xl p-10 text-left">
 				<div class="mb-5 flex items-baseline justify-between">
 					<div class="flex items-baseline gap-3">
@@ -71,6 +87,22 @@
 
 				<div>
 					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.load) : $hardwareStatistics.seconds.map((value) => value.gpu.load)} type={"Load"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+				</div>
+			</div>
+
+			<!-- gpu fan usage -->
+			<div class="transparent-800 rounded-xl p-10 text-left">
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
+						<h2>GPU Fan speed</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60m" : "Last 60s"}</h5>
+					</div>
+				</div>
+				<div>
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.fan)} type={"Fan speed"} unit={" RPM"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 		</div>
