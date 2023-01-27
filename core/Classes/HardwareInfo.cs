@@ -291,10 +291,15 @@ public class HardwareInfo {
 						Name = ni.Name,
 						Description = ni.Description,
 						MACAddress = ni.GetPhysicalAddress().ToString(),
-						Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString(),
 						DNS = ni.GetIPProperties().DnsAddresses[0].ToString(),
 						Speed = (ni.Speed / 1000 / 1000).ToString()
 					};
+
+					if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
+						temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
+					} else {
+						temp.Gateway = "N/A";
+					}
 
 					foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
 						if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
