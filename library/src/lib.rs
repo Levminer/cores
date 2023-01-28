@@ -1,8 +1,9 @@
+use directories::BaseDirs;
 use powershell_script;
+use serde::{Deserialize, Serialize};
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::os::raw::c_char;
-use std::process::Command;
 use wfd::DialogParams;
 
 #[no_mangle]
@@ -76,4 +77,60 @@ pub extern "C" fn getOSInfo() -> *const c_char {
     );
 
     return CString::new(returning).unwrap().into_raw();
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[repr(C)]
+pub struct Settings {
+    pub interval: u32,
+}
+
+#[no_mangle]
+pub extern "C" fn getSettings() -> Settings {
+    let sample_settings = Settings { interval: 2 };
+
+    let dir = match BaseDirs::new() {
+        Some(base_dirs) => base_dirs,
+        None => return sample_settings,
+    };
+
+    let appdata = dir.config_dir();
+
+    // Check if folder exists
+    if !appdata.join("Cores").exists() {
+        std::fs::create_dir(appdata.join("Cores")).unwrap();
+    }
+
+    // Check if file exists, and return it
+    if !appdata.join("Cores").join("settings.json").exists() {
+        std::fs::write(
+            appdata.join("Cores").join("settings.json"),
+            serde_json::to_string(&sample_settings).unwrap(),
+        )
+        .unwrap();
+
+        return sample_settings;
+    } else {
+        let file = std::fs::read_to_string(appdata.join("Cores").join("settings.json")).unwrap();
+        let settings: Settings = serde_json::from_str(&file).unwrap();
+
+        return settings;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn setSettings(settings: Settings) {
+    let dir = match BaseDirs::new() {
+        Some(base_dirs) => base_dirs,
+        None => return,
+    };
+
+    let appdata = dir.config_dir();
+
+    // Replace file
+    std::fs::write(
+        appdata.join("Cores").join("settings.json"),
+        serde_json::to_string(&settings).unwrap(),
+    )
+    .unwrap();
 }

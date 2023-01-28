@@ -17,6 +17,9 @@ public sealed partial class MainWindow : Window {
 	[DllImport("lib.dll")]
 	private static extern string dialog(string name);
 
+	[DllImport("lib.dll")]
+	private static extern void setSettings(Settings settings);
+
 	public MainWindow() {
 		InitializeComponent();
 
@@ -37,7 +40,7 @@ public sealed partial class MainWindow : Window {
 
 		APIRefresher = new DispatcherTimer();
 		APIRefresher.Tick += RefreshAPI;
-		APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.settings.Interval);
+		APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.interval);
 		APIRefresher.Start();
 	}
 
@@ -69,7 +72,7 @@ public sealed partial class MainWindow : Window {
 
 		var message = new Message() {
 			Name = "settings",
-			Content = JsonSerializer.Serialize(App.GlobalSettings.settings, App.SerializerOptions)
+			Content = JsonSerializer.Serialize(App.GlobalSettings, App.SerializerOptions)
 		};
 
 		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, App.SerializerOptions));
@@ -101,7 +104,9 @@ public sealed partial class MainWindow : Window {
 				break;
 
 			case "newSettings":
-				App.GlobalSettings.SetSettings(content.Content);
+				App.GlobalSettings = JsonSerializer.Deserialize<Settings>(content.Content, App.SerializerOptions);
+
+				setSettings(App.GlobalSettings);
 				break;
 
 			case "debug":

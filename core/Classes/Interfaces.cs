@@ -1,5 +1,7 @@
 ﻿using LibreHardwareMonitor.Hardware;
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Cores;
 
@@ -39,6 +41,11 @@ public class Message {
 	public string Content {
 		get; set;
 	}
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct Settings {
+	public int interval { get; set; }
 }
 
 public class Disk {

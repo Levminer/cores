@@ -1,6 +1,8 @@
 ﻿using cores;
 using Microsoft.UI.Xaml;
 using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using WinUIEx;
 
@@ -15,12 +17,15 @@ public partial class App : Application {
 	};
 	internal static Settings GlobalSettings = new();
 
+	[DllImport("lib.dll")]
+	private static extern Settings getSettings();
+
 	public App() {
 		InitializeComponent();
 
-		// Setup settings
-		GlobalSettings.SetupSettings();
-		GlobalSettings.GetSettings();
+		//Get settings
+		GlobalSettings = getSettings();
+
 	}
 
 	protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {

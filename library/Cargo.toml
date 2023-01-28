@@ -14,5 +14,8 @@ name = "bin"
 path = "src/main.rs"
 
 [dependencies]
+directories = "4.0.1"
 powershell_script = "1.0.4"
+serde = {version = "1.0", features = ["derive"]}
+serde_json = {version = "1.0"}
 wfd = "0.1.7"
