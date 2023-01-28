@@ -146,62 +146,74 @@
 
 		<!-- GPU info -->
 		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
-			<div class="transparent-800 rounded-xl p-10">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
-					<h2>GPU Temperature</h2>
+			{#if $hardwareInfo.gpu.temperature.length > 0}
+				<div class="transparent-800 rounded-xl p-10">
+					<div class="mb-5 flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
+						<h2>GPU Temperature</h2>
+					</div>
+					<h3>Avg. temperature: {Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)} °C</h3>
+					<div>
+						<MeterChart readings={$hardwareInfo.gpu.temperature} categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} °C)`)} i={1} type={{ name: "temperature", unit: "°C" }} />
+					</div>
 				</div>
-				<h3>Avg. temperature: {Math.round($hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length)} °C</h3>
-				<div>
-					<MeterChart readings={$hardwareInfo.gpu.temperature} categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} °C)`)} i={1} type={{ name: "temperature", unit: "°C" }} />
-				</div>
-			</div>
+			{/if}
 
-			<div class="transparent-800 rounded-xl p-10">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
-					<h2>GPU Fan Speed</h2>
+			{#if $hardwareInfo.gpu.fan.length > 0}
+				<div class="transparent-800 rounded-xl p-10">
+					<div class="mb-5 flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
+						<h2>GPU Fan Speed</h2>
+					</div>
+					<h3>Avg. fan speed: {Math.round($hardwareInfo.gpu.fan.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.fan.length)} RPM</h3>
+					{#if $hardwareInfo.gpu.fan[0].max > 0}
+						<div>
+							<MeterChart categories={$hardwareInfo.gpu.fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)} readings={$hardwareInfo.gpu.fan} i={7} type={{ name: "fan speed", unit: "RPM" }} />
+						</div>
+					{/if}
 				</div>
-				<h3>Avg. fan speed: {Math.round($hardwareInfo.gpu.fan.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.fan.length)} RPM</h3>
-				<div>
-					<MeterChart categories={$hardwareInfo.gpu.fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)} readings={$hardwareInfo.gpu.fan} i={7} type={{ name: "fan speed", unit: "RPM" }} />
-				</div>
-			</div>
+			{/if}
 
-			<div class="transparent-800 rounded-xl p-10">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
-						<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
-					</svg>
-					<h2>GPU Memory Usage</h2>
+			{#if $hardwareInfo.gpu.memory.length > 0}
+				<div class="transparent-800 rounded-xl p-10">
+					<div class="mb-5 flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
+							<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
+						</svg>
+						<h2>GPU Memory Usage</h2>
+					</div>
+					<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
+					<div>
+						<MeterChart readings={[$hardwareInfo.gpu.memory[0]]} categories={["GPU memory usage"]} i={10} type={{ name: "GPU memory usage", unit: "GB" }} />
+					</div>
 				</div>
-				<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
-				<div>
-					<MeterChart readings={[$hardwareInfo.gpu.memory[0]]} categories={["GPU memory usage"]} i={10} type={{ name: "GPU memory usage", unit: "GB" }} />
-				</div>
-			</div>
+			{/if}
 
-			<div class="transparent-800 rounded-xl p-10">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-					<h2>GPU Clock speed</h2>
+			{#if $hardwareInfo.gpu.clock.length > 0}
+				<div class="transparent-800 rounded-xl p-10">
+					<div class="mb-5 flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+						<h2>GPU Clock speed</h2>
+					</div>
+					<h3>Avg. clock speed: {(Math.round($hardwareInfo.gpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.clock.length) / 1000).toFixed(1)} GHz</h3>
+					<div>
+						<MeterChart readings={$hardwareInfo.gpu.clock} categories={$hardwareInfo.gpu.clock.map((temp) => `${temp.name.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={6} type={{ name: "clock speed", unit: "MHz" }} />
+					</div>
 				</div>
-				<h3>Avg. clock speed: {(Math.round($hardwareInfo.gpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.clock.length) / 1000).toFixed(1)} GHz</h3>
-				<div>
-					<MeterChart readings={$hardwareInfo.gpu.clock} categories={$hardwareInfo.gpu.clock.map((temp) => `${temp.name.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`)} i={6} type={{ name: "clock speed", unit: "MHz" }} />
-				</div>
-			</div>
+			{/if}
 
-			<div class="transparent-800 rounded-xl p-10">
-				<div class="mb-5 flex items-baseline gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
-					<h2>GPU Power usage</h2>
+			{#if $hardwareInfo.gpu.power.length > 0}
+				<div class="transparent-800 rounded-xl p-10">
+					<div class="mb-5 flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg>
+						<h2>GPU Power usage</h2>
+					</div>
+					<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
+					<div>
+						<MeterChart readings={$hardwareInfo.gpu.power} categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} W)`)} i={4} type={{ name: "power usage", unit: "W" }} />
+					</div>
 				</div>
-				<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
-				<div>
-					<MeterChart readings={$hardwareInfo.gpu.power} categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} W)`)} i={4} type={{ name: "power usage", unit: "W" }} />
-				</div>
-			</div>
+			{/if}
 		</div>
 	</div>
 </div>
