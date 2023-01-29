@@ -57,11 +57,11 @@ public class Disk {
 		get; set;
 	}
 
-	public float UsedSpace {
+	public int TotalSpace {
 		get; set;
 	}
 
-	public int Size {
+	public int FreeSpace {
 		get; set;
 	}
 

@@ -18,7 +18,7 @@
 				</div>
 			</div>
 
-			<div class="flex gap-5 sm:flex-wrap">
+			<div class="flex items-baseline gap-5 sm:flex-wrap">
 				<!-- Monitors -->
 				<div class="transparent-800 w-1/2 rounded-xl p-10 sm:w-full">
 					<div class="flex items-baseline gap-3">
@@ -54,18 +54,18 @@
 		</div>
 
 		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
-			<!-- Disk info -->
+			<!-- Drives -->
 			<div class="transparent-800 rounded-xl p-10">
 				<div class="flex items-baseline gap-3">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /><line x1="6" y1="16" x2="6.01" y2="16" /><line x1="10" y1="16" x2="10.01" y2="16" /></svg>
-					<h2>Disks</h2>
+					<h2>Drives</h2>
 				</div>
-				{#each $hardwareInfo.system.storage.disks as { name, temperature, usedSpace, size, health }}
+				{#each $hardwareInfo.system.storage.disks as { name, temperature, freeSpace, totalSpace, health }}
 					<div class="mt-5 select-text">
 						<h3>Name: {name}</h3>
 						<h3>Temperature: {temperature} °C</h3>
 						<h3>Health: {health}%</h3>
-						<h3>Available space: {(size - size * (usedSpace / 100)).toFixed()}/{size} GB</h3>
+						<h3>Available space: {freeSpace}/{totalSpace} GB</h3>
 					</div>
 				{/each}
 			</div>

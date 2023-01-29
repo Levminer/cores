@@ -26,8 +26,8 @@ declare global {
 	interface Disk {
 		name: string
 		temperature: number
-		usedSpace: number
-		size: number
+		freeSpace: number
+		totalSpace: number
 		health: string
 	}
 

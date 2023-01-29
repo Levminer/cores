@@ -60,7 +60,6 @@ public class HardwareInfo {
 
 		for (int i = 0; i < computerHardware.Count; i++) {
 			var sensor = computerHardware[i].Sensors;
-			var diskLoad = false;
 
 			// Get component names
 			if (firstRun) {
@@ -90,21 +89,48 @@ public class HardwareInfo {
 
 					// Get disk size
 					var report = computerHardware[i].GetReport().Split("\n");
-					long size = 0;
+					long total = 0;
+					long free = 0;
 					string health = "N/A";
 
 					foreach (var line in report) {
 						if (line.Contains("Size")) {
-							size = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+							total = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
 						}
 
+						if (line.Contains("Free")) {
+							free = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+						}
+
+						// Sandforce
 						if (line.Contains("E7")) {
+							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
+						}
+
+						// Intel
+						if (line.Contains("E8")) {
+							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
+						}
+
+						// Samsung
+						if (line.Contains("B4")) {
+							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
+						}
+
+						// Indilinx
+						if (line.Contains("D1")) {
+							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
+						}
+
+						// Micron
+						if (line.Contains("CA")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 					}
 
-					API.System.Storage.Disks[diskID].Size = (int)size;
+					API.System.Storage.Disks[diskID].TotalSpace = (int)total;
 					API.System.Storage.Disks[diskID].Health = health;
+					API.System.Storage.Disks[diskID].FreeSpace = (int)free;
 				}
 			}
 
@@ -223,14 +249,9 @@ public class HardwareInfo {
 					});
 				}
 
-				// Disk info
-				if (computerHardware[i].HardwareType.ToString() == "Storage") {
-					if (sensor[j].SensorType.ToString() == "Temperature") {
-						API.System.Storage.Disks[diskID].Temperature = float.Parse(sensor[j].Value.ToString());
-					} else if (sensor[j].SensorType.ToString() == "Load" && diskLoad == false) {
-						API.System.Storage.Disks[diskID].UsedSpace = float.Parse(sensor[j].Value.ToString());
-						diskLoad = true;
-					}
+				// Drive temperature
+				if (computerHardware[i].HardwareType.ToString() == "Storage" && sensor[j].SensorType.ToString() == "Temperature") {
+					API.System.Storage.Disks[diskID].Temperature = float.Parse(sensor[j].Value.ToString());
 				}
 			}
 		}
