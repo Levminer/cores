@@ -174,7 +174,7 @@
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.gpu.memory.length > 0}
+			{#if $hardwareInfo.gpu.memory.length > 2}
 				<div class="transparent-800 rounded-xl p-10">
 					<div class="mb-5 flex items-baseline gap-3">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
