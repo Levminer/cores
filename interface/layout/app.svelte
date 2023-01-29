@@ -32,14 +32,14 @@
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
 	import { settings } from "../stores/settings"
 
-	// Navigate to the home page on load (webview bug)
 	onMount(() => {
+		// Navigate to the home page on load (webview bug)
 		router.goto("/")
-	})
 
-	// Update hardware statistics
-	onMount(() => {
-		let observer: MutationObserver
+		// Scroll to the top of the page on route change
+		router.subscribe((data) => {
+			document.querySelector(".top").scrollIntoView()
+		})
 
 		// @ts-ignore - Receive settings from the webview
 		window.chrome.webview.addEventListener("message", (arg) => {
@@ -54,7 +54,10 @@
 		const date = new Date()
 		date.setSeconds(date.getSeconds() + 60)
 
-		// Watch for changes in the DOM
+		// Watch for API changes in the DOM
+		let observer: MutationObserver
+
+		// Update hardware statistics
 		observer = new MutationObserver(() => {
 			const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
 
@@ -110,7 +113,7 @@
 					},
 				}
 
-				if (date.toString() === new Date().toString()) {
+				if (date.getTime() < new Date().getTime()) {
 					let minutesData: Stats = {
 						cpu: {
 							temperature: {
