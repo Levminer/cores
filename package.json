@@ -1,6 +1,6 @@
 {
 	"name": "cores",
-	"version": "0.8.0",
+	"version": "0.9.0",
 	"description": "Hardware monitor",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -20,7 +20,7 @@
 		"postcss": "^8.4.21",
 		"prettier": "^2.8.3",
 		"prettier-plugin-svelte": "^2.9.0",
-		"prettier-plugin-tailwindcss": "^0.2.1",
+		"prettier-plugin-tailwindcss": "^0.2.2",
 		"svelte": "^3.55.1",
 		"svelte-check": "^3.0.3",
 		"svelte-preprocess": "^5.0.1",
