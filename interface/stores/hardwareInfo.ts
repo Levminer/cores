@@ -54,8 +54,8 @@ const defaultHardwareInfo: HardwareInfo = {
 				{
 					name: "Disk",
 					temperature: 20,
-					usedSpace: 50,
-					size: 250,
+					freeSpace: 50,
+					totalSpace: 100,
 					health: "N/A",
 				},
 			],
