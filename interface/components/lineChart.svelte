@@ -10,6 +10,7 @@
 	export let unit: string
 	export let color: string
 	export let time: string
+	export let zero = false
 
 	Chart.register(...registerables)
 
@@ -37,6 +38,7 @@
 					},
 					precision: 2,
 				},
+				min: zero ? 0 : undefined,
 			},
 			x: {
 				ticks: {

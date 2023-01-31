@@ -14,7 +14,7 @@
 				<div class="select-text">
 					<h3>Vendor: {$hardwareInfo.gpu.name.split(" ")[0]}</h3>
 					<h3>Name: {$hardwareInfo.gpu.name}</h3>
-					<h3>GPU memory: {Math.round($hardwareInfo.gpu.memory[2].value)} GB</h3>
+					<h3>GPU memory: {$hardwareInfo.gpu.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2].value) : "N/A"} GB</h3>
 					<h3>Driver date: {driverDate}</h3>
 					<h3>Primary monitor: {primaryMonitor.resolution} {primaryMonitor.refreshRate} Hz</h3>
 				</div>
@@ -102,7 +102,7 @@
 					</div>
 				</div>
 				<div>
-					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.fan)} type={"Fan speed"} unit={" RPM"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.fan)} type={"Fan speed"} unit={" RPM"} color={"#00bbf9"} time={minutes ? "m" : "s"} zero={true} />
 				</div>
 			</div>
 		</div>
