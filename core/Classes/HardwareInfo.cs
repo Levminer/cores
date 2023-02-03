@@ -270,7 +270,9 @@ public class HardwareInfo {
 		// HWInfo, monitors, network interfaces
 		if (firstRun) {
 			// CPU info
-			API.CPU.Info.Add(computer.SMBios.Processors.ToList()[0]);
+			for (int i = 0; i < computer.SMBios.Processors.Length; i++) {
+				API.CPU.Info.Add(computer.SMBios.Processors[i]);
+			}
 
 			// GPU info
 			API.GPU.Info = getGPUInfo();
