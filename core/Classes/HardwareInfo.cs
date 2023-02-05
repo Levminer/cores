@@ -94,36 +94,36 @@ public class HardwareInfo {
 					string health = "N/A";
 
 					foreach (var line in report) {
-						if (line.Contains("Size")) {
+						if (line.StartsWith("Total Size")) {
 							total = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
 						}
 
-						if (line.Contains("Free")) {
+						if (line.StartsWith("Total Free Space")) {
 							free = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
 						}
 
 						// Sandforce
-						if (line.Contains("E7")) {
+						if (line.Trim().StartsWith("E7")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 
 						// Intel
-						if (line.Contains("E8")) {
+						if (line.Trim().StartsWith("E8")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 
 						// Samsung
-						if (line.Contains("B4")) {
+						if (line.Trim().StartsWith("B4")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 
 						// Indilinx
-						if (line.Contains("D1")) {
+						if (line.Trim().StartsWith("D1")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 
 						// Micron
-						if (line.Contains("CA")) {
+						if (line.Trim().StartsWith("CA")) {
 							health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
 						}
 					}
@@ -291,8 +291,15 @@ public class HardwareInfo {
 			var displays = Display.GetDisplays().ToArray();
 
 			for (int i = 0; i < displays.Length; i++) {
+				var defaultName = "N/A";
+				var name = displays[i].ToPathDisplayTarget().FriendlyName;
+
+				if (name != "") {
+					defaultName = name;
+				}
+
 				API.System.Monitor.Monitors.Add(new Monitor {
-					Name = displays[i].ToPathDisplayTarget().FriendlyName,
+					Name = defaultName,
 					RefreshRate = Convert.ToString(displays[i].CurrentSetting.Frequency),
 					Resolution = $"{displays[i].CurrentSetting.Resolution.Width}x{displays[i].CurrentSetting.Resolution.Height}",
 					Primary = displays[i].IsGDIPrimary
