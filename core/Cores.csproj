@@ -32,12 +32,14 @@
 	<Content Include="Assets\assets\*">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
+	<None Remove="Views\Tray.xaml" />
 	<Content Include="Assets\icon.ico">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.77" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.2-pre188" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
@@ -58,6 +60,9 @@
     <None Update="lib.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Tray.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!-- 

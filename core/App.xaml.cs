@@ -9,7 +9,7 @@ using WinUIEx;
 namespace Cores;
 
 public partial class App : Application {
-	private Window MainWindow;
+	internal static Window MainWindow;
 	internal static HardwareInfo GlobalHardwareInfo = new();
 	internal static JsonSerializerOptions SerializerOptions = new() {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -55,6 +55,7 @@ public partial class App : Application {
 		MainWindow.Title = "Cores";
 		MainWindow.SetIcon("Assets/icon.ico");
 
+		// Resize window
 		var windowManager = WindowManager.Get(MainWindow);
 		windowManager.MinWidth = 1000;
 		windowManager.MinHeight = 600;
