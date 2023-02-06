@@ -7,12 +7,29 @@
 		<div class="top" />
 
 		<RouteTransition>
-			<Route path="/"><Home /></Route>
-			<Route path="/settings"><Settings /></Route>
-			<Route path="/system"><System /></Route>
-			<Route path="/cpu"><CPU /></Route>
-			<Route path="/gpu"><GPU /></Route>
-			<Route path="/ram"><RAM /></Route>
+			<Boundary onError={console.error}>
+				<Route path="/"><Home /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
+				<Route path="/cpu"><CPU /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
+				<Route path="/ram"><RAM /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
+				<Route path="/gpu"><GPU /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
+				<Route path="/system"><System /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
+				<Route path="/settings"><Settings /></Route>
+			</Boundary>
 		</RouteTransition>
 	</div>
 </div>
@@ -31,6 +48,8 @@
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
 	import { settings } from "../stores/settings"
+	// @ts-ignore
+	import { Boundary } from "@crownframework/svelte-error-boundary"
 
 	onMount(() => {
 		// Navigate to the home page on load (webview bug)
