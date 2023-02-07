@@ -1,17 +1,14 @@
 # Cores
 
--   Hardware monitor
-
-## TODO
-
--   [ ] Mica background
--   [ ] CPU/GPU/RAM detailed info
--   [ ] GPU usage is sometimes bad
+-   Modern hardware monitor for Windows.
 
 ## Features
 
--   💻 Track CPU/RAM/GPU usage
--   🌡️ Track CPU/GPU temperature, power usage
+-   💻 Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage
+-   🌡️ Monitor CPU/GPU temperature
+-   📈 See beautiful CPU/RAM/GPU graphs
+-   💾 Monitor SSD health and temperature
+-   🖥️ See detailed info about your computer
 
 ## Screenshot
 
