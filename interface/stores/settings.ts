@@ -3,6 +3,7 @@ import build from "../../build.json"
 
 const defaultSettings: LibSettings = {
 	interval: 2,
+	minimizeToTray: true,
 }
 
 // Create store

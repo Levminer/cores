@@ -11,6 +11,16 @@
 				<Select options={["1s", "2s", "3s", "5s", "15s"]} setting={"interval"} values={[1, 2, 3, 5, 15]} />
 			</div>
 		</div>
+
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+			<div>
+				<h2>Minimize to tray</h2>
+				<h3>When closing the app Cores will not quit. You can open Cores from the system tray.</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<Toggle bind:checked={$settings.minimizeToTray} />
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -66,8 +76,10 @@
 
 <script lang="ts">
 	import { hardwareInfo } from "../stores/hardwareInfo"
+	import { settings } from "../stores/settings"
 	import build from "../../build.json"
 	import Select from "../components/select.svelte"
+	import Toggle from "../components/toggle.svelte"
 
 	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
 

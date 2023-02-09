@@ -41,7 +41,7 @@ public partial class App : Application {
 			await mainInstance.RedirectActivationToAsync(appArgs);
 
 			// And exit our instance and stop
-			System.Diagnostics.Process.GetCurrentProcess().Kill();
+			Process.GetCurrentProcess().Kill();
 			return;
 		}
 
@@ -54,6 +54,16 @@ public partial class App : Application {
 		MainWindow.Maximize();
 		MainWindow.Title = "Cores";
 		MainWindow.SetIcon("Assets/icon.ico");
+
+		// Prevent window close
+		MainWindow.Closed += (s, e) => {
+			if (GlobalSettings.minimizeToTray) {
+				MainWindow.Hide();
+				e.Handled = true;
+			} else {
+				Process.GetCurrentProcess().Kill();
+			}
+		};
 
 		// Resize window
 		var windowManager = WindowManager.Get(MainWindow);

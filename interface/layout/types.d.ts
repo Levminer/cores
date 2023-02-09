@@ -168,6 +168,7 @@ declare global {
 
 	interface LibSettings {
 		interval: number
+		minimizeToTray: boolean
 	}
 }
 

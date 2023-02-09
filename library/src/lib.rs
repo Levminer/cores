@@ -83,11 +83,16 @@ pub extern "C" fn getOSInfo() -> *const c_char {
 #[repr(C)]
 pub struct Settings {
     pub interval: u32,
+    #[serde(rename = "minimizeToTray")]
+    pub minimize_to_tray: Option<bool>,
 }
 
 #[no_mangle]
 pub extern "C" fn getSettings() -> Settings {
-    let sample_settings = Settings { interval: 2 };
+    let sample_settings = Settings {
+        interval: 2,
+        minimize_to_tray: Some(true),
+    };
 
     let dir = match BaseDirs::new() {
         Some(base_dirs) => base_dirs,
