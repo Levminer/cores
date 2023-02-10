@@ -1,3 +1,4 @@
+use auto_launch::AutoLaunchBuilder;
 use directories::BaseDirs;
 use powershell_script;
 use serde::{Deserialize, Serialize};
@@ -79,19 +80,26 @@ pub extern "C" fn getOSInfo() -> *const c_char {
     return CString::new(returning).unwrap().into_raw();
 }
 
+const fn default_value() -> u32 {
+    0
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 #[repr(C)]
 pub struct Settings {
     pub interval: u32,
-    #[serde(rename = "minimizeToTray")]
-    pub minimize_to_tray: Option<bool>,
+    #[serde(rename = "minimizeToTray", default = "default_value")]
+    pub minimize_to_tray: u32,
+    #[serde(rename = "launchOnStartup", default = "default_value")]
+    pub launch_on_startup: u32,
 }
 
 #[no_mangle]
 pub extern "C" fn getSettings() -> Settings {
     let sample_settings = Settings {
         interval: 2,
-        minimize_to_tray: Some(true),
+        minimize_to_tray: 1,
+        launch_on_startup: 0,
     };
 
     let dir = match BaseDirs::new() {
@@ -138,4 +146,24 @@ pub extern "C" fn setSettings(settings: Settings) {
         serde_json::to_string(&settings).unwrap(),
     )
     .unwrap();
+}
+
+#[no_mangle]
+pub extern "C" fn autoLaunch(c_buf: *const c_char) {
+    let c_str: &CStr = unsafe { CStr::from_ptr(c_buf) };
+    let str_slice: &str = c_str.to_str().unwrap();
+
+    let auto = AutoLaunchBuilder::new()
+        .set_app_name("Cores")
+        .set_app_path(str_slice)
+        .set_use_launch_agent(false)
+        .set_args(&["--minimized"])
+        .build()
+        .unwrap();
+
+    if auto.is_enabled().unwrap() {
+        auto.disable().unwrap();
+    } else {
+        auto.enable().unwrap();
+    }
 }

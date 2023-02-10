@@ -15,9 +15,8 @@
 	}
 
 	const update = (event) => {
-		console.log(update)
-
 		checked = event.detail
+
 		// @ts-ignore
 		window.chrome.webview.postMessage({ name: "newSettings", content: JSON.stringify($settings) })
 	}

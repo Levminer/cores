@@ -47,6 +47,7 @@ public class Message {
 public struct Settings {
 	public int interval { get; set; }
 	public bool minimizeToTray { get; set; }
+	public bool launchOnStartup { get; set; }
 }
 
 public class Disk {

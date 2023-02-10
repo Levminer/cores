@@ -3,6 +3,17 @@
 version = 3
 
 [[package]]
+name = "auto-launch"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5904a4d734f0235edf29aab320a14899f3e090446e594ff96508a6215f76f89c"
+dependencies = [
+ "dirs",
+ "thiserror",
+ "winreg",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -19,6 +30,15 @@ name = "directories"
 version = "4.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f51c5d4ddabd36886dd3e1438cb358cdcb0d7c499cb99cb4ac2e38e18b5cb210"
+dependencies = [
+ "dirs-sys",
+]
+
+[[package]]
+name = "dirs"
+version = "4.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca3aa72a6f96ea37bbc5aa912f6788242832f75369bdfdadcb0e38423f100059"
 dependencies = [
  "dirs-sys",
 ]
@@ -61,6 +81,7 @@ checksum = "201de327520df007757c1f0adce6e827fe8562fbc28bfd9c15571c66ca1f5f79"
 name = "library"
 version = "0.1.0"
 dependencies = [
+ "auto-launch",
  "directories",
  "powershell_script",
  "serde",
@@ -223,3 +244,12 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+
+[[package]]
+name = "winreg"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80d0f4e272c85def139476380b12f9ac60926689dd2e01d4923222f40580869d"
+dependencies = [
+ "winapi",
+]

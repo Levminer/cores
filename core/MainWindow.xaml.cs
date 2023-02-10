@@ -20,6 +20,9 @@ public sealed partial class MainWindow : Window {
 	[DllImport("lib.dll")]
 	private static extern void setSettings(Settings settings);
 
+	[DllImport("lib.dll")]
+	private static extern void autoLaunch(string exe);
+
 	public MainWindow() {
 		InitializeComponent();
 
@@ -84,7 +87,7 @@ public sealed partial class MainWindow : Window {
 		args.Handled = true;
 	}
 
-	// About dialog
+	// WebView events
 	public async void WebView_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs args) {
 		var content = JsonSerializer.Deserialize<Message>(args.WebMessageAsJson, App.SerializerOptions);
 		Debug.WriteLine($"Message: {content.Name}");
@@ -117,7 +120,12 @@ public sealed partial class MainWindow : Window {
 
 				// write to file
 				System.IO.File.WriteAllText(path, contents);
+				break;
 
+			case "launchOnStartup":
+				var exe = AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "Cores.exe";
+
+				autoLaunch(exe);
 				break;
 		}
 	}

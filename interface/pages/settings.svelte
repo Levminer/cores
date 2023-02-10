@@ -4,11 +4,11 @@
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
-				<h2>Refresh interval</h2>
-				<h3>How often does Cores refreshes the sensors and displays the data. Restart required.</h3>
+				<h2>Launch on startup</h2>
+				<h3>Start Cores after your computer started. Cores will start on the system tray.</h3>
 			</div>
 			<div class="ml-20 flex gap-3">
-				<Select options={["1s", "2s", "3s", "5s", "15s"]} setting={"interval"} values={[1, 2, 3, 5, 15]} />
+				<Toggle bind:checked={$settings.launchOnStartup} on:click={launchOnStartup} />
 			</div>
 		</div>
 
@@ -19,6 +19,16 @@
 			</div>
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.minimizeToTray} />
+			</div>
+		</div>
+
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+			<div>
+				<h2>Refresh interval</h2>
+				<h3>How often does Cores refreshes the sensors and displays the data. Restart required.</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<Select options={["1s", "2s", "3s", "5s", "15s"]} setting={"interval"} values={[1, 2, 3, 5, 15]} />
 			</div>
 		</div>
 	</div>
@@ -82,6 +92,11 @@
 	import Toggle from "../components/toggle.svelte"
 
 	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${$hardwareInfo.system.os.webView}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+
+	const launchOnStartup = () => {
+		// @ts-ignore
+		window.chrome.webview.postMessage({ name: "launchOnStartup", content: message })
+	}
 
 	const about = () => {
 		// @ts-ignore
