@@ -2,7 +2,7 @@
 	<h1 class="mb-10">General</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
-		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+		<!-- <div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
 				<h2>Launch on startup</h2>
 				<h3>Start Cores after your computer started. Cores will start on the system tray.</h3>
@@ -10,7 +10,7 @@
 			<div class="ml-20 flex gap-3">
 				<Toggle bind:checked={$settings.launchOnStartup} on:click={launchOnStartup} />
 			</div>
-		</div>
+		</div> -->
 
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
 			<div>
