@@ -136,7 +136,7 @@ public sealed partial class MainWindow : Window {
 
 		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
-		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.230118.102";
+		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.230217.4";
 
 		var JSON = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, App.SerializerOptions);
 
