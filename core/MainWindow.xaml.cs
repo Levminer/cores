@@ -131,15 +131,19 @@ public sealed partial class MainWindow : Window {
 	}
 
 	// Send API info to the interface
-	public async void SendAPI() {
+	public void SendAPI() {
 		var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
 		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
 		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.2.230217.4";
 
-		var JSON = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, App.SerializerOptions);
 
-		await webView.CoreWebView2.ExecuteScriptAsync($"document.querySelector('#api').textContent = `{JSON}`");
+		var message = new Message() {
+			Name = "api",
+			Content = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, App.SerializerOptions)
+		};
+
+		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, App.SerializerOptions));
 	}
 }

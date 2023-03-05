@@ -171,6 +171,11 @@ declare global {
 		minimizeToTray: boolean
 		launchOnStartup: boolean
 	}
+
+	interface Message {
+		name: string
+		content: string
+	}
 }
 
 export {}

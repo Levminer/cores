@@ -50,6 +50,7 @@
 	import { settings } from "../stores/settings"
 	// @ts-ignore
 	import { Boundary } from "@crownframework/svelte-error-boundary"
+	import { setHardwareInfo } from "../stores/hardwareInfo"
 
 	onMount(() => {
 		// Navigate to the home page on load (webview bug)
@@ -61,7 +62,7 @@
 		})
 
 		// @ts-ignore - Receive settings from the webview
-		window.chrome.webview.addEventListener("message", (arg) => {
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
 			if (arg.data.name === "settings") {
 				console.log("New settings")
 
@@ -69,17 +70,22 @@
 			}
 		})
 
+		// @ts-ignore - Receive api data from the webview
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+			if (arg.data.name === "api") {
+				let parsed = JSON.parse(arg.data.content)
+
+				setHardwareInfo(parsed)
+				updateHardwareStats(parsed)
+			}
+		})
+
 		// 60s date comparison
 		const date = new Date()
 		date.setSeconds(date.getSeconds() + 60)
 
-		// Watch for API changes in the DOM
-		let observer: MutationObserver
-
 		// Update hardware statistics
-		observer = new MutationObserver(() => {
-			const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
-
+		const updateHardwareStats = (input: HardwareInfo) => {
 			if (Object.keys(input).length !== 0) {
 				if ($hardwareStatistics.minutes.length > 60) {
 					$hardwareStatistics.minutes.shift()
@@ -190,13 +196,6 @@
 					})
 				}
 			}
-		})
-
-		// Start observing the target
-		observer.observe(document.querySelector("#api"), {
-			attributes: true,
-			childList: true,
-			characterData: true,
-		})
+		}
 	})
 </script>

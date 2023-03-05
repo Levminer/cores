@@ -219,9 +219,7 @@
 </div>
 
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte"
-	import { hardwareInfo, setHardwareInfo } from "../stores/hardwareInfo"
-	import { hardwareStatistics } from "../stores/hardwareStatistics"
+	import { hardwareInfo } from "../stores/hardwareInfo"
 	import GaugeChart from "../components/gaugeChart.svelte"
 	import MeterChart from "../components/meterChart.svelte"
 
@@ -240,31 +238,4 @@
 			loadGraphsShown = false
 		}
 	}
-
-	let observer: MutationObserver
-
-	// Watch for changes in the DOM
-	observer = new MutationObserver(() => {
-		updateHardwareInfo()
-	})
-
-	// Watch for API changes
-	observer.observe(document.querySelector("#api"), {
-		attributes: true,
-		childList: true,
-		characterData: true,
-	})
-
-	// Update hardware info
-	const updateHardwareInfo = () => {
-		const input: HardwareInfo = JSON.parse(document.querySelector<HTMLInputElement>("#api").textContent)
-
-		if (Object.keys(input).length !== 0) {
-			setHardwareInfo(input)
-		}
-	}
-
-	onDestroy(() => {
-		observer.disconnect()
-	})
 </script>
