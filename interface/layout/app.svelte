@@ -135,6 +135,7 @@
 						load: Math.round(input.gpu.lastLoad),
 						power: Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)),
 						fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
+						memory: parseFloat(input.gpu.memory[0].value.toFixed(1)),
 					},
 				}
 
@@ -179,6 +180,7 @@
 							load: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.load).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
 							power: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.power).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
 							fan: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.fan).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+							memory: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.memory).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
 						},
 					}
 

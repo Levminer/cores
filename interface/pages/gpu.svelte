@@ -95,7 +95,7 @@
 				<div class="mb-5 flex items-baseline justify-between">
 					<div class="flex items-baseline gap-3">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z" /><path d="M12 12v.01" /></svg>
-						<h2>GPU Fan speed</h2>
+						<h2>GPU Fan Speed</h2>
 					</div>
 					<div>
 						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60m" : "Last 60s"}</h5>
@@ -103,6 +103,24 @@
 				</div>
 				<div>
 					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.fan)} type={"Fan speed"} unit={" RPM"} color={"#00bbf9"} time={minutes ? "m" : "s"} zero={true} />
+				</div>
+			</div>
+
+			<!-- gpu memory usage -->
+			<div class="transparent-800 rounded-xl p-10 text-left">
+				<div class="mb-5 flex items-baseline justify-between">
+					<div class="flex items-baseline gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-memory" viewBox="0 0 16 16">
+							<path d="M1 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.586a1 1 0 0 0 .707-.293l.353-.353a.5.5 0 0 1 .708 0l.353.353a1 1 0 0 0 .707.293H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H1Zm.5 1h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm5 0h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5Zm4.5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-4ZM2 10v2H1v-2h1Zm2 0v2H3v-2h1Zm2 0v2H5v-2h1Zm3 0v2H8v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Zm2 0v2h-1v-2h1Z" />
+						</svg>
+						<h2>GPU Memory Usage</h2>
+					</div>
+					<div>
+						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60m" : "Last 60s"}</h5>
+					</div>
+				</div>
+				<div>
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.memory)} type={"Memory usage"} unit={" GB"} color={"#00bbf9"} time={minutes ? "m" : "s"} zero={true} />
 				</div>
 			</div>
 		</div>

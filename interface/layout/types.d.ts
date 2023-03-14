@@ -153,6 +153,7 @@ declare global {
 			fan: number
 			load: number
 			power: number
+			memory: number
 		}
 
 		ram: {
