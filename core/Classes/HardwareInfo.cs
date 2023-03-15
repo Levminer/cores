@@ -285,6 +285,8 @@ public class HardwareInfo {
 				if (computer.SMBios.MemoryDevices[i].Speed != 0) {
 					API.RAM.Info.Add(computer.SMBios.MemoryDevices[i]);
 				}
+
+				API.RAM.Layout.Add(computer.SMBios.MemoryDevices[i]);
 			}
 
 			// Monitors

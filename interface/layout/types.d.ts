@@ -104,6 +104,7 @@ declare global {
 		ram: {
 			load: Sensor[]
 			info: RAMModule[]
+			layout: RAMModule[]
 		}
 
 		system: {

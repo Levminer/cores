@@ -187,6 +187,10 @@ public class RAMInfo {
 	public List<MemoryDevice> Info {
 		get; set;
 	} = new();
+
+	public List<MemoryDevice> Layout {
+		get; set;
+	} = new();
 }
 
 public class OSInfo {
