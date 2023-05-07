@@ -39,6 +39,7 @@ const defaultHardwareInfo: HardwareInfo = {
 	ram: {
 		load: [defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor, defaultSensor],
 		info: [],
+		layout: [],
 	},
 
 	system: {
