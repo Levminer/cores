@@ -48,6 +48,23 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
+            # Sign the unpackaged app
+            - name: Sign files with Azure Code Signing
+              uses: azure/azure-code-signing-action@v0.2.15
+              with:
+                  azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                  azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                  azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+                  endpoint: https://eus.codesigning.azure.net/
+                  code-signing-account-name: mnr
+                  certificate-profile-name: profile1
+                  files-folder: "core/bin/exe"
+                  files-folder-filter: exe,dll
+                  file-digest: SHA256
+                  timestamp-rfc3161: http://timestamp.acs.microsoft.com
+                  timestamp-digest: SHA256
+
+            # Upload the unpackaged app
             - name: Upload unpackaged app
               uses: actions/upload-artifact@v2
               with:
