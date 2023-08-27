@@ -98,9 +98,15 @@
 				let secondsData: Stats = {
 					cpu: {
 						temperature: {
-							value: Math.round(input.cpu.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
-							min: Math.round(input.cpu.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
-							max: Math.round(input.cpu.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
+							value: Math.round(
+								input.cpu.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.cpu.temperature.length,
+							),
+							min: Math.round(
+								input.cpu.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.cpu.temperature.length,
+							),
+							max: Math.round(
+								input.cpu.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.cpu.temperature.length,
+							),
 						},
 
 						clock: {
@@ -121,9 +127,15 @@
 
 					gpu: {
 						temperature: {
-							value: Math.round(input.gpu.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.gpu.temperature.length),
-							min: Math.round(input.gpu.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.gpu.temperature.length),
-							max: Math.round(input.gpu.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.gpu.temperature.length),
+							value: Math.round(
+								input.gpu.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.gpu.temperature.length,
+							),
+							min: Math.round(
+								input.gpu.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.gpu.temperature.length,
+							),
+							max: Math.round(
+								input.gpu.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.gpu.temperature.length,
+							),
 						},
 
 						clock: {
@@ -143,44 +155,111 @@
 					let minutesData: Stats = {
 						cpu: {
 							temperature: {
-								value: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.value).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								min: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.min).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								max: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.max).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+								value: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.value).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								min: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.min).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								max: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.temperature.max).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
 							},
 
 							clock: {
-								value: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.value).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								min: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.min).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								max: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.max).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+								value: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.value).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								min: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.min).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								max: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.clock.max).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
 							},
 
-							load: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.load).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							power: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.cpu.power).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							voltage: parseFloat(($hardwareStatistics.seconds.map((sensor) => sensor.cpu.voltage).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length).toFixed(2)),
+							load: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.cpu.load).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							power: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.cpu.power).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							voltage: parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.cpu.voltage).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(2),
+							),
 						},
 
 						ram: {
-							physicalUsage: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.ram.physicalUsage).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							virtualUsage: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.ram.virtualUsage).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+							physicalUsage: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.ram.physicalUsage).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							virtualUsage: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.ram.virtualUsage).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
 						},
 
 						gpu: {
 							temperature: {
-								value: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.value).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								min: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.min).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								max: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.max).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+								value: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.value).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								min: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.min).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								max: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.temperature.max).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
 							},
 
 							clock: {
-								value: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.value).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								min: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.min).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-								max: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.max).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+								value: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.value).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								min: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.min).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								max: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.clock.max).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
 							},
 
-							load: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.load).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							power: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.power).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							fan: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.fan).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
-							memory: Math.round($hardwareStatistics.seconds.map((sensor) => sensor.gpu.memory).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length),
+							load: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.load).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							power: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.power).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							fan: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.fan).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							memory: parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.gpu.memory).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(1),
+							),
 						},
 					}
 

@@ -138,7 +138,6 @@ public sealed partial class MainWindow : Window {
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
 		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.3.230724000";
 
-
 		var message = new Message() {
 			Name = "api",
 			Content = JsonSerializer.Serialize(App.GlobalHardwareInfo.API, App.SerializerOptions)

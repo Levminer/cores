@@ -120,7 +120,7 @@
 					</div>
 				</div>
 				<div>
-					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.fan) : $hardwareStatistics.seconds.map((value) => value.gpu.memory)} type={"Memory usage"} unit={" GB"} color={"#00bbf9"} time={minutes ? "m" : "s"} zero={true} />
+					<LineChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.gpu.memory) : $hardwareStatistics.seconds.map((value) => value.gpu.memory)} type={"Memory usage"} unit={" GB"} color={"#00bbf9"} time={minutes ? "m" : "s"} zero={true} />
 				</div>
 			</div>
 		</div>
