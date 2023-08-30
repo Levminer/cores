@@ -16,6 +16,7 @@ public partial class App : Application {
 		WriteIndented = true
 	};
 	internal static Settings GlobalSettings = new();
+	internal static bool exiting = false;
 
 	[DllImport("lib.dll")]
 	private static extern Settings getSettings();
@@ -56,7 +57,7 @@ public partial class App : Application {
 
 		// Prevent window close
 		MainWindow.Closed += (s, e) => {
-			if (GlobalSettings.minimizeToTray) {
+			if (GlobalSettings.minimizeToTray && !exiting) {
 				MainWindow.Hide();
 				e.Handled = true;
 			} else {
