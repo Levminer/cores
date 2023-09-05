@@ -17,7 +17,6 @@ public class HardwareInfo {
 		IsGpuEnabled = true,
 		IsMemoryEnabled = true,
 		IsMotherboardEnabled = true,
-		IsControllerEnabled = true,
 		IsStorageEnabled = true
 	};
 
@@ -63,7 +62,7 @@ public class HardwareInfo {
 
 			// Get component names
 			if (firstRun) {
-				if (computerHardware[i].HardwareType.ToString() == "Cpu") {
+				if (computerHardware[i].HardwareType == HardwareType.Cpu) {
 					API.CPU.Name = computerHardware[i].Name;
 				}
 
@@ -71,13 +70,13 @@ public class HardwareInfo {
 					API.GPU.Name = computerHardware[i].Name;
 				}
 
-				if (computerHardware[i].HardwareType.ToString() == "Motherboard") {
+				if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
 					API.System.Motherboard.Name = computerHardware[i].Name;
 				}
 			}
 
 			// Get disk names and IDs
-			if (computerHardware[i].HardwareType.ToString() == "Storage") {
+			if (computerHardware[i].HardwareType == HardwareType.Storage) {
 				var temp = new Disk {
 					Name = computerHardware[i].Name,
 				};
@@ -136,33 +135,29 @@ public class HardwareInfo {
 
 			for (int j = 0; j < sensor.Length; j++) {
 				// CPU temperature
-				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
-					var temp = new Sensor {
-						Value = float.Parse(sensor[j].Value.ToString()),
-						Min = float.Parse(sensor[j].Min.ToString()),
-						Max = float.Parse(sensor[j].Max.ToString()),
-						Name = sensor[j].Name.ToString(),
-					};
-
-					API.CPU.Temperature.Add(temp);
+				if (sensor[j].SensorType == SensorType.Temperature && computerHardware[i].HardwareType == HardwareType.Cpu && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
+					API.CPU.Temperature.Add(new Sensor {
+						Name = sensor[j].Name,
+						Value = (float)sensor[j].Value,
+						Min = (float)sensor[j].Min,
+						Max = (float)sensor[j].Max,
+					});
 				}
 
 				// GPU temperature
-				if (sensor[j].SensorType.ToString() == "Temperature" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					var temp = new Sensor {
-						Name = sensor[j].Name.ToString(),
-						Value = (float)Math.Truncate(float.Parse(sensor[j].Value.ToString())),
-						Min = (float)Math.Truncate(float.Parse(sensor[j].Min.ToString())),
-						Max = (float)Math.Truncate(float.Parse(sensor[j].Max.ToString())),
-					};
-
-					API.GPU.Temperature.Add(temp);
+				if (sensor[j].SensorType == SensorType.Temperature && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+					API.GPU.Temperature.Add(new Sensor {
+						Name = sensor[j].Name,
+						Value = (float)Math.Round((float)sensor[j].Value),
+						Min = (float)Math.Round((float)sensor[j].Min),
+						Max = (float)Math.Round((float)sensor[j].Max),
+					});
 				}
 
 				// CPU power
-				if (sensor[j].SensorType.ToString() == "Power" && computerHardware[i].HardwareType.ToString() == "Cpu") {
+				if (sensor[j].SensorType == SensorType.Power && computerHardware[i].HardwareType == HardwareType.Cpu) {
 					API.CPU.Power.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value),
 						Min = (float)Math.Round((float)sensor[j].Min),
 						Max = (float)Math.Round((float)sensor[j].Max),
@@ -170,14 +165,17 @@ public class HardwareInfo {
 				}
 
 				// CPU load
-				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString() == "Cpu") {
-					API.CPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
+				if (sensor[j].SensorType == SensorType.Load && computerHardware[i].HardwareType == HardwareType.Cpu) {
+					API.CPU.Load.Add(new Load {
+						Name = sensor[j].Name,
+						Value = (float)sensor[j].Value
+					});
 				}
 
 				// CPU clock
-				if (sensor[j].SensorType.ToString() == "Clock" && computerHardware[i].HardwareType.ToString() == "Cpu" && !sensor[j].Name.Contains("Bus")) {
+				if (sensor[j].SensorType == SensorType.Clock && computerHardware[i].HardwareType == HardwareType.Cpu && !sensor[j].Name.Contains("Bus")) {
 					API.CPU.Clock.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value),
 						Min = (float)Math.Round((float)sensor[j].Min),
 						Max = (float)Math.Round((float)sensor[j].Max),
@@ -185,7 +183,7 @@ public class HardwareInfo {
 				}
 
 				// CPU voltage
-				if (sensor[j].SensorType.ToString() == "Voltage" && computerHardware[i].HardwareType.ToString() == "Cpu" && sensor[j].Name.Contains("#")) {
+				if (sensor[j].SensorType == SensorType.Voltage && computerHardware[i].HardwareType == HardwareType.Cpu && sensor[j].Name.Contains("#")) {
 					API.CPU.Voltage.Add(new Sensor {
 						Name = sensor[j].Name.ToString(),
 						Value = (float)Math.Round((float)sensor[j].Value, 2),
@@ -195,14 +193,17 @@ public class HardwareInfo {
 				}
 
 				// GPU load
-				if (sensor[j].SensorType.ToString() == "Load" && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
-					API.GPU.Load.Add(new Load { Name = sensor[j].Name.ToString(), Value = float.Parse(sensor[j].Value.ToString()) });
+				if (sensor[j].SensorType == SensorType.Load && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
+					API.GPU.Load.Add(new Load {
+						Name = sensor[j].Name,
+						Value = (float)sensor[j].Value
+					});
 				}
 
 				// GPU fan
-				if (sensor[j].SensorType.ToString() == "Fan" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+				if (sensor[j].SensorType == SensorType.Fan && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Fan.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value, 1),
 						Min = (float)Math.Round((float)sensor[j].Min, 1),
 						Max = (float)Math.Round((float)sensor[j].Max, 1),
@@ -210,9 +211,9 @@ public class HardwareInfo {
 				}
 
 				// GPU Memory 
-				if (sensor[j].SensorType.ToString() == "SmallData" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+				if (sensor[j].SensorType == SensorType.SmallData && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Memory.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value / 1024, 1),
 						Min = (float)Math.Round((float)sensor[j].Min / 1024, 1),
 						Max = (float)Math.Round((float)sensor[j].Max / 1024, 1),
@@ -220,9 +221,9 @@ public class HardwareInfo {
 				}
 
 				// GPU power
-				if (sensor[j].SensorType.ToString() == "Power" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+				if (sensor[j].SensorType == SensorType.Power && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Power.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value),
 						Min = (float)Math.Round((float)sensor[j].Min),
 						Max = (float)Math.Round((float)sensor[j].Max),
@@ -230,9 +231,9 @@ public class HardwareInfo {
 				}
 
 				// GPU clock
-				if (sensor[j].SensorType.ToString() == "Clock" && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
+				if (sensor[j].SensorType == SensorType.Clock && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Clock.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value),
 						Min = (float)Math.Round((float)sensor[j].Min),
 						Max = (float)Math.Round((float)sensor[j].Max),
@@ -240,9 +241,9 @@ public class HardwareInfo {
 				}
 
 				// Memory load
-				if (computerHardware[i].HardwareType.ToString() == "Memory") {
+				if (computerHardware[i].HardwareType == HardwareType.Memory) {
 					API.RAM.Load.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
+						Name = sensor[j].Name,
 						Value = (float)Math.Round((float)sensor[j].Value, 1),
 						Min = (float)Math.Round((float)sensor[j].Min, 1),
 						Max = (float)Math.Round((float)sensor[j].Max, 1),
@@ -250,7 +251,7 @@ public class HardwareInfo {
 				}
 
 				// Drive temperature
-				if (computerHardware[i].HardwareType.ToString() == "Storage" && sensor[j].SensorType.ToString() == "Temperature") {
+				if (computerHardware[i].HardwareType == HardwareType.Storage && sensor[j].SensorType == SensorType.Temperature) {
 					API.System.Storage.Disks[diskID].Temperature = float.Parse(sensor[j].Value.ToString());
 				}
 			}
