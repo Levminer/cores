@@ -55,6 +55,11 @@ public class HardwareInfo {
 
 		API.RAM.Load.Clear();
 
+		API.System.SuperIO.Voltage.Clear();
+		API.System.SuperIO.Temperature.Clear();
+		API.System.SuperIO.Fan.Clear();
+		API.System.SuperIO.FanControl.Clear();
+
 		var diskID = -1;
 
 		for (int i = 0; i < computerHardware.Count; i++) {
@@ -72,6 +77,7 @@ public class HardwareInfo {
 
 				if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
 					API.System.Motherboard.Name = computerHardware[i].Name;
+					API.System.SuperIO.Name = computerHardware[i].SubHardware[0].Name;
 				}
 			}
 
@@ -131,6 +137,51 @@ public class HardwareInfo {
 					API.System.Storage.Disks[diskID].Health = health;
 					API.System.Storage.Disks[diskID].FreeSpace = (int)free;
 				}
+			}
+
+			// Get superIO info
+			if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
+				var sh = computerHardware[i].SubHardware[0];
+
+				for (int j = 0; j < sh.Sensors.Length; j++) {
+					if (sh.Sensors[j].SensorType == SensorType.Voltage) {
+						API.System.SuperIO.Voltage.Add(new Sensor {
+							Name = sh.Sensors[j].Name,
+							Value = (float)Math.Round((float)sh.Sensors[j].Value, 2),
+							Min = (float)Math.Round((float)sh.Sensors[j].Min, 2),
+							Max = (float)Math.Round((float)sh.Sensors[j].Max, 2),
+						});
+					}
+
+					if (sh.Sensors[j].SensorType == SensorType.Temperature) {
+						API.System.SuperIO.Temperature.Add(new Sensor {
+							Name = sh.Sensors[j].Name,
+							Value = (float)Math.Round((float)sh.Sensors[j].Value),
+							Min = (float)Math.Round((float)sh.Sensors[j].Min),
+							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+						});
+					}
+
+					if (sh.Sensors[j].SensorType == SensorType.Fan) {
+						API.System.SuperIO.Fan.Add(new Sensor {
+							Name = sh.Sensors[j].Name,
+							Value = (float)Math.Round((float)sh.Sensors[j].Value),
+							Min = (float)Math.Round((float)sh.Sensors[j].Min),
+							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+						});
+					}
+
+					if (sh.Sensors[j].SensorType == SensorType.Control) {
+						API.System.SuperIO.FanControl.Add(new Sensor {
+							Name = sh.Sensors[j].Name,
+							Value = (float)Math.Round((float)sh.Sensors[j].Value),
+							Min = (float)Math.Round((float)sh.Sensors[j].Min),
+							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+						});
+					}
+				}
+
+
 			}
 
 			for (int j = 0; j < sensor.Length; j++) {
@@ -204,9 +255,9 @@ public class HardwareInfo {
 				if (sensor[j].SensorType == SensorType.Fan && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
 					API.GPU.Fan.Add(new Sensor {
 						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value, 1),
-						Min = (float)Math.Round((float)sensor[j].Min, 1),
-						Max = (float)Math.Round((float)sensor[j].Max, 1),
+						Value = (float)Math.Round((float)sensor[j].Value),
+						Min = (float)Math.Round((float)sensor[j].Min),
+						Max = (float)Math.Round((float)sensor[j].Max),
 					});
 				}
 

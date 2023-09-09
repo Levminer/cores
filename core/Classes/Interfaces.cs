@@ -217,6 +217,28 @@ public class StorageInfo {
 	} = new();
 }
 
+public class SuperIOInfo {
+	public string Name {
+		get; set;
+	}
+
+	public List<Sensor> Voltage {
+		get; set;
+	} = new();
+
+	public List<Sensor> Temperature {
+		get; set;
+	} = new();
+
+	public List<Sensor> Fan {
+		get; set;
+	} = new();
+
+	public List<Sensor> FanControl {
+		get; set;
+	} = new();
+}
+
 public class MotherboardInfo {
 	public string Name {
 		get; set;
@@ -258,7 +280,11 @@ public class SystemAPI {
 
 	public BIOSInfo BIOS {
 		get; set;
-	}
+	} = new();
+
+	public SuperIOInfo SuperIO {
+		get; set;
+	} = new();
 }
 
 public class API {
