@@ -57,6 +57,11 @@ public sealed partial class MainWindow : Window {
 
 	private async void Init() {
 		await webView.EnsureCoreWebView2Async();
+		webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+
+		if (!Debugger.IsAttached) {
+			webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
+		}
 
 		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
 			"app.example", "assets", CoreWebView2HostResourceAccessKind.Allow);
