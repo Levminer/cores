@@ -30,7 +30,7 @@
 		<Grid x:Name="AppTitleBar">
 		<Image Source="Assets/icon.ico"
            HorizontalAlignment="Left" 
-           Width="16" Height="28" 
+           Width="16" Height="32" 
            Margin="8,0"/>
 			<TextBlock x:Name="AppTitleTextBlock" Text="Cores"
                TextWrapping="NoWrap"
