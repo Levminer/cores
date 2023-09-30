@@ -36,6 +36,9 @@
 	<Content Include="Assets\icon.ico">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
+	  <Content Include="Assets\Icons\*">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
 
   <ItemGroup>

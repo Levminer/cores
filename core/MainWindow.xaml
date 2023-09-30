@@ -29,9 +29,9 @@
 
 		<Grid x:Name="AppTitleBar">
 		<Image Source="Assets/icon.ico"
-           HorizontalAlignment="Left" 
-           Width="16" Height="32" 
-           Margin="8,0"/>
+			HorizontalAlignment="Left"
+			Width="16" Height="28" 
+			Margin="8,0"/>
 			<TextBlock x:Name="AppTitleTextBlock" Text="Cores"
                TextWrapping="NoWrap"
                Style="{StaticResource CaptionTextBlockStyle}" 
@@ -39,15 +39,41 @@
                Margin="30,0,4,0"/>
 		</Grid>
 
-		<!-- <TextBlock x:Name="text" Text="I am a TextBlock" /> -->
+		<NavigationView x:Name="nav" ItemInvoked="NavView_ItemInvoked" Grid.Row="1" Grid.ColumnSpan="2" IsBackButtonVisible="Collapsed" IsSettingsVisible="False" PaneDisplayMode="LeftCompact">
+			<NavigationView.MenuItems>
+				<NavigationViewItem IsSelected="True" Icon="Home" Content="Home" Tag="home" />
+				<NavigationViewItem Content="CPU" Tag="cpu">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/Icons/cpu.svg" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem Content="RAM" Tag="ram">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/Icons/ram.svg" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem Content="GPU" Tag="gpu">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/Icons/gpu.svg" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+				<NavigationViewItem Content="System" Tag="system">
+					<NavigationViewItem.Icon>
+						<ImageIcon Source="Assets/Icons/system.svg" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
+			</NavigationView.MenuItems>
 
-		<controls:WebView2
+			<NavigationView.FooterMenuItems>
+				<NavigationViewItem Icon="Setting" Content="Settings" Tag="Settings" />
+			</NavigationView.FooterMenuItems>
+
+			<controls:WebView2
 			x:Name="webView"
-			Grid.Row="1"
-			Grid.ColumnSpan="2"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
 			Source="http://localhost:3000" />
+		</NavigationView>
 
 		<views:TrayIconView x:Name="TrayIconView" />
 	</Grid>

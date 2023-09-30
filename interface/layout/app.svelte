@@ -1,6 +1,4 @@
 <div class="flex h-screen">
-	<Navigation />
-
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
 
@@ -77,6 +75,18 @@
 
 				setHardwareInfo(parsed)
 				updateHardwareStats(parsed)
+			}
+		})
+
+		// @ts-ignore - Receive navigation info
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+			console.log(arg.data)
+			if (arg.data.name === "navigation") {
+				if (arg.data.content === "home") {
+					router.goto("/")
+				} else {
+					router.goto(arg.data.content)
+				}
 			}
 		})
 

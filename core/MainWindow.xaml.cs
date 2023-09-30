@@ -1,6 +1,7 @@
 ﻿using cores;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.UI.ApplicationSettings;
 
 namespace Cores;
 
@@ -75,6 +77,15 @@ public sealed partial class MainWindow : Window {
 		webView.CoreWebView2.NewWindowRequested += WebView_NewWindowRequested;
 	}
 
+	// Navigation view navigation
+	private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args) {
+		webView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new Message() {
+			Name = "navigation",
+			Content = args.InvokedItem.ToString().ToLower()
+		}, App.SerializerOptions));
+	}
+
+	// Send settings to the interface
 	public void EventHandler(object target, CoreWebView2DOMContentLoadedEventArgs arg) {
 		SendAPI();
 
