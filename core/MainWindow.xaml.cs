@@ -141,7 +141,7 @@ public sealed partial class MainWindow : Window {
 
 		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
-		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.4.230913002";
+		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.3.230724000";
 
 		var message = new Message() {
 			Name = "api",
