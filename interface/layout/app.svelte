@@ -34,7 +34,6 @@
 
 <script lang="ts">
 	import { Route, router } from "@baileyherbert/tinro"
-	import Navigation from "../components/navigation.svelte"
 	import Home from "../pages/home.svelte"
 	import Settings from "../pages/settings.svelte"
 	import System from "../pages/system.svelte"
@@ -149,9 +148,9 @@
 						},
 
 						clock: {
-							value: Math.round(input.gpu.clock.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.gpu.clock.length),
-							min: Math.round(input.gpu.clock.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.gpu.clock.length),
-							max: Math.round(input.gpu.clock.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.gpu.clock.length),
+							value: Math.round(input.gpu.clock[0].value),
+							min: Math.round(input.gpu.clock[0].value),
+							max: Math.round(input.gpu.clock[0].value),
 						},
 
 						load: Math.round(input.gpu.lastLoad),

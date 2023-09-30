@@ -41,7 +41,7 @@
 				<div class="mb-5 flex items-baseline justify-between">
 					<div class="flex items-baseline gap-3">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg>
-						<h2>Average GPU Clock</h2>
+						<h2>Average GPU Core Clock</h2>
 					</div>
 					<div>
 						<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
