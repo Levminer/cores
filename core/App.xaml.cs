@@ -24,6 +24,9 @@ public partial class App : Application {
 	public App() {
 		InitializeComponent();
 
+		// Force dark mode
+		Current.RequestedTheme = ApplicationTheme.Dark;
+
 		//Get settings
 		GlobalSettings = getSettings();
 	}
