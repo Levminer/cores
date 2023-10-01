@@ -49,6 +49,7 @@ public sealed partial class MainWindow : Window {
 		APIRefresher.Start();
 	}
 
+	// Refresh API
 	public void RefreshAPI(object sender, object e) {
 		System.Threading.Tasks.Task.Run(() => {
 			App.GlobalHardwareInfo.Refresh();
@@ -57,6 +58,7 @@ public sealed partial class MainWindow : Window {
 		SendAPI();
 	}
 
+	// Start webview
 	private async void Init() {
 		await webView.EnsureCoreWebView2Async();
 		webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
@@ -124,6 +126,8 @@ public sealed partial class MainWindow : Window {
 
 			case "newSettings":
 				App.GlobalSettings = JsonSerializer.Deserialize<Settings>(content.Content, App.SerializerOptions);
+
+				APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.interval);
 
 				setSettings(App.GlobalSettings);
 				break;
