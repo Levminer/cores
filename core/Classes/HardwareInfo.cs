@@ -17,7 +17,8 @@ public class HardwareInfo {
 		IsGpuEnabled = true,
 		IsMemoryEnabled = true,
 		IsMotherboardEnabled = true,
-		IsStorageEnabled = true
+		IsStorageEnabled = true,
+		IsNetworkEnabled = true,
 	};
 
 	[DllImport("lib.dll")]
@@ -60,10 +61,38 @@ public class HardwareInfo {
 		API.System.SuperIO.Fan.Clear();
 		API.System.SuperIO.FanControl.Clear();
 
-		var diskID = -1;
+		if (firstRun) {
+			// Network interfaces
+			foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
+				if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
+					var temp = new NetInterface {
+						Name = ni.Name,
+						Description = ni.Description,
+						MACAddress = ni.GetPhysicalAddress().ToString(),
+						DNS = ni.GetIPProperties().DnsAddresses[0].ToString(),
+						Speed = (ni.Speed / 1000 / 1000).ToString()
+					};
 
-		for (int i = 0; i < computerHardware.Count; i++) {
-			var sensor = computerHardware[i].Sensors;
+					if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
+						temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
+					} else {
+						temp.Gateway = "N/A";
+					}
+
+					foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
+						if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+							temp.IPAddress = ip.Address.ToString();
+							temp.Mask = ip.IPv4Mask.ToString();
+						}
+					}
+
+					API.System.Network.Interfaces.Add(temp);
+				}
+			}
+		}
+
+		for (int i = 0; i < computer.Hardware.Count; i++) {
+			var hardware = computer.Hardware[i];
 
 			// Get component names
 			if (firstRun) {
@@ -81,16 +110,149 @@ public class HardwareInfo {
 				}
 			}
 
-			// Get disk names and IDs
-			if (computerHardware[i].HardwareType == HardwareType.Storage) {
-				var temp = new Disk {
-					Name = computerHardware[i].Name,
-				};
+			// CPU
+			if (hardware.HardwareType == HardwareType.Cpu) {
+				var sensor = hardware.Sensors;
 
-				diskID++;
+				for (int j = 0; j < hardware.Sensors.Length; j++) {
+					// CPU temperature
+					if (sensor[j].SensorType == SensorType.Temperature && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
+						API.CPU.Temperature.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)sensor[j].Value,
+							Min = (float)sensor[j].Min,
+							Max = (float)sensor[j].Max,
+						});
+					}
+
+					// CPU power
+					if (sensor[j].SensorType == SensorType.Power) {
+						API.CPU.Power.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+
+					// CPU load
+					if (sensor[j].SensorType == SensorType.Load) {
+						API.CPU.Load.Add(new Load {
+							Name = sensor[j].Name,
+							Value = (float)sensor[j].Value
+						});
+					}
+
+					// CPU clock
+					if (sensor[j].SensorType == SensorType.Clock && !sensor[j].Name.Contains("Bus")) {
+						API.CPU.Clock.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+
+					// CPU voltage
+					if (sensor[j].SensorType == SensorType.Voltage && sensor[j].Name.Contains("#")) {
+						API.CPU.Voltage.Add(new Sensor {
+							Name = sensor[j].Name.ToString(),
+							Value = (float)Math.Round((float)sensor[j].Value, 2),
+							Min = (float)Math.Round((float)sensor[j].Min, 2),
+							Max = (float)Math.Round((float)sensor[j].Max, 2),
+						});
+					}
+				}
+			}
+
+			// GPU
+			if (hardware.HardwareType.ToString().Contains("Gpu")) {
+				var sensor = hardware.Sensors;
+
+				for (int j = 0; j < hardware.Sensors.Length; j++) {
+					// GPU temperature
+					if (sensor[j].SensorType == SensorType.Temperature) {
+						API.GPU.Temperature.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+
+					// GPU load
+					if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("D3D")) {
+						API.GPU.Load.Add(new Load {
+							Name = sensor[j].Name,
+							Value = (float)sensor[j].Value
+						});
+					}
+
+					// GPU fan
+					if (sensor[j].SensorType == SensorType.Fan) {
+						API.GPU.Fan.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+
+					// GPU Memory 
+					if (sensor[j].SensorType == SensorType.SmallData) {
+						API.GPU.Memory.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value / 1024, 1),
+							Min = (float)Math.Round((float)sensor[j].Min / 1024, 1),
+							Max = (float)Math.Round((float)sensor[j].Max / 1024, 1),
+						});
+					}
+
+					// GPU power
+					if (sensor[j].SensorType == SensorType.Power) {
+						API.GPU.Power.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+
+					// GPU clock
+					if (sensor[j].SensorType == SensorType.Clock) {
+						API.GPU.Clock.Add(new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round((float)sensor[j].Value),
+							Min = (float)Math.Round((float)sensor[j].Min),
+							Max = (float)Math.Round((float)sensor[j].Max),
+						});
+					}
+				}
+			}
+
+			// RAM
+			if (hardware.HardwareType == HardwareType.Memory) {
+				var sensor = hardware.Sensors;
+
+				for (int j = 0; j < hardware.Sensors.Length; j++) {
+					// RAM load
+					API.RAM.Load.Add(new Sensor {
+						Name = sensor[j].Name,
+						Value = (float)Math.Round((float)sensor[j].Value, 1),
+						Min = (float)Math.Round((float)sensor[j].Min, 1),
+						Max = (float)Math.Round((float)sensor[j].Max, 1),
+					});
+				}
+			}
+
+			// Storage
+			if (hardware.HardwareType == HardwareType.Storage) {
+				var sensor = hardware.Sensors;
 
 				if (firstRun) {
-					API.System.Storage.Disks.Add(temp);
+					var temp = new Disk {
+						Name = computerHardware[i].Name,
+					};
 
 					// Get disk size
 					var report = computerHardware[i].GetReport().Split("\n");
@@ -133,13 +295,27 @@ public class HardwareInfo {
 						}
 					}
 
-					API.System.Storage.Disks[diskID].TotalSpace = (int)total;
-					API.System.Storage.Disks[diskID].Health = health;
-					API.System.Storage.Disks[diskID].FreeSpace = (int)free;
+					temp.TotalSpace = (int)total;
+					temp.Health = health;
+					temp.FreeSpace = (int)free;
+
+					API.System.Storage.Disks.Add(temp);
+				}
+
+				for (int j = 0; j < hardware.Sensors.Length; j++) {
+					// Drive temperature
+					if (sensor[j].SensorType == SensorType.Temperature) {
+						// find disk by name and overwrite value
+						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
+							if (API.System.Storage.Disks[k].Name == computerHardware[i].Name) {
+								API.System.Storage.Disks[k].Temperature = (float)sensor[j].Value;
+							}
+						}
+					}
 				}
 			}
 
-			// Get superIO info
+			// superIO
 			if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
 				var sh = computerHardware[i].SubHardware[0];
 
@@ -180,130 +356,39 @@ public class HardwareInfo {
 						});
 					}
 				}
-
-
 			}
 
-			for (int j = 0; j < sensor.Length; j++) {
-				// CPU temperature
-				if (sensor[j].SensorType == SensorType.Temperature && computerHardware[i].HardwareType == HardwareType.Cpu && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
-					API.CPU.Temperature.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)sensor[j].Value,
-						Min = (float)sensor[j].Min,
-						Max = (float)sensor[j].Max,
-					});
-				}
+			// Network
+			if (hardware.HardwareType == HardwareType.Network) {
+				var sensor = hardware.Sensors;
 
-				// GPU temperature
-				if (sensor[j].SensorType == SensorType.Temperature && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Temperature.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
+				for (int j = 0; j < hardware.Sensors.Length; j++) {
+					// Throughput
+					if (sensor[j].SensorType == SensorType.Throughput) {
+						// find interface by name and overwrite value
+						for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
+							if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
+								if (sensor[j].Name.Contains("Download")) {
+									API.System.Network.Interfaces[k].ThroughputDownload = (float)Math.Round((float)sensor[j].Value);
+								}
 
-				// CPU power
-				if (sensor[j].SensorType == SensorType.Power && computerHardware[i].HardwareType == HardwareType.Cpu) {
-					API.CPU.Power.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
+								if (sensor[j].Name.Contains("Upload")) {
+									API.System.Network.Interfaces[k].ThroughputUpload = (float)Math.Round((float)sensor[j].Value);
+								}
+							}
+						}
 
-				// CPU load
-				if (sensor[j].SensorType == SensorType.Load && computerHardware[i].HardwareType == HardwareType.Cpu) {
-					API.CPU.Load.Add(new Load {
-						Name = sensor[j].Name,
-						Value = (float)sensor[j].Value
-					});
-				}
+					}
 
-				// CPU clock
-				if (sensor[j].SensorType == SensorType.Clock && computerHardware[i].HardwareType == HardwareType.Cpu && !sensor[j].Name.Contains("Bus")) {
-					API.CPU.Clock.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
-
-				// CPU voltage
-				if (sensor[j].SensorType == SensorType.Voltage && computerHardware[i].HardwareType == HardwareType.Cpu && sensor[j].Name.Contains("#")) {
-					API.CPU.Voltage.Add(new Sensor {
-						Name = sensor[j].Name.ToString(),
-						Value = (float)Math.Round((float)sensor[j].Value, 2),
-						Min = (float)Math.Round((float)sensor[j].Min, 2),
-						Max = (float)Math.Round((float)sensor[j].Max, 2),
-					});
-				}
-
-				// GPU load
-				if (sensor[j].SensorType == SensorType.Load && computerHardware[i].HardwareType.ToString().Contains("Gpu") && sensor[j].Name.Contains("D3D")) {
-					API.GPU.Load.Add(new Load {
-						Name = sensor[j].Name,
-						Value = (float)sensor[j].Value
-					});
-				}
-
-				// GPU fan
-				if (sensor[j].SensorType == SensorType.Fan && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Fan.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
-
-				// GPU Memory 
-				if (sensor[j].SensorType == SensorType.SmallData && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Memory.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value / 1024, 1),
-						Min = (float)Math.Round((float)sensor[j].Min / 1024, 1),
-						Max = (float)Math.Round((float)sensor[j].Max / 1024, 1),
-					});
-				}
-
-				// GPU power
-				if (sensor[j].SensorType == SensorType.Power && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Power.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
-
-				// GPU clock
-				if (sensor[j].SensorType == SensorType.Clock && computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-					API.GPU.Clock.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value),
-						Min = (float)Math.Round((float)sensor[j].Min),
-						Max = (float)Math.Round((float)sensor[j].Max),
-					});
-				}
-
-				// Memory load
-				if (computerHardware[i].HardwareType == HardwareType.Memory) {
-					API.RAM.Load.Add(new Sensor {
-						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value, 1),
-						Min = (float)Math.Round((float)sensor[j].Min, 1),
-						Max = (float)Math.Round((float)sensor[j].Max, 1),
-					});
-				}
-
-				// Drive temperature
-				if (computerHardware[i].HardwareType == HardwareType.Storage && sensor[j].SensorType == SensorType.Temperature) {
-					API.System.Storage.Disks[diskID].Temperature = float.Parse(sensor[j].Value.ToString());
+					// Load
+					if (sensor[j].SensorType == SensorType.Load) {
+						// find interface by name and overwrite value
+						for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
+							if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
+								API.System.Network.Interfaces[k].Load = (float)Math.Round((float)sensor[j].Value);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -366,36 +451,6 @@ public class HardwareInfo {
 				Version = computer.SMBios.Bios.Version,
 				Date = computer.SMBios.Bios.Date.Value.ToShortDateString(),
 			};
-
-			// Network interfaces
-			foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
-
-				if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
-					var temp = new NetInterface {
-						Name = ni.Name,
-						Description = ni.Description,
-						MACAddress = ni.GetPhysicalAddress().ToString(),
-						DNS = ni.GetIPProperties().DnsAddresses[0].ToString(),
-						Speed = (ni.Speed / 1000 / 1000).ToString()
-					};
-
-					if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
-						temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
-					} else {
-						temp.Gateway = "N/A";
-					}
-
-					foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
-						if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
-							temp.IPAddress = ip.Address.ToString();
-							temp.Mask = ip.IPv4Mask.ToString();
-						}
-					}
-
-					API.System.Network.Interfaces.Add(temp);
-				}
-
-			}
 		}
 
 		firstRun = false;

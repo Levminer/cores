@@ -115,6 +115,18 @@ public class NetInterface {
 	public string Speed {
 		get; set;
 	}
+
+	public float Load {
+		get; set;
+	} = new();
+
+	public float ThroughputUpload {
+		get; set;
+	} = new();
+
+	public float ThroughputDownload {
+		get; set;
+	} = new();
 }
 
 public class BIOSInfo {
