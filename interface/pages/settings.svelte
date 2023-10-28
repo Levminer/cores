@@ -1,4 +1,4 @@
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl p-10 sm:m-3 sm:w-full">
+<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-10 sm:m-3 sm:w-full">
 	<h1 class="mb-10">General</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
@@ -34,7 +34,7 @@
 	</div>
 </div>
 
-<div class="transparent-900 m-10 mx-auto w-4/5 rounded-xl p-10 sm:m-3 sm:w-full">
+<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-10 sm:m-3 sm:w-full">
 	<h1 class="mb-10">About</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
