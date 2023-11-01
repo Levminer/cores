@@ -8,7 +8,7 @@ const defaultHardwareStatistics: HardwareStatistics = {
 export const hardwareStatistics = writable<HardwareStatistics>(sessionStorage.hardwareStatistics ? JSON.parse(sessionStorage.hardwareStatistics) : defaultHardwareStatistics)
 
 hardwareStatistics.subscribe((data) => {
-	// console.log("HardwareStatistics changed: ", data)
+	console.log("HardwareStatistics changed: ", data)
 
 	sessionStorage.setItem("hardwareStatistics", JSON.stringify(data))
 })

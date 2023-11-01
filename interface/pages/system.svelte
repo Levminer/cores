@@ -22,7 +22,7 @@
 
 			<div class="flex items-baseline gap-5 sm:flex-wrap">
 				<!-- Monitors -->
-				<div class="transparent-800 w-1/2 rounded-xl p-10 sm:w-full">
+				<div class="transparent-800 w-full rounded-xl p-10 sm:w-full">
 					<div class="flex items-baseline gap-3">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -48,39 +48,6 @@
 							<h3>Name: {name}</h3>
 							<h3>Resolution: {resolution}</h3>
 							<h3>Refresh rate: {refreshRate} Hz</h3>
-						</div>
-					{/each}
-				</div>
-
-				<!-- Interfaces -->
-				<div class="transparent-800 w-1/2 rounded-xl p-10 sm:w-full">
-					<div class="flex items-baseline gap-3">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							><rect x="9" y="2" width="6" height="6" /><rect x="16" y="16" width="6" height="6" /><rect
-								x="2"
-								y="16"
-								width="6"
-								height="6"
-							/><path d="M5 16v-4h14v4" /><path d="M12 12V8" /></svg
-						>
-						<h2>Interfaces</h2>
-					</div>
-					{#each $hardwareInfo.system.network.interfaces as { name, description, ipAddress, mask, gateway, dns, speed, macAddress }}
-						<div class="mt-5 select-text">
-							<h3>Name: {name}</h3>
-							<h3>Description: {description}</h3>
-							<h3>Address: {ipAddress} ({mask})</h3>
-							<h3>Gateway: {gateway} ({dns})</h3>
-							<h3>Speed: {speed} Mbit/s</h3>
 						</div>
 					{/each}
 				</div>

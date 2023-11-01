@@ -22,6 +22,10 @@
 			</Boundary>
 
 			<Boundary onError={console.error}>
+				<Route path="/network"><Network /></Route>
+			</Boundary>
+
+			<Boundary onError={console.error}>
 				<Route path="/system"><System /></Route>
 			</Boundary>
 
@@ -48,6 +52,7 @@
 	// @ts-ignore
 	import { Boundary } from "@crownframework/svelte-error-boundary"
 	import { setHardwareInfo } from "../stores/hardwareInfo"
+	import Network from "../pages/network.svelte"
 
 	onMount(() => {
 		// Navigate to the home page on load (webview bug)
@@ -79,7 +84,6 @@
 
 		// @ts-ignore - Receive navigation info
 		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			console.log(arg.data)
 			if (arg.data.name === "navigation") {
 				if (arg.data.content === "home") {
 					router.goto("/")
@@ -158,6 +162,13 @@
 						fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
 						memory: parseFloat(input.gpu.memory[0].value.toFixed(1)),
 					},
+
+					network: input.system.network.interfaces.map((int) => {
+						return {
+							throughputUpload: parseFloat((int.throughputUpload / 1_048_576).toFixed(2)),
+							throughputDownload: parseFloat((int.throughputDownload / 1_048_576).toFixed(2)),
+						}
+					}),
 				}
 
 				if (date.getTime() < new Date().getTime()) {
@@ -270,6 +281,27 @@
 								).toFixed(1),
 							),
 						},
+
+						network: input.system.network.interfaces.map((item, i) => {
+							let throughputDownload = parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.throughputDownload, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(2),
+							)
+
+							let throughputUpload = parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.throughputUpload, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(2),
+							)
+
+							return {
+								throughputUpload,
+								throughputDownload,
+							}
+						}),
 					}
 
 					// Update 60s timer

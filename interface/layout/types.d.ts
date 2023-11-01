@@ -75,6 +75,10 @@ declare global {
 		gateway: string
 		dns: string
 		speed: string
+		throughputDownload: number
+		throughputUpload: number
+		downloadData: number
+		uploadData: number
 	}
 
 	interface HardwareInfo {
@@ -161,6 +165,11 @@ declare global {
 			physicalUsage: number
 			virtualUsage: number
 		}
+
+		network: {
+			throughputDownload: number
+			throughputUpload: number
+		}[]
 	}
 
 	interface HardwareStatistics {

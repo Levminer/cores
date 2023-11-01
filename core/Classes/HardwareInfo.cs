@@ -381,11 +381,17 @@ public class HardwareInfo {
 					}
 
 					// Load
-					if (sensor[j].SensorType == SensorType.Load) {
+					if (sensor[j].SensorType == SensorType.Data) {
 						// find interface by name and overwrite value
 						for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 							if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
-								API.System.Network.Interfaces[k].Load = (float)Math.Round((float)sensor[j].Value);
+								if (sensor[j].Name.Contains("Download")) {
+									API.System.Network.Interfaces[k].DownloadData = (float)Math.Round((float)sensor[j].Value, 1);
+								}
+
+								if (sensor[j].Name.Contains("Upload")) {
+									API.System.Network.Interfaces[k].UploadData = (float)Math.Round((float)sensor[j].Value, 1);
+								}
 							}
 						}
 					}

@@ -57,6 +57,11 @@
 						<ImageIcon Source="Assets/Icons/gpu.svg" />
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem Content="Network" Tag="network">
+					<NavigationViewItem.Icon>
+						<FontIcon Glyph="&#xE839;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 				<NavigationViewItem Content="System" Tag="system">
 					<NavigationViewItem.Icon>
 						<ImageIcon Source="Assets/Icons/system.svg" />

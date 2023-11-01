@@ -116,7 +116,11 @@ public class NetInterface {
 		get; set;
 	}
 
-	public float Load {
+	public float UploadData {
+		get; set;
+	} = new();
+
+	public float DownloadData {
 		get; set;
 	} = new();
 
