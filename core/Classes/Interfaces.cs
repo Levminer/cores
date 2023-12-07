@@ -55,9 +55,13 @@ public class Disk {
 		get; set;
 	}
 
-	public float Temperature {
+	public Identifier Id {
 		get; set;
 	}
+
+	public Sensor Temperature {
+		get; set;
+	} = new();
 
 	public int TotalSpace {
 		get; set;
@@ -68,6 +72,14 @@ public class Disk {
 	}
 
 	public string Health {
+		get; set;
+	}
+
+	public float ThroughputRead {
+		get; set;
+	}
+
+	public float ThroughputWrite {
 		get; set;
 	}
 }

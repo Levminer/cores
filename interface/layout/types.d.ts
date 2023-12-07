@@ -25,10 +25,12 @@ declare global {
 
 	interface Disk {
 		name: string
-		temperature: number
+		temperature: Sensor
 		freeSpace: number
 		totalSpace: number
 		health: string
+		throughputRead: number
+		throughputWrite: number
 	}
 
 	interface RAMModule {
@@ -169,6 +171,11 @@ declare global {
 		network: {
 			throughputDownload: number
 			throughputUpload: number
+		}[]
+
+		storage: {
+			throughputRead: number
+			throughputWrite: number
 		}[]
 	}
 

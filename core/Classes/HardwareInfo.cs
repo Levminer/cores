@@ -252,6 +252,7 @@ public class HardwareInfo {
 				if (firstRun) {
 					var temp = new Disk {
 						Name = computerHardware[i].Name,
+						Id = computerHardware[i].Identifier,
 					};
 
 					// Get disk size
@@ -305,10 +306,39 @@ public class HardwareInfo {
 				for (int j = 0; j < hardware.Sensors.Length; j++) {
 					// Drive temperature
 					if (sensor[j].SensorType == SensorType.Temperature) {
-						// find disk by name and overwrite value
+						// find disk by id and overwrite value
 						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
-							if (API.System.Storage.Disks[k].Name == computerHardware[i].Name) {
-								API.System.Storage.Disks[k].Temperature = (float)sensor[j].Value;
+							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								API.System.Storage.Disks[k].Temperature = new Sensor {
+									Name = sensor[j].Name,
+									Value = (float)Math.Round((float)sensor[j].Value),
+									Min = (float)Math.Round((float)sensor[j].Min),
+									Max = (float)Math.Round((float)sensor[j].Max),
+								};
+							}
+						}
+					}
+
+					// Drive throughput
+					if (sensor[j].SensorType == SensorType.Throughput) {
+						// find disk by ide and overwrite value
+						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
+							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (sensor[j].Name.Contains("Read")) {
+									if (sensor[j].Value.ToString() == "0" || sensor[j].Value == null) {
+										API.System.Storage.Disks[k].ThroughputRead = 0;
+									} else {
+										API.System.Storage.Disks[k].ThroughputRead = (float)Math.Round((float)sensor[j].Value, 1);
+									}
+								}
+
+								if (sensor[j].Name.Contains("Write")) {
+									if (sensor[j].Value.ToString() == "0" || sensor[j].Value == null) {
+										API.System.Storage.Disks[k].ThroughputWrite = 0;
+									} else {
+										API.System.Storage.Disks[k].ThroughputWrite = (float)Math.Round((float)sensor[j].Value, 1);
+									}
+								}
 							}
 						}
 					}
