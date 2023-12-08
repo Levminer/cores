@@ -26,7 +26,7 @@
 			</Boundary>
 
 			<Boundary onError={console.error}>
-				<Route path="/system"><System /></Route>
+				<Route path="/storage"><Storage /></Route>
 			</Boundary>
 
 			<Boundary onError={console.error}>
@@ -40,12 +40,12 @@
 	import { Route, router } from "@baileyherbert/tinro"
 	import Home from "../pages/home.svelte"
 	import Settings from "../pages/settings.svelte"
-	import System from "../pages/system.svelte"
 	import RouteTransition from "../components/routeTransition.svelte"
 	import BuildNumber from "../components/buildNumber.svelte"
 	import CPU from "../pages/cpu.svelte"
 	import GPU from "../pages/gpu.svelte"
 	import RAM from "../pages/ram.svelte"
+	import Storage from "../pages/storage.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
 	import { settings } from "../stores/settings"
@@ -167,6 +167,13 @@
 						return {
 							throughputUpload: parseFloat((int.throughputUpload / 1_048_576).toFixed(2)),
 							throughputDownload: parseFloat((int.throughputDownload / 1_048_576).toFixed(2)),
+						}
+					}),
+
+					storage: input.system.storage.disks.map((item) => {
+						return {
+							throughputRead: parseFloat((item.throughputRead / 1_048_576).toFixed(2)),
+							throughputWrite: parseFloat((item.throughputWrite / 1_048_576).toFixed(2)),
 						}
 					}),
 				}
@@ -300,6 +307,27 @@
 							return {
 								throughputUpload,
 								throughputDownload,
+							}
+						}),
+
+						storage: input.system.storage.disks.map((item, i) => {
+							let throughputRead = parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + b.throughputRead, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(2),
+							)
+
+							let throughputWrite = parseFloat(
+								(
+									$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + b.throughputWrite, 0) /
+									$hardwareStatistics.seconds.length
+								).toFixed(2),
+							)
+
+							return {
+								throughputRead,
+								throughputWrite,
 							}
 						}),
 					}

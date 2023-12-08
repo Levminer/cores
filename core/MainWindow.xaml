@@ -57,14 +57,14 @@
 						<ImageIcon Source="Assets/Icons/gpu.svg" />
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
+				<NavigationViewItem Content="Storage" Tag="storage">
+					<NavigationViewItem.Icon>
+						<FontIcon Glyph="&#xEDA2;" />
+					</NavigationViewItem.Icon>
+				</NavigationViewItem>
 				<NavigationViewItem Content="Network" Tag="network">
 					<NavigationViewItem.Icon>
 						<FontIcon Glyph="&#xE839;" />
-					</NavigationViewItem.Icon>
-				</NavigationViewItem>
-				<NavigationViewItem Content="System" Tag="system">
-					<NavigationViewItem.Icon>
-						<ImageIcon Source="Assets/Icons/system.svg" />
 					</NavigationViewItem.Icon>
 				</NavigationViewItem>
 			</NavigationView.MenuItems>
