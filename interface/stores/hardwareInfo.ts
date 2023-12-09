@@ -54,10 +54,12 @@ const defaultHardwareInfo: HardwareInfo = {
 			disks: [
 				{
 					name: "Disk",
-					temperature: 20,
+					temperature: defaultSensor,
 					freeSpace: 50,
 					totalSpace: 100,
 					health: "N/A",
+					throughputRead: 100,
+					throughputWrite: 100,
 				},
 			],
 		},

@@ -154,7 +154,7 @@
 						stroke-linecap="round"
 						stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg
 					>
-					<h2>CPU Clock speed</h2>
+					<h2>CPU Clock Speed</h2>
 				</div>
 				<h3>
 					Avg. clock speed: {(
@@ -185,7 +185,7 @@
 						stroke-linejoin="round"
 						><path d="M12 22v-5" /><path d="M9 7V2" /><path d="M15 7V2" /><path d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z" /></svg
 					>
-					<h2>CPU Power usage</h2>
+					<h2>CPU Power Usage</h2>
 				</div>
 				<h3>Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 				<div>
@@ -376,7 +376,7 @@
 							stroke-linecap="round"
 							stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg
 						>
-						<h2>GPU Clock speed</h2>
+						<h2>GPU Clock Speed</h2>
 					</div>
 					<div>
 						<MeterChart
@@ -408,7 +408,7 @@
 								d="M6 13V8h12v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4Z"
 							/></svg
 						>
-						<h2>GPU Power usage</h2>
+						<h2>GPU Power Usage</h2>
 					</div>
 					<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
 					<div>
@@ -446,14 +446,38 @@
 					>
 					<h2>Drives</h2>
 				</div>
-				{#each $hardwareInfo.system.storage.disks as { name, temperature, freeSpace, totalSpace, health }}
+				{#each $hardwareInfo.system.storage.disks as { name, freeSpace, totalSpace, health }}
 					<div class="mt-5 select-text">
 						<h3>Name: {name}</h3>
-						<h3>Temperature: {temperature.value} °C</h3>
 						<h3>Health: {health}%</h3>
 						<h3>Available space: {freeSpace}/{totalSpace} GB</h3>
 					</div>
 				{/each}
+			</div>
+
+			<div class="transparent-800 rounded-xl p-10">
+				<div class="mb-5 flex items-baseline gap-3">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /></svg
+					>
+					<h2>Drive Temperatures</h2>
+				</div>
+				<div>
+					<MeterChart
+						readings={$hardwareInfo.system.storage.disks.map((disk) => disk.temperature)}
+						categories={$hardwareInfo.system.storage.disks.map((temp, i) => `${temp.name} (${temp.temperature.value} °C)`)}
+						i={100}
+						type={{ name: "temperature", unit: "°C" }}
+					/>
+				</div>
 			</div>
 		</div>
 
@@ -470,7 +494,7 @@
 				</div>
 				<div class="select-text">
 					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
-					<h3>RAM: {($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value).toFixed(1)} GB</h3>
+					<h3>RAM: {Math.round($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value)} GB</h3>
 					<h3>GPU: {$hardwareInfo.gpu.name}</h3>
 					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
 					<h3>OS: {$hardwareInfo.system.os.name}</h3>

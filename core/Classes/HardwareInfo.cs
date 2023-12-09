@@ -309,10 +309,17 @@ public class HardwareInfo {
 						// find disk by id and overwrite value
 						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								var min = (float)Math.Round((float)sensor[j].Min);
+
+								// Some drives don't return min temp
+								if (min == 0) {
+									min = (float)Math.Round((float)sensor[j].Value);
+								}
+
 								API.System.Storage.Disks[k].Temperature = new Sensor {
 									Name = sensor[j].Name,
 									Value = (float)Math.Round((float)sensor[j].Value),
-									Min = (float)Math.Round((float)sensor[j].Min),
+									Min = min,
 									Max = (float)Math.Round((float)sensor[j].Max),
 								};
 							}
