@@ -1,6 +1,7 @@
 <Line {data} {options} />
 
 <script lang="ts">
+	import { colors } from "@lib/utils"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Line } from "svelte-chartjs"
@@ -21,13 +22,42 @@
 	$: data = {
 		labels: labels,
 		datasets: [
-			{ label: `Min ${name}`, data: min, backgroundColor: ["#00bbf9"], borderColor: "#00bbf9", tension: 0.3, pointHitRadius: 15  },
-			{ label: `Current ${name}`, data: value, backgroundColor: ["#f15bb5"], borderColor: "#f15bb5", tension: 0.3, pointHitRadius: 15 },
-			{ label: `Max ${name}`, data: max, backgroundColor: ["#9b5de5"], borderColor: "#9b5de5", tension: 0.3, pointHitRadius: 15  },
+			{
+				label: `Min ${name}`,
+				data: min,
+				backgroundColor: colors.min,
+				borderColor: colors.min,
+				tension: 0.2,
+				pointHitRadius: 15,
+				borderWidth: 4,
+			},
+			{
+				label: `Current ${name}`,
+				data: value,
+				backgroundColor: colors.current,
+				borderColor: colors.current,
+				tension: 0.2,
+				pointHitRadius: 15,
+				borderWidth: 4,
+			},
+			{
+				label: `Max ${name}`,
+				data: max,
+				backgroundColor: colors.max,
+				borderColor: colors.max,
+				tension: 0.2,
+				pointHitRadius: 15,
+				borderWidth: 4,
+			},
 		],
 	}
 
 	let options: ChartOptions<"line"> = {
+		elements: {
+			point: {
+				radius: 0,
+			},
+		},
 		animation: {
 			onProgress: (context) => {
 				if (context.initial) {

@@ -1,17 +1,18 @@
-<div class="loadChart{i}">
+<div class="loadChart{id}">
 	<Bar {data} {options} />
 </div>
 
 <script lang="ts">
-	import { CategoryScale, Chart, registerables } from "chart.js"
+	import { Chart, registerables } from "chart.js"
 	import ChartjsPluginStacked100 from "chartjs-plugin-stacked100"
-	import type { ChartOptions, ChartDataset } from "chart.js"
+	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import { onMount } from "svelte"
+	import { colors } from "@lib/utils"
 
 	export let load: Load[]
-	export let i: number
+	let id = crypto.randomUUID()
 
 	Chart.register(...registerables, ChartjsPluginStacked100)
 
@@ -24,19 +25,20 @@
 	}
 
 	$: loads = load.map((load) => Math.trunc(load.value))
+
 	$: loadsPercentage = load.map((load) => Math.trunc(Math.abs(load.value - 100)))
 
 	$: data = {
 		labels: [...categories],
 		datasets: [
-			{ label: "Load", data: loads, backgroundColor: ["#00bbf9"] },
-			{ label: "Load", data: loadsPercentage, backgroundColor: ["#262626"] },
+			{ label: "Load", data: loads, backgroundColor: colors.min },
+			{ label: "Load", data: loadsPercentage, backgroundColor: ["hsla(0, 0%, 100%, 3.26%)"] },
 		],
 	}
 
 	// Resize chart to fit all data
 	onMount(() => {
-		document.querySelector<HTMLDivElement>(`.loadChart${i}`).style.height = $hardwareInfo.cpu.load.length * 25 + "px"
+		document.querySelector<HTMLDivElement>(`.loadChart${id}`).style.height = $hardwareInfo.cpu.load.length * 25 + "px"
 	})
 
 	// Chart options

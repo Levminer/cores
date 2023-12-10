@@ -8,11 +8,12 @@
 	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
 	import { afterUpdate, onMount } from "svelte"
+	import { colors } from "@lib/utils"
 
 	export let readings: Sensor[]
 	export let categories: string[]
-	export let i: number
 	export let type: { name: string; unit: string }
+	const id = crypto.randomUUID()
 
 	let lastCategories: string[] = categories
 
@@ -23,26 +24,26 @@
 	$: data = {
 		labels: categories,
 		datasets: [
-			{ label: `Min ${type.name}`, data: temps[0].data, backgroundColor: ["#00bbf9"] },
-			{ label: `Current ${type.name}`, data: temps[1].data, backgroundColor: ["#f15bb5"] },
-			{ label: `Max ${type.name}`, data: temps[2].data, backgroundColor: ["#9b5de5"] },
+			{ label: `Min ${type.name}`, data: temps[0].data, backgroundColor: colors.min },
+			{ label: `Current ${type.name}`, data: temps[1].data, backgroundColor: colors.current },
+			{ label: `Max ${type.name}`, data: temps[2].data, backgroundColor: colors.max },
 		],
 	}
 
 	// Resize chart to fit all data
 	afterUpdate(() => {
 		if (categories.length > lastCategories.length) {
-			document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+			document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 40 + "px"
 
 			lastCategories = categories
 		} else {
 			// potential bottleneck
 			if (readings.length < 2) {
-				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 55 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 55 + "px"
 			} else if (readings.length < 3) {
-				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 45 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 45 + "px"
 			} else {
-				document.querySelector<HTMLDivElement>(`.meterChart${i}`).style.height = readings.length * 40 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 40 + "px"
 			}
 		}
 	})

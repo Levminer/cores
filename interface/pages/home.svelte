@@ -29,7 +29,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={$hardwareInfo.cpu.load} i={0} />
+							<ProgressBar load={$hardwareInfo.cpu.load} />
 						{/await}
 					{/if}
 				</div>
@@ -64,7 +64,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={[$hardwareInfo.ram.load[5]]} i={1} />
+							<ProgressBar load={[$hardwareInfo.ram.load[5]]} />
 						{/await}
 					{/if}
 				</div>
@@ -99,7 +99,7 @@
 				<div>
 					{#if loadGraphs}
 						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={$hardwareInfo.gpu.load} i={2} />
+							<ProgressBar load={$hardwareInfo.gpu.load} />
 						{/await}
 					{/if}
 				</div>
@@ -135,7 +135,6 @@
 					<MeterChart
 						readings={$hardwareInfo.cpu.temperature}
 						categories={$hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)}
-						i={0}
 						type={{ name: "temperature", unit: "°C" }}
 					/>
 				</div>
@@ -165,7 +164,6 @@
 					<MeterChart
 						readings={$hardwareInfo.cpu.clock}
 						categories={$hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)}
-						i={2}
 						type={{ name: "clock speed", unit: "MHz" }}
 					/>
 				</div>
@@ -194,7 +192,6 @@
 						categories={$hardwareInfo.cpu.power
 							.filter((power) => power.value !== 0)
 							.map((temp) => `${temp.name.replaceAll("CPU", "")} (${temp.value} W)`)}
-						i={3}
 						type={{ name: "power usage", unit: "W" }}
 					/>
 				</div>
@@ -220,7 +217,6 @@
 					<MeterChart
 						readings={$hardwareInfo.cpu.voltage}
 						categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i} (${temp.value} V)`)}
-						i={5}
 						type={{ name: "voltage", unit: "V" }}
 					/>
 				</div>
@@ -244,7 +240,7 @@
 					).toFixed(1)} GB`}
 				</h3>
 				<div>
-					<MeterChart readings={[$hardwareInfo.ram.load[0]]} categories={["RAM usage"]} i={8} type={{ name: "memory usage", unit: "GB" }} />
+					<MeterChart readings={[$hardwareInfo.ram.load[0]]} categories={["RAM usage"]} type={{ name: "memory usage", unit: "GB" }} />
 				</div>
 			</div>
 
@@ -266,7 +262,6 @@
 					<MeterChart
 						readings={[$hardwareInfo.ram.load[3]]}
 						categories={["Virtual RAM usage"]}
-						i={9}
 						type={{ name: "virtual memory usage", unit: "GB" }}
 					/>
 				</div>
@@ -300,7 +295,6 @@
 						<MeterChart
 							readings={$hardwareInfo.gpu.temperature}
 							categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} °C)`)}
-							i={1}
 							type={{ name: "temperature", unit: "°C" }}
 						/>
 					</div>
@@ -332,7 +326,6 @@
 							<MeterChart
 								categories={$hardwareInfo.gpu.fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)}
 								readings={$hardwareInfo.gpu.fan}
-								i={7}
 								type={{ name: "fan speed", unit: "RPM" }}
 							/>
 						</div>
@@ -355,7 +348,6 @@
 						<MeterChart
 							readings={[$hardwareInfo.gpu.memory[0]]}
 							categories={["GPU memory usage"]}
-							i={10}
 							type={{ name: "GPU memory usage", unit: "GB" }}
 						/>
 					</div>
@@ -384,7 +376,6 @@
 							categories={$hardwareInfo.gpu.clock.map(
 								(temp) => `${temp.name.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`,
 							)}
-							i={6}
 							type={{ name: "clock speed", unit: "MHz" }}
 						/>
 					</div>
@@ -415,7 +406,6 @@
 						<MeterChart
 							readings={$hardwareInfo.gpu.power}
 							categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} W)`)}
-							i={4}
 							type={{ name: "power usage", unit: "W" }}
 						/>
 					</div>
@@ -474,7 +464,6 @@
 					<MeterChart
 						readings={$hardwareInfo.system.storage.disks.map((disk) => disk.temperature)}
 						categories={$hardwareInfo.system.storage.disks.map((temp, i) => `${temp.name} (${temp.temperature.value} °C)`)}
-						i={100}
 						type={{ name: "temperature", unit: "°C" }}
 					/>
 				</div>

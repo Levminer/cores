@@ -87,7 +87,7 @@
 				</div>
 
 				<div>
-					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.load) : $hardwareStatistics.seconds.map((value) => value.cpu.load)} type={"Load"} unit={"%"} color={"#00bbf9"} time={minutes ? "m" : "s"} />
+					<UsageChart statistics={minutes ? $hardwareStatistics.minutes.map((value) => value.cpu.load) : $hardwareStatistics.seconds.map((value) => value.cpu.load)} type={"Load"} unit={"%"} time={minutes ? "m" : "s"} />
 				</div>
 			</div>
 

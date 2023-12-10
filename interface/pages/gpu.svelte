@@ -152,7 +152,6 @@
 							: $hardwareStatistics.seconds.map((value) => value.gpu.load)}
 						type={"Load"}
 						unit={"%"}
-						color={"#00bbf9"}
 						time={minutes ? "m" : "s"}
 					/>
 				</div>

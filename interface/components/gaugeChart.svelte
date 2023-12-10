@@ -1,6 +1,7 @@
 <Doughnut {data} {options} plugins={pluginTest} />
 
 <script lang="ts">
+	import { colors } from "@lib/utils"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Doughnut } from "svelte-chartjs"
@@ -71,7 +72,7 @@
 		datasets: [
 			{
 				data: [percentage, total],
-				backgroundColor: ["#00bbf9", "#262626"],
+				backgroundColor: [colors.min, "hsla(0, 0%, 100%, 3.26%)"],
 			},
 		],
 	}

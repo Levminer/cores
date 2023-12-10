@@ -81,7 +81,6 @@
 							: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage)}
 						type={"Usage"}
 						unit={"%"}
-						color={"#00bbf9"}
 						time={minutes ? "m" : "s"}
 					/>
 				</div>
@@ -115,7 +114,6 @@
 							: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage)}
 						type={"Usage"}
 						unit={"%"}
-						color={"#00bbf9"}
 						time={minutes ? "m" : "s"}
 					/>
 				</div>

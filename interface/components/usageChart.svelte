@@ -1,6 +1,7 @@
 <Line {data} {options} />
 
 <script lang="ts">
+	import { colors } from "@lib/utils"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Line } from "svelte-chartjs"
@@ -8,7 +9,6 @@
 	export let statistics: number[]
 	export let type: string
 	export let unit: string
-	export let color: string
 	export let time: string
 
 	Chart.register(...registerables)
@@ -17,7 +17,9 @@
 
 	$: data = {
 		labels: labels,
-		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color, tension: 0.3, fill: true, pointHitRadius: 15}],
+		datasets: [
+			{ label: type, data: statistics, backgroundColor: colors.min, borderColor: colors.min, tension: 0.2, fill: true, pointHitRadius: 15 },
+		],
 	}
 
 	let options: ChartOptions<"line"> = {
