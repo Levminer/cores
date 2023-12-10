@@ -46,6 +46,7 @@
 						return `${value}${unit}`
 					},
 					stepSize: 10,
+					color: "#969696",
 				},
 			},
 			x: {
@@ -70,7 +71,7 @@
 				},
 			},
 			legend: {
-				position: "bottom",
+				display: false,
 			},
 		},
 	}

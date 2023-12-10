@@ -69,6 +69,7 @@
 		scales: {
 			y: {
 				ticks: {
+					color: "#969696",
 					callback: (value) => {
 						return `${value} ${unit}`
 					},
@@ -96,7 +97,7 @@
 				},
 			},
 			legend: {
-				position: "bottom",
+				display: false,
 			},
 		},
 	}

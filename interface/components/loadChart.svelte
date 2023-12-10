@@ -93,7 +93,7 @@
 			},
 			y: {
 				grid: { display: false },
-				ticks: { display: true, crossAlign: "far" },
+				ticks: { display: true, crossAlign: "far", color: "#969696" },
 			},
 		},
 	}

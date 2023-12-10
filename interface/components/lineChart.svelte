@@ -18,10 +18,15 @@
 
 	$: data = {
 		labels: labels,
-		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color, tension: 0.3, pointHitRadius: 15 }],
+		datasets: [{ label: type, data: statistics, backgroundColor: [color], borderColor: color, tension: 0.2, pointHitRadius: 15, borderWidth: 4 }],
 	}
 
 	let options: ChartOptions<"line"> = {
+		elements: {
+			point: {
+				radius: 0,
+			},
+		},
 		animation: {
 			onProgress: (context) => {
 				if (context.initial) {
@@ -37,6 +42,7 @@
 						return `${value}${unit}`
 					},
 					precision: 2,
+					color: "#969696",
 				},
 				min: zero ? 0 : undefined,
 			},
@@ -62,7 +68,7 @@
 				},
 			},
 			legend: {
-				position: "bottom",
+				display: false,
 			},
 		},
 	}

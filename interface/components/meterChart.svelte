@@ -1,4 +1,4 @@
-<div class="meterChart{i}">
+<div class="meterChart{id}">
 	<Bar {data} {options} />
 </div>
 
@@ -92,7 +92,20 @@
 			},
 			y: {
 				grid: { display: false },
-				ticks: { display: true, crossAlign: "far" },
+				ticks: {
+					display: true,
+					crossAlign: "far",
+					color: "#969696",
+					callback: function (value: number) {
+						const label = this.getLabelForValue(value)
+
+						if (label.length > 18) {
+							return label.slice(0, 18) + "..."
+						} else {
+							return label
+						}
+					},
+				},
 			},
 		},
 	}
