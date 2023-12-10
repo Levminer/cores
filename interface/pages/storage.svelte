@@ -57,7 +57,7 @@
 			</div>
 		</div>
 
-		<div class="flex w-full flex-col justify-start gap-5 sm:flex-wrap">
+		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
 			<!-- network usage -->
 			{#each $hardwareInfo.system.storage.disks as item, i}
 				<div class="flex gap-5">

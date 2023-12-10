@@ -61,93 +61,94 @@
 			</div>
 		</div>
 
-		<div class="flex w-full flex-row justify-start gap-5 sm:flex-wrap">
+		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
 			<!-- network usage -->
 			{#each $hardwareInfo.system.network.interfaces as item, i}
-				<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
-					<div class="mb-5 flex items-baseline justify-between">
-						<div class="flex items-baseline gap-3">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								class="lucide lucide-download"
-								><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line
-									x1="12"
-									x2="12"
-									y1="15"
-									y2="3"
-								/></svg
-							>
-							<h2>{item.name} Download speed</h2>
+				<div class="flex gap-5">
+					<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
+						<div class="mb-5 flex items-baseline justify-between">
+							<div class="flex items-baseline gap-3">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-download"
+									><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line
+										x1="12"
+										x2="12"
+										y1="15"
+										y2="3"
+									/></svg
+								>
+								<h2>{item.name} Download speed</h2>
+							</div>
+							<div>
+								<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>
+									{minutes ? "Last 60 minutes" : "Last 60 seconds"}
+								</h5>
+							</div>
 						</div>
 						<div>
-							<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+							<LineChart
+								statistics={minutes
+									? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
+									: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload)}
+								type={"Download speed"}
+								unit={" MB/s"}
+								color={"#00bbf9"}
+								time={minutes ? "m" : "s"}
+								zero={true}
+							/>
 						</div>
 					</div>
-					<div>
-						<LineChart
-							statistics={minutes
-								? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
-								: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload)}
-							type={"Download speed"}
-							unit={" MB/s"}
-							color={"#00bbf9"}
-							time={minutes ? "m" : "s"}
-							zero={true}
-						/>
-					</div>
-				</div>
-			{/each}
-		</div>
 
-		<div class="flex w-full flex-row justify-start gap-5 sm:flex-wrap">
-			<!-- network usage -->
-			{#each $hardwareInfo.system.network.interfaces as item, i}
-				<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
-					<div class="mb-5 flex items-baseline justify-between">
-						<div class="flex items-baseline gap-3">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								class="lucide lucide-upload"
-								><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line
-									x1="12"
-									x2="12"
-									y1="3"
-									y2="15"
-								/></svg
-							>
-							<h2>{item.name} Upload speed</h2>
+					<div class="transparent-800 w-1/2 rounded-xl p-10 text-left sm:w-full">
+						<div class="mb-5 flex items-baseline justify-between">
+							<div class="flex items-baseline gap-3">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-upload"
+									><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line
+										x1="12"
+										x2="12"
+										y1="3"
+										y2="15"
+									/></svg
+								>
+								<h2>{item.name} Upload speed</h2>
+							</div>
+							<div>
+								<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>
+									{minutes ? "Last 60 minutes" : "Last 60 seconds"}
+								</h5>
+							</div>
 						</div>
 						<div>
-							<h5 class="cursor-pointer" on:click={() => (minutes = !minutes)}>{minutes ? "Last 60 minutes" : "Last 60 seconds"}</h5>
+							<LineChart
+								statistics={minutes
+									? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
+									: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload)}
+								type={"Upload speed"}
+								unit={" MB/s"}
+								color={"#00bbf9"}
+								time={minutes ? "m" : "s"}
+								zero={true}
+							/>
 						</div>
-					</div>
-					<div>
-						<LineChart
-							statistics={minutes
-								? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
-								: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload)}
-							type={"Upload speed"}
-							unit={" MB/s"}
-							color={"#00bbf9"}
-							time={minutes ? "m" : "s"}
-							zero={true}
-						/>
 					</div>
 				</div>
 			{/each}
