@@ -1,7 +1,7 @@
 import { defineConfig } from "vite"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import sveltePreprocess from "svelte-preprocess"
-import path from "path"
+import tsconfigPaths from "vite-tsconfig-paths"
 
 export default defineConfig({
 	plugins: [
@@ -12,11 +12,9 @@ export default defineConfig({
 				handler(warning)
 			},
 		}),
+		tsconfigPaths(),
 	],
 	base: "",
-	server: {
-		port: 3000,
-	},
 	build: {
 		rollupOptions: {
 			output: {
@@ -27,10 +25,5 @@ export default defineConfig({
 		},
 		emptyOutDir: true,
 		outDir: "../core/Assets/assets",
-	},
-	resolve: {
-		alias: {
-			"@": path.resolve(__dirname, "./"),
-		},
 	},
 })
