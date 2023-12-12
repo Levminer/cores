@@ -8,7 +8,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=app vite interface --port 3000",
-		"dev:web": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=web vite interface --port 3001",
+		"dev:web": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=client vite interface --port 3001",
 		"build:interface": "node scripts/buildNumber.cjs alpha false && vite build interface",
 		"build:library": "cargo build --manifest-path library/Cargo.toml --release && node scripts/copyLib.js",
 		"check": "svelte-check && tsc --noEmit"
@@ -26,10 +26,10 @@
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"svelte": "^4.2.8",
 		"svelte-check": "^3.6.2",
-		"svelte-preprocess": "^5.1.1",
+		"svelte-preprocess": "^5.1.2",
 		"tailwindcss": "^3.3.6",
 		"typescript": "^5.3.3",
-		"vite": "^4.4.9",
+		"vite": "^5.0.8",
 		"vite-tsconfig-paths": "^4.2.2"
 	},
 	"overrides": {

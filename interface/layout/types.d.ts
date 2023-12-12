@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /// <reference types="svelte" />
+/// <reference types="vite/client" />
 
 import type { settings } from "stores/settings"
 
