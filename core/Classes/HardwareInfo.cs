@@ -349,6 +349,22 @@ public class HardwareInfo {
 							}
 						}
 					}
+
+					// Drive data
+					if (sensor[j].SensorType == SensorType.Data) {
+						// find disk by ide and overwrite value
+						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
+							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (sensor[j].Name.Contains("Read")) {
+									API.System.Storage.Disks[k].DataRead = (float)Math.Round((float)sensor[j].Value, 1);
+								}
+
+								if (sensor[j].Name.Contains("Written")) {
+									API.System.Storage.Disks[k].DataWritten = (float)Math.Round((float)sensor[j].Value, 1);
+								}
+							}
+						}
+					}
 				}
 			}
 

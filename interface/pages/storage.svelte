@@ -45,14 +45,16 @@
 						stroke-linejoin="round"
 						class="lucide lucide-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></svg
 					>
-					<h2>Data usage</h2>
+					<h2>Drive usage</h2>
 				</div>
-				{#each $hardwareInfo.system.network.interfaces as { name, downloadData, uploadData }}
-					<div class="mt-5 select-text">
-						<h3>Name: {name}</h3>
-						<h3>Downloaded data: {downloadData} GB</h3>
-						<h3>Uploaded data: {uploadData} GB</h3>
-					</div>
+				{#each $hardwareInfo.system.storage.disks as { name, dataRead, dataWritten }}
+					{#if dataRead != 0 || dataWritten != 0}
+						<div class="mt-5 select-text">
+							<h3>Name: {name}</h3>
+							<h3>Data read: {dataRead} GB</h3>
+							<h3>Data written: {dataWritten} GB</h3>
+						</div>
+					{/if}
 				{/each}
 			</div>
 		</div>

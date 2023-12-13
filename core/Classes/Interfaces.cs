@@ -82,6 +82,14 @@ public class Disk {
 	public float ThroughputWrite {
 		get; set;
 	}
+
+	public float DataRead {
+		get; set;
+	}
+
+	public float DataWritten {
+		get; set;
+	}
 }
 
 public class Monitor {
