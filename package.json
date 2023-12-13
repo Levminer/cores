@@ -16,7 +16,7 @@
 	"devDependencies": {
 		"@baileyherbert/tinro": "^1.0.0",
 		"@crownframework/svelte-error-boundary": "^1.0.3",
-		"@sveltejs/vite-plugin-svelte": "^2.4.6",
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@tailwindcss/forms": "^0.5.6",
 		"autoprefixer": "^10.4.16",
 		"cross-env": "^7.0.3",
