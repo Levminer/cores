@@ -4,15 +4,15 @@
 
 @layer components {
 	.button {
-		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white py-4 px-6 text-xl font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-6 py-4 text-xl font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.smallButton {
-		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white py-2 px-3 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-3 py-2 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.menuButton {
-		@apply transparent-900-hover mx-3 mt-0 mb-3 flex h-20 w-20 flex-col items-center justify-center rounded-xl font-medium outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply transparent-900-hover mx-3 mb-3 mt-0 flex h-20 w-20 flex-col items-center justify-center rounded-xl font-medium outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.selectedMenuButton {
@@ -82,6 +82,28 @@ h4 {
 h5 {
 	font-size: 18px;
 	color: #d3cfcf;
+}
+
+@media (max-width: 640px) {
+	h1 {
+		font-size: 48px;
+	}
+
+	h2 {
+		font-size: 24px;
+	}
+
+	h3 {
+		font-size: 20px;
+	}
+
+	h4 {
+		font-size: 18px;
+	}
+
+	h5 {
+		font-size: 16px;
+	}
 }
 
 /* backdrops */

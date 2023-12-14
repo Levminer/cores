@@ -44,8 +44,10 @@
 		"@rgossiaux/svelte-headlessui": "^1.0.2",
 		"chart.js": "^4.4.1",
 		"chartjs-plugin-stacked100": "^1.5.2",
+		"lucide-svelte": "^0.294.0",
 		"peerjs": "^1.5.2",
 		"socket.io-client": "^4.7.2",
+		"svelte-bootstrap-icons": "^3.1.0",
 		"svelte-chartjs": "^3.1.2"
 	}
 }
