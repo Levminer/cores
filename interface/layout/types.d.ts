@@ -32,6 +32,8 @@ declare global {
 		health: string
 		throughputRead: number
 		throughputWrite: number
+		dataRead: number
+		dataWritten: number
 	}
 
 	interface RAMModule {
@@ -189,6 +191,7 @@ declare global {
 		interval: number
 		minimizeToTray: boolean
 		launchOnStartup: boolean
+		mode?: "app" | "client"
 	}
 
 	interface Message {
