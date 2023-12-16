@@ -2,7 +2,7 @@
 	<!-- Row 1 -->
 	<div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
-			<div class="mx-auto flex w-full justify-center sm:w-1/2">
+			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
 			<div>
@@ -37,7 +37,7 @@
 		</div>
 
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
-			<div class="mx-auto flex w-full justify-center sm:w-1/2">
+			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
 			<div>
@@ -72,7 +72,7 @@
 		</div>
 
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
-			<div class="mx-auto flex w-full justify-center sm:w-1/2">
+			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
 			<div>
@@ -414,7 +414,7 @@
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Motherboard width={24} height={24} />
+						<CircuitBoard />
 					</div>
 					<h2>BIOS</h2>
 				</div>
@@ -453,8 +453,8 @@
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import GaugeChart from "../components/gaugeChart.svelte"
 	import MeterChart from "../components/meterChart.svelte"
-	import { Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap } from "lucide-svelte"
-	import { Memory, Motherboard, PcDisplay } from "svelte-bootstrap-icons"
+	import { CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap } from "lucide-svelte"
+	import { Memory, PcDisplay } from "svelte-bootstrap-icons"
 
 	let loadGraphs = null
 	let loadGraphsShown = false
