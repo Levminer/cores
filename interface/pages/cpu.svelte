@@ -20,7 +20,7 @@
 
 			<!-- cpu temp -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-baseline justify-between">
+				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Thermometer />
@@ -42,9 +42,9 @@
 				</div>
 			</div>
 
-			<!-- clock speed -->
+			<!-- cpu clock speed -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-baseline justify-between">
+				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Clock />
@@ -72,7 +72,7 @@
 		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
 			<!-- cpu power usage -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-baseline justify-between">
+				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Plug />
@@ -99,7 +99,7 @@
 
 			<!-- cpu load -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-baseline justify-between">
+				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Gauge />
@@ -125,7 +125,7 @@
 
 			<!-- cpu voltage -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-baseline justify-between">
+				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Zap />
