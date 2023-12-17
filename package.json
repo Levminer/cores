@@ -9,8 +9,8 @@
 	"scripts": {
 		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=app vite interface --port 3000",
 		"dev:web": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=client vite interface --port 3001",
-		"build:interface": "node scripts/buildNumber.cjs alpha false && vite build interface",
-		"build:library": "cargo build --manifest-path library/Cargo.toml --release && node scripts/copyLib.js",
+		"build:interface": "node scripts/buildNumber.cjs alpha false && cross-env VITE_CORES_MODE=app vite build interface",
+		"build:library": "cargo build --manifest-path crates/library/Cargo.toml --release && node scripts/copyLib.js",
 		"check": "svelte-check && tsc --noEmit"
 	},
 	"devDependencies": {
@@ -45,8 +45,6 @@
 		"chart.js": "^4.4.1",
 		"chartjs-plugin-stacked100": "^1.5.2",
 		"lucide-svelte": "^0.294.0",
-		"peerjs": "^1.5.2",
-		"socket.io-client": "^4.7.2",
 		"svelte-bootstrap-icons": "^3.1.0",
 		"svelte-chartjs": "^3.1.2"
 	}
