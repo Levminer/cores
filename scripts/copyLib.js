@@ -1,3 +1,3 @@
 import { copyFileSync } from "fs"
 
-copyFileSync("crates/library/target/release/lib.dll", "core/lib.dll")
+copyFileSync("target/release/lib.dll", "core/lib.dll")

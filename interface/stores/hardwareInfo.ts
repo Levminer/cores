@@ -60,6 +60,8 @@ const defaultHardwareInfo: HardwareInfo = {
 					health: "N/A",
 					throughputRead: 100,
 					throughputWrite: 100,
+					dataRead: 100,
+					dataWrite: 100,
 				},
 			],
 		},
