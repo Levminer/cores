@@ -1,0 +1,15 @@
+[package]
+name = "client"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "lib"
+crate-type = ["cdylib", "rlib"]
+path = "src/lib.rs"
+
+[dependencies]
+wasm-bindgen = "0.2.89"
+wasm-peers = "0.4.1"
+wasm-peers-protocol = "0.3.2"
+web-sys = "0.3.66"

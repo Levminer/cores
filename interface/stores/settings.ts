@@ -1,5 +1,4 @@
 import { writable, get } from "svelte/store"
-import build from "../../build.json"
 
 const defaultSettings: LibSettings = {
 	interval: 2,
@@ -9,10 +8,18 @@ const defaultSettings: LibSettings = {
 
 // Create store
 export const settings = writable<LibSettings>(sessionStorage.settings ? JSON.parse(sessionStorage.settings) : defaultSettings)
+settings.update((settings) => {
+	return {
+		...settings,
+		mode: import.meta.env.VITE_CORES_MODE,
+	}
+})
 
 // Listen for store events
 settings.subscribe((data) => {
 	console.log("Settings changed: ", data)
+
+	data.mode = import.meta.env.VITE_CORES_MODE
 
 	sessionStorage.setItem("settings", JSON.stringify(data))
 })
