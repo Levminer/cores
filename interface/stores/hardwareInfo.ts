@@ -61,7 +61,7 @@ const defaultHardwareInfo: HardwareInfo = {
 					throughputRead: 100,
 					throughputWrite: 100,
 					dataRead: 100,
-					dataWrite: 100,
+					dataWritten: 100,
 				},
 			],
 		},
