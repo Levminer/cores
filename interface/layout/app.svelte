@@ -1,6 +1,10 @@
-<div class="flex h-screen">
+<div class="flex h-screen flex-col">
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
+
+		{#if $settings.mode === "client"}
+			<Navigation />
+		{/if}
 
 		<div class="top" />
 
@@ -37,61 +41,82 @@
 </div>
 
 <script lang="ts">
-	import { Route, router } from "@baileyherbert/tinro"
-	import Home from "../pages/home.svelte"
-	import Settings from "../pages/settings.svelte"
-	import RouteTransition from "../components/routeTransition.svelte"
-	import BuildNumber from "../components/buildNumber.svelte"
-	import CPU from "../pages/cpu.svelte"
-	import GPU from "../pages/gpu.svelte"
-	import RAM from "../pages/ram.svelte"
-	import Storage from "../pages/storage.svelte"
-	import { onMount } from "svelte"
-	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
-	import { settings } from "../stores/settings"
-	// @ts-ignore
+	// @ts-ignore - no types
 	import { Boundary } from "@crownframework/svelte-error-boundary"
+	import { onMount } from "svelte"
+	import { Route, router } from "@baileyherbert/tinro"
+	import Home from "@pages/home.svelte"
+	import Settings from "@pages/settings.svelte"
+	import CPU from "@pages/cpu.svelte"
+	import GPU from "@pages/gpu.svelte"
+	import RAM from "@pages/ram.svelte"
+	import Storage from "@pages/storage.svelte"
+	import Network from "@pages/network.svelte"
+	import Navigation from "@components/navigation.svelte"
+	import RouteTransition from "@components/routeTransition.svelte"
+	import BuildNumber from "@components/buildNumber.svelte"
+	import { hardwareStatistics, setHardwareStatistics } from "../stores/hardwareStatistics"
+	import init, { WebRtcHost, WebRtcClient } from "../../crates/client/pkg/lib.js"
+	import { settings } from "../stores/settings"
 	import { setHardwareInfo } from "../stores/hardwareInfo"
-	import Network from "../pages/network.svelte"
 
 	onMount(() => {
+		let host: WebRtcHost | undefined
+		let client: WebRtcClient | undefined
+
+		init().then(() => {
+			if ($settings.mode === "app") {
+				host = new WebRtcHost()
+			} else {
+				client = new WebRtcClient()
+			}
+		})
+
 		// Navigate to the home page on load (webview bug)
-		router.goto("/")
+		if ($settings.mode === "app") {
+			router.goto("/")
+		}
 
 		// Scroll to the top of the page on route change
-		router.subscribe((data) => {
+		router.subscribe(() => {
 			document.querySelector(".top").scrollIntoView()
 		})
 
-		// @ts-ignore - Receive settings from the webview
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "settings") {
-				console.log("New settings")
+		if ($settings.mode === "app") {
+			// @ts-ignore - Receive settings from the webview
+			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+				if (arg.data.name === "settings") {
+					console.log("New settings")
 
-				$settings = JSON.parse(arg.data.content)
-			}
-		})
-
-		// @ts-ignore - Receive api data from the webview
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "api") {
-				let parsed = JSON.parse(arg.data.content)
-
-				setHardwareInfo(parsed)
-				updateHardwareStats(parsed)
-			}
-		})
-
-		// @ts-ignore - Receive navigation info
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "navigation") {
-				if (arg.data.content === "home") {
-					router.goto("/")
-				} else {
-					router.goto(arg.data.content)
+					$settings = JSON.parse(arg.data.content)
 				}
-			}
-		})
+			})
+
+			// @ts-ignore - Receive api data from the webview
+			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+				if (arg.data.name === "api") {
+					let parsed = JSON.parse(arg.data.content)
+
+					if (host !== undefined) {
+						host.send_message_to_clients(JSON.stringify(parsed))
+					}
+
+					setHardwareInfo(parsed)
+					updateHardwareStats(parsed)
+				}
+			})
+
+			// @ts-ignore - Receive navigation info
+			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+				if (arg.data.name === "navigation") {
+					if (arg.data.content === "home") {
+						router.goto("/")
+					} else {
+						router.goto(arg.data.content)
+					}
+				}
+			})
+		}
 
 		// 60s date comparison
 		const date = new Date()
@@ -346,6 +371,21 @@
 					})
 				}
 			}
+		}
+
+		if ($settings.mode === "client") {
+			setInterval(() => {
+				if (client !== undefined) {
+					let message = client.get_message()
+
+					if (message !== undefined && message !== "") {
+						let parsed = JSON.parse(message)
+
+						setHardwareInfo(parsed)
+						updateHardwareStats(parsed)
+					}
+				}
+			}, 3000)
 		}
 	})
 </script>
