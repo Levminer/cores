@@ -11,14 +11,6 @@
 		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-3 py-2 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
-	.menuButton {
-		@apply transparent-900-hover mx-3 mb-3 mt-0 flex h-20 w-20 flex-col items-center justify-center rounded-xl font-medium outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
-	}
-
-	.selectedMenuButton {
-		@apply mx-3 mb-3 flex h-20 w-20 flex-col items-center justify-center rounded-xl bg-white font-medium !text-black outline-none duration-200 ease-linear hover:bg-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
-	}
-
 	.select {
 		@apply form-select cursor-pointer rounded-2xl !border-white py-4 text-xl font-medium text-black !ring-transparent duration-200 ease-linear hover:bg-gray-200 focus-visible:!ring-4 focus-visible:!ring-popup-magenta;
 	}
