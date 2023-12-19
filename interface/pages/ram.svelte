@@ -46,14 +46,14 @@
 		</div>
 	</div>
 
-	<div class="mx-10 flex justify-evenly gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
+	<div class="mx-10 flex gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
 		<div class="flex w-full flex-row justify-start gap-5 sm:flex-wrap">
 			<!-- ram usage -->
 			<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
 				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Memory width={24} height={24} />
+							<Gauge />
 						</div>
 						<h2>RAM Usage</h2>
 					</div>
@@ -78,7 +78,7 @@
 				<div class="flex items-baseline justify-between">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<HardDrive />
+							<Gauge />
 						</div>
 						<h2>Virtual RAM Usage</h2>
 					</div>
@@ -107,7 +107,7 @@
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import ToggleButton from "@components/toggleButton.svelte"
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
-	import { HardDrive, LineChart } from "lucide-svelte"
+	import { Gauge } from "lucide-svelte"
 
 	let minutes = false
 </script>
