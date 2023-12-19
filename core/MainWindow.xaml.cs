@@ -71,7 +71,7 @@ public sealed partial class MainWindow : Window {
 			"app.example", "assets", CoreWebView2HostResourceAccessKind.Allow);
 
 		if (!Debugger.IsAttached) {
-			webView.Source = new Uri("http://app.example/assets/index.html");
+			webView.Source = new Uri("https://app.example/assets/index.html");
 		}
 
 		webView.CoreWebView2.DOMContentLoaded += EventHandler;
