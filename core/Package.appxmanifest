@@ -11,7 +11,7 @@
   <Identity
     Name="16050Levminer.Cores-Hardwaremonitor"
     Publisher="CN=B765AB4D-AD3E-473D-BE98-14C9D93F7EA7"
-    Version="0.11.0.0" />
+    Version="0.12.0.0" />
 
   <Properties>
     <DisplayName>Cores - Hardware monitor</DisplayName>

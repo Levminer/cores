@@ -61,7 +61,7 @@
 	import { setHardwareInfo } from "../stores/hardwareInfo"
 
 	onMount(() => {
-		let host: WebRtcHost | undefined
+		/* let host: WebRtcHost | undefined
 		let client: WebRtcClient | undefined
 
 		init().then(() => {
@@ -70,7 +70,7 @@
 			} else {
 				client = new WebRtcClient()
 			}
-		})
+		}) */
 
 		// Navigate to the home page on load (webview bug)
 		if ($settings.mode === "app") {
@@ -97,9 +97,9 @@
 				if (arg.data.name === "api") {
 					let parsed = JSON.parse(arg.data.content)
 
-					if (host !== undefined) {
+					/* if (host !== undefined) {
 						host.send_message_to_clients(JSON.stringify(parsed))
-					}
+					} */
 
 					setHardwareInfo(parsed)
 					updateHardwareStats(parsed)
@@ -394,7 +394,7 @@
 			}
 		}
 
-		if ($settings.mode === "client") {
+		/* 		if ($settings.mode === "client") {
 			setInterval(() => {
 				if (client !== undefined) {
 					let message = client.get_message()
@@ -407,6 +407,6 @@
 					}
 				}
 			}, 3000)
-		}
+		} */
 	})
 </script>
