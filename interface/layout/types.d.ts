@@ -179,6 +179,7 @@ declare global {
 		storage: {
 			throughputRead: number
 			throughputWrite: number
+			temperature: Sensor
 		}[]
 	}
 

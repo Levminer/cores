@@ -199,6 +199,11 @@
 						return {
 							throughputRead: parseFloat((item.throughputRead / 1_048_576).toFixed(2)),
 							throughputWrite: parseFloat((item.throughputWrite / 1_048_576).toFixed(2)),
+							temperature: {
+								value: Math.round(item.temperature.value),
+								min: Math.round(item.temperature.min),
+								max: Math.round(item.temperature.max),
+							},
 						}
 					}),
 				}
@@ -350,9 +355,25 @@
 								).toFixed(2),
 							)
 
+							let temperature = {
+								value: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.value).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								min: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.min).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+								max: Math.round(
+									$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.max).reduce((a, b) => a + b, 0) /
+										$hardwareStatistics.seconds.length,
+								),
+							}
+
 							return {
 								throughputRead,
 								throughputWrite,
+								temperature,
 							}
 						}),
 					}
