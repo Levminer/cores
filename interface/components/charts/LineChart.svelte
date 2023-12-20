@@ -10,19 +10,20 @@
 		statistics: {
 			label?: string
 			data?: number[]
+			fill?: boolean
+			color?: "min" | "max" | "current" | "yellow" | "orange"
 		}[]
 		unit: string
-		color: string
 		time: string
-		zero: boolean
+		min?: number
+		max?: number
+		step?: number
 	}
 
 	export let props: Props = {
 		statistics: [{}],
 		unit: "",
-		color: "",
 		time: "",
-		zero: false,
 	}
 
 	Chart.register(...registerables)
@@ -36,11 +37,12 @@
 				return {
 					label: value.label,
 					data: value.data,
-					backgroundColor: colors.categoricalPalette[index % colors.categoricalPalette.length],
-					borderColor: colors.categoricalPalette[index % colors.categoricalPalette.length],
+					backgroundColor: value.color ? colors[value.color] : colors.categoricalPalette[index % colors.categoricalPalette.length],
+					borderColor: value.color ? colors[value.color] : colors.categoricalPalette[index % colors.categoricalPalette.length],
 					tension: 0.2,
 					pointHitRadius: 15,
 					borderWidth: 4,
+					fill: value.fill,
 				}
 			}),
 		],
@@ -66,14 +68,16 @@
 		},
 		scales: {
 			y: {
+				max: props.max ? props.max : undefined,
+				min: props.min >= 0 ? props.min : undefined,
 				ticks: {
 					callback: (value) => {
 						return `${value}${props.unit}`
 					},
 					precision: 2,
 					color: "#969696",
+					stepSize: props.step ? props.step : undefined,
 				},
-				min: props.zero ? 0 : undefined,
 			},
 			x: {
 				ticks: {
