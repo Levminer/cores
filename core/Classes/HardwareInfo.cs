@@ -312,8 +312,17 @@ public class HardwareInfo {
 								var min = (float)Math.Round((float)sensor[j].Min);
 
 								// Some drives don't return min temp
-								if (min == 0) {
+								if (firstRun && min == 0) {
 									min = (float)Math.Round((float)sensor[j].Value);
+								}
+
+								// Replace min temp if current temp is lower
+								if (min == 0) {
+									if ((float)Math.Round((float)sensor[j].Value) < API.System.Storage.Disks[k].Temperature.Min) {
+										min = (float)Math.Round((float)sensor[j].Value);
+									} else {
+										min = API.System.Storage.Disks[k].Temperature.Min;
+									}
 								}
 
 								API.System.Storage.Disks[k].Temperature = new Sensor {
@@ -369,7 +378,7 @@ public class HardwareInfo {
 			}
 
 			// superIO
-			if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
+			if (hardware.HardwareType == HardwareType.Motherboard) {
 				var sh = computerHardware[i].SubHardware[0];
 
 				for (int j = 0; j < sh.Sensors.Length; j++) {

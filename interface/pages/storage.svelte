@@ -75,9 +75,8 @@
 										},
 									],
 									unit: " MB/s",
-									color: "#00bbf9",
 									time: minutes ? "m" : "s",
-									zero: true,
+									min: 0,
 								}}
 							/>
 						</div>
@@ -101,6 +100,7 @@
 									statistics: [
 										{
 											label: `Max Temperature`,
+											color: "max",
 											data: minutes
 												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.max)
 												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.max),
@@ -108,21 +108,21 @@
 
 										{
 											label: `Current Temperature`,
+											color: "current",
 											data: minutes
 												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.value)
 												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.value),
 										},
 										{
 											label: `Min Temperature`,
+											color: "min",
 											data: minutes
 												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.min)
 												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.min),
 										},
 									],
 									unit: " °C",
-									color: "#00bbf9",
 									time: minutes ? "m" : "s",
-									zero: false,
 								}}
 							/>
 						</div>
