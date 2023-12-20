@@ -32,12 +32,35 @@
 					</div>
 				</div>
 
-				<div class="cursor-crosshair">
-					<MultiLineChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.cpu.temperature)
-							: $hardwareStatistics.seconds.map((value) => value.cpu.temperature)}
-						time={minutes ? "m" : "s"}
+				<div>
+					<LineChart
+						props={{
+							statistics: [
+								{
+									label: "Max Temperature",
+									color: "max",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.max)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.max),
+								},
+								{
+									label: "Current Temperature",
+									color: "current",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.value)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.value),
+								},
+								{
+									label: "Min Temperature",
+									color: "min",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.min)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.min),
+								},
+							],
+							time: minutes ? "m" : "s",
+							unit: " °C",
+						}}
 					/>
 				</div>
 			</div>
@@ -57,13 +80,34 @@
 				</div>
 
 				<div>
-					<MultiLineChart
-						name="Clock Speed"
-						unit={"Mhz"}
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.cpu.clock)
-							: $hardwareStatistics.seconds.map((value) => value.cpu.clock)}
-						time={minutes ? "m" : "s"}
+					<LineChart
+						props={{
+							statistics: [
+								{
+									label: "Max Clock Speed",
+									color: "max",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.max)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.max),
+								},
+								{
+									label: "Current Clock Speed",
+									color: "current",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.value)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.value),
+								},
+								{
+									label: "Min Clock Speed",
+									color: "min",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.min)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.min),
+								},
+							],
+							time: minutes ? "m" : "s",
+							unit: " Mhz",
+						}}
 					/>
 				</div>
 			</div>
@@ -86,13 +130,19 @@
 
 				<div>
 					<LineChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.cpu.power)
-							: $hardwareStatistics.seconds.map((value) => value.cpu.power)}
-						type={"Power usage"}
-						unit={" W"}
-						color={"#ffd60a"}
-						time={minutes ? "m" : "s"}
+						props={{
+							statistics: [
+								{
+									label: "Power Usage",
+									color: "yellow",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.power)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.power),
+								},
+							],
+							time: minutes ? "m" : "s",
+							unit: " W",
+						}}
 					/>
 				</div>
 			</div>
@@ -112,13 +162,23 @@
 				</div>
 
 				<div>
-					<UsageChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.cpu.load)
-							: $hardwareStatistics.seconds.map((value) => value.cpu.load)}
-						type={"Load"}
-						unit={"%"}
-						time={minutes ? "m" : "s"}
+					<LineChart
+						props={{
+							statistics: [
+								{
+									label: "Load",
+									color: "min",
+									fill: true,
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.load)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.load),
+								},
+							],
+							time: minutes ? "m" : "s",
+							unit: "%",
+							min: 0,
+							max: 100,
+						}}
 					/>
 				</div>
 			</div>
@@ -139,13 +199,19 @@
 
 				<div>
 					<LineChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.cpu.voltage)
-							: $hardwareStatistics.seconds.map((value) => value.cpu.voltage)}
-						type={"Voltage"}
-						unit={" V"}
-						color={"#ffd60a"}
-						time={minutes ? "m" : "s"}
+						props={{
+							statistics: [
+								{
+									label: "Voltage",
+									color: "orange",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.cpu.voltage)
+										: $hardwareStatistics.seconds.map((value) => value.cpu.voltage),
+								},
+							],
+							time: minutes ? "m" : "s",
+							unit: " V",
+						}}
 					/>
 				</div>
 			</div>
@@ -154,9 +220,7 @@
 </div>
 
 <script lang="ts">
-	import MultiLineChart from "../components/multiLineChart.svelte"
-	import LineChart from "../components/lineChart.svelte"
-	import UsageChart from "../components/usageChart.svelte"
+	import LineChart from "@components/charts/LineChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import { Clock, Cpu, Gauge, Plug, Thermometer, Zap } from "lucide-svelte"
