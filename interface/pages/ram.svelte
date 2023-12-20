@@ -62,13 +62,24 @@
 					</div>
 				</div>
 				<div>
-					<UsageChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
-							: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage)}
-						type={"Usage"}
-						unit={"%"}
-						time={minutes ? "m" : "s"}
+					<LineChart
+						props={{
+							statistics: [
+								{
+									label: "Usage",
+									fill: true,
+									color: "min",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
+										: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage),
+								},
+							],
+							unit: " %",
+							time: minutes ? "m" : "s",
+							min: 0,
+							max: 100,
+							step: 10,
+						}}
 					/>
 				</div>
 			</div>
@@ -87,13 +98,24 @@
 					</div>
 				</div>
 				<div>
-					<UsageChart
-						statistics={minutes
-							? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
-							: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage)}
-						type={"Usage"}
-						unit={"%"}
-						time={minutes ? "m" : "s"}
+					<LineChart
+						props={{
+							statistics: [
+								{
+									label: "Usage",
+									fill: true,
+									color: "min",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
+										: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage),
+								},
+							],
+							unit: " %",
+							time: minutes ? "m" : "s",
+							min: 0,
+							max: 100,
+							step: 10,
+						}}
 					/>
 				</div>
 			</div>
@@ -102,12 +124,12 @@
 </div>
 
 <script lang="ts">
-	import UsageChart from "../components/usageChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import ToggleButton from "@components/toggleButton.svelte"
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
 	import { Gauge } from "lucide-svelte"
+	import LineChart from "@components/charts/LineChart.svelte"
 
 	let minutes = false
 </script>
