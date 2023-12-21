@@ -198,7 +198,7 @@
 						props={{
 							statistics: [
 								{
-									label: "Fan speed",
+									label: "Fan Speed",
 									color: "min",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.gpu.fan)
@@ -231,7 +231,7 @@
 						props={{
 							statistics: [
 								{
-									label: "Memory usage",
+									label: "Memory Usage",
 									color: "min",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.gpu.memory)
@@ -251,11 +251,8 @@
 
 <script lang="ts">
 	import LineChart from "@components/charts/LineChart.svelte"
-	import MultiLineChart from "../components/multiLineChart.svelte"
-	import OldLineChart from "../components/lineChart.svelte"
 	import { hardwareStatistics } from "../stores/hardwareStatistics"
 	import { hardwareInfo } from "../stores/hardwareInfo"
-	import UsageChart from "../components/usageChart.svelte"
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
 	import { Clock, Fan, Gauge, Thermometer, Zap } from "lucide-svelte"
 	import ToggleButton from "@components/toggleButton.svelte"
