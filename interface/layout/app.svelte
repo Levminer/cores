@@ -178,8 +178,8 @@
 
 						clock: {
 							value: Math.round(input.gpu.clock[0].value),
-							min: Math.round(input.gpu.clock[0].value),
-							max: Math.round(input.gpu.clock[0].value),
+							min: Math.round(input.gpu.clock[0].min),
+							max: Math.round(input.gpu.clock[0].max),
 						},
 
 						load: Math.round(input.gpu.lastLoad),
