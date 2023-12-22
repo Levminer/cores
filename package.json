@@ -6,6 +6,10 @@
 	"license": "GPL-3.0",
 	"private": true,
 	"type": "module",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
 	"scripts": {
 		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=app vite interface --port 3000",
 		"dev:web": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=client vite interface --port 3001",
@@ -48,6 +52,7 @@
 		"chartjs-plugin-stacked100": "^1.5.2",
 		"lucide-svelte": "^0.294.0",
 		"svelte-bootstrap-icons": "^3.1.0",
-		"svelte-chartjs": "^3.1.2"
+		"svelte-chartjs": "^3.1.2",
+		"ui": "*"
 	}
 }

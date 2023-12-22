@@ -450,9 +450,9 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "../stores/hardwareInfo"
-	import GaugeChart from "../components/gaugeChart.svelte"
-	import MeterChart from "../components/meterChart.svelte"
+	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import GaugeChart from "ui/charts/gaugeChart.svelte"
+	import MeterChart from "ui/charts/meterChart.svelte"
 	import { CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap } from "lucide-svelte"
 	import { Memory, PcDisplay } from "svelte-bootstrap-icons"
 
@@ -462,7 +462,7 @@
 	// Show load graphs
 	const showLoadGraphs = () => {
 		if (!loadGraphsShown) {
-			loadGraphs = import("../components/loadChart.svelte")
+			loadGraphs = import("ui/charts/loadChart.svelte")
 
 			loadGraphsShown = true
 		} else {

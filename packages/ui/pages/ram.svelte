@@ -124,12 +124,12 @@
 </div>
 
 <script lang="ts">
-	import { hardwareStatistics } from "../stores/hardwareStatistics"
-	import { hardwareInfo } from "../stores/hardwareInfo"
-	import ToggleButton from "@components/toggleButton.svelte"
+	import { hardwareStatistics } from "ui/stores/hardwareStatistics"
+	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import ToggleButton from "ui/components/toggleButton.svelte"
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
 	import { Gauge } from "lucide-svelte"
-	import LineChart from "@components/charts/LineChart.svelte"
+	import LineChart from "ui/charts/LineChart.svelte"
 
 	let minutes = false
 </script>

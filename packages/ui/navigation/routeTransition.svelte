@@ -4,7 +4,7 @@
 	</div>
 {/key}
 
-<script>
+<script lang="ts">
 	import { router } from "@baileyherbert/tinro"
 	import { fade } from "svelte/transition"
 </script>

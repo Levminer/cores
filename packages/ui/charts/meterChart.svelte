@@ -8,7 +8,7 @@
 	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
 	import { afterUpdate, onMount } from "svelte"
-	import { colors } from "@lib/utils"
+	import { colors } from "ui/utils/colors"
 
 	export let readings: Sensor[]
 	export let categories: string[]

@@ -9,7 +9,7 @@
 	import { Bar } from "svelte-chartjs"
 	import { hardwareInfo } from "../stores/hardwareInfo"
 	import { onMount } from "svelte"
-	import { colors } from "@lib/utils"
+	import { colors } from "ui/utils/colors"
 
 	export let load: Load[]
 	let id = crypto.randomUUID()

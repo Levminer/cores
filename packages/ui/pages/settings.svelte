@@ -126,11 +126,11 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "../stores/hardwareInfo"
-	import { settings } from "../stores/settings"
-	import build from "../../build.json"
-	import Select from "../components/select.svelte"
-	import Toggle from "../components/toggle.svelte"
+	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import { settings } from "ui/stores/settings"
+	import build from "../../../build.json"
+	import Select from "ui/components/select.svelte"
+	import Toggle from "ui/components/toggle.svelte"
 
 	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${
 		$hardwareInfo.system.os.webView

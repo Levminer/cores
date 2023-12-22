@@ -1,7 +1,7 @@
 <Doughnut {data} {options} plugins={pluginTest} />
 
 <script lang="ts">
-	import { colors } from "@lib/utils"
+	import { colors } from "ui/utils/colors"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Doughnut } from "svelte-chartjs"
