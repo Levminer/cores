@@ -10,7 +10,7 @@
 
 		<RouteTransition>
 			<Boundary onError={console.error}>
-				<Route path="/"><Home /></Route>
+				<Route path="/home"><Home /></Route>
 			</Boundary>
 
 			<Boundary onError={console.error}>
@@ -74,7 +74,7 @@
 
 		// Navigate to the home page on load (webview bug)
 		if ($settings.mode === "app") {
-			router.goto("/")
+			router.goto("/home")
 		}
 
 		// Scroll to the top of the page on route change
@@ -109,11 +109,7 @@
 			// @ts-ignore - Receive navigation info
 			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
 				if (arg.data.name === "navigation") {
-					if (arg.data.content === "home") {
-						router.goto("/")
-					} else {
-						router.goto(arg.data.content)
-					}
+					router.goto(arg.data.content)
 				}
 			})
 		}

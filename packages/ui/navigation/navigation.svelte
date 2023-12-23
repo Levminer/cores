@@ -4,7 +4,7 @@
 	<div class="no-scrollbar mx-auto flex h-full max-w-lg flex-1 overflow-x-auto">
 		<a
 			aria-label="Home"
-			href="/"
+			href="/home"
 			class="group inline-flex flex-shrink-0 flex-grow flex-col items-center justify-center rounded-s-full px-5 text-gray-200 duration-200 ease-in-out hover:bg-gray-800 hover:text-white sm:rounded-none"
 		>
 			<Home />
