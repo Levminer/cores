@@ -16,25 +16,25 @@ fn log(message: String) {
 #[wasm_bindgen]
 pub struct WebRtcHost {
     server: MiniServer,
-    server_open_connections_count: Rc<RefCell<i32>>,
+    open_connections: Rc<RefCell<i32>>,
 }
 
 #[wasm_bindgen]
 impl WebRtcHost {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<WebRtcHost, JsValue> {
+    pub fn new(session_id: String) -> Result<WebRtcHost, JsValue> {
         let mut server = MiniServer::new(
             SIGNALING_SERVER_URL,
-            SessionId::new("dummy-session-id".to_string()),
+            SessionId::new(session_id),
             ConnectionType::Stun {
                 urls: STUN_SERVER_URL.to_string(),
             },
         )?;
-        let server_open_connections_count = Rc::new(RefCell::new(0));
+        let open_connections = Rc::new(RefCell::new(0));
 
         let server_clone = server.clone();
         let server_on_open = {
-            let server_open_connections_count = server_open_connections_count.clone();
+            let server_open_connections_count = open_connections.clone();
             move |user_id| {
                 log(format!("connection to user established: {:?}", user_id));
                 *server_open_connections_count.borrow_mut() += 1;
@@ -55,12 +55,16 @@ impl WebRtcHost {
 
         Ok(WebRtcHost {
             server,
-            server_open_connections_count,
+            open_connections,
         })
     }
 
     pub fn send_message_to_clients(&self, message: &str) {
         self.server.send_message_to_all(message);
+    }
+
+    pub fn get_open_connections(&self) -> i32 {
+        self.open_connections.borrow().clone()
     }
 }
 
@@ -73,13 +77,13 @@ pub struct WebRtcClient {
 #[wasm_bindgen]
 impl WebRtcClient {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> Result<WebRtcClient, JsValue> {
+    pub fn new(session_id: String) -> Result<WebRtcClient, JsValue> {
         let data = Rc::new(RefCell::new(String::new()));
         let data_clone = data.clone();
 
         let mut client = MiniClient::new(
             SIGNALING_SERVER_URL,
-            SessionId::new("dummy-session-id".to_string()),
+            SessionId::new(session_id.to_string()),
             ConnectionType::Stun {
                 urls: STUN_SERVER_URL.to_string(),
             },

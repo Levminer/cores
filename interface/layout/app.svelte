@@ -56,63 +56,54 @@
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import init, { WebRtcHost, WebRtcClient } from "../../crates/client/pkg/lib.js"
+	import init, { WebRtcHost } from "../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { setHardwareInfo } from "ui/stores/hardwareInfo"
 
 	onMount(() => {
-		/* let host: WebRtcHost | undefined
-		let client: WebRtcClient | undefined
+		let host: WebRtcHost | undefined
 
 		init().then(() => {
-			if ($settings.mode === "app") {
-				host = new WebRtcHost()
-			} else {
-				client = new WebRtcClient()
-			}
-		}) */
+			host = new WebRtcHost($settings.connectionCode)
+		})
 
 		// Navigate to the home page on load (webview bug)
-		if ($settings.mode === "app") {
-			router.goto("/home")
-		}
+		router.goto("/home")
 
 		// Scroll to the top of the page on route change
 		router.subscribe(() => {
 			document.querySelector(".top").scrollIntoView()
 		})
 
-		if ($settings.mode === "app") {
-			// @ts-ignore - Receive settings from the webview
-			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-				if (arg.data.name === "settings") {
-					console.log("New settings")
+		// @ts-ignore - Receive settings from the webview
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+			if (arg.data.name === "settings") {
+				console.log("New settings")
 
-					$settings = JSON.parse(arg.data.content)
+				$settings = JSON.parse(arg.data.content)
+			}
+		})
+
+		// @ts-ignore - Receive api data from the webview
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+			if (arg.data.name === "api") {
+				let parsed = JSON.parse(arg.data.content)
+
+				if (host !== undefined) {
+					host.send_message_to_clients(JSON.stringify(parsed))
 				}
-			})
 
-			// @ts-ignore - Receive api data from the webview
-			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-				if (arg.data.name === "api") {
-					let parsed = JSON.parse(arg.data.content)
+				setHardwareInfo(parsed)
+				updateHardwareStats(parsed)
+			}
+		})
 
-					/* if (host !== undefined) {
-						host.send_message_to_clients(JSON.stringify(parsed))
-					} */
-
-					setHardwareInfo(parsed)
-					updateHardwareStats(parsed)
-				}
-			})
-
-			// @ts-ignore - Receive navigation info
-			window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-				if (arg.data.name === "navigation") {
-					router.goto(arg.data.content)
-				}
-			})
-		}
+		// @ts-ignore - Receive navigation info
+		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
+			if (arg.data.name === "navigation") {
+				router.goto(arg.data.content)
+			}
+		})
 
 		// 60s date comparison
 		const date = new Date()
@@ -389,20 +380,5 @@
 				}
 			}
 		}
-
-		/* 		if ($settings.mode === "client") {
-			setInterval(() => {
-				if (client !== undefined) {
-					let message = client.get_message()
-
-					if (message !== undefined && message !== "") {
-						let parsed = JSON.parse(message)
-
-						setHardwareInfo(parsed)
-						updateHardwareStats(parsed)
-					}
-				}
-			}, 3000)
-		} */
 	})
 </script>

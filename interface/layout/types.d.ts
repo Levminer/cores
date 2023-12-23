@@ -193,6 +193,7 @@ declare global {
 		minimizeToTray: boolean
 		launchOnStartup: boolean
 		mode?: "app" | "client"
+		connectionCode?: string
 	}
 
 	interface Message {
