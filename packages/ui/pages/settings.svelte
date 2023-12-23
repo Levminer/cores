@@ -35,6 +35,38 @@
 </div>
 
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-10 sm:m-3 sm:w-full">
+	<h1 class="mb-10">Remote connections</h1>
+
+	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
+			<div>
+				<h2>Connection code</h2>
+				<h3>Use this code on the website (https://cores.levminer.com/settings).</h3>
+			</div>
+			<div class="ml-20 flex gap-3">
+				<div class="flex items-center justify-center space-x-3">
+					<input class="input" readonly value={$settings.connectionCode} />
+					<button
+						class="button"
+						on:click={() => {
+							navigator.clipboard.writeText($settings.connectionCode)
+							document.querySelector(".copy").innerHTML = "Copied"
+
+							setTimeout(() => {
+								document.querySelector(".copy").innerHTML = "Copy"
+							}, 1000)
+						}}
+					>
+						<Clipboard />
+						<span class="copy">Copy</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-10 sm:m-3 sm:w-full">
 	<h1 class="mb-10">About</h1>
 
 	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
@@ -131,6 +163,7 @@
 	import build from "../../../build.json"
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"
+	import { Clipboard } from "lucide-svelte"
 
 	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${
 		$hardwareInfo.system.os.webView
