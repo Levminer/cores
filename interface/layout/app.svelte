@@ -2,41 +2,41 @@
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
 
-		{#if $settings.mode === "client"}
-			<Navigation />
-		{/if}
-
 		<div class="top" />
 
-		<RouteTransition>
-			<Boundary onError={console.error}>
-				<Route path="/home"><Home /></Route>
-			</Boundary>
+		{#if $hardwareInfo.cpu === undefined}
+			<Loading />
+		{:else}
+			<RouteTransition>
+				<Boundary onError={console.error}>
+					<Route path="/home"><Home /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/cpu"><CPU /></Route>
-			</Boundary>
+				<Boundary onError={console.error}>
+					<Route path="/cpu"><CPU /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/ram"><RAM /></Route>
-			</Boundary>
+				<Boundary onError={console.error}>
+					<Route path="/ram"><RAM /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/gpu"><GPU /></Route>
-			</Boundary>
+				<Boundary onError={console.error}>
+					<Route path="/gpu"><GPU /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/network"><Network /></Route>
-			</Boundary>
+				<Boundary onError={console.error}>
+					<Route path="/network"><Network /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/storage"><Storage /></Route>
-			</Boundary>
+				<Boundary onError={console.error}>
+					<Route path="/storage"><Storage /></Route>
+				</Boundary>
 
-			<Boundary onError={console.error}>
-				<Route path="/settings"><Settings /></Route>
-			</Boundary>
-		</RouteTransition>
+				<Boundary onError={console.error}>
+					<Route path="/settings"><Settings /></Route>
+				</Boundary>
+			</RouteTransition>
+		{/if}
 	</div>
 </div>
 
@@ -52,13 +52,13 @@
 	import RAM from "ui/pages/ram.svelte"
 	import Storage from "ui/pages/storage.svelte"
 	import Network from "ui/pages/network.svelte"
-	import Navigation from "ui/navigation/navigation.svelte"
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import init, { WebRtcHost } from "../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
-	import { setHardwareInfo } from "ui/stores/hardwareInfo"
+	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
+	import Loading from "ui/navigation/loading.svelte"
 
 	onMount(() => {
 		let host: WebRtcHost | undefined

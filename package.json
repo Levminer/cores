@@ -11,10 +11,8 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=app vite interface --port 3000",
-		"dev:web": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=client vite interface --port 3001",
-		"build:interface": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && cross-env VITE_CORES_MODE=app vite build interface",
-		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && cross-env VITE_CORES_MODE=client vite build interface",
+		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=host vite interface --port 3000",
+		"build:interface": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && cross-env VITE_CORES_MODE=host vite build interface",
 		"build:library": "cargo build --manifest-path crates/library/Cargo.toml --release && node scripts/copyLib.js",
 		"build:wasm": "npx wasm-pack build crates/client --target web --release",
 		"check": "svelte-check && tsc --noEmit"

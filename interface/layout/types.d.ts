@@ -1,8 +1,5 @@
-/* eslint-disable no-unused-vars */
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
-
-import type { settings } from "stores/settings"
 
 declare global {
 	interface Load {
@@ -192,7 +189,6 @@ declare global {
 		interval: number
 		minimizeToTray: boolean
 		launchOnStartup: boolean
-		mode?: "app" | "client"
 		connectionCode?: string
 	}
 

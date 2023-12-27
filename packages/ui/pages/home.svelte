@@ -1,4 +1,33 @@
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
+	<!-- <div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
+		<div class="transparent-800 flex w-full justify-between rounded-xl p-8 sm:flex-col sm:flex-wrap sm:p-4">
+			<div>
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<MonitorSmartphone />
+					</div>
+					<h2>Connected Devices: 0</h2>
+				</div>
+			</div>
+			<div>
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Cast />
+					</div>
+
+					<h2>Code</h2>
+					<div class="flex items-center justify-center">
+						<input class="input" readonly value="crsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+
+						<button class="relative right-9 top-0.5 h-6 w-6 cursor-pointer">
+							<Clipboard />
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+
 	<!-- Row 1 -->
 	<div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
 		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
@@ -453,7 +482,7 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
-	import { CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap } from "lucide-svelte"
+	import { Cast, CircuitBoard, Clock, Fan, HardDrive, Monitor, MonitorSmartphone, Network, Plug, Thermometer, Zap, Clipboard } from "lucide-svelte"
 	import { Memory, PcDisplay } from "svelte-bootstrap-icons"
 
 	let loadGraphs = null
