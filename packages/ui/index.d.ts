@@ -7,18 +7,16 @@ declare global {
 		value: number
 	}
 
-	interface Monitors {
-		name: string
-		resolution: string
-		refreshRate: string
-		primary: boolean
-	}
-
 	interface Sensor {
 		name?: string
 		value: number
 		min: number
 		max: number
+	}
+
+	interface Message {
+		name: string
+		content: string
 	}
 
 	interface Disk {
@@ -33,39 +31,11 @@ declare global {
 		dataWritten: number
 	}
 
-	interface RAMModule {
-		bankLocator: string
-		deviceLocator: string
-		manufacturerName: string
-		partNumber: string
-		serialNumber: string
-		size: number
-		speed: number
-		configuredSpeed: number
-		configuredVoltage: number
-		type: number
-	}
-
-	interface CPUInfo {
-		characteristics: ProcessorCharacteristics
-		coreCount: number
-		coreEnabled: number
-		currentSpeed: number
-		externalClock: number
-		family: ProcessorFamily
-		handle: number
-		id: number
-		l1CacheHandle: number
-		l2CacheHandle: number
-		l3CacheHandle: number
-		manufacturerName: string
-		maxSpeed: number
-		processorType: ProcessorType
-		serial: string
-		socket: ProcessorSocket
-		socketDesignation: string
-		threadCount: number
-		version: string
+	interface Monitor {
+		name: string
+		resolution: string
+		refreshRate: string
+		primary: boolean
 	}
 
 	interface NetworkInterface {
@@ -83,6 +53,37 @@ declare global {
 		uploadData: number
 	}
 
+	interface RAM {
+		bankLocator: string
+		deviceLocator: string
+		manufacturerName: string
+		partNumber: string
+		serialNumber: string
+		size: number
+		speed: number
+		configuredSpeed: number
+		configuredVoltage: number
+		type: number
+	}
+
+	interface CPU {
+		coreCount: number
+		coreEnabled: number
+		currentSpeed: number
+		externalClock: number
+		handle: number
+		id: number
+		l1CacheHandle: number
+		l2CacheHandle: number
+		l3CacheHandle: number
+		manufacturerName: string
+		maxSpeed: number
+		serial: string
+		socketDesignation: string
+		threadCount: number
+		version: string
+	}
+
 	interface HardwareInfo {
 		cpu: {
 			name: string
@@ -90,7 +91,7 @@ declare global {
 			lastLoad: number
 			power: Sensor[]
 			load: Load[]
-			info: CPUInfo[]
+			info: CPU[]
 			clock: Sensor[]
 			voltage: Sensor[]
 		}
@@ -109,8 +110,8 @@ declare global {
 
 		ram: {
 			load: Sensor[]
-			info: RAMModule[]
-			layout: RAMModule[]
+			info: RAM[]
+			layout: RAM[]
 		}
 
 		system: {
@@ -130,7 +131,7 @@ declare global {
 			}
 
 			monitor: {
-				monitors: Monitors[]
+				monitors: Monitor[]
 			}
 
 			network: {
@@ -190,11 +191,6 @@ declare global {
 		minimizeToTray: boolean
 		launchOnStartup: boolean
 		connectionCode?: string
-	}
-
-	interface Message {
-		name: string
-		content: string
 	}
 }
 
