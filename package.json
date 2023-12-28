@@ -11,11 +11,11 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev": "node scripts/buildNumber.cjs alpha true && cross-env VITE_CORES_MODE=host vite interface --port 3000",
-		"build:interface": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && cross-env VITE_CORES_MODE=host vite build interface",
+		"dev:app": "node scripts/buildNumber.cjs alpha true && npm run dev -w app",
+		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && npm run build -w app",
 		"build:library": "cargo build --manifest-path crates/library/Cargo.toml --release && node scripts/copyLib.js",
 		"build:wasm": "npx wasm-pack build crates/client --target web --release",
-		"check": "svelte-check && tsc --noEmit"
+		"check": "npm run check -w app"
 	},
 	"devDependencies": {
 		"@baileyherbert/tinro": "^1.0.0",

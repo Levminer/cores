@@ -6,7 +6,7 @@
 		"module": "esnext",
 		"moduleResolution": "Node",
 		"resolveJsonModule": true,
-		"baseUrl": "./interface",
+		"baseUrl": "./",
 		"allowJs": true,
 		"checkJs": true,
 		"sourceMap": true,
@@ -15,13 +15,7 @@
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
-		"paths": {
-			"@components/*": ["components/*"],
-			"@pages/*": ["pages/*"],
-			"@stores/*": ["stores/*"],
-			"@lib/*": ["lib/*"]
-		}
 	},
-	"include": ["interface/**/*.d.ts", "interface/**/*.ts", "interface/**/*.js", "interface/**/*.svelte"],
+	"include": ["./**/*.d.ts", "./**/*.ts", "./**/*.js", "./**/*.svelte"],
 	"exclude": ["dist"]
 }

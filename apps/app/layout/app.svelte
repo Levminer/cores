@@ -55,7 +55,7 @@
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import init, { WebRtcHost } from "../../crates/client/pkg/lib.js"
+	import init, { WebRtcHost } from "../../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"

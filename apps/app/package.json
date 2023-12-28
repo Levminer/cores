@@ -1,0 +1,11 @@
+{
+	"name": "app",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "cross-env VITE_CORES_MODE=host vite --port 3000",
+		"build": "cross-env VITE_CORES_MODE=host vite build",
+		"check": "svelte-check && tsc --noEmit"
+	},
+	"type": "module"
+}
