@@ -12,7 +12,9 @@
 	],
 	"scripts": {
 		"dev:app": "node scripts/buildNumber.cjs alpha true && npm run dev -w app",
+		"dev:web": "node scripts/buildNumber.cjs alpha true && npm run dev -w web",
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && npm run build -w app",
+		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build:wasm && npm run build -w web",
 		"build:library": "cargo build --manifest-path crates/library/Cargo.toml --release && node scripts/copyLib.js",
 		"build:wasm": "npx wasm-pack build crates/client --target web --release",
 		"check": "npm run check -w app"
