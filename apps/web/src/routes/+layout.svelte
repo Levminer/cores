@@ -1,9 +1,5 @@
 <div class="flex h-screen flex-col">
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
-		<BuildNumber />
-
-		<Navigation />
-
 		<div class="top" />
 
 		<div>
@@ -32,8 +28,6 @@
 	import init, { WebRtcClient } from "../../../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { setHardwareInfo } from "ui/stores/hardwareInfo"
-	import BuildNumber from "ui/navigation/buildNumber.svelte"
-	import Navigation from "ui/navigation/navigation.svelte"
 	import { onNavigate } from "$app/navigation"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 
