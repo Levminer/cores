@@ -6,8 +6,11 @@ use wasm_peers::ConnectionType;
 use wasm_peers_protocol::SessionId;
 use web_sys::console;
 
-static SIGNALING_SERVER_URL: &str = "wss://slippery-chalk-production.up.railway.app/one-to-many";
+static SIGNALING_SERVER_URL: &str = "wss://ss.levminer.com/one-to-many";
 static STUN_SERVER_URL: &str = "stun:openrelay.metered.ca:80";
+static TURN_SERVER_URL: &str = "turn:standard.relay.metered.ca:443";
+static TURN_SERVER_USERNAME: &str = "2ce7aaf275c1abdef74ec7e3";
+static TURN_SERVER_CREDENTIAL: &str = "8By67N7nOLDIagJk";
 
 fn log(message: String) {
     console::log_1(&message.into());
@@ -26,8 +29,11 @@ impl WebRtcHost {
         let mut server = MiniServer::new(
             SIGNALING_SERVER_URL,
             SessionId::new(session_id),
-            ConnectionType::Stun {
-                urls: STUN_SERVER_URL.to_string(),
+            ConnectionType::StunAndTurn {
+                stun_urls: STUN_SERVER_URL.to_string(),
+                turn_urls: TURN_SERVER_URL.to_string(),
+                username: TURN_SERVER_USERNAME.to_string(),
+                credential: TURN_SERVER_CREDENTIAL.to_string(),
             },
         )?;
         let open_connections = Rc::new(RefCell::new(0));
@@ -84,8 +90,11 @@ impl WebRtcClient {
         let mut client = MiniClient::new(
             SIGNALING_SERVER_URL,
             SessionId::new(session_id.to_string()),
-            ConnectionType::Stun {
-                urls: STUN_SERVER_URL.to_string(),
+            ConnectionType::StunAndTurn {
+                stun_urls: STUN_SERVER_URL.to_string(),
+                turn_urls: TURN_SERVER_URL.to_string(),
+                username: TURN_SERVER_USERNAME.to_string(),
+                credential: TURN_SERVER_CREDENTIAL.to_string(),
             },
         )?;
 
