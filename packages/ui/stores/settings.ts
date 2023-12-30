@@ -1,10 +1,14 @@
 import { writable, get } from "svelte/store"
 
+const generateConnectionCode = () => {
+	return `crs_${crypto.randomUUID().replaceAll("-", "")}`.slice(0, 14)
+}
+
 const defaultSettings: LibSettings = {
 	interval: 2,
 	minimizeToTray: true,
 	launchOnStartup: false,
-	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? `crs_${crypto.randomUUID().replaceAll("-", "")}` : "",
+	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
 }
 
 // Create store
@@ -15,9 +19,10 @@ settings.subscribe((data) => {
 	let prev: LibSettings = localStorage.settings ? JSON.parse(localStorage.settings) : defaultSettings
 	console.log("Settings changed: ", data)
 
-	if (!data.connectionCode) {
+	// Load default connection code from local storage
+	if (!data.connectionCode && import.meta.env.VITE_CORES_MODE === "host") {
 		if (!prev.connectionCode && import.meta.env.VITE_CORES_MODE === "host") {
-			data.connectionCode = `crs_${crypto.randomUUID().replaceAll("-", "")}`
+			data.connectionCode = generateConnectionCode()
 		} else {
 			data.connectionCode = prev.connectionCode
 		}

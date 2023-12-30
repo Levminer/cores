@@ -13,6 +13,7 @@
 					<button
 						class="button"
 						on:click={() => {
+							sessionStorage.clear()
 							location.href = "/home"
 						}}
 					>
