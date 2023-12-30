@@ -95,7 +95,7 @@
 					</div>
 				</div>
 				<div class="flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video autoplay src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/home.webm" loop />
+					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/home.webm" loop />
 				</div>
 			</div>
 		</div>
@@ -103,7 +103,7 @@
 		<div id="features2" class="flex justify-center rounded-xl bg-gradient-to-r from-teal-200 to-teal-500 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video autoplay src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/charts.webm" loop />
+					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/charts.webm" loop />
 				</div>
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
@@ -146,7 +146,7 @@
 		<div id="features3" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-400 to-cyan-400 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-[800px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video class="" autoplay src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/remote.webm" loop />
+					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/remote.webm" loop />
 				</div>
 				<div class="flex w-[800px] flex-col sm:w-full">
 					<!-- card 0 -->
