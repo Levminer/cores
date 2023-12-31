@@ -12,9 +12,14 @@
 		{/key}
 
 		<div class="">
-			<img src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/landing.webp" alt="" />
+			<!-- @ts-ignore -->
+			<img
+				width="800"
+				height="450"
+				src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/landing.webp"
+				alt="Cores on desktop computer and on a phone"
+			/>
 		</div>
-		<div class="flex flex-col items-center justify-center space-y-2" />
 	</div>
 
 	<div class="space-y-20">
@@ -216,9 +221,9 @@
 									</div>
 								</div>
 								<div class="flex w-1/2 flex-col justify-center space-y-2 px-5 text-left text-lg sm:w-full">
-									<h5>Access to free updates for a year</h5>
-									<h5>One-time purchase, no subscriptions</h5>
-									<h5>Open source</h5>
+									<p>Access to free updates for a year</p>
+									<p>One-time purchase, no subscriptions</p>
+									<p>Open source</p>
 								</div>
 							</div>
 						</div>
