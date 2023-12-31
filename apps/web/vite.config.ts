@@ -17,6 +17,20 @@ export default defineConfig({
 				orientation: "portrait-primary",
 				lang: "en-US",
 				categories: ["utilities"],
+				icons: [
+					{
+						src: "maskable_icon_x512",
+						sizes: "512x512",
+						type: "image/png",
+						purpose: "any",
+					},
+					{
+						src: "maskable_icon_x192",
+						sizes: "192x192",
+						type: "image/png",
+						purpose: "any",
+					},
+				],
 			},
 		}),
 	],
