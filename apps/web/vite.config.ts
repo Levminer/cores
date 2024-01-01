@@ -19,16 +19,16 @@ export default defineConfig({
 				categories: ["utilities"],
 				icons: [
 					{
-						src: "maskable_icon_x512",
+						src: "maskable_icon_x512.png",
 						sizes: "512x512",
 						type: "image/png",
-						purpose: "any",
+						purpose: 'any maskable'
 					},
 					{
-						src: "maskable_icon_x192",
+						src: "maskable_icon_x192.png",
 						sizes: "192x192",
 						type: "image/png",
-						purpose: "any",
+						purpose: 'any maskable'
 					},
 				],
 			},
