@@ -106,7 +106,10 @@ public class HardwareInfo {
 
 				if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
 					API.System.Motherboard.Name = computerHardware[i].Name;
-					API.System.SuperIO.Name = computerHardware[i].SubHardware[0].Name;
+
+					if (computerHardware[i].SubHardware.Length != 0) {
+						API.System.SuperIO.Name = computerHardware[i].SubHardware[0].Name;
+					}
 				}
 			}
 
@@ -378,7 +381,7 @@ public class HardwareInfo {
 			}
 
 			// superIO
-			if (hardware.HardwareType == HardwareType.Motherboard) {
+			if (hardware.HardwareType == HardwareType.Motherboard && computerHardware[i].SubHardware.Length != 0) {
 				var sh = computerHardware[i].SubHardware[0];
 
 				for (int j = 0; j < sh.Sensors.Length; j++) {
