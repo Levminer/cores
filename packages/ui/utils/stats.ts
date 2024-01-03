@@ -46,6 +46,8 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 			return {
 				throughputUpload: parseFloat((int.throughputUpload / 1_048_576).toFixed(2)),
 				throughputDownload: parseFloat((int.throughputDownload / 1_048_576).toFixed(2)),
+				downloadedData: parseFloat(int.downloadData.toFixed(2)),
+				uploadedData: parseFloat(int.uploadData.toFixed(2)),
 			}
 		}),
 
@@ -176,9 +178,25 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 				).toFixed(2),
 			)
 
+			let downloadedData = parseFloat(
+				(
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.downloadedData, 0) /
+					$hardwareStatistics.seconds.length
+				).toFixed(2),
+			)
+
+			let uploadedData = parseFloat(
+				(
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.uploadedData, 0) /
+					$hardwareStatistics.seconds.length
+				).toFixed(2),
+			)
+
 			return {
 				throughputUpload,
 				throughputDownload,
+				downloadedData,
+				uploadedData,
 			}
 		}),
 

@@ -172,6 +172,8 @@ declare global {
 		network: {
 			throughputDownload: number
 			throughputUpload: number
+			downloadedData: number
+			uploadedData: number
 		}[]
 
 		storage: {

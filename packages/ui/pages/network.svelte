@@ -85,7 +85,7 @@
 						<div class="flex items-baseline justify-between">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<ArrowDownUp />
+									<PieChart />
 								</div>
 								<h2><span class="line-clamp-1">{item.name}</span> Data Usage</h2>
 							</div>
@@ -98,19 +98,19 @@
 								props={{
 									statistics: [
 										{
-											label: `Download speed`,
+											label: `Downloaded data`,
 											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload),
+												? $hardwareStatistics.minutes.map((value) => value.network[i].downloadedData)
+												: $hardwareStatistics.seconds.map((value) => value.network[i].downloadedData),
 										},
 										{
-											label: `Upload speed`,
+											label: `Uploaded data`,
 											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload),
+												? $hardwareStatistics.minutes.map((value) => value.network[i].uploadedData)
+												: $hardwareStatistics.seconds.map((value) => value.network[i].uploadedData),
 										},
 									],
-									unit: " MB/s",
+									unit: " GB",
 									time: minutes ? "m" : "s",
 									min: 0,
 								}}
