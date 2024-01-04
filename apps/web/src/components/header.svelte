@@ -1,23 +1,32 @@
-<header class="mt-10 rounded-xl bg-[#110A30] text-white">
-	<div class="container mx-auto flex flex-col flex-wrap items-center space-y-6 p-5 md:flex-row md:space-y-0">
-		<a class="flex" href="/">
+<nav class="sticky start-0 top-0 z-20 w-full border-b border-gray-600 bg-gray-900 px-20 sm:static sm:px-0">
+	<div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-3">
+		<a href="/" class="flex items-center space-x-3">
 			<img class="h-8 w-8" src={"/favicon.ico"} alt="Cores logo" />
-			<span class="ml-5 text-xl text-white">Cores</span>
+			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
 		</a>
-		<nav class="flex flex-wrap items-center justify-center text-xl font-semibold md:ml-auto md:mr-auto">
-			<a href="#features" class="mr-5 hover:text-white">Features</a>
-			<a href="#pricing" class="mr-5 hover:text-white">Pricing</a>
-			<a href="/home" class="mr-5 hover:text-white">Web app</a>
-		</nav>
-		<div class="flex space-x-2">
-			<a href="/account" class="smallButton text-lg">
-				<CircleUserRound />
-				Account
-			</a>
+		<div class="flex space-x-2 md:order-2">
+			<a href="/account" class="smallButton"> Get Cores </a>
+		</div>
+		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
+			<ul
+				class="mt-4 flex flex-col rounded-lg border border-gray-700 bg-gray-800 p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
+			>
+				<li>
+					<a href="#features" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Features</a
+					>
+				</li>
+				<li>
+					<a href="#pricing" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Pricing</a
+					>
+				</li>
+				<li>
+					<a href="/home" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Web app</a
+					>
+				</li>
+			</ul>
 		</div>
 	</div>
-</header>
-
-<script lang="ts">
-	import { CircleUserRound, Github, Rocket } from "lucide-svelte"
-</script>
+</nav>

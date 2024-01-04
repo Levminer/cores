@@ -1,6 +1,6 @@
-<div class="m-10 mx-auto w-11/12 rounded-xl sm:w-full">
-	<Header />
+<Header />
 
+<div class="mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mb-60 mt-10 flex flex-col items-center justify-center text-center">
 		<h1 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-8xl font-extrabold text-transparent">Cores</h1>
 		<h2 class="mt-10 font-medium">Modern hardware monitor for your</h2>
