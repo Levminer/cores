@@ -9,7 +9,7 @@
 		</div>
 		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
 			<ul
-				class="mt-4 flex flex-col rounded-lg border border-gray-700 bg-gray-800 p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
+				class="mt-4 flex flex-col rounded-lg border border-gray-700  p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
 			>
 				<li>
 					<a href="#features" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
