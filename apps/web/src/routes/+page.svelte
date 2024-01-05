@@ -22,7 +22,7 @@
 		</div>
 	</div>
 
-	<div class="space-y-20">
+	<div class="space-y-20 mb-20">
 		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
@@ -203,13 +203,30 @@
 					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
 						<!-- card 1 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<h1 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-4xl font-extrabold text-transparent">
-								Cores for Windows
-							</h1>
+							<div class="flex items-center justify-center">
+								<div
+									class="my-5 inline-flex gap-3 rounded-xl bg-gradient-to-r from-purple-400 to-pink-600 p-3 text-lg font-medium backdrop-blur-sm"
+								>
+									<button class="rounded-xl bg-white/30 px-3 py-3 backdrop-blur-xl">
+										<p>Windows</p>
+									</button>
+									<div class="px-3 py-3">
+										<p>Linux</p>
+									</div>
+									<div class="px-3 py-3">
+										<p>macOS</p>
+									</div>
+								</div>
+							</div>
 
-							<div class="mt-10 flex flex-row gap-5 sm:flex-col">
-								<div class="w-1/2 px-5 text-left sm:w-full">
-									<h1>$14<sup>99</sup></h1>
+							<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
+								<h1
+									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
+								>
+									Cores for Windows
+								</h1>
+								<div class="px-5 text-center sm:w-full">
+									<h3 class="text-[3rem]">$14<sup>99</sup></h3>
 
 									<div class="text-center">
 										<button
@@ -217,27 +234,41 @@
 										>
 											Coming soon
 										</button>
-										<button class="mt-5">Download the trial for free</button>
+										<div class="mt-3">
+											<a href="" class="underline">Download the trial for free</a>
+										</div>
 									</div>
 								</div>
-								<div class="flex w-1/2 flex-col justify-center space-y-2 px-5 text-left text-lg sm:w-full">
-									<p>Access to free updates for a year</p>
-									<p>One-time purchase, no subscriptions</p>
-									<p>Open source</p>
+								<div class="flex flex-col justify-center space-y-2 border-t-2 border-gray-600 px-5 pt-3 text-left text-lg sm:w-full">
+									<div class="flex items-center space-x-2">
+										<Check class="h-5 w-5 text-green-500" />
+										<p>For personal use</p>
+									</div>
+									<div class="flex items-center space-x-2">
+										<Check class="h-5 w-5 text-green-500" />
+										<p>One-time purchase, no subscriptions</p>
+									</div>
+									<div class="flex items-center space-x-2">
+										<Check class="h-5 w-5 text-green-500" />
+										<p>Open source</p>
+									</div>
+									<div class="flex items-center space-x-2">
+										<Check class="h-5 w-5 text-green-500" />
+										<p>Use on up to 10 devices</p>
+									</div>
+
+									<!-- <p>Access to free updates for a year</p> -->
 								</div>
 							</div>
+							<div class="mt-4 flex justify-center gap-2 text-center flex-wrap text-lg">
+								<p>Want to use Cores as a business?</p>
+								<a class="underline" href="mailto:cores@levminer.com">Contact</a>
+							</div>
 						</div>
-					</div>
-
-					<div class="mt-5 flex flex-col rounded-2xl bg-gray-800 p-10 text-center">
-						<h2 class="text-2xl">Are you looking for the Linux and Mac version?</h2>
-						<h3>It's coming soon...</h3>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<Footer />
 	</div>
 
 	<!-- <div class="flex justify-center bg-gradient-to-r from-red-500 to-orange-500 py-96">
@@ -331,8 +362,10 @@
 	</div> -->
 </div>
 
+<Footer />
+
 <script lang="ts">
-	import { BarChart3, Cpu, Info, Network, Radio } from "lucide-svelte"
+	import { BarChart3, Check, Cpu, Info, Network, Play, Radio } from "lucide-svelte"
 	import { BrowserChrome, GpuCard, Memory, Microsoft, PcDisplay, Ubuntu, Apple } from "svelte-bootstrap-icons"
 	import Header from "../components/header.svelte"
 	import Footer from "../components/footer.svelte"
