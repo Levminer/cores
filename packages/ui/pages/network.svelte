@@ -125,8 +125,8 @@
 
 <script lang="ts">
 	import LineChart from "ui/charts/LineChart.svelte"
-	import { hardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import { hardwareStatistics } from "../stores/hardwareStatistics.ts"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { ArrowDownUp, Network, PieChart } from "lucide-svelte"
 	import ToggleButton from "ui/components/toggleButton.svelte"
 

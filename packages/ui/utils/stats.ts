@@ -19,8 +19,8 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 		},
 
 		ram: {
-			physicalUsage: Math.round(input.ram.load[2].value),
-			virtualUsage: Math.round(input.ram.load[5].value),
+			physicalUsage: Math.round(input.ram.load[2]?.value ?? 0),
+			virtualUsage: Math.round(input.ram.load[5]?.value ?? 0),
 		},
 
 		gpu: {
@@ -31,15 +31,15 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 			},
 
 			clock: {
-				value: Math.round(input.gpu.clock[0].value),
-				min: Math.round(input.gpu.clock[0].min),
-				max: Math.round(input.gpu.clock[0].max),
+				value: Math.round(input.gpu.clock[0]?.value ?? 0),
+				min: Math.round(input.gpu.clock[0]?.min ?? 0),
+				max: Math.round(input.gpu.clock[0]?.max ?? 0),
 			},
 
 			load: Math.round(input.gpu.lastLoad),
 			power: Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)),
 			fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
-			memory: parseFloat(input.gpu.memory[0].value.toFixed(1)),
+			memory: parseFloat((input.gpu.memory[0]?.value ?? 0).toFixed(1)),
 		},
 
 		network: input.system.network.interfaces.map((int) => {
@@ -166,28 +166,28 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 		network: input.system.network.interfaces.map((item, i) => {
 			let throughputDownload = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.throughputDownload, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + (b?.throughputDownload ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
 
 			let throughputUpload = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.throughputUpload, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + (b?.throughputUpload ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
 
 			let downloadedData = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.downloadedData, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + (b?.downloadedData ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
 
 			let uploadedData = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + b.uploadedData, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.network[i]).reduce((a, b) => a + (b?.uploadedData ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
@@ -203,29 +203,29 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 		storage: input.system.storage.disks.map((item, i) => {
 			let throughputRead = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + b.throughputRead, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + (b?.throughputRead ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
 
 			let throughputWrite = parseFloat(
 				(
-					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + b.throughputWrite, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]).reduce((a, b) => a + (b?.throughputWrite ?? 0), 0) /
 					$hardwareStatistics.seconds.length
 				).toFixed(2),
 			)
 
 			let temperature = {
 				value: Math.round(
-					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.value).reduce((a, b) => a + b, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]?.temperature?.value ?? 0).reduce((a, b) => a + b, 0) /
 						$hardwareStatistics.seconds.length,
 				),
 				min: Math.round(
-					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.min).reduce((a, b) => a + b, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]?.temperature?.min ?? 0).reduce((a, b) => a + b, 0) /
 						$hardwareStatistics.seconds.length,
 				),
 				max: Math.round(
-					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i].temperature.max).reduce((a, b) => a + b, 0) /
+					$hardwareStatistics.seconds.map((sensor) => sensor.storage[i]?.temperature?.max ?? 0).reduce((a, b) => a + b, 0) /
 						$hardwareStatistics.seconds.length,
 				),
 			}

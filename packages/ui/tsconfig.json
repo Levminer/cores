@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "es2022",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"allowImportingTsExtensions": true,
+		/* "strict": true,
+		"noUncheckedIndexedAccess": true, */
+		"declaration": true,
+		"composite": true,
+		"declarationMap": true,
+		"moduleResolution": "NodeNext",
+		"module": "NodeNext",
+		"noEmit": true,
+		"lib": ["es2022", "dom", "dom.iterable"]
+	}
+}

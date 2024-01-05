@@ -27,6 +27,6 @@
 </div>
 
 <script lang="ts">
-	import { settings } from "ui/stores/settings"
+	import { settings } from "ui/stores/settings.ts"
 	import { RefreshCcw } from "lucide-svelte"
 </script>

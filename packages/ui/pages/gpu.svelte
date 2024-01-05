@@ -10,11 +10,11 @@
 					<h2>GPU Info</h2>
 				</div>
 				<div class="select-text">
-					<h3>Vendor: {$hardwareInfo.gpu.name.split(" ")[0]}</h3>
-					<h3>Name: {$hardwareInfo.gpu.name}</h3>
-					<h3>GPU memory: {$hardwareInfo.gpu.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2].value) : "N/A"} GB</h3>
+					<h3>Vendor: {$hardwareInfo.gpu.name?.split(" ")[0] ?? "N/A"}</h3>
+					<h3>Name: {$hardwareInfo.gpu.name ?? "N/A"}</h3>
+					<h3>GPU memory: {$hardwareInfo.gpu.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2]?.value ?? 0) : "N/A"} GB</h3>
 					<h3>Driver date: {driverDate}</h3>
-					<h3>Primary monitor: {primaryMonitor.resolution} {primaryMonitor.refreshRate} Hz</h3>
+					<h3>Primary monitor: {primaryMonitor?.resolution ?? "N/A"} {primaryMonitor?.refreshRate ?? "N/A"} Hz</h3>
 				</div>
 			</div>
 
@@ -251,8 +251,8 @@
 
 <script lang="ts">
 	import LineChart from "ui/charts/LineChart.svelte"
-	import { hardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import { hardwareStatistics } from "ui/stores/hardwareStatistics.ts"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
 	import { Clock, Fan, Gauge, Thermometer, Zap } from "lucide-svelte"
 	import ToggleButton from "ui/components/toggleButton.svelte"

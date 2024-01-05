@@ -158,8 +158,8 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
-	import { settings } from "ui/stores/settings"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
+	import { settings } from "ui/stores/settings.ts"
 	import build from "../../../build.json"
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"

@@ -1,7 +1,7 @@
 <Line {data} {options} />
 
 <script lang="ts">
-	import { colors } from "ui/utils/colors"
+	import { colors } from "ui/utils/colors.ts"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Line } from "svelte-chartjs"

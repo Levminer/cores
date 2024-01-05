@@ -479,7 +479,7 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
 	import { Cast, CircuitBoard, Clock, Fan, HardDrive, Monitor, MonitorSmartphone, Network, Plug, Thermometer, Zap, Clipboard } from "lucide-svelte"

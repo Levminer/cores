@@ -7,9 +7,9 @@
 	import ChartjsPluginStacked100 from "chartjs-plugin-stacked100"
 	import type { ChartOptions } from "chart.js"
 	import { Bar } from "svelte-chartjs"
-	import { hardwareInfo } from "../stores/hardwareInfo"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { onMount } from "svelte"
-	import { colors } from "ui/utils/colors"
+	import { colors } from "ui/utils/colors.ts"
 
 	export let load: Load[]
 	let id = crypto.randomUUID()

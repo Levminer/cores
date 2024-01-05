@@ -134,8 +134,8 @@
 </div>
 
 <script lang="ts">
-	import { hardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
+	import { hardwareStatistics } from "ui/stores/hardwareStatistics.ts"
+	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import LineChart from "ui/charts/LineChart.svelte"
 	import { Activity, HardDrive, PieChart, Thermometer } from "lucide-svelte"
 	import ToggleButton from "ui/components/toggleButton.svelte"
