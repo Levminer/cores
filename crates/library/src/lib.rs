@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::ffi::CStr;
 use std::ffi::CString;
 use std::os::raw::c_char;
+use uuid::Uuid;
 use wfd::DialogParams;
 
 #[no_mangle]
@@ -81,30 +82,61 @@ pub extern "C" fn getOSInfo() -> *const c_char {
 }
 
 const fn default_value() -> u32 {
-    0
+    2
+}
+
+const fn default_false() -> bool {
+    false
+}
+
+const fn default_true() -> bool {
+    true
+}
+pub fn default_connection_code() -> String {
+    let id: String = Uuid::new_v4()
+        .to_string()
+        .replace("-", "")
+        .chars()
+        .take(10)
+        .collect();
+
+    format!("crs_{}", id)
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[repr(C)]
 pub struct Settings {
+    #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
-    #[serde(rename = "minimizeToTray", default = "default_value")]
-    pub minimize_to_tray: u32,
-    #[serde(rename = "launchOnStartup", default = "default_value")]
-    pub launch_on_startup: u32,
+    #[serde(rename = "minimizeToTray", default = "default_true")]
+    pub minimize_to_tray: bool,
+    #[serde(rename = "launchOnStartup", default = "default_false")]
+    pub launch_on_startup: bool,
+    #[serde(rename = "remoteConnections", default = "default_false")]
+    pub remote_connections: bool,
+    #[serde(rename = "connectionCode", default = "default_connection_code")]
+    pub connection_code: String,
+    pub version: Option<u8>,
 }
 
 #[no_mangle]
-pub extern "C" fn getSettings() -> Settings {
+pub extern "C" fn getSettings() -> *const c_char {
     let sample_settings = Settings {
+        version: Some(1),
         interval: 2,
-        minimize_to_tray: 1,
-        launch_on_startup: 0,
+        minimize_to_tray: true,
+        launch_on_startup: false,
+        remote_connections: false,
+        connection_code: default_connection_code(),
     };
 
+    // check if appdata exists, return sample settings if not
     let dir = match BaseDirs::new() {
         Some(base_dirs) => base_dirs,
-        None => return sample_settings,
+        None => {
+            return CString::new(serde_json::to_string(&sample_settings).unwrap())
+                .unwrap()
+                .into_raw();
+        }
     };
 
     let appdata = dir.config_dir();
@@ -122,17 +154,39 @@ pub extern "C" fn getSettings() -> Settings {
         )
         .unwrap();
 
-        return sample_settings;
+        return CString::new(serde_json::to_string(&sample_settings).unwrap())
+            .unwrap()
+            .into_raw();
     } else {
         let file = std::fs::read_to_string(appdata.join("Cores").join("settings.json")).unwrap();
-        let settings: Settings = serde_json::from_str(&file).unwrap();
+        let settings: Result<Settings, _> = serde_json::from_str(&file);
 
-        return settings;
+        match settings {
+            Ok(settings) => {
+                return CString::new(serde_json::to_string(&settings).unwrap())
+                    .unwrap()
+                    .into_raw();
+            }
+            Err(_) => {
+                std::fs::write(
+                    appdata.join("Cores").join("settings.json"),
+                    serde_json::to_string(&sample_settings).unwrap(),
+                )
+                .unwrap();
+
+                return CString::new(serde_json::to_string(&sample_settings).unwrap())
+                    .unwrap()
+                    .into_raw();
+            }
+        };
     }
 }
 
 #[no_mangle]
-pub extern "C" fn setSettings(settings: Settings) {
+pub extern "C" fn setSettings(settings: *const c_char) {
+    let c_str: &CStr = unsafe { CStr::from_ptr(settings) };
+    let str_slice: &str = c_str.to_str().unwrap();
+
     let dir = match BaseDirs::new() {
         Some(base_dirs) => base_dirs,
         None => return,
@@ -141,11 +195,7 @@ pub extern "C" fn setSettings(settings: Settings) {
     let appdata = dir.config_dir();
 
     // Replace file
-    std::fs::write(
-        appdata.join("Cores").join("settings.json"),
-        serde_json::to_string(&settings).unwrap(),
-    )
-    .unwrap();
+    std::fs::write(appdata.join("Cores").join("settings.json"), str_slice).unwrap();
 }
 
 #[no_mangle]

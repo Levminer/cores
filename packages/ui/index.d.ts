@@ -187,7 +187,9 @@ declare global {
 		interval: number
 		minimizeToTray: boolean
 		launchOnStartup: boolean
-		connectionCode?: string
+		connectionCode: string
+		version: number
+		remoteConnections: boolean
 	}
 }
 

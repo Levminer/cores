@@ -19,7 +19,7 @@ public partial class App : Application {
 	internal static bool exiting = false;
 
 	[DllImport("lib.dll")]
-	private static extern Settings getSettings();
+	private static extern string getSettings();
 
 	public App() {
 		InitializeComponent();
@@ -28,7 +28,7 @@ public partial class App : Application {
 		Current.RequestedTheme = ApplicationTheme.Dark;
 
 		//Get settings
-		GlobalSettings = getSettings();
+		GlobalSettings = JsonSerializer.Deserialize<Settings>(getSettings());
 	}
 
 	protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {

@@ -9,6 +9,8 @@ const defaultSettings: LibSettings = {
 	minimizeToTray: true,
 	launchOnStartup: false,
 	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
+	version: 1,
+	remoteConnections: false,
 }
 
 // Create store
@@ -16,17 +18,7 @@ export const settings = writable<LibSettings>(localStorage.settings ? JSON.parse
 
 // Listen for store events
 settings.subscribe((data) => {
-	let prev: LibSettings = localStorage.settings ? JSON.parse(localStorage.settings) : defaultSettings
 	console.log("Settings changed: ", data)
-
-	// Load default connection code from local storage
-	if (!data.connectionCode && import.meta.env.VITE_CORES_MODE === "host") {
-		if (!prev.connectionCode && import.meta.env.VITE_CORES_MODE === "host") {
-			data.connectionCode = generateConnectionCode()
-		} else {
-			data.connectionCode = prev.connectionCode
-		}
-	}
 
 	localStorage.setItem("settings", JSON.stringify(data))
 })
