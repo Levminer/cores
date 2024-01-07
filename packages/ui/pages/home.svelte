@@ -30,7 +30,7 @@
 
 	<!-- Row 1 -->
 	<div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
 			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
 			</div>
@@ -39,33 +39,10 @@
 				<div class="mt-5">
 					<h3>{$hardwareInfo.cpu.name}</h3>
 				</div>
-				<div class="mt-3 flex justify-center">
-					<svg
-						class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`}
-						on:click={showLoadGraphs}
-						on:keydown={showLoadGraphs}
-						xmlns="http://www.w3.org/2000/svg"
-						width="32"
-						height="32"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg
-					>
-				</div>
-				<div>
-					{#if loadGraphs}
-						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={$hardwareInfo.cpu.load} />
-						{/await}
-					{/if}
-				</div>
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
 			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
 			</div>
@@ -74,33 +51,10 @@
 				<div class="mt-5">
 					<h3>Generic Memory</h3>
 				</div>
-				<div class="mt-3 flex justify-center">
-					<svg
-						class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`}
-						on:click={showLoadGraphs}
-						on:keydown={showLoadGraphs}
-						xmlns="http://www.w3.org/2000/svg"
-						width="32"
-						height="32"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg
-					>
-				</div>
-				<div>
-					{#if loadGraphs}
-						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={[$hardwareInfo.ram.load[5]]} />
-						{/await}
-					{/if}
-				</div>
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-10 pt-0 text-center sm:w-full">
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
 			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
 				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
 			</div>
@@ -108,29 +62,6 @@
 				<h2>GPU</h2>
 				<div class="mt-5">
 					<h3>{$hardwareInfo.gpu.name}</h3>
-				</div>
-				<div class="mt-3 flex justify-center">
-					<svg
-						class={`${loadGraphsShown ? "mb-3 rotate-180 transform" : ""} cursor-pointer text-white`}
-						on:click={showLoadGraphs}
-						on:keydown={showLoadGraphs}
-						xmlns="http://www.w3.org/2000/svg"
-						width="32"
-						height="32"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg
-					>
-				</div>
-				<div>
-					{#if loadGraphs}
-						{#await loadGraphs then { default: ProgressBar }}
-							<ProgressBar load={$hardwareInfo.gpu.load} />
-						{/await}
-					{/if}
 				</div>
 			</div>
 		</div>
@@ -225,7 +156,7 @@
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Memory width={24} height={24} />
+						<Gauge />
 					</div>
 
 					<h2>RAM Usage</h2>
@@ -243,7 +174,7 @@
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Memory width={24} height={24} />
+						<Gauge />
 					</div>
 					<h2>Virtual RAM Usage</h2>
 				</div>
@@ -482,22 +413,6 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
-	import { Cast, CircuitBoard, Clock, Fan, HardDrive, Monitor, MonitorSmartphone, Network, Plug, Thermometer, Zap, Clipboard } from "lucide-svelte"
+	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, MonitorSmartphone, Network, Plug, Thermometer, Zap, Clipboard } from "lucide-svelte"
 	import { Memory, PcDisplay } from "svelte-bootstrap-icons"
-
-	let loadGraphs = null
-	let loadGraphsShown = false
-
-	// Show load graphs
-	const showLoadGraphs = () => {
-		if (!loadGraphsShown) {
-			loadGraphs = import("ui/charts/loadChart.svelte")
-
-			loadGraphsShown = true
-		} else {
-			loadGraphs = null
-
-			loadGraphsShown = false
-		}
-	}
 </script>

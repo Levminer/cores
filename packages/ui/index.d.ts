@@ -2,11 +2,6 @@
 /// <reference types="vite/client" />
 
 declare global {
-	interface Load {
-		name: string
-		value: number
-	}
-
 	interface Sensor {
 		name?: string
 		value: number
@@ -90,7 +85,7 @@ declare global {
 			temperature: Sensor[]
 			lastLoad: number
 			power: Sensor[]
-			load: Load[]
+			load: Sensor[]
 			info: CPU[]
 			clock: Sensor[]
 			voltage: Sensor[]
@@ -103,7 +98,7 @@ declare global {
 			fan: Sensor[]
 			memory: Sensor[]
 			power: Sensor[]
-			load: Load[]
+			load: Sensor[]
 			info: string
 			clock: Sensor[]
 		}

@@ -140,9 +140,11 @@ public class HardwareInfo {
 
 					// CPU load
 					if (sensor[j].SensorType == SensorType.Load) {
-						API.CPU.Load.Add(new Load {
+						API.CPU.Load.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)sensor[j].Value
+							Value = (float)sensor[j].Value,
+							Min = (float)sensor[j].Min,
+							Max = (float)sensor[j].Max,
 						});
 					}
 
@@ -185,9 +187,11 @@ public class HardwareInfo {
 
 					// GPU load
 					if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("D3D")) {
-						API.GPU.Load.Add(new Load {
+						API.GPU.Load.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)sensor[j].Value
+							Value = (float)sensor[j].Value,
+							Min = (float)sensor[j].Min,
+							Max = (float)sensor[j].Max,
 						});
 					}
 

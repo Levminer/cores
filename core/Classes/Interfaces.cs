@@ -5,16 +5,6 @@ using System.Runtime.InteropServices;
 
 namespace Cores;
 
-public class Load {
-	public string Name {
-		get; set;
-	}
-
-	public float Value {
-		get; set;
-	}
-}
-
 public class Sensor {
 	public string Name {
 		get; set;
@@ -172,7 +162,7 @@ public class CPUInfo {
 		get; set;
 	}
 
-	public List<Load> Load {
+	public List<Sensor> Load {
 		get; set;
 	} = new();
 
