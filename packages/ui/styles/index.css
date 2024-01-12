@@ -4,15 +4,15 @@
 
 @layer components {
 	.button {
-		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-6 py-4 text-xl font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply focus-visible:ring-popup-magenta flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-6 py-4 text-xl font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4;
 	}
 
 	.smallButton {
-		@apply flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-3 py-2 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply focus-visible:ring-popup-magenta flex items-center justify-center gap-2 whitespace-nowrap rounded-2xl border-2 border-white bg-white px-3 py-2 text-lg font-medium text-black outline-none duration-200 ease-linear hover:bg-transparent hover:text-white focus-visible:ring-4;
 	}
 
 	.select {
-		@apply form-select cursor-pointer rounded-2xl !border-white py-4 text-xl font-medium text-black !ring-transparent duration-200 ease-linear hover:bg-gray-200 focus-visible:!ring-4 focus-visible:!ring-popup-magenta;
+		@apply form-select focus-visible:!ring-popup-magenta cursor-pointer rounded-2xl !border-white py-4 text-xl font-medium text-black !ring-transparent duration-200 ease-linear hover:bg-gray-200 focus-visible:!ring-4;
 	}
 
 	.input {
@@ -24,7 +24,7 @@
 	}
 
 	.focusRing {
-		@apply outline-none focus-visible:ring-4 focus-visible:ring-popup-magenta;
+		@apply focus-visible:ring-popup-magenta outline-none focus-visible:ring-4;
 	}
 
 	.checkbox {
@@ -143,4 +143,41 @@ h5 {
 
 .scroll::-webkit-scrollbar-corner {
 	background-color: #000000;
+}
+
+/* width */
+.overlayScroll::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+.overlayScroll::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+/* Handle */
+.overlayScroll::-webkit-scrollbar-thumb {
+	background-color: #9f9f9f;
+	border-radius: 30px;
+}
+
+/* Handle on hover */
+.overlayScroll::-webkit-scrollbar-thumb:hover {
+	background-color: #9f9f9f;
+}
+
+.progress {
+	position: relative;
+	width: 95%;
+	height: 10px;
+	background: hsla(0, 0%, 100%, 5.12%);
+	border-radius: 30px;
+	overflow: hidden;
+}
+
+.progressFill {
+	width: 0%;
+	height: 100%;
+	background: #35cbfd;
+	/* transition: all 0.1s ease-in-out; */
 }

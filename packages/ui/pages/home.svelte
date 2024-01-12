@@ -1,67 +1,76 @@
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
-	<!-- <div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
-		<div class="transparent-800 flex w-full justify-between rounded-xl p-8 sm:flex-col sm:flex-wrap sm:p-4">
-			<div>
-				<div class="flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<MonitorSmartphone />
-					</div>
-					<h2>Connected Devices: 0</h2>
-				</div>
-			</div>
-			<div>
-				<div class="flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cast />
-					</div>
-
-					<h2>Code</h2>
-					<div class="flex items-center justify-center">
-						<input class="input" readonly value="crsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
-
-						<button class="relative right-9 top-0.5 h-6 w-6 cursor-pointer">
-							<Clipboard />
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
-
 	<!-- Row 1 -->
 	<div class="mx-10 flex justify-evenly gap-5 pt-10 sm:mx-3 sm:flex-wrap">
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
-			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
-				<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
-			</div>
-			<div>
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
+			<div class="mb-5 flex items-center gap-3">
+				<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+					<Cpu />
+				</div>
 				<h2>CPU</h2>
-				<div class="mt-5">
-					<h3>{$hardwareInfo.cpu.name}</h3>
+			</div>
+			<h3>{$hardwareInfo.cpu.name}</h3>
+			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
+				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
+					<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
+				</div>
+
+				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
+					{#each $hardwareInfo.cpu.load as item, i}
+						<div>
+							<p class="text-sm">{item.name}</p>
+							<div class="progress">
+								<div id={`progress${i}`} class="progressFill" />
+							</div>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
-			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
-				<GaugeChart load={$hardwareInfo.ram.load[2].value} />
-			</div>
-			<div>
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
+			<div class="mb-5 flex items-center gap-3">
+				<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+					<Memory height={24} width={24} />
+				</div>
 				<h2>RAM</h2>
-				<div class="mt-5">
-					<h3>Generic Memory</h3>
+			</div>
+			<h3>{$hardwareInfo.ram.info[0].manufacturerName}</h3>
+			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
+				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
+					<GaugeChart load={$hardwareInfo.ram.load[2].value} />
+				</div>
+				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
+					<div>
+						<p class="text-sm">Virtual Memory</p>
+						<div class="progress">
+							<div id="2progress" class="progressFill" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 text-center sm:w-full sm:p-4">
-			<div class="mx-auto flex w-4/5 justify-center sm:w-1/2">
-				<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
-			</div>
-			<div>
+		<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
+			<div class="mb-5 flex items-center gap-3">
+				<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+					<GpuCard height={24} width={24} />
+				</div>
 				<h2>GPU</h2>
-				<div class="mt-5">
-					<h3>{$hardwareInfo.gpu.name}</h3>
+			</div>
+			<h3>{$hardwareInfo.gpu.name}</h3>
+			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
+				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
+					<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
+				</div>
+				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
+					{#each $hardwareInfo.gpu.load as item, i}
+						<div>
+							<p class="text-sm">{item.name}</p>
+							<div class="progress">
+								<div id={`3progress${i}`} class="progressFill" />
+							</div>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
@@ -413,6 +422,30 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
-	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, MonitorSmartphone, Network, Plug, Thermometer, Zap, Clipboard } from "lucide-svelte"
-	import { Memory, PcDisplay } from "svelte-bootstrap-icons"
+	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu } from "lucide-svelte"
+	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
+	import { onMount } from "svelte"
+
+	let interval: NodeJS.Timer
+
+	onMount(() => {
+		interval = setInterval(() => {
+			$hardwareInfo.cpu.load.forEach((load, i) => {
+				const progress = document.getElementById(`progress${i}`) as HTMLDivElement
+				progress.style.width = `${load.value}%`
+			})
+
+			$hardwareInfo.gpu.load.forEach((load, i) => {
+				const progress = document.getElementById(`3progress${i}`) as HTMLDivElement
+				progress.style.width = `${load.value}%`
+			})
+
+			let ramLoad = document.getElementById("2progress") as HTMLDivElement
+			ramLoad.style.width = `${$hardwareInfo.ram.load[5].value}%`
+		}, 1000)
+
+		return () => {
+			clearInterval(interval)
+		}
+	})
 </script>

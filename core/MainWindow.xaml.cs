@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.ApplicationSettings;
 
 namespace Cores;
 
@@ -20,7 +19,7 @@ public sealed partial class MainWindow : Window {
 	private static extern string dialog(string name);
 
 	[DllImport("lib.dll")]
-	private static extern void setSettings(Settings settings);
+	private static extern void setSettings(string settings);
 
 	[DllImport("lib.dll")]
 	private static extern void autoLaunch(string exe);
@@ -129,7 +128,7 @@ public sealed partial class MainWindow : Window {
 
 				APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.interval);
 
-				setSettings(App.GlobalSettings);
+				setSettings(JsonSerializer.Serialize(App.GlobalSettings));
 				break;
 
 			case "debug":

@@ -11,11 +11,9 @@
 	Chart.register(...registerables)
 
 	let options: ChartOptions<"doughnut"> = {
-		responsive: true,
-		maintainAspectRatio: true,
-		rotation: 270,
-		circumference: 180,
-		cutout: "90%",
+		rotation: 0,
+		circumference: 360,
+		cutout: "85%",
 		hover: {
 			mode: null,
 		},
@@ -50,14 +48,14 @@
 					ctx = chart.ctx
 
 				ctx.restore()
-				var fontSize = (height / 114).toFixed(2)
+				var fontSize = (height / 85).toFixed(2)
 				ctx.font = fontSize + "em sans-serif"
 				ctx.textBaseline = "middle"
 				ctx.fillStyle = "white"
 
 				var text = percentage.toString() + "%",
 					textX = Math.round((width - ctx.measureText(text).width) / 2),
-					textY = (height + 30) / 2
+					textY = height / 2
 
 				ctx.fillText(text, textX, textY)
 				ctx.save()
