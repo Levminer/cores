@@ -122,9 +122,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Temperature && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
 						API.CPU.Temperature.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)sensor[j].Value,
-							Min = (float)sensor[j].Min,
-							Max = (float)sensor[j].Max,
+							Value = sensor[j].Value ?? 0,
+							Min = sensor[j].Min ?? 0,
+							Max = sensor[j].Max ?? 0,
 						});
 					}
 
@@ -132,9 +132,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Power) {
 						API.CPU.Power.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 
@@ -142,9 +142,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Load) {
 						API.CPU.Load.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)sensor[j].Value,
-							Min = (float)sensor[j].Min,
-							Max = (float)sensor[j].Max,
+							Value = sensor[j].Value ?? 0,
+							Min = sensor[j].Min ?? 0,
+							Max = sensor[j].Max ?? 0,
 						});
 					}
 
@@ -152,9 +152,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Clock && !sensor[j].Name.Contains("Bus")) {
 						API.CPU.Clock.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 
@@ -162,9 +162,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Voltage && sensor[j].Name.Contains("#")) {
 						API.CPU.Voltage.Add(new Sensor {
 							Name = sensor[j].Name.ToString(),
-							Value = (float)Math.Round((float)sensor[j].Value, 2),
-							Min = (float)Math.Round((float)sensor[j].Min, 2),
-							Max = (float)Math.Round((float)sensor[j].Max, 2),
+							Value = (float)Math.Round(sensor[j].Value ?? 0, 2),
+							Min = (float)Math.Round(sensor[j].Min ?? 0, 2),
+							Max = (float)Math.Round(sensor[j].Max ?? 0, 2),
 						});
 					}
 				}
@@ -179,9 +179,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Temperature) {
 						API.GPU.Temperature.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 
@@ -189,9 +189,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("D3D")) {
 						API.GPU.Load.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)sensor[j].Value,
-							Min = (float)sensor[j].Min,
-							Max = (float)sensor[j].Max,
+							Value = sensor[j].Value ?? 0,
+							Min = sensor[j].Min ?? 0,
+							Max = sensor[j].Max ?? 0,
 						});
 					}
 
@@ -199,9 +199,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Fan) {
 						API.GPU.Fan.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 
@@ -209,9 +209,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.SmallData) {
 						API.GPU.Memory.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value / 1024, 1),
-							Min = (float)Math.Round((float)sensor[j].Min / 1024, 1),
-							Max = (float)Math.Round((float)sensor[j].Max / 1024, 1),
+							Value = (float)Math.Round(sensor[j].Value ?? 0 / 1024, 1),
+							Min = (float)Math.Round(sensor[j].Min ?? 0 / 1024, 1),
+							Max = (float)Math.Round(sensor[j].Max ?? 0 / 1024, 1),
 						});
 					}
 
@@ -219,9 +219,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Power) {
 						API.GPU.Power.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 
@@ -229,9 +229,9 @@ public class HardwareInfo {
 					if (sensor[j].SensorType == SensorType.Clock) {
 						API.GPU.Clock.Add(new Sensor {
 							Name = sensor[j].Name,
-							Value = (float)Math.Round((float)sensor[j].Value),
-							Min = (float)Math.Round((float)sensor[j].Min),
-							Max = (float)Math.Round((float)sensor[j].Max),
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
 						});
 					}
 				}
@@ -245,9 +245,9 @@ public class HardwareInfo {
 					// RAM load
 					API.RAM.Load.Add(new Sensor {
 						Name = sensor[j].Name,
-						Value = (float)Math.Round((float)sensor[j].Value, 1),
-						Min = (float)Math.Round((float)sensor[j].Min, 1),
-						Max = (float)Math.Round((float)sensor[j].Max, 1),
+						Value = (float)Math.Round(sensor[j].Value ?? 0, 1),
+						Min = (float)Math.Round(sensor[j].Min ?? 0, 1),
+						Max = (float)Math.Round(sensor[j].Max ?? 0, 1),
 					});
 				}
 			}
@@ -316,17 +316,17 @@ public class HardwareInfo {
 						// find disk by id and overwrite value
 						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
-								var min = (float)Math.Round((float)sensor[j].Min);
+								var min = (float)Math.Round(sensor[j].Min ?? 0);
 
 								// Some drives don't return min temp
 								if (firstRun && min == 0) {
-									min = (float)Math.Round((float)sensor[j].Value);
+									min = (float)Math.Round(sensor[j].Value ?? 0);
 								}
 
 								// Replace min temp if current temp is lower
 								if (min == 0) {
-									if ((float)Math.Round((float)sensor[j].Value) < API.System.Storage.Disks[k].Temperature.Min) {
-										min = (float)Math.Round((float)sensor[j].Value);
+									if ((float)Math.Round(sensor[j].Value ?? 0) < API.System.Storage.Disks[k].Temperature.Min) {
+										min = (float)Math.Round(sensor[j].Value ?? 0);
 									} else {
 										min = API.System.Storage.Disks[k].Temperature.Min;
 									}
@@ -334,9 +334,9 @@ public class HardwareInfo {
 
 								API.System.Storage.Disks[k].Temperature = new Sensor {
 									Name = sensor[j].Name,
-									Value = (float)Math.Round((float)sensor[j].Value),
+									Value = (float)Math.Round(sensor[j].Value ?? 0),
 									Min = min,
-									Max = (float)Math.Round((float)sensor[j].Max),
+									Max = (float)Math.Round(sensor[j].Max ?? 0),
 								};
 							}
 						}
@@ -351,7 +351,7 @@ public class HardwareInfo {
 									if (sensor[j].Value.ToString() == "0" || sensor[j].Value == null) {
 										API.System.Storage.Disks[k].ThroughputRead = 0;
 									} else {
-										API.System.Storage.Disks[k].ThroughputRead = (float)Math.Round((float)sensor[j].Value, 1);
+										API.System.Storage.Disks[k].ThroughputRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 								}
 
@@ -359,7 +359,7 @@ public class HardwareInfo {
 									if (sensor[j].Value.ToString() == "0" || sensor[j].Value == null) {
 										API.System.Storage.Disks[k].ThroughputWrite = 0;
 									} else {
-										API.System.Storage.Disks[k].ThroughputWrite = (float)Math.Round((float)sensor[j].Value, 1);
+										API.System.Storage.Disks[k].ThroughputWrite = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 								}
 							}
@@ -372,11 +372,11 @@ public class HardwareInfo {
 						for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 							if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
 								if (sensor[j].Name.Contains("Read")) {
-									API.System.Storage.Disks[k].DataRead = (float)Math.Round((float)sensor[j].Value, 1);
+									API.System.Storage.Disks[k].DataRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
 								}
 
 								if (sensor[j].Name.Contains("Written")) {
-									API.System.Storage.Disks[k].DataWritten = (float)Math.Round((float)sensor[j].Value, 1);
+									API.System.Storage.Disks[k].DataWritten = (float)Math.Round(sensor[j].Value ?? 0, 1);
 								}
 							}
 						}
@@ -392,36 +392,36 @@ public class HardwareInfo {
 					if (sh.Sensors[j].SensorType == SensorType.Voltage) {
 						API.System.SuperIO.Voltage.Add(new Sensor {
 							Name = sh.Sensors[j].Name,
-							Value = (float)Math.Round((float)sh.Sensors[j].Value, 2),
-							Min = (float)Math.Round((float)sh.Sensors[j].Min, 2),
-							Max = (float)Math.Round((float)sh.Sensors[j].Max, 2),
+							Value = (float)Math.Round(sh.Sensors[j].Value ?? 0, 2),
+							Min = (float)Math.Round(sh.Sensors[j].Min ?? 0, 2),
+							Max = (float)Math.Round(sh.Sensors[j].Max ?? 0, 2),
 						});
 					}
 
 					if (sh.Sensors[j].SensorType == SensorType.Temperature) {
 						API.System.SuperIO.Temperature.Add(new Sensor {
 							Name = sh.Sensors[j].Name,
-							Value = (float)Math.Round((float)sh.Sensors[j].Value),
-							Min = (float)Math.Round((float)sh.Sensors[j].Min),
-							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+							Value = (float)Math.Round(sh.Sensors[j].Value ?? 0),
+							Min = (float)Math.Round(sh.Sensors[j].Min ?? 0),
+							Max = (float)Math.Round(sh.Sensors[j].Max ?? 0),
 						});
 					}
 
 					if (sh.Sensors[j].SensorType == SensorType.Fan) {
 						API.System.SuperIO.Fan.Add(new Sensor {
 							Name = sh.Sensors[j].Name,
-							Value = (float)Math.Round((float)sh.Sensors[j].Value),
-							Min = (float)Math.Round((float)sh.Sensors[j].Min),
-							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+							Value = (float)Math.Round(sh.Sensors[j].Value ?? 0),
+							Min = (float)Math.Round(sh.Sensors[j].Min ?? 0),
+							Max = (float)Math.Round(sh.Sensors[j].Max ?? 0),
 						});
 					}
 
 					if (sh.Sensors[j].SensorType == SensorType.Control) {
 						API.System.SuperIO.FanControl.Add(new Sensor {
 							Name = sh.Sensors[j].Name,
-							Value = (float)Math.Round((float)sh.Sensors[j].Value),
-							Min = (float)Math.Round((float)sh.Sensors[j].Min),
-							Max = (float)Math.Round((float)sh.Sensors[j].Max),
+							Value = (float)Math.Round(sh.Sensors[j].Value ?? 0),
+							Min = (float)Math.Round(sh.Sensors[j].Min ?? 0),
+							Max = (float)Math.Round(sh.Sensors[j].Max ?? 0),
 						});
 					}
 				}
@@ -438,11 +438,11 @@ public class HardwareInfo {
 						for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 							if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
 								if (sensor[j].Name.Contains("Download")) {
-									API.System.Network.Interfaces[k].ThroughputDownload = (float)Math.Round((float)sensor[j].Value);
+									API.System.Network.Interfaces[k].ThroughputDownload = (float)Math.Round(sensor[j].Value ?? 0);
 								}
 
 								if (sensor[j].Name.Contains("Upload")) {
-									API.System.Network.Interfaces[k].ThroughputUpload = (float)Math.Round((float)sensor[j].Value);
+									API.System.Network.Interfaces[k].ThroughputUpload = (float)Math.Round(sensor[j].Value ?? 0);
 								}
 							}
 						}
@@ -455,11 +455,11 @@ public class HardwareInfo {
 						for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 							if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
 								if (sensor[j].Name.Contains("Download")) {
-									API.System.Network.Interfaces[k].DownloadData = (float)Math.Round((float)sensor[j].Value, 1);
+									API.System.Network.Interfaces[k].DownloadData = (float)Math.Round(sensor[j].Value ?? 0, 1);
 								}
 
 								if (sensor[j].Name.Contains("Upload")) {
-									API.System.Network.Interfaces[k].UploadData = (float)Math.Round((float)sensor[j].Value, 1);
+									API.System.Network.Interfaces[k].UploadData = (float)Math.Round(sensor[j].Value ?? 0, 1);
 								}
 							}
 						}
@@ -486,11 +486,16 @@ public class HardwareInfo {
 				API.CPU.Info.Add(computer.SMBios.Processors[i]);
 			}
 
-			// GPU info
-			API.GPU.Info = getGPUInfo();
+			try {
+				// GPU info
+				API.GPU.Info = getGPUInfo();
 
-			// OS info
-			API.System.OS.Name = getOSInfo();
+				// OS info
+				API.System.OS.Name = getOSInfo();
+			}
+			catch (Exception) {
+				Debug.WriteLine("Failed to get GPU and OS name");
+			}
 
 			// RAM modules
 			for (int i = 0; i < computer.SMBios.MemoryDevices.Length; i++) {
@@ -521,10 +526,12 @@ public class HardwareInfo {
 			}
 
 			// BIOS info
+			var biosDate = computer.SMBios.Bios.Date ?? new DateTime(1970, 01, 01);
+
 			API.System.BIOS = new BIOSInfo {
 				Vendor = computer.SMBios.Bios.Vendor,
 				Version = computer.SMBios.Bios.Version,
-				Date = computer.SMBios.Bios.Date.Value.ToShortDateString(),
+				Date = biosDate.ToShortDateString(),
 			};
 		}
 
