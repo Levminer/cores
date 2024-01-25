@@ -17,7 +17,7 @@
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					{#each $hardwareInfo.cpu.load as item, i}
 						<div>
-							<p class="text-sm">{item.name}</p>
+							<p class="text-sm">{item.name?.replaceAll("CPU", "")}</p>
 							<div class="progress">
 								<div id={`progress${i}`} class="progressFill" />
 							</div>
@@ -34,10 +34,10 @@
 				</div>
 				<h2>RAM</h2>
 			</div>
-			<h3>{$hardwareInfo.ram.info[0].manufacturerName}</h3>
+			<h3>{$hardwareInfo.ram.info[0]?.manufacturerName ?? "Generic Memory"}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
-					<GaugeChart load={$hardwareInfo.ram.load[2].value} />
+					<GaugeChart load={$hardwareInfo.ram.load[2]?.value ?? 0} />
 				</div>
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					<div>
@@ -65,7 +65,7 @@
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					{#each $hardwareInfo.gpu.load as item, i}
 						<div>
-							<p class="text-sm">{item.name}</p>
+							<p class="text-sm">{item.name?.replaceAll("D3D", "")}</p>
 							<div class="progress">
 								<div id={`3progress${i}`} class="progressFill" />
 							</div>
@@ -95,7 +95,7 @@
 				<div>
 					<MeterChart
 						readings={$hardwareInfo.cpu.temperature}
-						categories={$hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i} (${temp.value} °C)`)}
+						categories={$hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i + 1} (${temp.value} °C)`)}
 						type={{ name: "temperature", unit: "°C" }}
 					/>
 				</div>
@@ -117,7 +117,7 @@
 				<div>
 					<MeterChart
 						readings={$hardwareInfo.cpu.clock}
-						categories={$hardwareInfo.cpu.clock.map((temp, i) => `Core #${i} (${(temp.value / 1000).toFixed(1)} GHz)`)}
+						categories={$hardwareInfo.cpu.clock.map((temp, i) => `Core #${i + 1} (${(temp.value / 1000).toFixed(1)} GHz)`)}
 						type={{ name: "clock speed", unit: "MHz" }}
 					/>
 				</div>
@@ -153,7 +153,7 @@
 				<div>
 					<MeterChart
 						readings={$hardwareInfo.cpu.voltage}
-						categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i} (${temp.value} V)`)}
+						categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i + 1} (${temp.value} V)`)}
 						type={{ name: "voltage", unit: "V" }}
 					/>
 				</div>
