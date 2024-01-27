@@ -188,6 +188,10 @@ declare global {
 		minimizeToTray: boolean
 		launchOnStartup: boolean
 		connectionCode: string
+		connectionCodes: {
+			name: string
+			code: string
+		}[]
 		version: number
 		remoteConnections: boolean
 	}

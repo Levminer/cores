@@ -1,7 +1,11 @@
 {#if $hardwareInfo.cpu === undefined}
-	<Loading showTips={true} />
+	{#if url === "/settings"}
+		<Navigation />
+		<slot />
+	{:else}
+		<Loading showTips={true} />
+	{/if}
 {:else}
-	<BuildNumber />
 	<Navigation />
 	<slot />
 {/if}
@@ -9,13 +13,20 @@
 <script lang="ts">
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
-	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import Navigation from "ui/navigation/navigation.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import init, { WebRtcClient } from "../../../../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
+	import { page } from "$app/stores"
+	import { onNavigate } from "$app/navigation"
+
+	$: url = $page.url.pathname
+
+	onNavigate((navigation) => {
+		url = navigation.to?.url.pathname ?? "/"
+	})
 
 	onMount(() => {
 		let client: WebRtcClient | undefined

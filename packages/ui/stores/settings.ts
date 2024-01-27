@@ -9,6 +9,7 @@ const defaultSettings: LibSettings = {
 	minimizeToTray: true,
 	launchOnStartup: false,
 	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
+	connectionCodes: [],
 	version: 1,
 	remoteConnections: false,
 }
