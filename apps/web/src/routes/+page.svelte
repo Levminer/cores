@@ -2,23 +2,29 @@
 
 <div class="mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mb-60 mt-10 flex flex-col items-center justify-center text-center">
-		<h1 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-8xl font-extrabold text-transparent">Cores</h1>
-		<h2 class="mt-10 font-medium">Modern hardware monitor for your</h2>
+		<h1 class="mt-10 font-medium">Modern hardware monitor for your</h1>
 
 		{#key index}
-			<h1 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text font-medium italic text-transparent" transition:slide>
+			<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-6xl font-medium italic text-transparent" transition:slide>
 				{greetings[index]}
-			</h1>
+			</h2>
 		{/key}
 
-		<div class="">
-			<!-- @ts-ignore -->
-			<img
-				width="1000"
-				height="650"
-				src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/landing.webp"
-				alt="Cores on desktop computer and on a phone"
-			/>
+		<h3 class="mt-5">
+			Unleash the power of real-time PC monitoring from anywhere. <br /> Access detailed information about your computer anytime.
+		</h3>
+
+		<div class="mt-5 flex flex-row items-center justify-center gap-5">
+			<a
+				href="#download"
+				class="transform rounded-2xl bg-pink-500 px-5 py-4 text-xl font-medium duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"
+				>Get Cores</a
+			>
+			<a class="flex gap-1 font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
+		</div>
+
+		<div>
+			<img width="1000" height="650" src="https://cdn.levminer.com/cores/landing.webp" alt="Cores on desktop computer and on a phone" />
 		</div>
 	</div>
 
@@ -100,7 +106,7 @@
 					</div>
 				</div>
 				<div class="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video id="video0" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/home.webm" />
+					<video id="video0" muted loop src="https://cdn.levminer.com/cores/home.webm" />
 					<div class="absolute flex items-center justify-center">
 						<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
@@ -111,7 +117,7 @@
 		<div id="features2" class="flex justify-center rounded-xl bg-gradient-to-r from-teal-200 to-teal-500 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video id="video1" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/charts.webm" />
+					<video id="video1" muted loop src="https://cdn.levminer.com/cores/charts.webm" />
 					<div class="absolute flex items-center justify-center">
 						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
@@ -157,7 +163,7 @@
 		<div id="features3" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-400 to-cyan-400 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="relative flex w-[800px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video id="video2" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/remote.webm" />
+					<video id="video2" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
 					<div class="absolute flex items-center justify-center">
 						<Play id="play2" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
@@ -200,7 +206,7 @@
 			</div>
 		</div>
 
-		<div id="pricing" class="flex justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-pink-600 py-20">
+		<div id="download" class="flex justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-pink-600 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
@@ -374,18 +380,19 @@
 <Footer />
 
 <script lang="ts">
-	import { BarChart3, Check, Cpu, Info, Network, Play, Radio } from "lucide-svelte"
-	import { BrowserChrome, GpuCard, Memory, Microsoft, PcDisplay, Ubuntu, Apple } from "svelte-bootstrap-icons"
-	import Header from "../components/header.svelte"
-	import Footer from "../components/footer.svelte"
-	import { onMount, onDestroy } from "svelte"
+	import { ArrowRight, BarChart3, Check, Cpu, Info, Network, Play, Radio } from "lucide-svelte"
+	import { onDestroy, onMount } from "svelte"
+	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import { slide } from "svelte/transition"
+	import Footer from "../components/footer.svelte"
+	import Header from "../components/header.svelte"
 
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0
 	let roller: NodeJS.Timer
 
 	onMount(() => {
+		// hero text animation
 		roller = setInterval(() => {
 			if (index === greetings.length - 1) index = 0
 			else index++
@@ -394,6 +401,7 @@
 		if (index === greetings.length - 1) index = 0
 		else index++
 
+		// play videos on hover
 		for (let i = 0; i < 3; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
@@ -416,6 +424,8 @@
 	})
 
 	onDestroy(() => {
+		clearInterval(roller)
+
 		for (let i = 0; i < 3; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
@@ -424,7 +434,5 @@
 			video.removeEventListener("mouseleave", () => {})
 			play.removeEventListener("click", () => {})
 		}
-
-		clearInterval(roller)
 	})
 </script>

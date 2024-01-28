@@ -5,7 +5,7 @@
 			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
-			<a href="/account" class="smallButton"> Get Cores </a>
+			<a href="/home" class="rounded-2xl bg-pink-500 px-4 py-2 text-lg font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"> Launch app </a>
 		</div>
 		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
 			<ul
@@ -17,13 +17,13 @@
 					>
 				</li>
 				<li>
-					<a href="#pricing" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
-						>Pricing</a
+					<a href="#download" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Download</a
 					>
 				</li>
 				<li>
-					<a href="/home" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
-						>Web app</a
+					<a href="/account" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Account</a
 					>
 				</li>
 			</ul>
