@@ -14,15 +14,15 @@
 		<div class="">
 			<!-- @ts-ignore -->
 			<img
-				width="800"
-				height="450"
+				width="1000"
+				height="650"
 				src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/landing.webp"
 				alt="Cores on desktop computer and on a phone"
 			/>
 		</div>
 	</div>
 
-	<div class="space-y-20 mb-20">
+	<div class="mb-20 space-y-20">
 		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
@@ -99,16 +99,22 @@
 						</div>
 					</div>
 				</div>
-				<div class="flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/home.webm" loop />
+				<div class="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
+					<video id="video0" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/home.webm" />
+					<div class="absolute flex items-center justify-center">
+						<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div id="features2" class="flex justify-center rounded-xl bg-gradient-to-r from-teal-200 to-teal-500 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/charts.webm" loop />
+				<div class="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
+					<video id="video1" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/charts.webm" />
+					<div class="absolute flex items-center justify-center">
+						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+					</div>
 				</div>
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
@@ -150,8 +156,11 @@
 
 		<div id="features3" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-400 to-cyan-400 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-[800px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video autoplay muted src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/remote.webm" loop />
+				<div class="relative flex w-[800px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
+					<video id="video2" muted loop src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/remote.webm" />
+					<div class="absolute flex items-center justify-center">
+						<Play id="play2" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+					</div>
 				</div>
 				<div class="flex w-[800px] flex-col sm:w-full">
 					<!-- card 0 -->
@@ -183,7 +192,7 @@
 								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h2>
 							</div>
 							<div class="select-text">
-								<h3>You can connect directly to the host computer, no server needed</h3>
+								<h3>You can connect directly to the multiple host computers, no server needed.</h3>
 							</div>
 						</div>
 					</div>
@@ -226,7 +235,7 @@
 									Cores for Windows
 								</h1>
 								<div class="px-5 text-center sm:w-full">
-									<h3 class="text-[3rem]">$14<sup>99</sup></h3>
+									<h2 class="text-[3rem] font-semibold">$14<sup>99</sup></h2>
 
 									<div class="text-center">
 										<button
@@ -235,7 +244,7 @@
 											Coming soon
 										</button>
 										<div class="mt-3">
-											<a href="" class="underline">Download the trial for free</a>
+											<a rel="noreferrer" href="https://github.com/levminer/cores" class="underline">Download for free</a>
 										</div>
 									</div>
 								</div>
@@ -260,7 +269,7 @@
 									<!-- <p>Access to free updates for a year</p> -->
 								</div>
 							</div>
-							<div class="mt-4 flex justify-center gap-2 text-center flex-wrap text-lg">
+							<div class="mt-4 flex flex-wrap justify-center gap-2 text-center text-lg">
 								<p>Want to use Cores as a business?</p>
 								<a class="underline" href="mailto:cores@levminer.com">Contact</a>
 							</div>
@@ -384,9 +393,38 @@
 
 		if (index === greetings.length - 1) index = 0
 		else index++
+
+		for (let i = 0; i < 3; i++) {
+			const video = document.getElementById(`video${i}`) as HTMLVideoElement
+			const play = document.getElementById(`play${i}`) as HTMLElement
+
+			video.addEventListener("mouseenter", () => {
+				video.play()
+				play.style.display = "none"
+			})
+
+			video.addEventListener("mouseleave", () => {
+				video.pause()
+				play.style.display = "flex"
+			})
+
+			play.addEventListener("click", () => {
+				video.play()
+				play.style.display = "none"
+			})
+		}
 	})
 
 	onDestroy(() => {
+		for (let i = 0; i < 3; i++) {
+			const video = document.getElementById(`video${i}`) as HTMLVideoElement
+			const play = document.getElementById(`play${i}`) as HTMLElement
+
+			video.removeEventListener("mouseenter", () => {})
+			video.removeEventListener("mouseleave", () => {})
+			play.removeEventListener("click", () => {})
+		}
+
 		clearInterval(roller)
 	})
 </script>
