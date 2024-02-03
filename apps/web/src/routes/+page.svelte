@@ -286,6 +286,10 @@
 		</div>
 	</div>
 
+	<div class="mb-44">
+		<GetStarted />
+	</div>
+
 	<!-- <div class="flex justify-center bg-gradient-to-r from-red-500 to-orange-500 py-96">
 		<div class="flex items-center justify-center gap-10">
 			<div
@@ -386,6 +390,7 @@
 	import { slide } from "svelte/transition"
 	import Footer from "../components/footer.svelte"
 	import Header from "../components/header.svelte"
+	import GetStarted from "../components/getStarted.svelte"
 
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0

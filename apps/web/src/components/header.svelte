@@ -5,28 +5,45 @@
 			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
-			<a href="/home" class="rounded-2xl bg-pink-500 px-4 py-2 text-lg font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"> Launch app </a>
+			<button
+				on:click={() => {
+					const settings = JSON.parse(localStorage.getItem("settings") || "{}")
+
+					if (settings.connectionCode !== undefined && settings.connectionCode !== "") {
+						goto("/home")
+					} else {
+						goto("/get-started")
+					}
+				}}
+				class="rounded-2xl bg-pink-500 px-4 py-2 text-lg font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"
+			>
+				Launch app
+			</button>
 		</div>
 		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
 			<ul
-				class="mt-4 flex flex-col rounded-lg border border-gray-700  p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
+				class="mt-4 flex flex-col rounded-lg border border-gray-700 p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
 			>
 				<li>
-					<a href="#features" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+					<a href="/#features" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
 						>Features</a
 					>
 				</li>
 				<li>
-					<a href="#download" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+					<a href="/#download" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
 						>Download</a
 					>
 				</li>
 				<li>
-					<a href="/account" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
-						>Account</a
+					<a href="/#pricing" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+						>Pricing</a
 					>
 				</li>
 			</ul>
 		</div>
 	</div>
 </nav>
+
+<script lang="ts">
+	import { goto } from "$app/navigation"
+</script>

@@ -17,6 +17,9 @@
 					<li>
 						Make sure you typed in the <button class="underline" on:click={connectionCode}>connection code</button> in the settings right
 					</li>
+					<li>
+						Go back to the <a class="underline" href="/">home</a> page
+					</li>
 				</ul>
 			</div>
 		{/if}
