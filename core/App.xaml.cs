@@ -1,5 +1,7 @@
 ﻿using cores;
 using Microsoft.UI.Xaml;
+using Sentry;
+using Sentry.Protocol;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -22,7 +24,18 @@ public partial class App : Application {
 	private static extern string getSettings();
 
 	public App() {
+		SentrySdk.Init(settings => {
+			settings.Dsn = "https://9d82458dfddf56230ce675882bcc093a@o4506670275428352.ingest.sentry.io/4506671395897344";
+			settings.AutoSessionTracking = true;
+			settings.IsGlobalModeEnabled = true;
+			settings.EnableTracing = true;
+			settings.Debug = true;
+		});
+
 		InitializeComponent();
+		UnhandledException += (s, e) => {
+			SentrySdk.CaptureException(e.Exception);
+		};
 
 		// Force dark mode
 		Current.RequestedTheme = ApplicationTheme.Dark;
