@@ -20,24 +20,6 @@
 		"check": "npm run check -w app"
 	},
 	"devDependencies": {
-		"cross-env": "^7.0.3",
-		"svelte": "^4.2.9"
-	},
-	"overrides": {
-		"@rgossiaux/svelte-headlessui": {
-			"svelte": "$svelte"
-		},
-		"svelte-chartjs": {
-			"svelte": "$svelte"
-		}
-	},
-	"dependencies": {
-		"@rgossiaux/svelte-headlessui": "^1.0.2",
-		"chart.js": "^4.4.1",
-		"chartjs-plugin-stacked100": "^1.5.2",
-		"lucide-svelte": "^0.294.0",
-		"svelte-bootstrap-icons": "^3.1.0",
-		"svelte-chartjs": "^3.1.2",
-		"ui": "*"
+		"cross-env": "^7.0.3"
 	}
 }
