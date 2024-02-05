@@ -26,6 +26,9 @@
 	"overrides": {
 		"@rgossiaux/svelte-headlessui": {
 			"svelte": "$svelte"
+		},
+		"svelte-chartjs": {
+			"svelte": "$svelte"
 		}
 	},
 	"dependencies": {
@@ -34,7 +37,7 @@
 		"chartjs-plugin-stacked100": "^1.5.2",
 		"lucide-svelte": "^0.294.0",
 		"svelte-bootstrap-icons": "^3.1.0",
-		"svelte-chartjs": "^3.1.4",
+		"svelte-chartjs": "^3.1.2",
 		"ui": "*"
 	}
 }
