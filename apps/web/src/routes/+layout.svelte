@@ -1,6 +1,6 @@
 <div class="flex h-screen flex-col">
-	<div class="scroll w-full overflow-hidden overflow-y-scroll scroll-smooth">
-		<div class="top" />
+	<div id="layout" class="scroll w-full overflow-hidden overflow-y-scroll">
+		<div id="cores" class="top" />
 
 		<div>
 			<slot />
@@ -26,14 +26,13 @@
 	import { onNavigate } from "$app/navigation"
 
 	onNavigate((navigation) => {
-		document.querySelector(".top")!.scrollIntoView()
-
 		if (!document.startViewTransition) return
 
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
 				resolve()
 				await navigation.complete
+				document.querySelector(".top")!.scrollIntoView()
 			})
 		})
 	})

@@ -350,96 +350,6 @@
 	<div class="mb-44">
 		<GetStarted />
 	</div>
-
-	<!-- <div class="flex justify-center bg-gradient-to-r from-red-500 to-orange-500 py-96">
-		<div class="flex items-center justify-center gap-10">
-			<div
-				class="isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-
-			<div
-				class="relative -top-5 isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-
-			<div
-				class="isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="flex items-center justify-center gap-10">
-			<div
-				class="relative -top-5 isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-
-			<div
-				class="relative -top-5 isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-
-			<div
-				class="relative -top-5 isolate aspect-video w-96 transform rounded-xl bg-white/20 p-8 shadow-lg ring-1 ring-black/5 duration-200 ease-in-out hover:rotate-1 hover:scale-105 sm:p-4"
-			>
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cpu />
-					</div>
-					<h2>Easy monitoring</h2>
-				</div>
-				<div class="select-text text-left">
-					<p class="text-base leading-relaxed">Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage</p>
-				</div>
-			</div>
-		</div>
-	</div> -->
 </div>
 
 <Footer />
@@ -455,9 +365,12 @@
 
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0
-	let roller: NodeJS.Timer
+	let roller: NodeJS.Timeout
 
 	onMount(() => {
+		// smooth scroll
+		document.querySelector("#layout")?.classList.add("scroll-smooth")
+
 		// hero text animation
 		roller = setInterval(() => {
 			if (index === greetings.length - 1) index = 0
@@ -491,6 +404,8 @@
 
 	onDestroy(() => {
 		clearInterval(roller)
+
+		document.querySelector("#layout")?.classList.remove("scroll-smooth")
 
 		for (let i = 0; i < 3; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement

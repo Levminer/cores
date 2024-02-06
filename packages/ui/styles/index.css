@@ -16,7 +16,7 @@
 	}
 
 	.input {
-		@apply transparent-900 transparent-input rounded-xl p-4 text-xl text-white outline-none duration-200 ease-linear;
+		@apply transparent-900 transparent-input rounded-xl p-4 text-xl text-white outline-none duration-200 ease-linear read-only:cursor-not-allowed;
 	}
 
 	.dialog {

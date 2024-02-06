@@ -426,7 +426,7 @@
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import { onMount } from "svelte"
 
-	let interval: NodeJS.Timer
+	let interval: NodeJS.Timeout
 
 	onMount(() => {
 		interval = setInterval(() => {
