@@ -20,6 +20,11 @@ export default {
 					yellow: "#F5AB00",
 					magenta: "#9B5094",
 				},
+				cores: {
+					min: "#35cbfd",
+					current: "#ff5380",
+					max: "#9d0cfd",
+				},
 				html: {
 					gray: "#808080",
 				},

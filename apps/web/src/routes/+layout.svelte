@@ -1,5 +1,5 @@
 <div class="flex h-screen flex-col">
-	<div class="scroll w-full overflow-hidden overflow-y-scroll">
+	<div class="scroll w-full overflow-hidden overflow-y-scroll scroll-smooth">
 		<div class="top" />
 
 		<div>

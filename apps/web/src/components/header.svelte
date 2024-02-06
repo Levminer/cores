@@ -15,7 +15,7 @@
 						goto("/get-started")
 					}
 				}}
-				class="rounded-2xl bg-pink-500 px-4 py-2 text-lg font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"
+				class="bg-cores-current hover:text-cores-current rounded-2xl px-4 py-2 text-xl font-semibold duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
 			>
 				Launch app
 			</button>
@@ -25,17 +25,17 @@
 				class="mt-4 flex flex-col rounded-lg border border-gray-700 p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
 			>
 				<li>
-					<a href="/#features" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+					<a href="/#features" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
 						>Features</a
 					>
 				</li>
 				<li>
-					<a href="/#download" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+					<a href="/#download" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
 						>Download</a
 					>
 				</li>
 				<li>
-					<a href="/#pricing" class="block rounded px-3 py-2 font-semibold text-white duration-200 ease-in hover:text-pink-600 md:p-0"
+					<a href="/#pricing" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
 						>Pricing</a
 					>
 				</li>

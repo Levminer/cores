@@ -2,10 +2,13 @@
 
 <div class="mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mb-60 mt-10 flex flex-col items-center justify-center text-center">
-		<h1 class="mt-10 font-medium">Modern hardware monitor for your</h1>
+		<h1 class="mt-10 text-4xl font-medium md:text-6xl">Modern hardware monitor for your</h1>
 
 		{#key index}
-			<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-6xl font-medium italic text-transparent" transition:slide>
+			<h2
+				class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-4xl font-medium italic text-transparent md:text-6xl"
+				transition:slide
+			>
 				{greetings[index]}
 			</h2>
 		{/key}
@@ -17,14 +20,20 @@
 		<div class="mt-5 flex flex-row items-center justify-center gap-5">
 			<a
 				href="#download"
-				class="transform rounded-2xl bg-pink-500 px-5 py-4 text-xl font-medium duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent hover:text-pink-600"
+				class="bg-cores-current hover:text-cores-current transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
 				>Get Cores</a
 			>
-			<a class="flex gap-1 font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
+			<a class="flex text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
 		</div>
 
 		<div>
-			<img width="1000" height="650" src="https://cdn.levminer.com/cores/landing.webp" alt="Cores on desktop computer and on a phone" />
+			<img
+				width="1000"
+				loading="lazy"
+				height="650"
+				src="https://cdn.levminer.com/cores/landing.webp"
+				alt="Cores on desktop computer and on a phone"
+			/>
 		</div>
 	</div>
 
@@ -206,7 +215,57 @@
 			</div>
 		</div>
 
-		<div id="download" class="flex justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-pink-600 py-20">
+		<div id="download" class="flex justify-center rounded-xl bg-gradient-to-r from-red-200 to-yellow-200 py-20">
+			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
+				<div class="flex w-full flex-col">
+					<!-- card 0 -->
+					<div class="mx-auto flex w-full flex-col items-start justify-center rounded-xl bg-gray-900 p-10 text-left">
+						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-4xl font-extrabold text-transparent">Downloads</h2>
+						<h3>Download the latest version of Cores.</h3>
+					</div>
+
+					<div class="mt-5 flex w-full flex-col justify-between gap-5 sm:flex-col">
+						<!-- windows installer -->
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="flex flex-col justify-between gap-10 md:flex-row">
+								<div class="flex items-center gap-3">
+									<Microsoft width="24" height="24" />
+									<h2>Windows Installer (x64)</h2>
+								</div>
+								<div class="flex flex-col gap-3 md:flex-row">
+									<a href="https://apps.microsoft.com/detail/9PF137SC1MJL" target="_blank" class="smallButton">
+										<Microsoft width="24" height="24" />
+										Microsoft Store
+									</a>
+									<a href="https://github.com/Levminer/cores/releases/latest" class="smallButton">
+										<Download />
+										Download
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<!-- windows portable -->
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="flex flex-col justify-between gap-10 md:flex-row">
+								<div class="flex items-center gap-3">
+									<Microsoft width="24" height="24" />
+									<h2>Windows Portable (x64)</h2>
+								</div>
+								<div class="flex flex-col gap-3 md:flex-row">
+									<a href="https://github.com/Levminer/cores/releases/latest" class="smallButton">
+										<Download />
+										Download
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="pricing" class="flex justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-pink-600 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
@@ -226,10 +285,10 @@
 										<p>Windows</p>
 									</button>
 									<div class="px-3 py-3">
-										<p>Linux</p>
+										<p title="Coming soon...">Linux</p>
 									</div>
 									<div class="px-3 py-3">
-										<p>macOS</p>
+										<p title="Coming soon...">macOS</p>
 									</div>
 								</div>
 							</div>
@@ -245,12 +304,14 @@
 
 									<div class="text-center">
 										<button
-											class="button mt-5 w-full hover:translate-y-0.5 hover:animate-pulse hover:border-pink-600 hover:text-pink-400"
+											class="button hover:border-cores-current hover:text-cores-current mt-5 w-full hover:translate-y-0.5 hover:animate-pulse"
 										>
 											Coming soon
 										</button>
 										<div class="mt-3">
-											<a rel="noreferrer" href="https://github.com/levminer/cores" class="underline">Download for free</a>
+											<a rel="noreferrer" href="#download" class="underline duration-200 hover:text-gray-200"
+												>Download for free</a
+											>
 										</div>
 									</div>
 								</div>
@@ -384,9 +445,9 @@
 <Footer />
 
 <script lang="ts">
-	import { ArrowRight, BarChart3, Check, Cpu, Info, Network, Play, Radio } from "lucide-svelte"
+	import { ArrowRight, BarChart3, Check, Cpu, Info, Network, Play, Radio, Download } from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
-	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
+	import { GpuCard, Memory, PcDisplay, Microsoft } from "svelte-bootstrap-icons"
 	import { slide } from "svelte/transition"
 	import Footer from "../components/footer.svelte"
 	import Header from "../components/header.svelte"
