@@ -11,7 +11,7 @@ jobs:
         runs-on: windows-latest
 
         env:
-            Solution_Name: paltforms/windows/cores.sln
+            Solution_Name: cores.sln
             Project_Directory: platforms/windows/desktop
 
         steps:
