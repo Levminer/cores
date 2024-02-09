@@ -11,8 +11,8 @@ jobs:
         runs-on: windows-latest
 
         env:
-            Solution_Name: Cores.sln
-            Project_Directory: core
+            Solution_Name: cores.sln
+            Project_Directory: platforms/windows/desktop
 
         steps:
             - name: Checkout

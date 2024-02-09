@@ -366,6 +366,6 @@ dist
 build.json
 core/Assets/assets
 cli
-core/lib.dll
+platforms/windows/desktop/lib.dll
 target
 /target
