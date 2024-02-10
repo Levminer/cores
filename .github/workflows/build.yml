@@ -58,7 +58,7 @@ jobs:
                   endpoint: https://eus.codesigning.azure.net/
                   code-signing-account-name: mnr
                   certificate-profile-name: profile1
-                  files-folder: "core/bin/exe"
+                  files-folder: "platforms/windows/desktop/bin/exe"
                   files-folder-filter: exe,dll
                   file-digest: SHA256
                   timestamp-rfc3161: http://timestamp.acs.microsoft.com
