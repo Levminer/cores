@@ -11,8 +11,8 @@ jobs:
         runs-on: windows-latest
 
         env:
-            Solution_Name: Cores.sln
-            Project_Directory: core
+            Solution_Name: cores.sln
+            Project_Directory: platforms/windows/desktop
 
         steps:
             - name: Checkout
@@ -58,7 +58,7 @@ jobs:
                   endpoint: https://eus.codesigning.azure.net/
                   code-signing-account-name: mnr
                   certificate-profile-name: profile1
-                  files-folder: "core/bin/exe"
+                  files-folder: "platforms/windows/desktop/bin/exe"
                   files-folder-filter: exe,dll
                   file-digest: SHA256
                   timestamp-rfc3161: http://timestamp.acs.microsoft.com
@@ -69,7 +69,7 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: "cores-latest-windows-x64-exe"
-                  path: "core/bin/exe"
+                  path: "platforms/windows/desktop/bin/exe"
 
             # Decode the base 64 encoded pfx and save the Signing_Certificate
             - name: Decode the pfx
@@ -90,10 +90,10 @@ jobs:
 
             # Remove the .pfx
             - name: Remove the .pfx
-              run: Remove-Item -path core/Cores_TemporaryKey.pfx
+              run: Remove-Item -path platforms/windows/desktop/Cores_TemporaryKey.pfx
 
             - name: Upload packaged app
               uses: actions/upload-artifact@v2
               with:
                   name: "cores-latest-windows-x64-msix"
-                  path: "core/bin/msix"
+                  path: "platforms/windows/desktop/bin/msix"
