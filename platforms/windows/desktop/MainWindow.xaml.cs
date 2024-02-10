@@ -1,10 +1,12 @@
 ﻿using cores;
+using lib;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -14,15 +16,6 @@ namespace Cores;
 
 public sealed partial class MainWindow : Window {
 	private readonly DispatcherTimer APIRefresher;
-
-	[DllImport("lib.dll")]
-	private static extern string dialog(string name);
-
-	[DllImport("lib.dll")]
-	private static extern void setSettings(string settings);
-
-	[DllImport("lib.dll")]
-	private static extern void autoLaunch(string exe);
 
 	public MainWindow() {
 		InitializeComponent();
@@ -63,7 +56,7 @@ public sealed partial class MainWindow : Window {
 		webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
 
 		if (!Debugger.IsAttached) {
-			webView.CoreWebView2.Settings.AreDevToolsEnabled = false;
+			webView.CoreWebView2.Settings.AreDevToolsEnabled = true;
 		}
 
 		webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
@@ -125,26 +118,18 @@ public sealed partial class MainWindow : Window {
 
 			case "newSettings":
 				App.GlobalSettings = JsonSerializer.Deserialize<Settings>(content.Content, App.SerializerOptions);
+				App.GlobalSettings.SetSettings();
 
 				APIRefresher.Interval = new TimeSpan(0, 0, App.GlobalSettings.interval);
 
-				setSettings(JsonSerializer.Serialize(App.GlobalSettings));
 				break;
 
 			case "debug":
-
-				var path = dialog("cores-debug");
-
+				var path = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "cores-debug.txt");
 				var contents = $"{content.Content}\n{App.GlobalHardwareInfo.computer.GetReport()}";
 
 				// write to file
-				System.IO.File.WriteAllText(path, contents);
-				break;
-
-			case "launchOnStartup":
-				var exe = AppDomain.CurrentDomain.BaseDirectory.Replace("\\", "/") + "Cores.exe";
-
-				autoLaunch(exe);
+				File.WriteAllText(path, contents);
 				break;
 		}
 	}

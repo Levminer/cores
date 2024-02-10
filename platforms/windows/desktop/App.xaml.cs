@@ -1,4 +1,5 @@
 ﻿using cores;
+using lib;
 using Microsoft.UI.Xaml;
 using Sentry;
 using Sentry.Protocol;
@@ -20,9 +21,6 @@ public partial class App : Application {
 	internal static Settings GlobalSettings = new();
 	internal static bool exiting = false;
 
-	[DllImport("lib.dll")]
-	private static extern string getSettings();
-
 	public App() {
 		SentrySdk.Init(settings => {
 			settings.Dsn = "https://9d82458dfddf56230ce675882bcc093a@o4506670275428352.ingest.sentry.io/4506671395897344";
@@ -41,7 +39,7 @@ public partial class App : Application {
 		Current.RequestedTheme = ApplicationTheme.Dark;
 
 		//Get settings
-		GlobalSettings = JsonSerializer.Deserialize<Settings>(getSettings());
+		GlobalSettings.GetSettings();
 	}
 
 	protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args) {

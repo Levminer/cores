@@ -364,8 +364,6 @@ FodyWeavers.xsd
 
 dist
 build.json
-core/Assets/assets
-cli
+platforms/windows/desktop/Assets/assets
 platforms/windows/desktop/lib.dll
 target
-/target

@@ -1,4 +1,4 @@
-﻿using Cores;
+﻿using lib;
 using LibreHardwareMonitor.Hardware;
 using Sentry;
 using System;
@@ -8,11 +8,12 @@ using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using WindowsDisplayAPI;
 
-namespace cores;
+namespace lib;
 
 public class HardwareInfo {
 	public bool firstRun = true;
 	public HardwareUpdater refresher = new();
+	public Commands commands = new();
 	public Computer computer = new() {
 		IsCpuEnabled = true,
 		IsGpuEnabled = true,
@@ -21,12 +22,6 @@ public class HardwareInfo {
 		IsStorageEnabled = true,
 		IsNetworkEnabled = true,
 	};
-
-	[DllImport("lib.dll")]
-	private static extern string getOSInfo();
-
-	[DllImport("lib.dll")]
-	private static extern string getGPUInfo();
 
 	public API API {
 		get; set;
@@ -491,10 +486,10 @@ public class HardwareInfo {
 
 				try {
 					// GPU info
-					API.GPU.Info = getGPUInfo();
+					API.GPU.Info = Commands.GetGPUInfo();
 
 					// OS info
-					API.System.OS.Name = getOSInfo();
+					API.System.OS.Name = Commands.GetOSInfo();
 				}
 				catch (Exception) {
 					Debug.WriteLine("Failed to get GPU and OS name");

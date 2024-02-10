@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Cores;
+namespace lib;
 
 public class Sensor {
 	public string Name {
@@ -31,15 +31,6 @@ public class Message {
 	public string Content {
 		get; set;
 	}
-}
-
-public struct Settings {
-	public int interval { get; set; }
-	public bool minimizeToTray { get; set; }
-	public bool launchOnStartup { get; set; }
-	public bool remoteConnections { get; set; }
-	public string connectionCode { get; set; }
-	public int version { get; set; }
 }
 
 public class Disk {
