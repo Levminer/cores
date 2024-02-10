@@ -96,4 +96,4 @@ jobs:
               uses: actions/upload-artifact@v2
               with:
                   name: "cores-latest-windows-x64-msix"
-                  path: "platforms/windows/desktop"
+                  path: "platforms/windows/desktop/bin/msix"
