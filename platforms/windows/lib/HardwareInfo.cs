@@ -67,9 +67,14 @@ public class HardwareInfo {
 							Name = ni.Name,
 							Description = ni.Description,
 							MACAddress = ni.GetPhysicalAddress().ToString(),
-							DNS = ni.GetIPProperties().DnsAddresses[0].ToString(),
 							Speed = (ni.Speed / 1000 / 1000).ToString()
 						};
+
+						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
+							temp.DNS = ni.GetIPProperties().DnsAddresses[0].ToString();
+						} else {
+							temp.DNS = "N/A";
+						}
 
 						if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
 							temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
