@@ -177,6 +177,13 @@ public class HardwareInfo {
 				if (hardware.HardwareType.ToString().Contains("Gpu")) {
 					var sensor = hardware.Sensors;
 
+					Task.Run(() => {
+						var GPULoad = new GPULoad();
+						GPULoad.GetInfo();
+
+						API.GPU.Load = GPULoad.GPUUsage;
+					});
+
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
 						// GPU temperature
 						if (sensor[j].SensorType == SensorType.Temperature) {
