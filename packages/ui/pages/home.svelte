@@ -17,7 +17,10 @@
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					{#each $hardwareInfo.cpu.load as item, i}
 						<div>
-							<p class="text-sm">{item.name?.replaceAll("CPU", "")}</p>
+							<div class="flex w-[95%] flex-row justify-between">
+								<p class="text-sm">{item.name?.replaceAll("CPU", "")}</p>
+								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
+							</div>
 							<div class="progress">
 								<div id={`progress${i}`} class="progressFill" />
 							</div>
@@ -41,7 +44,10 @@
 				</div>
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					<div>
-						<p class="text-sm">Virtual Memory</p>
+						<div class="flex w-[95%] flex-row justify-between">
+							<p class="text-sm">Virtual memory</p>
+							<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.ram.load[5]?.value ?? 0)}%</p>
+						</div>
 						<div class="progress">
 							<div id="2progress" class="progressFill" />
 						</div>
@@ -60,12 +66,15 @@
 			<h3>{$hardwareInfo.gpu.name}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
-					<GaugeChart load={$hardwareInfo.gpu.lastLoad} />
+					<GaugeChart load={Math.round($hardwareInfo.gpu.lastLoad)} />
 				</div>
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					{#each $hardwareInfo.gpu.load as item, i}
 						<div>
-							<p class="text-sm">{item.name?.replaceAll("D3D", "")}</p>
+							<div class="flex w-[95%] flex-row justify-between">
+								<p class="text-sm">{item.name?.replaceAll("D3D", "")}</p>
+								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
+							</div>
 							<div class="progress">
 								<div id={`3progress${i}`} class="progressFill" />
 							</div>
@@ -432,16 +441,16 @@
 		interval = setInterval(() => {
 			$hardwareInfo.cpu.load.forEach((load, i) => {
 				const progress = document.getElementById(`progress${i}`) as HTMLDivElement
-				progress.style.width = `${load.value}%`
+				progress.style.width = `${Math.round(load.value)}%`
 			})
 
 			$hardwareInfo.gpu.load.forEach((load, i) => {
 				const progress = document.getElementById(`3progress${i}`) as HTMLDivElement
-				progress.style.width = `${load.value}%`
+				progress.style.width = `${Math.round(load.value)}%`
 			})
 
 			let ramLoad = document.getElementById("2progress") as HTMLDivElement
-			ramLoad.style.width = `${$hardwareInfo.ram.load[5].value}%`
+			ramLoad.style.width = `${Math.round($hardwareInfo.ram.load[5].value)}%`
 		}, 1000)
 
 		return () => {
