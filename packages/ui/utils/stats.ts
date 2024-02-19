@@ -13,7 +13,7 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 				max: Math.round(input.cpu.clock.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.cpu.clock.length),
 			},
 
-			load: Math.round(input.cpu.lastLoad),
+			load: Math.round(input.cpu.maxLoad),
 			power: Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)),
 			voltage: parseFloat((input.cpu.voltage.reduce((a, b) => a + b.value, 0) / input.cpu.clock.length).toFixed(2)),
 		},
@@ -36,7 +36,7 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 				max: Math.round(input.gpu.clock[0]?.max ?? 0),
 			},
 
-			load: Math.round(input.gpu.lastLoad),
+			load: Math.round(input.gpu.maxLoad),
 			power: Math.round(input.gpu.power.reduce((a, b) => a + b.value, 0)),
 			fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
 			memory: parseFloat((input.gpu.memory[0]?.value ?? 0).toFixed(1)),

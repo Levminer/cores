@@ -159,7 +159,7 @@ public class CPUInfo {
 		get; set;
 	} = new();
 
-	public float LastLoad {
+	public float MaxLoad {
 		get; set;
 	}
 

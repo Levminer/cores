@@ -83,7 +83,7 @@ declare global {
 		cpu: {
 			name: string
 			temperature: Sensor[]
-			lastLoad: number
+			maxLoad: number
 			power: Sensor[]
 			load: Sensor[]
 			info: CPU[]
@@ -94,7 +94,7 @@ declare global {
 		gpu: {
 			name: string
 			temperature: Sensor[]
-			lastLoad: number
+			maxLoad: number
 			fan: Sensor[]
 			memory: Sensor[]
 			power: Sensor[]
@@ -194,6 +194,7 @@ declare global {
 		}[]
 		version: number
 		remoteConnections: boolean
+		optionalAnalytics: boolean
 	}
 }
 

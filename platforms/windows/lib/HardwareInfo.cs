@@ -45,7 +45,6 @@ public class HardwareInfo {
 			API.CPU.Clock.Clear();
 			API.CPU.Voltage.Clear();
 
-			API.GPU.Load.Clear();
 			API.GPU.Temperature.Clear();
 			API.GPU.Fan.Clear();
 			API.GPU.Memory.Clear();
@@ -153,7 +152,7 @@ public class HardwareInfo {
 
 						// CPU total load
 						if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("Total")) {
-							API.CPU.LastLoad = sensor[j].Value ?? 0;
+							API.CPU.MaxLoad = sensor[j].Value ?? 0;
 						}
 
 						// CPU clock
@@ -183,15 +182,17 @@ public class HardwareInfo {
 					var sensor = hardware.Sensors;
 
 					// Get inital GPU Load
-					API.GPU.Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+					if (firstRun) {
+						API.GPU.Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+					}
 
 					// Get GPU Load
 					Task.Run(async () => {
 						var GPULoad = new GPULoad();
 						await GPULoad.GetInfo();
 
-						API.GPU.Load = GPULoad.GPUUsage;
-						API.GPU.LastLoad = GPULoad.GPULastLoad;
+						API.GPU.Load = GPULoad.Load;
+						API.GPU.MaxLoad = GPULoad.MaxLoad;
 					});
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {

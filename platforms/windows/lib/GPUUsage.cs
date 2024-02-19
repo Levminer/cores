@@ -2,6 +2,7 @@
 using System.Runtime.Versioning;
 
 namespace lib;
+
 public class Counters {
 	public string Type {
 		get; set;
@@ -11,17 +12,18 @@ public class Counters {
 		get; set;
 	}
 }
+
 [SupportedOSPlatform("Windows")]
 public class GPULoad {
-	public List<Sensor> GPUUsage { get; set; } = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
-	public float GPULastLoad = 0;
+	public List<Sensor> Load { get; set; } = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+	public float MaxLoad = 0;
 
 	public async Task GetInfo() {
 		var gpuEngineCategory = new PerformanceCounterCategory("GPU Engine");
 		var gpuEngineNames = gpuEngineCategory.GetInstanceNames();
 		var d3dCounters = new List<Counters>();
-		GPUUsage = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
-		GPULastLoad = 0;
+		Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+		MaxLoad = 0;
 
 		foreach (string counterName in gpuEngineNames) {
 			if (!gpuEngineCategory.InstanceExists(counterName)) {
@@ -84,16 +86,16 @@ public class GPULoad {
 				if (val > 0) {
 					switch (c.Type) {
 						case "3d":
-							GPUUsage[0].Value += val;
+							Load[0].Value += val;
 							break;
 						case "Copy":
-							GPUUsage[1].Value += val;
+							Load[1].Value += val;
 							break;
 						case "Video Encode":
-							GPUUsage[2].Value += val;
+							Load[2].Value += val;
 							break;
 						case "Video Decode":
-							GPUUsage[3].Value += val;
+							Load[3].Value += val;
 							break;
 
 					}
@@ -105,6 +107,6 @@ public class GPULoad {
 			}
 		}
 
-		GPULastLoad = GPUUsage.Max(t => t.Value);
+		MaxLoad = Load.Max(t => t.Value);
 	}
 }

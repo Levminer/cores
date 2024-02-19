@@ -11,7 +11,7 @@
 			<h3>{$hardwareInfo.cpu.name}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
-					<GaugeChart load={$hardwareInfo.cpu.lastLoad} />
+					<GaugeChart load={$hardwareInfo.cpu.maxLoad} />
 				</div>
 
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
@@ -66,7 +66,7 @@
 			<h3>{$hardwareInfo.gpu.name}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
-					<GaugeChart load={Math.round($hardwareInfo.gpu.lastLoad)} />
+					<GaugeChart load={Math.round($hardwareInfo.gpu.maxLoad)} />
 				</div>
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
 					{#each $hardwareInfo.gpu.load as item, i}
