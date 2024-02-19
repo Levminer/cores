@@ -14,12 +14,14 @@ public class Counters {
 [SupportedOSPlatform("Windows")]
 public class GPULoad {
 	public List<Sensor> GPUUsage { get; set; } = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+	public float GPULastLoad = 0;
 
-	public async void GetInfo() {
+	public async Task GetInfo() {
 		var gpuEngineCategory = new PerformanceCounterCategory("GPU Engine");
 		var gpuEngineNames = gpuEngineCategory.GetInstanceNames();
 		var d3dCounters = new List<Counters>();
 		GPUUsage = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+		GPULastLoad = 0;
 
 		foreach (string counterName in gpuEngineNames) {
 			if (!gpuEngineCategory.InstanceExists(counterName)) {
@@ -71,6 +73,7 @@ public class GPULoad {
 			}
 		}
 
+		// Wait 1000ms to gather data
 		await Task.Delay(1000);
 
 		for (var i = 0; i < d3dCounters.Count; i++) {
@@ -101,5 +104,7 @@ public class GPULoad {
 				Debug.WriteLine("Counter not available");
 			}
 		}
+
+		GPULastLoad = GPUUsage.Max(t => t.Value);
 	}
 }

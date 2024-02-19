@@ -142,13 +142,18 @@ public class HardwareInfo {
 						}
 
 						// CPU load
-						if (sensor[j].SensorType == SensorType.Load) {
+						if (sensor[j].SensorType == SensorType.Load && !sensor[j].Name.Contains("Total") && !sensor[j].Name.Contains("Max")) {
 							API.CPU.Load.Add(new Sensor {
 								Name = sensor[j].Name,
 								Value = sensor[j].Value ?? 0,
 								Min = sensor[j].Min ?? 0,
 								Max = sensor[j].Max ?? 0,
 							});
+						}
+
+						// CPU total load
+						if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("Total")) {
+							API.CPU.LastLoad = sensor[j].Value ?? 0;
 						}
 
 						// CPU clock
@@ -177,11 +182,16 @@ public class HardwareInfo {
 				if (hardware.HardwareType.ToString().Contains("Gpu")) {
 					var sensor = hardware.Sensors;
 
-					Task.Run(() => {
+					// Get inital GPU Load
+					API.GPU.Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+
+					// Get GPU Load
+					Task.Run(async () => {
 						var GPULoad = new GPULoad();
-						GPULoad.GetInfo();
+						await GPULoad.GetInfo();
 
 						API.GPU.Load = GPULoad.GPUUsage;
+						API.GPU.LastLoad = GPULoad.GPULastLoad;
 					});
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
@@ -195,15 +205,6 @@ public class HardwareInfo {
 							});
 						}
 
-						// GPU load
-						if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("D3D")) {
-							API.GPU.Load.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = sensor[j].Value ?? 0,
-								Min = sensor[j].Min ?? 0,
-								Max = sensor[j].Max ?? 0,
-							});
-						}
 
 						// GPU fan
 						if (sensor[j].SensorType == SensorType.Fan) {
@@ -476,17 +477,6 @@ public class HardwareInfo {
 						}
 					}
 				}
-			}
-
-			// Last loads
-			try {
-				API.CPU.LastLoad = float.Parse(API.CPU.Load.Last().Value.ToString());
-				API.CPU.Load.RemoveAt(API.CPU.Load.Count - 1);
-
-				API.GPU.LastLoad = API.GPU.Load.Max(t => t.Value);
-			}
-			catch (Exception) {
-				Debug.WriteLine("Error");
 			}
 
 			// HWInfo, monitors, network interfaces
