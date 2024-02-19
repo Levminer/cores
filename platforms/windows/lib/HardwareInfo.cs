@@ -393,6 +393,17 @@ public class HardwareInfo {
 								}
 							}
 						}
+
+						if (sensor[j].SensorType == SensorType.Level && firstRun) {
+							// find disk by ide and overwrite value
+							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+									if (sensor[j].Name.Contains("Percentage Used")) {
+										API.System.Storage.Disks[k].Health = (100 - sensor[j].Value ?? 0).ToString();
+									}
+								}
+							}
+						}
 					}
 				}
 
