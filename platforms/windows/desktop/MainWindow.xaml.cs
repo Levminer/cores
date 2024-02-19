@@ -4,6 +4,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
+using Sentry;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,6 +17,7 @@ namespace Cores;
 
 public sealed partial class MainWindow : Window {
 	private readonly DispatcherTimer APIRefresher;
+	private bool firstRun = false;
 
 	public MainWindow() {
 		InitializeComponent();
@@ -136,11 +138,21 @@ public sealed partial class MainWindow : Window {
 
 	// Send API info to the interface
 	public void SendAPI() {
-		var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
+		if (firstRun) {
+			try {
+				var appVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-		App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
-		App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
-		App.GlobalHardwareInfo.API.System.OS.Runtime = "1.3.230724000";
+				App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
+				App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
+				App.GlobalHardwareInfo.API.System.OS.Runtime = "1.3.230724000";
+			}
+			catch (Exception e) {
+				SentrySdk.CaptureException(e);
+				SentrySdk.CaptureMessage(e.ToString());
+			}
+
+			firstRun = true;
+		}
 
 		var message = new Message() {
 			Name = "api",

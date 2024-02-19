@@ -551,6 +551,7 @@ public class HardwareInfo {
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);
+			SentrySdk.CaptureMessage(e.ToString());
 		}
 	}
 

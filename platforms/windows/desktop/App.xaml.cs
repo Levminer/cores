@@ -14,10 +14,7 @@ namespace Cores;
 public partial class App : Application {
 	internal static Window MainWindow;
 	internal static HardwareInfo GlobalHardwareInfo = new();
-	internal static JsonSerializerOptions SerializerOptions = new() {
-		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-		WriteIndented = true
-	};
+	internal static JsonSerializerOptions SerializerOptions = new JSON().SerializerOptions;
 	internal static Settings GlobalSettings = new();
 	internal static bool exiting = false;
 
@@ -33,6 +30,7 @@ public partial class App : Application {
 		InitializeComponent();
 		UnhandledException += (s, e) => {
 			SentrySdk.CaptureException(e.Exception);
+			SentrySdk.CaptureMessage(e.ToString());
 		};
 
 		// Force dark mode
