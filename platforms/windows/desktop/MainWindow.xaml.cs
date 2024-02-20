@@ -17,7 +17,7 @@ namespace Cores;
 
 public sealed partial class MainWindow : Window {
 	private readonly DispatcherTimer APIRefresher;
-	private bool firstRun = false;
+	private bool firstRun = true;
 
 	public MainWindow() {
 		InitializeComponent();
@@ -151,7 +151,7 @@ public sealed partial class MainWindow : Window {
 				SentrySdk.CaptureMessage(e.ToString());
 			}
 
-			firstRun = true;
+			firstRun = false;
 		}
 
 		var message = new Message() {

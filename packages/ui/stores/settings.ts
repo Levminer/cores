@@ -12,6 +12,7 @@ const defaultSettings: LibSettings = {
 	connectionCodes: [],
 	version: 1,
 	remoteConnections: false,
+	optionalAnalytics: true,
 }
 
 // Create store

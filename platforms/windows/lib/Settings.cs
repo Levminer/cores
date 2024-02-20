@@ -24,6 +24,7 @@ public class Settings {
 	public bool minimizeToTray { get; set; } = true;
 	public bool launchOnStartup { get; set; } = false;
 	public bool remoteConnections { get; set; } = false;
+	public bool optionalAnalytics { get; set; } = true;
 	public string connectionCode { get; set; } = ConnectionCode.Generate();
 	public int version { get; set; } = 2;
 
@@ -42,14 +43,21 @@ public class Settings {
 		}
 
 		// read settings.json
-		var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path.Join(appData, "Cores", "settings.json")));
+		try {
+			var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path.Join(appData, "Cores", "settings.json")));
 
-		interval = settings.interval;
-		minimizeToTray = settings.minimizeToTray;
-		launchOnStartup = settings.launchOnStartup;
-		remoteConnections = settings.remoteConnections;
-		connectionCode = settings.connectionCode;
-		version = settings.version;
+			interval = settings.interval;
+			minimizeToTray = settings.minimizeToTray;
+			launchOnStartup = settings.launchOnStartup;
+			remoteConnections = settings.remoteConnections;
+			optionalAnalytics = settings.optionalAnalytics;
+			connectionCode = settings.connectionCode;
+			version = settings.version;
+		}
+		catch (Exception e) {
+			SentrySdk.CaptureException(e);
+			SentrySdk.CaptureMessage(e.ToString());
+		}
 	}
 
 	public void SetSettings() {
