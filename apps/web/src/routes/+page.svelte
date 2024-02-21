@@ -221,43 +221,44 @@
 					<!-- card 0 -->
 					<div class="mx-auto flex w-full flex-col items-start justify-center rounded-xl bg-gray-900 p-10 text-left">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-4xl font-extrabold text-transparent">Downloads</h2>
-						<h3>Download the latest version of Cores.</h3>
+						<h3>Download the latest version of Cores now and gain real-time insights into your computer's performance.</h3>
 					</div>
 
 					<div class="mt-5 flex w-full flex-col justify-between gap-5 sm:flex-col">
 						<!-- windows installer -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+						<div class="w-full space-y-8 rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex items-center gap-3">
-									<Microsoft width="24" height="24" />
-									<h2>Windows Installer (x64)</h2>
+								<div class="flex flex-col">
+									<div class="flex flex-row items-center gap-3">
+										<Microsoft width="24" height="24" />
+										<h2>Windows Installer</h2>
+									</div>
+									<h3>Download the installer for the best experience.</h3>
 								</div>
 								<div class="flex flex-col gap-3 md:flex-row">
-									<a href="https://apps.microsoft.com/detail/9PF137SC1MJL" target="_blank" class="smallButton">
+									<a href="https://link.levminer.com/cores-ms-store" target="_blank" class="smallButton">
 										<Microsoft width="24" height="24" />
 										Microsoft Store
 									</a>
-									<a href="https://github.com/Levminer/cores/releases/latest" class="smallButton">
+								</div>
+							</div>
+							<div class="flex flex-col justify-between gap-10 md:flex-row">
+								<div class="flex flex-col">
+									<div class="flex flex-row items-center gap-3">
+										<Microsoft width="24" height="24" />
+										<h2>Windows Portable</h2>
+									</div>
+									<h3>Download the portable version if you want to try out Cores.</h3>
+								</div>
+								<div class="flex flex-col gap-3 md:flex-row">
+									<a href="https://link.levminer.com/cores-gh-portable" class="smallButton">
 										<Download />
 										Download
 									</a>
 								</div>
 							</div>
-						</div>
-
-						<!-- windows portable -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex items-center gap-3">
-									<Microsoft width="24" height="24" />
-									<h2>Windows Portable (x64)</h2>
-								</div>
-								<div class="flex flex-col gap-3 md:flex-row">
-									<a href="https://github.com/Levminer/cores/releases/latest" class="smallButton">
-										<Download />
-										Download
-									</a>
-								</div>
+							<div class="border-t-2 pt-6">
+								<h3 class="text-lg">System requirements: Windows 10 or 11, 64bit processor</h3>
 							</div>
 						</div>
 					</div>
@@ -310,7 +311,7 @@
 										</button>
 										<div class="mt-3">
 											<a rel="noreferrer" href="#download" class="underline duration-200 hover:text-gray-200"
-												>Download for free</a
+												>Get started for free</a
 											>
 										</div>
 									</div>
