@@ -60,9 +60,14 @@
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
+	import { init as initAnalytics, trackEvent } from "@aptabase/web"
+	import build from "../../../build.json"
+
+	initAnalytics("A-EU-7472334817", { appVersion: build.version })
 
 	onMount(() => {
 		let host: WebRtcHost | undefined
+		let sendAnalytics = true
 
 		init().then(() => {
 			host = new WebRtcHost($settings.connectionCode)
@@ -88,10 +93,24 @@
 		// @ts-ignore - Receive api data from the webview
 		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
 			if (arg.data.name === "api") {
-				let parsed = JSON.parse(arg.data.content)
+				let parsed: HardwareInfo = JSON.parse(arg.data.content)
 
 				if (host !== undefined) {
 					host.send_message_to_clients(JSON.stringify(parsed))
+				}
+
+				if (sendAnalytics && !build.dev) {
+					console.log("Sending analytics")
+
+					trackEvent("hardware_info", {
+						version: build.version,
+						build: build.number,
+						cpu: parsed.cpu.name ?? "N/A",
+						gpu: parsed.gpu.name ?? "N/A",
+						os: parsed.system.os.name ?? "N/A",
+						ram: Math.round((parsed.ram.load[0]?.value ?? 0) + (parsed.ram.load[1]?.value ?? 0)),
+						date: new Date().toISOString().split("T")[0],
+					})
 				}
 
 				setHardwareInfo(parsed)
