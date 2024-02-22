@@ -145,10 +145,10 @@
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Info />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Info</h2>
+								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Information</h2>
 							</div>
 							<div class="select-text">
-								<h3>Detailed information about each component</h3>
+								<h3>Detailed information about each component in its own page.</h3>
 							</div>
 						</div>
 
@@ -158,10 +158,10 @@
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<BarChart3 />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Charts</h2>
+								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Useful Charts</h2>
 							</div>
 							<div class="select-text">
-								<h3>Track your components status with charts</h3>
+								<h3>Track your components status with informative charts.</h3>
 							</div>
 						</div>
 					</div>
@@ -191,10 +191,10 @@
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Radio />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote connection</h2>
+								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Monitor from anywhere</h2>
 							</div>
 							<div class="select-text">
-								<h3>You can monitor your device from any device with a browser.</h3>
+								<h3>You can monitor your system from any device with a web browser.</h3>
 							</div>
 						</div>
 
@@ -207,11 +207,22 @@
 								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h2>
 							</div>
 							<div class="select-text">
-								<h3>You can connect directly to the multiple host computers, no server needed.</h3>
+								<h3>You can connect directly to multiple host systems. No cloud, no central server.</h3>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div id="features4" class="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-blue-800 to-indigo-900 py-20">
+			<h1 class="mb-10 text-5xl font-bold sm:text-3xl">Packed with features</h1>
+			<div class="flex max-w-2xl flex-wrap items-center justify-center gap-1">
+				{#each features as item}
+					<div class="rounded-xl border border-white/40 bg-white/30 p-3 text-lg shadow-xl backdrop-blur-xl">
+						<p>{item}</p>
+					</div>
+				{/each}
 			</div>
 		</div>
 
@@ -364,6 +375,8 @@
 	import Header from "../components/header.svelte"
 	import GetStarted from "../components/getStarted.svelte"
 
+	// prettier-ignore
+	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date","Remote Access","Runs In The Background", "Minimal Resource Usage"]
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0
 	let roller: NodeJS.Timeout

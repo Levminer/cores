@@ -1,9 +1,9 @@
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center sm:m-2">
 	<div class="my-10">
 		<h1>Getting Started</h1>
 	</div>
 	<div class="flex max-w-6xl flex-col flex-wrap gap-10 text-center md:flex-row md:flex-nowrap">
-		<div class="transparent-900 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
+		<div class="transparent-900 border shadow-xl border-gray-500 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
 			<div class="bg-cores-min flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">1</div>
 			<h2 class="my-5">Download Cores Desktop</h2>
 			<h3>Download and install Cores on your computer.</h3>
@@ -13,7 +13,7 @@
 			>
 		</div>
 
-		<div class="transparent-900 relative top-5 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
+		<div class="transparent-900 border shadow-xl border-gray-500 relative top-5 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
 			<div class="bg-cores-current flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">2</div>
 			<h2 class="my-5">Enable remote connections</h2>
 			<h3>Enable remote connections and copy your connection code.</h3>
@@ -23,7 +23,7 @@
 			>
 		</div>
 
-		<div class="transparent-900 relative top-10 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
+		<div class="transparent-900 border shadow-xl border-gray-500 relative top-10 flex w-full flex-col items-center rounded-xl p-10 md:w-1/3">
 			<div class="bg-cores-max flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">3</div>
 			<h2 class="my-5">Launch Cores Web</h2>
 			<h3>Launch Cores Web in any browser and use the connection code you copied from Cores Desktop.</h3>
