@@ -24,7 +24,7 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
 	<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
 	<AssemblyName>Cores</AssemblyName>
-	<Version>0.15.0</Version>
+	<Version>0.16.0</Version>
 	<WindowsPackageType>None</WindowsPackageType>
 	<!--<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>-->
   </PropertyGroup>
