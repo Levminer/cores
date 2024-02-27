@@ -1,3 +1,5 @@
+/// <reference types="vite-plugin-pwa/info" />
+/// <reference types="vite-plugin-pwa/client" />
 import "ui/index.d.ts"
 
 declare global {
