@@ -188,11 +188,16 @@ public class HardwareInfo {
 
 					// Get GPU Load
 					Task.Run(async () => {
-						var GPULoad = new GPULoad();
-						await GPULoad.GetInfo();
+						try {
+							var GPULoad = new GPULoad();
+							await GPULoad.GetInfo();
 
-						API.GPU.Load = GPULoad.Load;
-						API.GPU.MaxLoad = GPULoad.MaxLoad;
+							API.GPU.Load = GPULoad.Load;
+							API.GPU.MaxLoad = GPULoad.MaxLoad;
+						}
+						catch (Exception) {
+							Debug.WriteLine("Error in GPULoad");
+						}
 					});
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
@@ -551,7 +556,6 @@ public class HardwareInfo {
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);
-			SentrySdk.CaptureMessage(e.ToString());
 		}
 	}
 

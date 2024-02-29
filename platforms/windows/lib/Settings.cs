@@ -56,7 +56,6 @@ public class Settings {
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);
-			SentrySdk.CaptureMessage(e.ToString());
 		}
 	}
 

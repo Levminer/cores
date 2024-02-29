@@ -148,7 +148,6 @@ public sealed partial class MainWindow : Window {
 			}
 			catch (Exception e) {
 				SentrySdk.CaptureException(e);
-				SentrySdk.CaptureMessage(e.ToString());
 			}
 
 			firstRun = false;

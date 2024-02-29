@@ -63,7 +63,7 @@
 	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
 
-	initAnalytics("A-EU-7472334817", { appVersion: build.version })
+	initAnalytics("A-EU-8347557657", { appVersion: build.version })
 
 	onMount(() => {
 		let host: WebRtcHost | undefined
@@ -111,6 +111,8 @@
 						ram: Math.round((parsed.ram.load[0]?.value ?? 0) + (parsed.ram.load[1]?.value ?? 0)),
 						date: new Date().toISOString().split("T")[0],
 					})
+
+					sendAnalytics = false
 				}
 
 				setHardwareInfo(parsed)

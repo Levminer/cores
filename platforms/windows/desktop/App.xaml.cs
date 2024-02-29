@@ -30,7 +30,6 @@ public partial class App : Application {
 		InitializeComponent();
 		UnhandledException += (s, e) => {
 			SentrySdk.CaptureException(e.Exception);
-			SentrySdk.CaptureMessage(e.ToString());
 		};
 
 		// Force dark mode
