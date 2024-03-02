@@ -26,11 +26,12 @@
 	<AssemblyName>Cores</AssemblyName>
 	<Version>0.16.0</Version>
 	<WindowsPackageType>None</WindowsPackageType>
-	<!--<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>-->
+	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
 	<Content Include="Assets\assets\*">
+		<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
 	<None Remove="Views\Tray.xaml" />
@@ -43,11 +44,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.115" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230724000" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
-    <PackageReference Include="Sentry" Version="4.0.0" />
-    <PackageReference Include="WinUIEx" Version="2.2.0" />
+    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.124" />
+	<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240227000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
+    <PackageReference Include="Sentry" Version="4.1.2" />
+    <PackageReference Include="WinUIEx" Version="2.3.4" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

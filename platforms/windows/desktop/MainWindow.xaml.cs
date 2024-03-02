@@ -144,7 +144,7 @@ public sealed partial class MainWindow : Window {
 
 				App.GlobalHardwareInfo.API.System.OS.WebView = webView.CoreWebView2.Environment.BrowserVersionString;
 				App.GlobalHardwareInfo.API.System.OS.App = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
-				App.GlobalHardwareInfo.API.System.OS.Runtime = "1.3.230724000";
+				App.GlobalHardwareInfo.API.System.OS.Runtime = "1.5.240227000";
 			}
 			catch (Exception e) {
 				SentrySdk.CaptureException(e);

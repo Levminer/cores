@@ -2,6 +2,7 @@ using H.NotifyIcon;
 using H.NotifyIcon.EfficiencyMode;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
+using WinUIEx;
 
 namespace Cores.Views;
 public sealed partial class TrayIconView {
@@ -21,7 +22,6 @@ public sealed partial class TrayIconView {
 			EfficiencyModeUtilities.SetEfficiencyMode(true);
 			ShowHideText.Label = "Show Cores";
 		} else {
-			window.Activate();
 			window.Show();
 			EfficiencyModeUtilities.SetEfficiencyMode(false);
 			ShowHideText.Label = "Hide Cores";
