@@ -108,7 +108,7 @@
 						cpu: parsed.cpu.name ?? "N/A",
 						gpu: parsed.gpu.name ?? "N/A",
 						os: parsed.system.os.name ?? "N/A",
-						ram: Math.round((parsed.ram.load[0]?.value ?? 0) + (parsed.ram.load[1]?.value ?? 0)),
+						ram: `${Math.round((parsed.ram.load[0]?.value ?? 0) + (parsed.ram.load[1]?.value ?? 0))} GB`,
 						date: new Date().toISOString().split("T")[0],
 					})
 
