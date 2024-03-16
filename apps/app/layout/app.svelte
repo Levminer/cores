@@ -55,23 +55,28 @@
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import init, { WebRtcHost } from "../../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
+	import { EzrtcHost as EzRTCHost } from "ezrtc"
 
 	initAnalytics("A-EU-8347557657", { appVersion: build.version })
 
 	onMount(() => {
-		let host: WebRtcHost | undefined
 		let sendAnalytics = true
-
-		init().then(() => {
-			host = new WebRtcHost($settings.connectionCode)
-		})
+		let host = new EzRTCHost("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
+			{
+				urls: "stun:stun.relay.metered.ca:80",
+			},
+			{
+				urls: "turn:standard.relay.metered.ca:80",
+				username: "56feef2e09dcd8d33c5f67eb",
+				credential: "ynk5rIg6gGh4lEAk",
+			},
+		])
 
 		// Navigate to the home page on load (webview bug)
 		router.goto("/home")
@@ -96,7 +101,7 @@
 				let parsed: HardwareInfo = JSON.parse(arg.data.content)
 
 				if (host !== undefined) {
-					host.send_message_to_clients(JSON.stringify(parsed))
+					host.sendMessageToAll(JSON.stringify(parsed))
 				}
 
 				if (sendAnalytics && !build.dev) {

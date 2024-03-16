@@ -16,11 +16,11 @@
 	import Navigation from "ui/navigation/navigation.svelte"
 	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import init, { WebRtcClient } from "../../../../../crates/client/pkg/lib.js"
 	import { settings } from "ui/stores/settings"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { page } from "$app/stores"
 	import { onNavigate } from "$app/navigation"
+	import { EzrtcClient as EzRTCClient } from "ezrtc"
 
 	$: url = $page.url.pathname
 
@@ -29,13 +29,20 @@
 	})
 
 	onMount(() => {
-		let client: WebRtcClient | undefined
+		let client: EzRTCClient | undefined
 
-		init().then(() => {
-			if ($settings.connectionCode!.startsWith("crs_")) {
-				client = new WebRtcClient($settings.connectionCode!)
-			}
-		})
+		if ($settings.connectionCode!.startsWith("crs_")) {
+			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
+				{
+					urls: "stun:stun.relay.metered.ca:80",
+				},
+				{
+					urls: "turn:standard.relay.metered.ca:80",
+					username: "56feef2e09dcd8d33c5f67eb",
+					credential: "ynk5rIg6gGh4lEAk",
+				},
+			])
+		}
 
 		// 60s date comparison
 		const date = new Date()
@@ -73,17 +80,13 @@
 			}
 		}
 
-		setInterval(() => {
-			if (client !== undefined) {
-				let message = client.get_message()
+		client?.onMessage((message) => {
+			if (message !== undefined && message !== "") {
+				let parsed = JSON.parse(message)
 
-				if (message !== undefined && message !== "") {
-					let parsed = JSON.parse(message)
-
-					setHardwareInfo(parsed)
-					updateHardwareStats(parsed)
-				}
+				setHardwareInfo(parsed)
+				updateHardwareStats(parsed)
 			}
-		}, 3000)
+		})
 	})
 </script>

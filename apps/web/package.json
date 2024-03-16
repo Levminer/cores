@@ -8,6 +8,7 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
 	},
+	"type": "module",
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.1",
@@ -25,5 +26,7 @@
 		"ui": "*",
 		"vite": "^5.0.12"
 	},
-	"type": "module"
+	"dependencies": {
+		"ezrtc": "^0.3.0"
+	}
 }
