@@ -36,7 +36,7 @@ public class Server {
 
 	static async Task ProcessRequestAsync(HttpListenerContext context, HardwareInfo hardwareInfo) {
 		// Prepare the response content (JSON)
-		string responseJson = JsonSerializer.Serialize(hardwareInfo.API);
+		string responseJson = JsonSerializer.Serialize(hardwareInfo.API, Program.SerializerOptions);
 		byte[] buffer = Encoding.UTF8.GetBytes(responseJson);
 
 		// Set response headers, including CORS headers

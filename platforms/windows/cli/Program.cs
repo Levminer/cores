@@ -36,7 +36,7 @@ internal class Program {
 			HardwareInfo.GetInfo();
 		});
 
-		var mes = JsonSerializer.Serialize(HardwareInfo.API);
+		var mes = JsonSerializer.Serialize(HardwareInfo.API, SerializerOptions);
 		Console.WriteLine(mes);
 
 		Timer = new System.Timers.Timer(3000);
