@@ -10,6 +10,7 @@ namespace lib;
 public class JSON {
 	public JsonSerializerOptions SerializerOptions = new() {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
 		WriteIndented = true,
 		Converters = { new InfinityToZeroConverter() }
 	};

@@ -45,9 +45,9 @@
 
   <ItemGroup>
     <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.124" />
-	<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240227000" />
+	<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
-    <PackageReference Include="Sentry" Version="4.1.2" />
+    <PackageReference Include="Sentry" Version="4.2.1" />
     <PackageReference Include="WinUIEx" Version="2.3.4" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
