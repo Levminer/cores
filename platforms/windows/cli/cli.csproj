@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sentry" Version="4.0.0" />
+    <PackageReference Include="Sentry" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>
