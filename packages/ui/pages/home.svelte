@@ -22,7 +22,7 @@
 								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
 							</div>
 							<div class="progress">
-								<div id={`progress${i}`} class="progressFill" />
+								<div id={`cpuProgress${i}`} class="progressFill" />
 							</div>
 						</div>
 					{/each}
@@ -49,7 +49,7 @@
 							<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.ram.load[5]?.value ?? 0)}%</p>
 						</div>
 						<div class="progress">
-							<div id="2progress" class="progressFill" />
+							<div id="ramProgress0" class="progressFill" />
 						</div>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
 							</div>
 							<div class="progress">
-								<div id={`3progress${i}`} class="progressFill" />
+								<div id={`gpuProgress${i}`} class="progressFill" />
 							</div>
 						</div>
 					{/each}
@@ -433,28 +433,35 @@
 	import MeterChart from "ui/charts/meterChart.svelte"
 	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu } from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
-	import { onMount } from "svelte"
 
-	let interval: NodeJS.Timeout
+	$: cpuLoadChange($hardwareInfo.cpu.load)
+	$: ramLoadChange($hardwareInfo.ram.load)
+	$: gpuLoadChange($hardwareInfo.gpu.load)
 
-	onMount(() => {
-		interval = setInterval(() => {
+	const cpuLoadChange = (val) => {
+		if (document.getElementById("cpuProgress0") !== null) {
 			$hardwareInfo.cpu.load.forEach((load, i) => {
-				const progress = document.getElementById(`progress${i}`) as HTMLDivElement
+				const progress = document.getElementById(`cpuProgress${i}`) as HTMLDivElement
 				progress.style.width = `${Math.round(load.value)}%`
 			})
-
-			$hardwareInfo.gpu.load.forEach((load, i) => {
-				const progress = document.getElementById(`3progress${i}`) as HTMLDivElement
-				progress.style.width = `${Math.round(load.value)}%`
-			})
-
-			let ramLoad = document.getElementById("2progress") as HTMLDivElement
-			ramLoad.style.width = `${Math.round($hardwareInfo.ram.load[5].value)}%`
-		}, 1000)
-
-		return () => {
-			clearInterval(interval)
 		}
-	})
+	}
+
+	const ramLoadChange = (val) => {
+		if (document.getElementById("ramProgress0") !== null) {
+			$hardwareInfo.ram.load.forEach((load, i) => {
+				const progress = document.getElementById(`ramProgress0`) as HTMLDivElement
+				progress.style.width = `${Math.round(load.value)}%`
+			})
+		}
+	}
+
+	const gpuLoadChange = (val) => {
+		if (document.getElementById("gpuProgress0") !== null) {
+			$hardwareInfo.gpu.load.forEach((load, i) => {
+				const progress = document.getElementById(`gpuProgress${i}`) as HTMLDivElement
+				progress.style.width = `${Math.round(load.value)}%`
+			})
+		}
+	}
 </script>
