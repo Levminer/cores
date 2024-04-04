@@ -50,29 +50,29 @@ body {
 
 /* headings */
 h1 {
-	font-size: 64px;
+	font-size: 62px;
 	font-weight: 700;
 }
 
 /* main card */
 h2 {
-	font-size: 32px;
+	font-size: 30px;
 	font-weight: 700;
 }
 
 h3 {
-	font-size: 24px;
+	font-size: 22px;
 	color: #d3cfcf;
 }
 
 /* secondary card */
 h4 {
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 500;
 }
 
 h5 {
-	font-size: 18px;
+	font-size: 16px;
 	color: #d3cfcf;
 }
 
