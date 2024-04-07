@@ -1,40 +1,15 @@
-<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-8 sm:w-full sm:p-4">
-	<h1 class="mb-10">Remote connections</h1>
-
-	<div class="mx-auto flex flex-col items-center justify-center gap-5 rounded-2xl">
-		<div class="transparent-800 flex w-full flex-col items-start justify-start rounded-xl p-8 text-left sm:flex-col sm:p-4">
-			<div>
-				<h2>Add connection code</h2>
-				<h3>Get your connection code from the Cores desktop app.</h3>
-			</div>
-			<div class="mt-4 flex w-full gap-3">
-				<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
-					<div class="flex flex-row flex-wrap gap-3">
-						<div>
-							<h5>Name</h5>
-							<input class="input mt-1" type="text" id="name" />
-						</div>
-
-						<div>
-							<h5>Connection code</h5>
-							<input class="input mt-1" type="text" id="code" />
-						</div>
-					</div>
-
-					<button class="button mt-6" on:click={addConnectionCode}>
-						<Plus />
-						<span>Add</span>
-					</button>
+<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
+	<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
+		<!-- remote connections -->
+		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex items-center gap-3">
+				<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+					<Cable />
 				</div>
+				<h2>Remote connections</h2>
 			</div>
-		</div>
-
-		<div class="transparent-800 flex w-full flex-col items-start justify-start rounded-xl p-8 text-left sm:flex-col sm:p-4">
-			<div>
-				<h2>Connection codes</h2>
-				<h3>List of your connection codes.</h3>
-			</div>
-			<div class="mt-4 flex w-full flex-col gap-3">
+			<div class="mt-5 flex w-full flex-col gap-5">
+				<h3>Get your connection code from the Cores desktop app.</h3>
 				{#each $settings.connectionCodes as item}
 					<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
 						<div class="flex flex-row flex-wrap gap-3">
@@ -69,47 +44,57 @@
 						</div>
 					</div>
 				{/each}
+				<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
+					<div class="flex flex-row flex-wrap gap-3">
+						<div>
+							<h5>Name</h5>
+							<input class="input mt-1" type="text" id="name" />
+						</div>
+
+						<div>
+							<h5>Connection code</h5>
+							<input class="input mt-1" type="text" id="code" />
+						</div>
+					</div>
+
+					<button class="button mt-6" on:click={addConnectionCode}>
+						<Plus />
+						<span>Add</span>
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl p-8 sm:w-full sm:p-4">
-	<h1 class="mb-10">About</h1>
+		<!-- about -->
+		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Info />
+					</div>
+					<h2>About Cores</h2>
+				</div>
+				<h3>Information about your Cores build and your computer.</h3>
+			</div>
 
-	<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-10 text-left">
-		<div>
-			<h2>About Cores</h2>
-			<h3>Information about your Cores build and your computer.</h3>
-		</div>
-		<div class="ml-20 flex gap-3">
-			<button
-				on:click={() => {
-					alert(`Cores ${version} \n\nRelease date: ${date} \nBuild number: ${number} \n\nCreated by Lőrik Levente`)
-				}}
-				class="button"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg
+			<div class="flex flex-col items-start gap-3 sm:my-5">
+				<button
+					on:click={() => {
+						alert(`Cores ${version} \n\nRelease date: ${date} \nBuild number: ${number} \n\nCreated by Lőrik Levente`)
+					}}
+					class="button"
 				>
-				About Cores
-			</button>
+					<Info />
+					About Cores
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
 
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
-	import { Plus, RefreshCcw, Trash2 } from "lucide-svelte"
+	import { Plus, RefreshCcw, Trash2, Cable, Info } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../build.json"
 
 	const addConnectionCode = () => {
