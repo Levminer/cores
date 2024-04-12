@@ -1,26 +1,24 @@
-{#if $hardwareInfo.cpu === undefined}
-	{#if url === "/settings"}
-		<Navigation />
-		<slot />
-	{:else}
-		<Loading showTips={true} />
-	{/if}
+<Navigation />
+{#if url === "/connect"}
+	<Connect {connect} />
+{:else if loading}
+	<Loading showTips={true} />
 {:else}
-	<Navigation />
 	<slot />
 {/if}
 
 <script lang="ts">
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
-	import Loading from "ui/navigation/loading.svelte"
 	import Navigation from "ui/navigation/navigation.svelte"
-	import { onMount } from "svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import { settings } from "ui/stores/settings"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { page } from "$app/stores"
 	import { onNavigate } from "$app/navigation"
 	import { EzrtcClient as EzRTCClient } from "ezrtc"
+	import Loading from "ui/navigation/loading.svelte"
+	import Connect from "../../components/connect.svelte"
+	let loading = false
 
 	$: url = $page.url.pathname
 
@@ -28,10 +26,13 @@
 		url = navigation.to?.url.pathname ?? "/"
 	})
 
-	onMount(() => {
+	const connect = () => {
+		loading = true
+
 		let client: EzRTCClient | undefined
 
 		if ($settings.connectionCode!.startsWith("crs_")) {
+			console.log("MI A FOS")
 			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
 				{
 					urls: "stun:stun.relay.metered.ca:80",
@@ -83,10 +84,11 @@
 		client?.onMessage((message) => {
 			if (message !== undefined && message !== "") {
 				let parsed = JSON.parse(message)
+				loading = false
 
 				setHardwareInfo(parsed)
 				updateHardwareStats(parsed)
 			}
 		})
-	})
+	}
 </script>

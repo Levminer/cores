@@ -29,18 +29,6 @@
 								<Trash2 />
 								<span>Delete</span>
 							</button>
-
-							<button
-								class="button mt-6"
-								on:click={() => {
-									$settings.connectionCode = item.code
-									sessionStorage.clear()
-									location.href = "/home"
-								}}
-							>
-								<RefreshCcw />
-								<span>Connect</span>
-							</button>
 						</div>
 					</div>
 				{/each}
