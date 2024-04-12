@@ -1,0 +1,40 @@
+{
+	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/web-manifest.json",
+	"name": "Cores - Hardware Monitor",
+	"short_name": "Cores",
+	"description": "Modern hardware monitor for Windows.",
+	"start_url": "/home",
+	"display": "standalone",
+	"background_color": "#000000",
+	"theme_color": "#fe7162",
+	"orientation": "portrait-primary",
+	"lang": "en-US",
+	"categories": ["utilities"],
+	"dir": "ltr",
+	"icons": [
+		{
+			"src": "maskable_icon_x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "maskable_icon_x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "maskable_icon_x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "maskable_icon_x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
+}
