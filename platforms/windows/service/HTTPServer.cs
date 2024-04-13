@@ -8,11 +8,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace service;
-public class Server {
+public class HTTPServer {
 	static HttpListener listener;
 
 	public void Start(HardwareInfo hardwareInfo) {
-		string url = "http://localhost:8080/";
+		string url = "http://localhost:5390/";
 
 		// Create an HttpListener
 		listener = new HttpListener();
