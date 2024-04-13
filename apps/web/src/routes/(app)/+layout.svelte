@@ -18,6 +18,7 @@
 	import { EzrtcClient as EzRTCClient } from "ezrtc"
 	import Loading from "ui/navigation/loading.svelte"
 	import Connect from "../../components/connect.svelte"
+	import { onMount } from "svelte"
 	let loading = false
 
 	$: url = $page.url.pathname
@@ -26,13 +27,18 @@
 		url = navigation.to?.url.pathname ?? "/"
 	})
 
+	onMount(() => {
+		if ($settings.connectionCode!.startsWith("crs_") && $hardwareInfo.cpu !== undefined) {
+			connect()
+		}
+	})
+
 	const connect = () => {
 		loading = true
 
 		let client: EzRTCClient | undefined
 
 		if ($settings.connectionCode!.startsWith("crs_")) {
-			console.log("MI A FOS")
 			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
 				{
 					urls: "stun:stun.relay.metered.ca:80",
