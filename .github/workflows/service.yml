@@ -45,7 +45,13 @@ jobs:
 
             # Build service executable
             - name: Build installer
-              run: msbuild /p:Platform=x64 /p:Configuration=$env:Configuration /t:Restore
+              run: msbuild /p:Platform=x64 /p:Configuration=$env:Configuration /t:Publish
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            # Build service installer
+            - name: Build installer
+              run: msbuild /p:Platform=x64 /p:Configuration=$env:Configuration
               env:
                   Configuration: ${{ matrix.configuration }}
 
