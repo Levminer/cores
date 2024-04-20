@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>CoresService</AssemblyName>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <PublishProfile>win10-x64.pubxml</PublishProfile>
   </PropertyGroup>
 
   <ItemGroup>

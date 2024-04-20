@@ -42,7 +42,7 @@
 				<!-- Copies the App.WindowsService.exe file using the
                      project reference preprocessor variables -->
 				<File Id="Cores.Service.exe"
-                      Source="$(var.service.TargetDir)\publish\win-x64\CoresService.exe"
+                      Source="$(var.service.ProjectDir)bin\exe\CoresService.exe"
                       KeyPath="true"
 					  />
 
