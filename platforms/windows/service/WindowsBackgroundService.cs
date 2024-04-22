@@ -14,9 +14,9 @@ namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
 	private readonly ILogger<WindowsBackgroundService> logger;
 	internal static HardwareInfo HardwareInfo = new();
-	internal static HTTPServer Server = new();
+	internal static HTTPServer HTTPServer = new();
 	internal static WSServer WSServer = new();
-	internal static EzRTCHost EzRTCHost = new(new Uri("wss://rtc-usw.levminer.com/one-to-many"), "crs_1d7de676b4", new List<RTCIceServer> { new RTCIceServer { urls = "stun:openrelay.metered.ca:80" }, new RTCIceServer { urls = "turn:standard.relay.metered.ca:443", credential = "8By67N7nOLDIagJk", username = "2ce7aaf275c1abdef74ec7e3", credentialType = RTCIceCredentialType.password } });
+	internal static RTCServer RTCServer = new();
 
 	public WindowsBackgroundService(ILogger<WindowsBackgroundService> logger) {
 		this.logger = logger;
@@ -25,23 +25,20 @@ public sealed class WindowsBackgroundService : BackgroundService {
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		logger.LogWarning("Starting Cores service");
 		HardwareInfo.GetInfo();
-		Server.Start(HardwareInfo);
+		HTTPServer.Start(HardwareInfo);
 		WSServer.Start(HardwareInfo);
-
-		Task.Run(() => {
-			EzRTCHost.Start();
-		});
+		RTCServer.Start(HardwareInfo);
 
 		while (!stoppingToken.IsCancellationRequested) {
 			try {
 				HardwareInfo.Refresh();
-				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(HardwareInfo.API, Program.SerializerOptions));
 				await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
 			}
 			catch (OperationCanceledException) {
-				Server.Stop();
-				HardwareInfo.Stop();
+				HTTPServer.Stop();
 				WSServer.Stop();
+				RTCServer.Stop();
+				HardwareInfo.Stop();
 			}
 			catch (Exception ex) {
 				logger.LogError(ex, "{Message}", ex.Message);
