@@ -13,6 +13,9 @@ jobs:
         env:
             Solution_Name: cores.sln
             Project_Directory: platforms/windows/desktop
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
         steps:
             - name: Checkout
@@ -49,7 +52,7 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
-            - name: Install trusted-signing-cli
+            - name: Sign service executable
               run: |
                 npm run sign platforms/windows/service/bin/exe/CoresService.exe
 
@@ -59,7 +62,7 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
-            - name: Install trusted-signing-cli
+            - name: Sign service installer
               run: |
                 npm run sign platforms/windows/installer/bin/x64/Release/en-US/installer.msi
 
