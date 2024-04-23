@@ -15,7 +15,8 @@
 		"dev:web": "node scripts/buildNumber.cjs alpha true && npm run dev -w web",
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build -w web",
-		"check": "npm run check -w app"
+		"check": "npm run check -w app",
+		"sign": "node scripts/sign.js"
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3"

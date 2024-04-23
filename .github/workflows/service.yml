@@ -49,11 +49,19 @@ jobs:
               env:
                   Configuration: ${{ matrix.configuration }}
 
+            - name: Install trusted-signing-cli
+              run: |
+                npm run sign platforms/windows/service/bin/exe/CoresService.exe
+
             # Build service installer
             - name: Build service installer
               run: msbuild /p:Platform=x64 /p:Configuration=$env:Configuration
               env:
                   Configuration: ${{ matrix.configuration }}
+
+            - name: Install trusted-signing-cli
+              run: |
+                npm run sign platforms/windows/installer/bin/x64/Release/en-US/installer.msi
 
             # Upload the unpackaged app
             - name: Upload service installer
