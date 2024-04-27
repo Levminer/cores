@@ -1,4 +1,6 @@
-<div class="flex h-screen flex-col">
+<div class="flex h-screen">
+	<DesktopNavigation />
+
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
 
@@ -61,22 +63,28 @@
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
-	import { EzrtcHost as EzRTCHost } from "ezrtc"
+	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
 
 	initAnalytics("A-EU-8347557657", { appVersion: build.version })
 
 	onMount(() => {
+		// connect to local ws server
+		const ws = new WebSocket("ws://localhost:5391")
+
+		ws.onopen = () => {
+			console.log("Local WS Connection established")
+		}
+
+		ws.onmessage = (event) => {
+			const data = JSON.parse(event.data)
+
+			setHardwareInfo(data)
+			updateHardwareStats(data)
+		}
+
+		// TODO: reconnect to ws server if connection is lost
+
 		let sendAnalytics = true
-		let host = new EzRTCHost("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
-			{
-				urls: "stun:stun.relay.metered.ca:80",
-			},
-			{
-				urls: "turn:standard.relay.metered.ca:80",
-				username: "56feef2e09dcd8d33c5f67eb",
-				credential: "ynk5rIg6gGh4lEAk",
-			},
-		])
 
 		// Navigate to the home page on load (webview bug)
 		router.goto("/home")
@@ -86,7 +94,7 @@
 			document.querySelector(".top").scrollIntoView()
 		})
 
-		// @ts-ignore - Receive settings from the webview
+		// @ts-ignore - Receive settings from the webview - DEPRECATED
 		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
 			if (arg.data.name === "settings") {
 				console.log("New settings")
@@ -95,14 +103,10 @@
 			}
 		})
 
-		// @ts-ignore - Receive api data from the webview
+		// @ts-ignore - Receive api data from the webview - DEPRECATED
 		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
 			if (arg.data.name === "api") {
 				let parsed: HardwareInfo = JSON.parse(arg.data.content)
-
-				if (host !== undefined) {
-					host.sendMessageToAll(JSON.stringify(parsed))
-				}
 
 				if (sendAnalytics && !build.dev) {
 					console.log("Sending analytics")
@@ -122,13 +126,6 @@
 
 				setHardwareInfo(parsed)
 				updateHardwareStats(parsed)
-			}
-		})
-
-		// @ts-ignore - Receive navigation info
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "navigation") {
-				router.goto(arg.data.content)
 			}
 		})
 

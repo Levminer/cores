@@ -30,6 +30,14 @@
 	.checkbox {
 		@apply focusRing form-checkbox relative -top-0.5 transform cursor-pointer rounded-full border-2 text-black outline-none duration-200 ease-in focus:ring-transparent motion-reduce:transform-none motion-reduce:transition-none;
 	}
+
+	.menuButton {
+		@apply p-3;
+	}
+
+	.selectedMenuButton {
+		@apply transparent-900 rounded-lg p-3;
+	}
 }
 
 /* body */
