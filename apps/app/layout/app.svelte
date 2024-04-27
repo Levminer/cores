@@ -68,6 +68,8 @@
 	initAnalytics("A-EU-8347557657", { appVersion: build.version })
 
 	onMount(() => {
+		// TODO: Set background color to #0a0a0a when os not supports mica
+
 		// connect to local ws server
 		const ws = new WebSocket("ws://localhost:5391")
 
@@ -82,7 +84,7 @@
 			updateHardwareStats(data)
 		}
 
-		// TODO: reconnect to ws server if connection is lost
+		// TODO: Reconnect to ws server if connection is lost
 
 		let sendAnalytics = true
 
@@ -166,3 +168,9 @@
 		}
 	})
 </script>
+
+<style>
+	:global(body) {
+		background-color: transparent !important;
+	}
+</style>
