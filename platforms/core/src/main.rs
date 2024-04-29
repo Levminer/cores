@@ -13,8 +13,11 @@ pub mod settings;
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
-            app.get_webview_window("main").unwrap().set_focus().unwrap();
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            let window = app.get_webview_window("main").unwrap();
+
+            window.show().unwrap();
+            window.set_focus().unwrap();
         }))
         .invoke_handler(tauri::generate_handler![
             settings::get_settings,
@@ -64,6 +67,20 @@ fn main() {
                 .build(app);
 
             Ok(())
+        })
+        .on_window_event(|window, event| match event {
+            tauri::WindowEvent::CloseRequested { api, .. } => {
+                api.prevent_close();
+
+                let settings = settings::get_settings();
+
+                if settings.minimize_to_tray {
+                    window.hide().unwrap();
+                } else {
+                    window.app_handle().exit(1)
+                }
+            }
+            _ => {}
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
