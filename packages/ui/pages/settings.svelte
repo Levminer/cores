@@ -148,6 +148,7 @@
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"
 	import { Clipboard, Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"
+	import { open } from "@tauri-apps/plugin-shell"
 
 	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${
 		$hardwareInfo.system.os.webView
