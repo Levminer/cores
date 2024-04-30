@@ -9,10 +9,12 @@ use tauri::{
 };
 
 pub mod settings;
+pub mod utils;
 
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let window = app.get_webview_window("main").unwrap();
 
@@ -21,7 +23,8 @@ fn main() {
         }))
         .invoke_handler(tauri::generate_handler![
             settings::get_settings,
-            settings::set_settings
+            settings::set_settings,
+            utils::system_info
         ])
         .setup(|app| {
             let toggle_window_item =

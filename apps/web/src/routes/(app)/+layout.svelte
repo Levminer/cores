@@ -2,7 +2,7 @@
 {#if url === "/connect"}
 	<Connect {connect} />
 {:else if loading}
-	<Loading showTips={true} />
+	<Loading />
 {:else}
 	<slot />
 {/if}

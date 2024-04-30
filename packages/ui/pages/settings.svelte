@@ -52,17 +52,7 @@
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center justify-center space-x-3">
 					<input class="input" readonly value={$settings.connectionCode} />
-					<button
-						class="button"
-						on:click={() => {
-							navigator.clipboard.writeText($settings.connectionCode)
-							document.querySelector(".copy").innerHTML = "Copied"
-
-							setTimeout(() => {
-								document.querySelector(".copy").innerHTML = "Copy"
-							}, 1000)
-						}}
-					>
+					<button class="button" on:click={copyConnectionCode}>
 						<Clipboard />
 						<span class="copy">Copy</span>
 					</button>
@@ -149,28 +139,52 @@
 	import Toggle from "ui/components/toggle.svelte"
 	import { Clipboard, Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
-
-	let message = `Cores: ${$hardwareInfo.system.os.app} \n\nRuntime: ${$hardwareInfo.system.os.runtime} \nChromium: ${
-		$hardwareInfo.system.os.webView
-	}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round(
-		$hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value,
-	)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+	import { message } from "@tauri-apps/plugin-dialog"
+	import { invoke } from "@tauri-apps/api/core"
 
 	const launchOnStartup = () => {
 		// @ts-ignore
-		window.chrome.webview.postMessage({ name: "launchOnStartup", content: message })
 	}
 
-	const about = () => {
+	const about = async () => {
 		// @ts-ignore
-		window.chrome.webview.postMessage({ name: "about", content: message })
+		const ua = await navigator.userAgentData.getHighEntropyValues(["architecture", "model", "platform", "platformVersion", "fullVersionList"])
+
+		console.log(ua)
+
+		const systemInfo = (await invoke("system_info")) as {
+			tauriVersion: string
+			osName: string
+			osVersion: string
+			osArch: string
+			cpuName: string
+			totalMem: number
+		}
+
+		console.log(systemInfo)
+
+		let dialogMessage = `Cores: ${build.version} \n\nTauri: ${systemInfo.tauriVersion} \nChromium: ${
+			ua.fullVersionList[0].version
+		}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round(
+			$hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value,
+		)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+
+		message(dialogMessage)
 	}
 
 	const debug = async () => {
 		// let name = `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}.txt`
 
 		// @ts-ignore
-		window.chrome.webview.postMessage({ name: "debug", content: message })
 		alert("Debug report saved to the desktop")
+	}
+
+	const copyConnectionCode = () => {
+		navigator.clipboard.writeText($settings.connectionCode)
+		document.querySelector(".copy").innerHTML = "Copied"
+
+		setTimeout(() => {
+			document.querySelector(".copy").innerHTML = "Copy"
+		}, 1000)
 	}
 </script>
