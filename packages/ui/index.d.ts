@@ -9,11 +9,6 @@ declare global {
 		max: number
 	}
 
-	interface Message {
-		name: string
-		content: string
-	}
-
 	interface Disk {
 		name: string
 		temperature: Sensor
@@ -195,6 +190,15 @@ declare global {
 		version: number
 		remoteConnections: boolean
 		optionalAnalytics: boolean
+	}
+
+	interface SystemInfo {
+		tauriVersion: string
+		osName: string
+		osVersion: string
+		osArch: string
+		cpuName: string
+		totalMem: number
 	}
 }
 

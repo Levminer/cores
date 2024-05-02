@@ -57,36 +57,57 @@
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { settings } from "ui/stores/settings"
+	import { setSettings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
 	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
+	import { invoke } from "@tauri-apps/api/core"
 
-	initAnalytics("A-EU-8347557657", { appVersion: build.version })
+	initAnalytics("A-EU-8117718240", { appVersion: build.version })
 
-	onMount(() => {
+	onMount(async () => {
+		let sendAnalytics = true
+
+		// Get settings from disk
+		const storeSettings = (await invoke("get_settings")) as LibSettings
+		setSettings(storeSettings)
+
 		// TODO: Set background color to #0a0a0a when os not supports mica
 
 		// connect to local ws server
-		const ws = new WebSocket("ws://localhost:5391")
+		let ws = new WebSocket("ws://localhost:5391")
 
 		ws.onopen = () => {
 			console.log("Local WS Connection established")
 		}
 
 		ws.onmessage = (event) => {
-			const data = JSON.parse(event.data)
+			const data: HardwareInfo = JSON.parse(event.data)
+
+			if (sendAnalytics && !build.dev) {
+				console.log("Sending analytics")
+
+				trackEvent("hardware_info", {
+					version: build.version,
+					build: build.number,
+					cpu: data.cpu.name ?? "N/A",
+					gpu: data.gpu.name ?? "N/A",
+					os: data.system.os.name ?? "N/A",
+					ram: `${Math.round((data.ram.load[0]?.value ?? 0) + (data.ram.load[1]?.value ?? 0))} GB`,
+					date: new Date().toISOString().split("T")[0],
+				})
+
+				sendAnalytics = false
+			}
 
 			setHardwareInfo(data)
 			updateHardwareStats(data)
 		}
 
-		// TODO: Reconnect to ws server if connection is lost
-
-		let sendAnalytics = true
+		// TODO Reconnect to ws server if connection is lost
 
 		// Navigate to the home page on load (webview bug)
 		router.goto("/home")
@@ -94,41 +115,6 @@
 		// Scroll to the top of the page on route change
 		router.subscribe(() => {
 			document.querySelector(".top").scrollIntoView()
-		})
-
-		// @ts-ignore - Receive settings from the webview - DEPRECATED
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "settings") {
-				console.log("New settings")
-
-				$settings = JSON.parse(arg.data.content)
-			}
-		})
-
-		// @ts-ignore - Receive api data from the webview - DEPRECATED
-		window.chrome.webview.addEventListener("message", (arg: { data: Message }) => {
-			if (arg.data.name === "api") {
-				let parsed: HardwareInfo = JSON.parse(arg.data.content)
-
-				if (sendAnalytics && !build.dev) {
-					console.log("Sending analytics")
-
-					trackEvent("hardware_info", {
-						version: build.version,
-						build: build.number,
-						cpu: parsed.cpu.name ?? "N/A",
-						gpu: parsed.gpu.name ?? "N/A",
-						os: parsed.system.os.name ?? "N/A",
-						ram: `${Math.round((parsed.ram.load[0]?.value ?? 0) + (parsed.ram.load[1]?.value ?? 0))} GB`,
-						date: new Date().toISOString().split("T")[0],
-					})
-
-					sendAnalytics = false
-				}
-
-				setHardwareInfo(parsed)
-				updateHardwareStats(parsed)
-			}
 		})
 
 		// 60s date comparison

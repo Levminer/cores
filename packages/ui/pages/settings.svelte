@@ -147,27 +147,32 @@
 	}
 
 	const about = async () => {
-		// @ts-ignore
-		const ua = await navigator.userAgentData.getHighEntropyValues(["architecture", "model", "platform", "platformVersion", "fullVersionList"])
-
-		console.log(ua)
-
-		const systemInfo = (await invoke("system_info")) as {
-			tauriVersion: string
-			osName: string
-			osVersion: string
-			osArch: string
-			cpuName: string
-			totalMem: number
+		interface userAgentData {
+			fullVersionList?: { version: string }[]
 		}
 
-		console.log(systemInfo)
+		let chromium_version = "N/A"
 
-		let dialogMessage = `Cores: ${build.version} \n\nTauri: ${systemInfo.tauriVersion} \nChromium: ${
-			ua.fullVersionList[0].version
-		}\n\nOS version: ${$hardwareInfo.system.os.name} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round(
-			$hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value,
-		)} GB RAM\n\nRelease date: ${build.date} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
+		// @ts-ignore
+		const ua: userAgentData = await navigator.userAgentData.getHighEntropyValues([
+			"architecture",
+			"model",
+			"platform",
+			"platformVersion",
+			"fullVersionList",
+		])
+
+		if (ua.fullVersionList !== undefined && ua.fullVersionList.length > 0) {
+			chromium_version = ua.fullVersionList?.[0]?.version || "N/A"
+		}
+
+		const systemInfo: SystemInfo = await invoke("system_info")
+
+		let dialogMessage = `Cores: ${build.version} \n\nTauri: ${systemInfo.tauriVersion} \nChromium: ${chromium_version}\n\nOS version: ${
+			$hardwareInfo.system.os.name
+		} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round(systemInfo.totalMem / 1024 / 1024 / 1024)} GB RAM\n\nRelease date: ${
+			build.date
+		} \nBuild number: ${build.number} \n\nCreated by: Lőrik Levente`
 
 		message(dialogMessage)
 	}
