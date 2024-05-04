@@ -1,14 +1,4 @@
-using ezrtc;
 using lib;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SIPSorcery.Net;
-using System;
-using System.IO.Pipes;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
@@ -42,6 +32,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			}
 			catch (Exception ex) {
 				logger.LogError(ex, "{Message}", ex.Message);
+				SentrySdk.CaptureException(ex);
 
 				Environment.Exit(1);
 			}
