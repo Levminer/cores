@@ -13,6 +13,8 @@
 		"menu:default",
 		"tray:default",
 		"shell:allow-open",
-		"dialog:allow-message"
+		"dialog:allow-message",
+		"dialog:allow-save",
+		"dialog:allow-ask"
 	]
 }

@@ -25,6 +25,19 @@ settings.subscribe(async (data) => {
 
 	if (import.meta.env.VITE_CORES_MODE === "host") {
 		await invoke("set_settings", { settings: JSON.stringify(data) })
+
+		await fetch("http://localhost:5390/post", {
+			method: "POST",
+			body: JSON.stringify({
+				type: "new_settings",
+				data: {
+					settings: JSON.stringify(data),
+				},
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
 	}
 
 	localStorage.setItem("settings", JSON.stringify(data))

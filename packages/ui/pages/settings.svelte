@@ -139,7 +139,7 @@
 	import Toggle from "ui/components/toggle.svelte"
 	import { Clipboard, Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
-	import { message } from "@tauri-apps/plugin-dialog"
+	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
 
 	const launchOnStartup = () => {
@@ -178,10 +178,32 @@
 	}
 
 	const debug = async () => {
-		// let name = `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}.txt`
+		const filePath = await save({
+			filters: [
+				{
+					name: "Text file",
+					extensions: ["txt"],
+				},
+			],
+		})
 
-		// @ts-ignore
-		alert("Debug report saved to the desktop")
+		if (filePath) {
+			await fetch("http://localhost:5390/post", {
+				method: "POST",
+				body: JSON.stringify({
+					type: "debug_report",
+					data: {
+						filePath: filePath,
+						systemInfo: `Cores: ${build.version}`,
+					},
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+
+			// let name = `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}.txt`
+		}
 	}
 
 	const copyConnectionCode = () => {

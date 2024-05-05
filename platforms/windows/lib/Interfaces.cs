@@ -1,7 +1,4 @@
 ﻿using LibreHardwareMonitor.Hardware;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace lib;
 
@@ -31,6 +28,17 @@ public class Message {
 	public string Content {
 		get; set;
 	}
+}
+
+public class ProtocolData {
+	public string FilePath { get; set; }
+	public string SystemInfo { get; set; }
+	public string Settings { get; set; }
+}
+
+public class ProtocolMessage {
+	public string Type { get; set; }
+	public ProtocolData Data { get; set; }
 }
 
 public class Disk {
