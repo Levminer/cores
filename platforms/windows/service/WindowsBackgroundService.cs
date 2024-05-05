@@ -22,7 +22,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		while (!stoppingToken.IsCancellationRequested) {
 			try {
 				HardwareInfo.Refresh();
-				await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval), stoppingToken);
 			}
 			catch (OperationCanceledException) {
 				HTTPServer.Stop();

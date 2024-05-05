@@ -1,3 +1,4 @@
+using lib;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.EventLog;
 using System.Diagnostics;
@@ -12,6 +13,9 @@ public class Program {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 		WriteIndented = true,
 	};
+
+	internal static Settings Settings = new();
+
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 		Debug.WriteLine("App crashed");
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
@@ -26,6 +30,8 @@ public class Program {
 		});
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+		Settings.GetSettings();
 
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 		builder.Services.AddWindowsService(options => {
