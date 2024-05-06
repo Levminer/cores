@@ -8,6 +8,7 @@ use tauri::{
     Manager,
 };
 
+pub mod service;
 pub mod settings;
 pub mod utils;
 
@@ -24,6 +25,9 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             settings::get_settings,
             settings::set_settings,
+            service::start_service,
+            service::stop_service,
+            service::restart_service,
             utils::system_info
         ])
         .setup(|app| {

@@ -21,3 +21,4 @@ uuid = { version = "1.6.1", features = ["v4"] }
 directories = "4.0.1"
 sysinfo = "0.30.11"
 tauri-plugin-os = "2.0.0-beta.3"
+runas = "1.2.0"

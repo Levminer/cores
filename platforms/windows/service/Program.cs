@@ -1,3 +1,4 @@
+using H.NotifyIcon.EfficiencyMode;
 using lib;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.EventLog;
@@ -32,6 +33,14 @@ public class Program {
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 		Settings.GetSettings();
+
+		try {
+			EfficiencyModeUtilities.SetEfficiencyMode(true);
+		}
+		catch (Exception e) {
+			SentrySdk.CaptureException(e);
+		}
+
 
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 		builder.Services.AddWindowsService(options => {
