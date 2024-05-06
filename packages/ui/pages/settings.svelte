@@ -37,28 +37,47 @@
 
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
-		<!-- connection code -->
+		<!-- remote connections -->
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cable />
+						<Globe />
 					</div>
-					<h2>Connection code</h2>
+					<h2>Remote connections</h2>
 				</div>
-				<h3>Use this code on the website (https://cores.levminer.com/settings).</h3>
+				<h3>You can access your computer from any device with a web browser.</h3>
 			</div>
 
 			<div class="flex flex-col items-start gap-3">
-				<div class="flex items-center justify-center space-x-3">
-					<input class="input" readonly value={$settings.connectionCode} />
-					<button class="button" on:click={copyConnectionCode}>
-						<Clipboard />
-						<span class="copy">Copy</span>
-					</button>
-				</div>
+				<Toggle bind:checked={$settings.remoteConnections} on:click={remoteConnections} />
 			</div>
 		</div>
+
+		<!-- copy connection code -->
+		{#if $settings.remoteConnections}
+			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Cable />
+						</div>
+						<h2>Connection code</h2>
+					</div>
+					<h3>Use this code on the website (https://cores.levminer.com/settings).</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center justify-center space-x-3">
+						<input class="input" readonly value={$settings.connectionCode} />
+						<button class="button" on:click={copyConnectionCode}>
+							<Clipboard />
+							<span class="copy">Copy</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -137,10 +156,14 @@
 	import build from "../../../build.json"
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"
-	import { Clipboard, Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"
+	import { Clipboard, Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, Globe } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
+
+	const remoteConnections = () => {
+		invoke("restart_service")
+	}
 
 	const launchOnStartup = () => {
 		// @ts-ignore

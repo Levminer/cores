@@ -17,7 +17,10 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		HardwareInfo.GetInfo();
 		HTTPServer.Start(HardwareInfo);
 		WSServer.Start(HardwareInfo);
-		RTCServer.Start(HardwareInfo);
+
+		if (Program.Settings.remoteConnections) {
+			RTCServer.Start(HardwareInfo);
+		}
 
 		while (!stoppingToken.IsCancellationRequested) {
 			try {
