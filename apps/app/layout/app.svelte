@@ -7,7 +7,7 @@
 		<div class="top" />
 
 		{#if $hardwareInfo.cpu === undefined}
-			<Loading />
+			<DesktopLoading />
 		{:else}
 			<RouteTransition>
 				<Boundary onError={console.error}>
@@ -59,7 +59,7 @@
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import { setSettings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
-	import Loading from "ui/navigation/loading.svelte"
+	import DesktopLoading from "ui/navigation/desktopLoading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
@@ -70,44 +70,72 @@
 
 	onMount(async () => {
 		let sendAnalytics = true
+		let retries = 0
 
 		// Get settings from disk
 		const storeSettings = (await invoke("get_settings")) as LibSettings
 		setSettings(storeSettings)
 
-		// TODO: Set background color to #0a0a0a when os not supports mica
+		// Change background color if Mica
+		const setBackgroundColor = async () => {
+			const systemInfo: SystemInfo = await invoke("system_info")
 
-		// connect to local ws server
-		let ws = new WebSocket("ws://localhost:5391")
-
-		ws.onopen = () => {
-			console.log("Local WS Connection established")
+			if (systemInfo.osName === "Windows" && systemInfo.osVersion < "10.0.22000") {
+				console.log("yo")
+				document.querySelector("body").style.background = "#0a0a0a"
+			}
 		}
 
-		ws.onmessage = (event) => {
-			const data: HardwareInfo = JSON.parse(event.data)
+		setBackgroundColor()
 
-			if (sendAnalytics && !build.dev) {
-				console.log("Sending analytics")
+		// Connect to local WebSocket server
+		const connectToWSServer = () => {
+			let ws = new WebSocket("ws://localhost:5391")
 
-				trackEvent("hardware_info", {
-					version: build.version,
-					build: build.number,
-					cpu: data.cpu.name ?? "N/A",
-					gpu: data.gpu.name ?? "N/A",
-					os: data.system.os.name ?? "N/A",
-					ram: `${Math.round((data.ram.load[0]?.value ?? 0) + (data.ram.load[1]?.value ?? 0))} GB`,
-					date: new Date().toISOString().split("T")[0],
-				})
-
-				sendAnalytics = false
+			ws.onopen = () => {
+				console.log("Local WS Connection established")
 			}
 
-			setHardwareInfo(data)
-			updateHardwareStats(data)
+			ws.onmessage = (event) => {
+				const data: HardwareInfo = JSON.parse(event.data)
+
+				if (sendAnalytics && !build.dev) {
+					console.log("Sending analytics")
+
+					trackEvent("hardware_info", {
+						version: build.version,
+						build: build.number,
+						cpu: data.cpu.name ?? "N/A",
+						gpu: data.gpu.name ?? "N/A",
+						os: data.system.os.name ?? "N/A",
+						ram: `${Math.round((data.ram.load[0]?.value ?? 0) + (data.ram.load[1]?.value ?? 0))} GB`,
+						date: new Date().toISOString().split("T")[0],
+					})
+
+					sendAnalytics = false
+				}
+
+				setHardwareInfo(data)
+				updateHardwareStats(data)
+			}
+
+			ws.onclose = (e) => {
+				console.log("Socket is closed.  Reconnecting...", e.reason)
+				setTimeout(() => {
+					if (retries == 3) {
+						sessionStorage.clear()
+						location.reload()
+					}
+
+					connectToWSServer()
+
+					console.log(`Reconnecting... (Retry #${retries + 1})`)
+					retries++
+				}, 1000)
+			}
 		}
 
-		// TODO Reconnect to ws server if connection is lost
+		connectToWSServer()
 
 		// Navigate to the home page on load (webview bug)
 		router.goto("/home")
@@ -156,7 +184,4 @@
 </script>
 
 <style>
-	:global(body) {
-		background-color: transparent !important;
-	}
 </style>
