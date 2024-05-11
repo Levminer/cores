@@ -57,7 +57,7 @@
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { setSettings } from "ui/stores/settings"
+	import { initializeSettings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import DesktopLoading from "ui/navigation/desktopLoading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
@@ -72,9 +72,7 @@
 		let sendAnalytics = true
 		let retries = 0
 
-		// Get settings from disk
-		const storeSettings = (await invoke("get_settings")) as LibSettings
-		setSettings(storeSettings)
+		initializeSettings()
 
 		// Change background color if Mica
 		const setBackgroundColor = async () => {
