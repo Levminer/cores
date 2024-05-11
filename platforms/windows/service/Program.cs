@@ -32,8 +32,6 @@ public class Program {
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-		Settings.GetSettings();
-
 		try {
 			EfficiencyModeUtilities.SetEfficiencyMode(true);
 		}

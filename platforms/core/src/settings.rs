@@ -1,5 +1,5 @@
-use directories::BaseDirs;
 use serde::{Deserialize, Serialize};
+use std::path::Path;
 use uuid::Uuid;
 
 const fn default_value() -> u32 {
@@ -39,6 +39,33 @@ pub struct Settings {
     pub version: Option<u8>,
 }
 
+fn check_if_settings_exits() {
+    let sample_settings = Settings {
+        version: Some(1),
+        interval: 2,
+        minimize_to_tray: true,
+        launch_on_startup: false,
+        remote_connections: false,
+        connection_code: default_connection_code(),
+    };
+
+    let program_data = Path::new("C:\\ProgramData");
+
+    // Check if folder exists
+    if !program_data.join("Cores").exists() {
+        std::fs::create_dir(program_data.join("Cores")).unwrap();
+    }
+
+    // Check if file exists
+    if !program_data.join("Cores").join("settings.json").exists() {
+        std::fs::write(
+            program_data.join("Cores").join("settings.json"),
+            serde_json::to_string(&sample_settings).unwrap(),
+        )
+        .unwrap();
+    }
+}
+
 #[tauri::command]
 pub fn get_settings() -> Settings {
     let sample_settings = Settings {
@@ -50,58 +77,38 @@ pub fn get_settings() -> Settings {
         connection_code: default_connection_code(),
     };
 
-    // check if appdata exists, return sample settings if not
-    let dir = match BaseDirs::new() {
-        Some(base_dirs) => base_dirs,
-        None => return sample_settings,
+    println!("Getting settings");
+
+    let program_data = Path::new("C:\\ProgramData");
+
+    check_if_settings_exits();
+
+    let file = std::fs::read_to_string(program_data.join("Cores").join("settings.json")).unwrap();
+    let settings: Result<Settings, _> = serde_json::from_str(&file);
+
+    match settings {
+        Ok(settings) => {
+            return settings;
+        }
+        Err(_) => {
+            std::fs::write(
+                program_data.join("Cores").join("settings.json"),
+                serde_json::to_string(&sample_settings).unwrap(),
+            )
+            .unwrap();
+
+            return sample_settings;
+        }
     };
-
-    let appdata = dir.config_dir();
-
-    // Check if folder exists
-    if !appdata.join("Cores").exists() {
-        std::fs::create_dir(appdata.join("Cores")).unwrap();
-    }
-
-    // Check if file exists, and return it
-    if !appdata.join("Cores").join("settings.json").exists() {
-        std::fs::write(
-            appdata.join("Cores").join("settings.json"),
-            serde_json::to_string(&sample_settings).unwrap(),
-        )
-        .unwrap();
-
-        return sample_settings;
-    } else {
-        let file = std::fs::read_to_string(appdata.join("Cores").join("settings.json")).unwrap();
-        let settings: Result<Settings, _> = serde_json::from_str(&file);
-
-        match settings {
-            Ok(settings) => {
-                return settings;
-            }
-            Err(_) => {
-                std::fs::write(
-                    appdata.join("Cores").join("settings.json"),
-                    serde_json::to_string(&sample_settings).unwrap(),
-                )
-                .unwrap();
-
-                return sample_settings;
-            }
-        };
-    }
 }
 
 #[tauri::command]
 pub fn set_settings(settings: String) {
-    let dir = match BaseDirs::new() {
-        Some(base_dirs) => base_dirs,
-        None => return,
-    };
+    let program_data = Path::new("C:\\ProgramData");
 
-    let appdata = dir.config_dir();
+    println!("Setting settings");
 
-    // replace file
-    std::fs::write(appdata.join("Cores").join("settings.json"), settings).unwrap();
+    check_if_settings_exits();
+
+    std::fs::write(program_data.join("Cores").join("settings.json"), settings).unwrap();
 }
