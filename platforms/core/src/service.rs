@@ -1,7 +1,7 @@
 #[tauri::command]
 pub fn start_service() {
     let status = runas::Command::new("sc.exe")
-        .args(&["start", "Cores.Service"])
+        .args(&["start", "CoresService"])
         .status();
 
     if status.is_ok() {
@@ -14,7 +14,7 @@ pub fn start_service() {
 #[tauri::command]
 pub fn stop_service() {
     let status = runas::Command::new("sc.exe")
-        .args(&["stop", "Cores.Service"])
+        .args(&["stop", "CoresService"])
         .status();
 
     if status.is_ok() {
