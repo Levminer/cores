@@ -14,10 +14,12 @@
 		"dev:core": "tauri dev",
 		"dev:app": "node scripts/buildNumber.cjs alpha true && npm run dev -w app",
 		"dev:web": "node scripts/buildNumber.cjs alpha true && npm run dev -w web",
+		"build:core": "node scripts/buildNumber.cjs alpha false && tauri build",
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build -w web",
 		"check": "npm run check -w app",
-		"sign": "node scripts/sign.js"
+		"sign": "node scripts/sign.js",
+		"tauri": "tauri"
 	},
 	"devDependencies": {
 		"@tauri-apps/cli": "^2.0.0-beta.13",

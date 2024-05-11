@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+		<DirectoryRef Id="INSTALLDIR">
+			<Component Id="ServiceEntry" Guid="*">
+			<File Source="$(sys.SOURCEFILEDIR)../../windows/service/bin/exe/CoresService.exe" />
+			<ServiceInstall Id="ServiceInstaller" Name="CoresService" Type="ownProcess" Vital="yes" DisplayName="Cores Service" Description="Cores background service." Start="auto" Account="LocalSystem" ErrorControl="normal" Interactive="no" />
+				<ServiceControl Id="StartService" Name="CoresService" Stop="both" Start="install" Remove="uninstall" Wait="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+</Wix>

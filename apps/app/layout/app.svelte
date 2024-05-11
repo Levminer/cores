@@ -81,7 +81,6 @@
 			const systemInfo: SystemInfo = await invoke("system_info")
 
 			if (systemInfo.osName === "Windows" && systemInfo.osVersion < "10.0.22000") {
-				console.log("yo")
 				document.querySelector("body").style.background = "#0a0a0a"
 			}
 		}

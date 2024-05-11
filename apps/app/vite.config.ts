@@ -18,6 +18,6 @@ export default defineConfig({
 			},
 		},
 		emptyOutDir: true,
-		outDir: "../../platforms/windows/desktop/Assets/assets",
+		outDir: "../../dist",
 	},
 })
