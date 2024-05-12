@@ -180,8 +180,8 @@
 					<h2>RAM Usage</h2>
 				</div>
 				<h3>
-					Memory: {`${$hardwareInfo.ram.load[0].value.toFixed(1)}/${(
-						$hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value
+					Memory: {`${$hardwareInfo.ram.load[0]?.value.toFixed(1) ?? 0}/${(
+						($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0)
 					).toFixed(1)} GB`}
 				</h3>
 				<div>
@@ -197,8 +197,8 @@
 					<h2>Virtual RAM Usage</h2>
 				</div>
 				<h3>
-					Virtual memory: {`${$hardwareInfo.ram.load[3].value.toFixed(1)}/${(
-						$hardwareInfo.ram.load[3].value + $hardwareInfo.ram.load[4].value
+					Virtual memory: {`${$hardwareInfo.ram.load[3]?.value.toFixed(1) ?? 0}/${(
+						($hardwareInfo.ram.load[3]?.value ?? 0) + ($hardwareInfo.ram.load[4]?.value ?? 0)
 					).toFixed(1)} GB`}
 				</h3>
 				<div>
@@ -366,7 +366,7 @@
 				</div>
 				<div class="select-text">
 					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
-					<h3>RAM: {Math.round($hardwareInfo.ram.load[0].value + $hardwareInfo.ram.load[1].value)} GB</h3>
+					<h3>RAM: {Math.round(($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0))} GB</h3>
 					<h3>GPU: {$hardwareInfo.gpu.name}</h3>
 					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
 					<h3>OS: {$hardwareInfo.system.os.name}</h3>
@@ -438,7 +438,7 @@
 	$: ramLoadChange($hardwareInfo.ram.load)
 	$: gpuLoadChange($hardwareInfo.gpu.load)
 
-	const cpuLoadChange = (val) => {
+	const cpuLoadChange = (sensors: Sensor[]) => {
 		if (document.getElementById("cpuProgress0") !== null) {
 			$hardwareInfo.cpu.load.forEach((load, i) => {
 				const progress = document.getElementById(`cpuProgress${i}`) as HTMLDivElement
@@ -447,7 +447,7 @@
 		}
 	}
 
-	const ramLoadChange = (val) => {
+	const ramLoadChange = (sensors: Sensor[]) => {
 		if (document.getElementById("ramProgress0") !== null) {
 			$hardwareInfo.ram.load.forEach((load, i) => {
 				const progress = document.getElementById(`ramProgress0`) as HTMLDivElement
@@ -456,7 +456,7 @@
 		}
 	}
 
-	const gpuLoadChange = (val) => {
+	const gpuLoadChange = (sensors: Sensor[]) => {
 		if (document.getElementById("gpuProgress0") !== null) {
 			$hardwareInfo.gpu.load.forEach((load, i) => {
 				const progress = document.getElementById(`gpuProgress${i}`) as HTMLDivElement

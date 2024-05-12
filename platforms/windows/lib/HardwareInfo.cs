@@ -1,11 +1,6 @@
-﻿using lib;
-using LibreHardwareMonitor.Hardware;
-using Sentry;
-using System;
+﻿using LibreHardwareMonitor.Hardware;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Runtime.InteropServices;
 using WindowsDisplayAPI;
 
 namespace lib;
@@ -400,7 +395,7 @@ public class HardwareInfo {
 						}
 
 						if (sensor[j].SensorType == SensorType.Level && firstRun) {
-							// find disk by ide and overwrite value
+							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
 									if (sensor[j].Name.Contains("Percentage Used")) {

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace lib;
 public class Commands {
@@ -54,6 +49,11 @@ public class Commands {
 		var command = ExecuteCommand("Get-WmiObject -class Win32_VideoController | Select-Object DriverDate | ConvertTo-Json");
 		var gpuInfo = JsonSerializer.Deserialize<CmdGpuInfo>(command);
 
-		return gpuInfo.DriverDate;
+		// format: 20240411000000.000000-000
+		var driverDate = gpuInfo?.DriverDate ?? "00000000000000.000000-000";
+		var unformattedDate = driverDate.Split(".")[0];
+		var foramttedDate = $"{unformattedDate.Substring(0, 4)}. {unformattedDate.Substring(4, 2)}. {unformattedDate.Substring(6, 2)}.";
+
+		return foramttedDate;
 	}
 }
