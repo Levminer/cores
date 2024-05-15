@@ -63,15 +63,16 @@ jobs:
             - name: Build service installer
               run: npm run build:core
 
-            - name: Extract version from package.json
-              uses: sergeysova/jq-action@v2
+            - name: Get version
               id: version
+              uses: notiz-dev/github-action-json-property@release
               with:
-                cmd: 'jq .version package.json -r'
+                  path: package.json
+                  prop_path: version
 
             - name: Sign service installer
               run: |
-                npm run target/release/bundle/msi/Cores_${{steps.version.outputs.value}}_x64_en-US.msi
+                npm run target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
 
             # Upload the unpackaged app
             - name: Upload service installer
