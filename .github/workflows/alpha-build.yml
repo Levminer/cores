@@ -72,7 +72,7 @@ jobs:
 
             - name: Sign service installer
               run: |
-                npm run target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
+                npm run sign target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
 
             # Upload the unpackaged app
             - name: Upload service installer
