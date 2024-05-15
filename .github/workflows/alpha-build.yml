@@ -27,6 +27,9 @@ jobs:
               run: |
                   cargo install trusted-signing-cli
 
+            - name: Install node modules
+              run: npm ci
+
             # Install the .NET Core workload
             - name: Install .NET Core
               uses: actions/setup-dotnet@v1
