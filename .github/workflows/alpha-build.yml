@@ -1,0 +1,91 @@
+name: Alpha build
+
+on: push
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                configuration: [Release]
+
+        runs-on: windows-latest
+
+        env:
+            Solution_Name: cores.sln
+            Project_Directory: platforms/windows/desktop
+            AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+            AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+            AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: Install trusted-signing-cli
+              run: |
+                  cargo install trusted-signing-cli
+
+            - name: Install node modules
+              run: npm ci
+
+            # Install the .NET Core workload
+            - name: Install .NET Core
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: 7.0.x
+
+            # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+            - name: Setup MSBuild.exe
+              uses: microsoft/setup-msbuild@v1.0.2
+
+            # Restore the application to populate the obj folder with RuntimeIdentifiers
+            - name: Restore the application
+              run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            - name: "nuget restore"
+              run: nuget restore $env:Solution_Name
+
+            # Build service executable
+            - name: Build service executable
+              run: msbuild /p:Platform=x64 /p:Configuration=$env:Configuration /t:Publish
+              env:
+                  Configuration: ${{ matrix.configuration }}
+
+            - name: Sign service executable
+              run: |
+                npm run sign platforms/windows/service/bin/exe/CoresService.exe
+
+            # Build service installer
+            - name: Build service installer
+              run: npm run build:core
+
+            - name: Get version
+              id: version
+              uses: notiz-dev/github-action-json-property@release
+              with:
+                  path: package.json
+                  prop_path: version
+
+            - name: Sign service installer
+              run: |
+                npm run sign target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
+
+
+            - name: Remove useless folders
+              run: |
+                  rm -rf target/release/build
+                  rm -rf target/release/deps
+                  rm -rf target/release/bundle/appimage/authme.AppDir
+                  npm run rename
+              shell: bash
+
+            # Upload the unpackaged app
+            - name: Upload service installer
+              uses: actions/upload-artifact@v2
+              with:
+                  name: "cores-service-latest-windows-x64-installer"
+                  path: "target/release"

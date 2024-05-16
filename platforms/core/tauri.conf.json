@@ -6,6 +6,7 @@
 		"beforeDevCommand": "npm run dev:app",
 		"devUrl": "http://localhost:3000",
 		"beforeBuildCommand": "npm run build:app",
+		"beforeBundleCommand": "npm run sign ./target/release/Cores.exe",
 		"frontendDist": "../../dist"
 	},
 	"app": {
