@@ -77,9 +77,9 @@ jobs:
 
             - name: Remove useless folders
               run: |
-                  rm -rf core/target/release/build
-                  rm -rf core/target/release/deps
-                  rm -rf core/target/release/bundle/appimage/authme.AppDir
+                  rm -rf target/release/build
+                  rm -rf target/release/deps
+                  rm -rf target/release/bundle/appimage/authme.AppDir
                   npm run rename
               shell: bash
 

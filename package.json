@@ -18,6 +18,7 @@
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build -w web",
 		"check": "npm run check -w app",
+		"rename": "node scripts/rename.js",
 		"sign": "node scripts/sign.js",
 		"tauri": "tauri"
 	},
