@@ -3,21 +3,13 @@
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
-	"overrides": {
-		"@rgossiaux/svelte-headlessui": {
-			"svelte": "$svelte"
-		},
-		"svelte-chartjs": {
-			"svelte": "$svelte"
-		}
-	},
 	"dependencies": {
-		"svelte": "^4.2.10",
-		"svelte-chartjs": "^3.1.2",
-		"@rgossiaux/svelte-headlessui": "^1.0.2",
+		"bits-ui": "^0.21.8",
 		"chart.js": "^4.4.1",
 		"chartjs-plugin-stacked100": "^1.5.2",
 		"lucide-svelte": "^0.294.0",
-		"svelte-bootstrap-icons": "^3.1.0"
+		"svelte": "^4.2.10",
+		"svelte-bootstrap-icons": "^3.1.0",
+		"svelte-chartjs": "^3.1.5"
 	}
 }

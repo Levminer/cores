@@ -29,7 +29,16 @@
 				<h3>How often does Cores refreshes the sensors and displays the data.</h3>
 			</div>
 			<div class="flex flex-col items-start gap-3">
-				<Select options={["1s", "2s", "3s", "5s", "15s"]} setting={"interval"} values={[1, 2, 3, 5, 15]} />
+				<Select
+					options={[
+						{ value: 1, label: "1s" },
+						{ value: 2, label: "2s" },
+						{ value: 3, label: "3s" },
+						{ value: 5, label: "5s" },
+						{ value: 15, label: "15s" },
+					]}
+					setting={"interval"}
+				/>
 			</div>
 		</div>
 	</div>
@@ -50,7 +59,7 @@
 			</div>
 
 			<div class="flex flex-col items-start gap-3">
-				<Toggle bind:checked={$settings.remoteConnections} on:click={remoteConnections} />
+				<Toggle bind:checked={$settings.remoteConnections} onChange={remoteConnections} />
 			</div>
 		</div>
 
