@@ -15,6 +15,7 @@
 		"shell:allow-open",
 		"dialog:allow-message",
 		"dialog:allow-save",
-		"dialog:allow-ask"
+		"dialog:allow-ask",
+		"updater:default"
 	]
 }

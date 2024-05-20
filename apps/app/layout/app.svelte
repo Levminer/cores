@@ -65,6 +65,9 @@
 	import build from "../../../build.json"
 	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
 	import { invoke } from "@tauri-apps/api/core"
+	import { check } from "@tauri-apps/plugin-updater"
+	import { relaunch } from "@tauri-apps/plugin-process"
+	import { ask } from "@tauri-apps/plugin-dialog"
 
 	initAnalytics("A-EU-8117718240", { appVersion: build.version })
 
@@ -141,6 +144,32 @@
 		router.subscribe(() => {
 			document.querySelector(".top").scrollIntoView()
 		})
+
+		// Check for updates
+		const checkForUpdates = async () => {
+			if (build.dev) {
+				console.log("Checking for updates")
+
+				const update = await check()
+
+				console.log("Update:", update)
+
+				if (update.available) {
+					const result = await ask("A new version of Cores is available. Do you want to update?", {
+						title: "Cores update available",
+					})
+
+					if (result) {
+						await update.downloadAndInstall((event) => {
+							console.log("Downloading update", event)
+						})
+						await relaunch()
+					}
+				}
+			}
+		}
+
+		checkForUpdates()
 
 		// 60s date comparison
 		const date = new Date()

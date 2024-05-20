@@ -42,5 +42,11 @@
 			}
 		},
 		"resources": ["icons/32x32.png"]
+	},
+	"plugins": {
+		"updater": {
+			"endpoints": ["https://gist.githubusercontent.com/Levminer/6d5d89e336febee7c51457ea40409d77/raw"],
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEUxM0FDQUNGRDhBQTI1MzMKUldRekphcll6OG82NFJNS1VmUWJiaW9NZWVWcTVyckZYZlhEejZpVFl1S1loaXk1YzloT0t0ZFYK"
+		}
 	}
 }
