@@ -147,7 +147,7 @@
 
 		// Check for updates
 		const checkForUpdates = async () => {
-			if (build.dev) {
+			if (!build.dev) {
 				console.log("Checking for updates")
 
 				const update = await check()
