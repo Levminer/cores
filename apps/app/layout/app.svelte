@@ -128,10 +128,6 @@
 		connectToWSServer()
 
 		const analytics = async () => {
-			const systemInfo: SystemInfo = await invoke("system_info")
-
-			console.log(systemInfo)
-
 			if (sendAnalytics && !build.dev) {
 				const systemInfo: SystemInfo = await invoke("system_info")
 

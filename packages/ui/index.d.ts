@@ -2,6 +2,11 @@
 /// <reference types="vite/client" />
 
 declare global {
+	interface NetworkMessage {
+		type: "data" | "initialData"
+		data: HardwareInfo
+	}
+
 	interface Sensor {
 		name?: string
 		value: number

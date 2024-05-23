@@ -27,7 +27,7 @@
 	onMount(async () => {
 		try {
 			// Check if service is running
-			await fetch("http://localhost:5390/status")
+			await fetch("http://localhost:5390")
 		} catch (error) {
 			document.querySelector(".error").classList.remove("hidden")
 		}

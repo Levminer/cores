@@ -10,6 +10,9 @@ namespace service;
 
 [SupportedOSPlatform("Windows")]
 public class Program {
+	internal static JsonSerializerOptions CompressedSerializerOptions = new() {
+		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+	};
 	internal static JsonSerializerOptions SerializerOptions = new() {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 		WriteIndented = true,

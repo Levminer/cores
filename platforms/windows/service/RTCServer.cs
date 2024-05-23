@@ -15,11 +15,11 @@ public class RTCServer {
 			});
 
 			EzRTCHost.onDataChannelOpen += (data) => {
-				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(hardwareInfo.API, Program.SerializerOptions));
+				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new NetworkMessage() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 			};
 
 			while (!stop) {
-				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(hardwareInfo.API, Program.SerializerOptions));
+				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new NetworkMessage() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
 				await Task.Delay(2000);
 			}

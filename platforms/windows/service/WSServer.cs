@@ -1,15 +1,12 @@
 ﻿using lib;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace service;
+
 public class WSServer {
 	static HttpListener listener;
 	static ConcurrentDictionary<WebSocket, Task> connectedClients = new ConcurrentDictionary<WebSocket, Task>();
@@ -47,7 +44,7 @@ public class WSServer {
 	}
 
 	static async Task ProcessWebSocketRequestAsync(WebSocket socket, HardwareInfo hardwareInfo) {
-		byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(hardwareInfo.API, Program.SerializerOptions));
+		byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new NetworkMessage() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 		await socket.SendAsync(new ArraySegment<byte>(initialBuffer, 0, initialBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 
 		var receiveBuffer = new ArraySegment<byte>(new byte[1024 * 4]);
@@ -55,7 +52,7 @@ public class WSServer {
 
 		Task sendTask = Task.Run(async () => {
 			while (socket.State == WebSocketState.Open) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(hardwareInfo.API, Program.SerializerOptions));
+				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new NetworkMessage() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 				await Task.Delay(2000);
 			}

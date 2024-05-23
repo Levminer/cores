@@ -20,6 +20,15 @@ public class Sensor {
 	}
 }
 
+public class NetworkMessage {
+	public string Type {
+		get; set;
+	}
+	public API Data {
+		get; set;
+	}
+}
+
 public class Message {
 	public string Name {
 		get; set;
