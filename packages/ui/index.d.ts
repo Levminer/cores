@@ -199,6 +199,7 @@ declare global {
 		osArch: string
 		cpuName: string
 		totalMem: number
+		gpuName: string
 	}
 }
 

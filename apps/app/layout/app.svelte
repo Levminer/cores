@@ -97,26 +97,16 @@
 			}
 
 			ws.onmessage = (event) => {
-				const data: HardwareInfo = JSON.parse(event.data)
+				const WSData: NetworkMessage = JSON.parse(event.data)
 
-				if (sendAnalytics && !build.dev) {
-					console.log("Sending analytics")
-
-					trackEvent("hardware_info", {
-						version: build.version,
-						build: build.number,
-						cpu: data.cpu.name ?? "N/A",
-						gpu: data.gpu.name ?? "N/A",
-						os: data.system.os.name ?? "N/A",
-						ram: `${Math.round((data.ram.load[0]?.value ?? 0) + (data.ram.load[1]?.value ?? 0))} GB`,
-						date: new Date().toISOString().split("T")[0],
-					})
-
-					sendAnalytics = false
+				if (WSData.type == "data" || WSData.type == "initialData") {
+					// Check if RAM load data is available
+					// RAM load is rarely empty, might be a bug
+					if (WSData.data.ram.load.length > 0) {
+						setHardwareInfo(WSData.data)
+						updateHardwareStats(WSData.data)
+					}
 				}
-
-				setHardwareInfo(data)
-				updateHardwareStats(data)
 			}
 
 			ws.onclose = (e) => {
@@ -136,6 +126,30 @@
 		}
 
 		connectToWSServer()
+
+		const analytics = async () => {
+			const systemInfo: SystemInfo = await invoke("system_info")
+
+			console.log(systemInfo)
+
+			if (sendAnalytics && !build.dev) {
+				const systemInfo: SystemInfo = await invoke("system_info")
+
+				trackEvent("hardware_info", {
+					version: build.version,
+					build: build.number,
+					cpu: systemInfo.cpuName,
+					gpu: systemInfo.gpuName,
+					os: systemInfo.osName,
+					ram: Math.round(systemInfo.totalMem / 1024 / 1024 / 1024),
+					date: new Date().toISOString().split("T")[0],
+				})
+
+				sendAnalytics = false
+			}
+		}
+
+		analytics()
 
 		// Navigate to the home page on load (webview bug)
 		router.goto("/home")

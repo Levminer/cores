@@ -24,3 +24,4 @@ uuid = { version = "1.6.1", features = ["v4"] }
 directories = "4.0.1"
 sysinfo = "0.30.11"
 runas = "1.2.0"
+powershell_script = "1.1.0"

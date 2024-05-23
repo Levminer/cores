@@ -12,6 +12,14 @@ pub struct SystemInfo {
     pub cpu_name: String,
     pub total_mem: u64,
     pub tauri_version: String,
+    pub gpu_name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct PowershellGPUOutput {
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 #[tauri::command]
@@ -25,6 +33,17 @@ pub fn system_info() -> SystemInfo {
     let mut os_arch = env::consts::ARCH.to_string();
     let cpu_name = sys.cpus()[0].brand().to_string();
     let total_mem = sys.total_memory();
+
+    let gpu_name_json = powershell_script::run(
+        "Get-WmiObject -class Win32_VideoController | Select-Object Name | ConvertTo-Json",
+    )
+    .unwrap()
+    .stdout()
+    .unwrap();
+
+    let gpu_name = serde_json::from_str::<PowershellGPUOutput>(&gpu_name_json)
+        .unwrap()
+        .name;
 
     os_name = match os_name.as_str() {
         "Darwin" => "macOS".to_string(),
@@ -44,6 +63,7 @@ pub fn system_info() -> SystemInfo {
         total_mem,
         os_arch,
         tauri_version,
+        gpu_name,
     };
 
     res.into()
