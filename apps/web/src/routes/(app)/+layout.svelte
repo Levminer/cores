@@ -1,7 +1,6 @@
 <Navigation />
-{#if url === "/connect"}
-	<Connect {connect} />
-{:else if loading}
+
+{#if $state.state === "loading"}
 	<Loading />
 {:else}
 	<slot />
@@ -17,9 +16,8 @@
 	import { onNavigate } from "$app/navigation"
 	import { EzrtcClient as EzRTCClient } from "ezrtc"
 	import Loading from "ui/navigation/loading.svelte"
-	import Connect from "../../components/connect.svelte"
 	import { onMount } from "svelte"
-	let loading = false
+	import { state } from "../../stores/state.ts"
 
 	$: url = $page.url.pathname
 
@@ -28,17 +26,25 @@
 	})
 
 	onMount(() => {
+		// Connect to server when user selected a connection
+		state.subscribe((data) => {
+			if (data.currentCode !== "" && data.state === "waiting") {
+				connect()
+			}
+		})
+
+		// Reconnect if data is present from previous session
 		if ($settings.connectionCode!.startsWith("crs_") && $hardwareInfo.cpu !== undefined) {
 			connect()
 		}
 	})
 
 	const connect = () => {
-		loading = true
-
 		let client: EzRTCClient | undefined
 
 		if ($settings.connectionCode!.startsWith("crs_")) {
+			$state.state = "loading"
+
 			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
 				{
 					urls: "stun:stun.relay.metered.ca:80",
@@ -88,12 +94,17 @@
 		}
 
 		client?.onMessage((message) => {
-			if (message !== undefined && message !== "") {
-				let parsed = JSON.parse(message)
-				loading = false
+			const WSData: NetworkMessage = JSON.parse(message)
 
-				setHardwareInfo(parsed)
-				updateHardwareStats(parsed)
+			$state.state = "connected"
+
+			if (WSData.type == "data" || WSData.type == "initialData") {
+				// Check if RAM load data is available
+				// RAM load is rarely empty, might be a bug
+				if (WSData.data.ram.load.length > 0) {
+					setHardwareInfo(WSData.data)
+					updateHardwareStats(WSData.data)
+				}
 			}
 		})
 	}

@@ -12,7 +12,7 @@
 					<button
 						on:click={() => {
 							$settings.connectionCode = item.code
-							connect()
+							$state.currentCode = item.code
 							goto("/home")
 						}}
 					>
@@ -29,6 +29,5 @@
 	import { settings } from "ui/stores/settings.ts"
 	import { Plug } from "lucide-svelte"
 	import { goto } from "$app/navigation"
-
-	export let connect = () => {}
+	import { state } from "../stores/state.ts"
 </script>

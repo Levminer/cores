@@ -1,5 +1,5 @@
-<Loading />
+<Connect />
 
 <script>
-	import Loading from "ui/navigation/loading.svelte"
+	import Connect from "../../../components/connect.svelte"
 </script>
