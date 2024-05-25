@@ -257,11 +257,6 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 		fan: input.system.superIO.fan
 			.filter((item) => item.value !== 0)
 			.map((item, i) => {
-				console.log(
-					"fan",
-					$hardwareStatistics.seconds.map((sensor) => sensor.fan[i]),
-				)
-
 				let speed = {
 					value: Math.round(
 						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].speed.value).reduce((a, b) => a + b, 0) /

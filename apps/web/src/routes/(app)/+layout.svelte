@@ -4,6 +4,7 @@
 	<Loading />
 {:else}
 	<slot />
+	<div class="mb-32" />
 {/if}
 
 <script lang="ts">
