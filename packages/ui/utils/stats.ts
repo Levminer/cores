@@ -62,6 +62,23 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 				},
 			}
 		}),
+
+		fan: input.system.superIO.fan
+			.filter((item) => item.value !== 0)
+			.map((item, i) => {
+				return {
+					speed: {
+						value: Math.round(item.value),
+						min: Math.round(item.min),
+						max: Math.round(item.max),
+					},
+					control: {
+						value: Math.round(input.system.superIO.fanControl[i].value),
+						min: Math.round(input.system.superIO.fanControl[i].min),
+						max: Math.round(input.system.superIO.fanControl[i].max),
+					},
+				}
+			}),
 	}
 }
 
@@ -236,5 +253,49 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 				temperature,
 			}
 		}),
+
+		fan: input.system.superIO.fan
+			.filter((item) => item.value !== 0)
+			.map((item, i) => {
+				console.log(
+					"fan",
+					$hardwareStatistics.seconds.map((sensor) => sensor.fan[i]),
+				)
+
+				let speed = {
+					value: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].speed.value).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+					min: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].speed.min).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+					max: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].speed.max).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+				}
+
+				let control = {
+					value: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].control.value).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+					min: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].control.min).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+					max: Math.round(
+						$hardwareStatistics.seconds.map((sensor) => sensor.fan[i].control.max).reduce((a, b) => a + b, 0) /
+							$hardwareStatistics.seconds.length,
+					),
+				}
+
+				return {
+					speed,
+					control,
+				}
+			}),
 	}
 }

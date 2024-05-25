@@ -4,7 +4,7 @@ export const colors = {
 	max: "#9d0cfd",
 	yellow: "#fee440",
 	orange: "#fe884d",
-	categoricalPalette: ["#dc94ff", "#7d70fe"],
+	categoricalPalette: ["#dc94ff", "#7d70fe", "#2a9d8f"],
 	divergentPalette: [
 		"#35cbfd",
 		"#78ceff",

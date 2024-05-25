@@ -23,6 +23,10 @@
 		<a href="/network" use:active data-active-class="selectedMenuButton" class="menuButton">
 			<Network class="h-5 w-5" />
 		</a>
+
+		<a href="/system" use:active data-active-class="selectedMenuButton" class="menuButton">
+			<PcDisplay width={20} height={20} />
+		</a>
 	</div>
 
 	<div class="flex flex-col">
@@ -35,5 +39,5 @@
 <script lang="ts">
 	import { active } from "@baileyherbert/tinro"
 	import { Cpu, HardDrive, Home, Network, Settings } from "lucide-svelte"
-	import { GpuCard, Memory } from "svelte-bootstrap-icons"
+	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 </script>

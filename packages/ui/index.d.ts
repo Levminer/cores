@@ -138,6 +138,14 @@ declare global {
 				version: string
 				date: string
 			}
+
+			superIO:{
+				name: string
+				fan: Sensor[]
+				fanControl: Sensor[]
+				voltage: Sensor[]
+				temperature: Sensor[]
+			}
 		}
 	}
 
@@ -175,6 +183,11 @@ declare global {
 			throughputRead: number
 			throughputWrite: number
 			temperature: Sensor
+		}[]
+
+		fan: {
+			speed: Sensor
+			control: Sensor
 		}[]
 	}
 

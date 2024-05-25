@@ -35,6 +35,10 @@
 				</Boundary>
 
 				<Boundary onError={console.error}>
+					<Route path="/system"><System /></Route>
+				</Boundary>
+
+				<Boundary onError={console.error}>
 					<Route path="/settings"><Settings /></Route>
 				</Boundary>
 			</RouteTransition>
@@ -54,6 +58,7 @@
 	import RAM from "ui/pages/ram.svelte"
 	import Storage from "ui/pages/storage.svelte"
 	import Network from "ui/pages/network.svelte"
+	import System from "ui/pages/system.svelte"
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
