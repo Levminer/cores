@@ -1,3 +1,4 @@
+<AppHeader />
 <Navigation />
 
 {#if $state.state === "loading"}
@@ -19,6 +20,7 @@
 	import Loading from "ui/navigation/loading.svelte"
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
+	import AppHeader from "../../components/appHeader.svelte"
 
 	$: url = $page.url.pathname
 
