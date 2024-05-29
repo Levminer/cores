@@ -21,7 +21,12 @@
 		$settings.connectionCode = code
 		$state.currentCode = code
 		$state.state = "loading"
-        goto("/home")
+
+		if ($hardwareInfo.cpu !== undefined) {
+			location.href = "/home"
+		} else {
+			goto("home")
+		}
 	}
 
 	onMount(() => {

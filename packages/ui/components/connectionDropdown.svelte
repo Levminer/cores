@@ -19,14 +19,14 @@
 				on:click={() => {
 					connect(item.code)
 				}}
-				class="flex cursor-pointer select-none items-center rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+				class="flex cursor-pointer select-none gap-3 items-center rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
 			>
+				<div class="flex items-center">
+					<Plug />
+				</div>
 				<div class="flex flex-col items-start">
 					<h4>{item.name}</h4>
 					<h5>crs_********{item.code.slice(-2)}</h5>
-				</div>
-				<div class="ml-auto flex items-center gap-px">
-					<Plug />
 				</div>
 			</DropdownMenu.Item>
 		{/each}

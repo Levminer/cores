@@ -27,6 +27,7 @@
 	import { onMount } from "svelte"
 
 	const reload = () => {
+		sessionStorage.clear()
 		location.reload()
 	}
 

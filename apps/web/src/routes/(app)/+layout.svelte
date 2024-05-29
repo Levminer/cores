@@ -1,7 +1,7 @@
 <AppHeader />
 <Navigation />
 
-{#if $state.state === "loading"}
+{#if $state.state === "loading" && url !== "/settings"}
 	<Loading />
 {:else}
 	<slot />
@@ -16,7 +16,7 @@
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { page } from "$app/stores"
 	import { onNavigate } from "$app/navigation"
-	import { EzrtcClient as EzRTCClient } from "ezrtc"
+	import { EzRTCClient } from "ezrtc"
 	import Loading from "ui/navigation/loading.svelte"
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
