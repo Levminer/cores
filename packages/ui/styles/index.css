@@ -148,20 +148,3 @@ h5 {
 .overlayScroll::-webkit-scrollbar-thumb:hover {
 	background-color: #9f9f9f;
 }
-
-/* Home progress bar */
-.progress {
-	position: relative;
-	width: 95%;
-	height: 10px;
-	background: hsla(0, 0%, 100%, 5.12%);
-	border-radius: 30px;
-	overflow: hidden;
-}
-
-.progressFill {
-	width: 0%;
-	height: 100%;
-	background: #35cbfd;
-	/* transition: all 0.1s ease-in-out; */
-}

@@ -21,9 +21,7 @@
 								<p class="text-sm">{item.name?.replaceAll("CPU", "")}</p>
 								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
 							</div>
-							<div class="progress">
-								<div id={`cpuProgress${i}`} class="progressFill" />
-							</div>
+							<Progress value={item.value} />
 						</div>
 					{/each}
 				</div>
@@ -48,9 +46,7 @@
 							<p class="text-sm">Virtual memory</p>
 							<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.ram.load[5]?.value ?? 0)}%</p>
 						</div>
-						<div class="progress">
-							<div id="ramProgress0" class="progressFill" />
-						</div>
+						<Progress value={$hardwareInfo.ram.load[5]?.value ?? 0} />
 					</div>
 				</div>
 			</div>
@@ -75,9 +71,7 @@
 								<p class="text-sm">{item.name?.replaceAll("D3D", "")}</p>
 								<p class="text-sm text-[#969696]">{Math.round(item.value)}%</p>
 							</div>
-							<div class="progress">
-								<div id={`gpuProgress${i}`} class="progressFill" />
-							</div>
+							<Progress value={item.value} />
 						</div>
 					{/each}
 				</div>
@@ -433,35 +427,5 @@
 	import MeterChart from "ui/charts/meterChart.svelte"
 	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu } from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
-
-	$: cpuLoadChange($hardwareInfo.cpu.load)
-	$: ramLoadChange($hardwareInfo.ram.load)
-	$: gpuLoadChange($hardwareInfo.gpu.load)
-
-	const cpuLoadChange = (sensors: Sensor[]) => {
-		if (document.getElementById("cpuProgress0") !== null) {
-			$hardwareInfo.cpu.load.forEach((load, i) => {
-				const progress = document.getElementById(`cpuProgress${i}`) as HTMLDivElement
-				progress.style.width = `${Math.round(load.value)}%`
-			})
-		}
-	}
-
-	const ramLoadChange = (sensors: Sensor[]) => {
-		if (document.getElementById("ramProgress0") !== null) {
-			$hardwareInfo.ram.load.forEach((load, i) => {
-				const progress = document.getElementById(`ramProgress0`) as HTMLDivElement
-				progress.style.width = `${Math.round(load.value)}%`
-			})
-		}
-	}
-
-	const gpuLoadChange = (sensors: Sensor[]) => {
-		if (document.getElementById("gpuProgress0") !== null) {
-			$hardwareInfo.gpu.load.forEach((load, i) => {
-				const progress = document.getElementById(`gpuProgress${i}`) as HTMLDivElement
-				progress.style.width = `${Math.round(load.value)}%`
-			})
-		}
-	}
+	import Progress from "ui/components/progress.svelte"
 </script>
