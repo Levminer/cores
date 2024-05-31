@@ -90,6 +90,10 @@ public class Disk {
 	public float DataWritten {
 		get; set;
 	}
+
+	public bool SystemDrive {
+		get; set;
+	}
 }
 
 public class Monitor {

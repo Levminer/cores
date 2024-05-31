@@ -268,7 +268,7 @@ public class HardwareInfo {
 					var sensor = hardware.Sensors;
 
 					if (firstRun) {
-						var temp = new Disk {
+						var data = new Disk {
 							Name = computerHardware[i].Name,
 							Id = computerHardware[i].Identifier,
 						};
@@ -278,6 +278,7 @@ public class HardwareInfo {
 						long total = 0;
 						long free = 0;
 						string health = "N/A";
+						bool systemDrive = false;
 
 						foreach (var line in report) {
 							if (line.StartsWith("Total Size")) {
@@ -286,6 +287,10 @@ public class HardwareInfo {
 
 							if (line.StartsWith("Total Free Space")) {
 								free = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+							}
+
+							if (line.StartsWith("Logical Drive Name: C")) {
+								systemDrive = true;
 							}
 
 							// Sandforce
@@ -314,11 +319,12 @@ public class HardwareInfo {
 							}
 						}
 
-						temp.TotalSpace = (int)total;
-						temp.Health = health;
-						temp.FreeSpace = (int)free;
+						data.TotalSpace = (int)total;
+						data.Health = health;
+						data.FreeSpace = (int)free;
+						data.SystemDrive = systemDrive;
 
-						API.System.Storage.Disks.Add(temp);
+						API.System.Storage.Disks.Add(data);
 					}
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
@@ -393,6 +399,7 @@ public class HardwareInfo {
 							}
 						}
 
+						// M.2 SSD Health
 						if (sensor[j].SensorType == SensorType.Level && firstRun) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {

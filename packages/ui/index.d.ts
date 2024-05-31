@@ -24,6 +24,7 @@ declare global {
 		throughputWrite: number
 		dataRead: number
 		dataWritten: number
+		systemDrive: boolean
 	}
 
 	interface Monitor {
