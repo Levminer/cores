@@ -26,6 +26,6 @@
 		"vite": "^5.0.12"
 	},
 	"dependencies": {
-		"ezrtc": "^0.3.0"
+		"ezrtc": "^0.5.0"
 	}
 }
