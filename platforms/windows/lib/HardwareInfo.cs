@@ -31,14 +31,7 @@ public class HardwareInfo {
 
 	public void GetInfo() {
 		try {
-
 			var computerHardware = computer.Hardware;
-
-			API.GPU.Temperature.Clear();
-			API.GPU.Fan.Clear();
-			API.GPU.Memory.Clear();
-			API.GPU.Power.Clear();
-			API.GPU.Clock.Clear();
 
 			if (firstRun) {
 				// Network interfaces
@@ -129,7 +122,6 @@ public class HardwareInfo {
 						} else {
 							API.CPU.Temperature[j] = data;
 						}
-
 					}
 
 					// CPU Power
@@ -146,10 +138,7 @@ public class HardwareInfo {
 						} else {
 							API.CPU.Power[j] = data2;
 						}
-
 					}
-
-					Debug.WriteLine("----");
 
 					// CPU Load
 					for (int j = 0; j < loadSensors.Length; j++) {
@@ -170,7 +159,6 @@ public class HardwareInfo {
 
 						// This is the last in the array, might be a problem if its not last
 						if (loadSensors[j].Name.Contains("Total")) {
-							Debug.WriteLine(j);
 							API.CPU.MaxLoad = loadSensors[j].Value ?? 0;
 						}
 					}
@@ -212,9 +200,93 @@ public class HardwareInfo {
 
 				// GPU
 				if (hardware.HardwareType.ToString().Contains("Gpu")) {
-					var sensor = hardware.Sensors;
+					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature).ToArray();
+					var fanSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Fan).ToArray();
+					var memorySensors = hardware.Sensors.Where(x => x.SensorType == SensorType.SmallData).ToArray();
+					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
+					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
 
-					// Get inital GPU Load
+					// GPU Temperature
+					for (int j = 0; j < temperatureSensors.Length; j++) {
+						var data = new Sensor {
+							Name = temperatureSensors[j].Name,
+							Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
+							Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
+							Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.GPU.Temperature.Add(data);
+						} else {
+							API.GPU.Temperature[j] = data;
+						}
+					}
+
+					// GPU Fan
+					for (int j = 0; j < fanSensors.Length; j++) {
+						var data = new Sensor {
+							Name = fanSensors[j].Name,
+							Value = (float)Math.Round(fanSensors[j].Value ?? 0),
+							Min = (float)Math.Round(fanSensors[j].Min ?? 0),
+							Max = (float)Math.Round(fanSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.GPU.Fan.Add(data);
+						} else {
+							API.GPU.Fan[j] = data;
+						}
+					}
+
+					// GPU Memory
+					for (int j = 0; j < memorySensors.Length; j++) {
+						var data = new Sensor {
+							Name = memorySensors[j].Name,
+							Value = (float)Math.Round(memorySensors[j].Value / 1024 ?? 0, 1),
+							Min = (float)Math.Round(memorySensors[j].Min / 1024 ?? 0, 1),
+							Max = (float)Math.Round(memorySensors[j].Max / 1024 ?? 0, 1),
+						};
+
+						if (firstRun) {
+							API.GPU.Memory.Add(data);
+						} else {
+							API.GPU.Memory[j] = data;
+						}
+					}
+
+					// GPU Power
+					for (int j = 0; j < powerSensors.Length; j++) {
+						var data = new Sensor {
+							Name = powerSensors[j].Name,
+							Value = (float)Math.Round(powerSensors[j].Value ?? 0),
+							Min = (float)Math.Round(powerSensors[j].Min ?? 0),
+							Max = (float)Math.Round(powerSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.GPU.Power.Add(data);
+						} else {
+							API.GPU.Power[j] = data;
+						}
+					}
+
+					// GPU Clock
+					for (int j = 0; j < clockSensors.Length; j++) {
+						var data = new Sensor {
+							Name = clockSensors[j].Name,
+							Value = (float)Math.Round(clockSensors[j].Value ?? 0),
+							Min = (float)Math.Round(clockSensors[j].Min ?? 0),
+							Max = (float)Math.Round(clockSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.GPU.Clock.Add(data);
+						} else {
+							API.GPU.Clock[j] = data;
+						}
+					}
+
+					// Get initial GPU Load
 					if (firstRun) {
 						API.GPU.Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
 					}
@@ -232,59 +304,6 @@ public class HardwareInfo {
 							Debug.WriteLine("Error in GPULoad");
 						}
 					});
-
-					for (int j = 0; j < hardware.Sensors.Length; j++) {
-						// GPU temperature
-						if (sensor[j].SensorType == SensorType.Temperature) {
-							API.GPU.Temperature.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
-						}
-
-
-						// GPU fan
-						if (sensor[j].SensorType == SensorType.Fan) {
-							API.GPU.Fan.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
-						}
-
-						// GPU Memory 
-						if (sensor[j].SensorType == SensorType.SmallData) {
-							API.GPU.Memory.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value / 1024 ?? 0, 1),
-								Min = (float)Math.Round(sensor[j].Min / 1024 ?? 0, 1),
-								Max = (float)Math.Round(sensor[j].Max / 1024 ?? 0, 1),
-							});
-						}
-
-						// GPU power
-						if (sensor[j].SensorType == SensorType.Power) {
-							API.GPU.Power.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
-						}
-
-						// GPU clock
-						if (sensor[j].SensorType == SensorType.Clock) {
-							API.GPU.Clock.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
-						}
-					}
 				}
 
 				// RAM
