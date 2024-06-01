@@ -1,8 +1,8 @@
 [package]
 name = "cores"
 version = "0.0.0"
-description = "Modern hardware monitor."
-authors = ["you"]
+description = "Cores - Modern hardware monitor for Windows"
+authors = ["Lőrik Levente"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
