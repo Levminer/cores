@@ -34,12 +34,6 @@ public class HardwareInfo {
 
 			var computerHardware = computer.Hardware;
 
-			API.CPU.Temperature.Clear();
-			API.CPU.Load.Clear();
-			API.CPU.Power.Clear();
-			API.CPU.Clock.Clear();
-			API.CPU.Voltage.Clear();
-
 			API.GPU.Temperature.Clear();
 			API.GPU.Fan.Clear();
 			API.GPU.Memory.Clear();
@@ -115,62 +109,103 @@ public class HardwareInfo {
 
 				// CPU
 				if (hardware.HardwareType == HardwareType.Cpu) {
-					var sensor = hardware.Sensors;
+					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature && x.Name.StartsWith("CPU Core") && !x.Name.Contains("Tj")).ToArray();
+					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load).ToArray();
+					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
+					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock && !x.Name.Contains("Bus")).ToArray();
+					var voltageSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Voltage && x.Name.Contains('#')).ToArray();
 
-					for (int j = 0; j < hardware.Sensors.Length; j++) {
-						// CPU temperature
-						if (sensor[j].SensorType == SensorType.Temperature && sensor[j].Name.StartsWith("CPU Core") && !sensor[j].Name.Contains("Tj")) {
-							API.CPU.Temperature.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = sensor[j].Value ?? 0,
-								Min = sensor[j].Min ?? 0,
-								Max = sensor[j].Max ?? 0,
-							});
+					// CPU Temperature
+					for (int j = 0; j < temperatureSensors.Length; j++) {
+						var data = new Sensor {
+							Name = temperatureSensors[j].Name,
+							Value = temperatureSensors[j].Value ?? 0,
+							Min = temperatureSensors[j].Min ?? 0,
+							Max = temperatureSensors[j].Max ?? 0,
+						};
+
+						if (firstRun) {
+							API.CPU.Temperature.Add(data);
+						} else {
+							API.CPU.Temperature[j] = data;
 						}
 
-						// CPU power
-						if (sensor[j].SensorType == SensorType.Power) {
-							API.CPU.Power.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
+					}
+
+					// CPU Power
+					for (int j = 0; j < powerSensors.Length; j++) {
+						var data2 = new Sensor {
+							Name = powerSensors[j].Name,
+							Value = (float)Math.Round(powerSensors[j].Value ?? 0),
+							Min = (float)Math.Round(powerSensors[j].Min ?? 0),
+							Max = (float)Math.Round(powerSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.CPU.Power.Add(data2);
+						} else {
+							API.CPU.Power[j] = data2;
 						}
 
-						// CPU load
-						if (sensor[j].SensorType == SensorType.Load && !sensor[j].Name.Contains("Total") && !sensor[j].Name.Contains("Max")) {
-							API.CPU.Load.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = sensor[j].Value ?? 0,
-								Min = sensor[j].Min ?? 0,
-								Max = sensor[j].Max ?? 0,
-							});
+					}
+
+					Debug.WriteLine("----");
+
+					// CPU Load
+					for (int j = 0; j < loadSensors.Length; j++) {
+						var data = new Sensor {
+							Name = loadSensors[j].Name,
+							Value = loadSensors[j].Value ?? 0,
+							Min = loadSensors[j].Min ?? 0,
+							Max = loadSensors[j].Max ?? 0,
+						};
+
+						if (!loadSensors[j].Name.Contains("Total") && !loadSensors[j].Name.Contains("Max")) {
+							if (firstRun) {
+								API.CPU.Load.Add(data);
+							} else {
+								API.CPU.Load[j] = data;
+							}
 						}
 
-						// CPU total load
-						if (sensor[j].SensorType == SensorType.Load && sensor[j].Name.Contains("Total")) {
-							API.CPU.MaxLoad = sensor[j].Value ?? 0;
+						// This is the last in the array, might be a problem if its not last
+						if (loadSensors[j].Name.Contains("Total")) {
+							Debug.WriteLine(j);
+							API.CPU.MaxLoad = loadSensors[j].Value ?? 0;
 						}
+					}
 
-						// CPU clock
-						if (sensor[j].SensorType == SensorType.Clock && !sensor[j].Name.Contains("Bus")) {
-							API.CPU.Clock.Add(new Sensor {
-								Name = sensor[j].Name,
-								Value = (float)Math.Round(sensor[j].Value ?? 0),
-								Min = (float)Math.Round(sensor[j].Min ?? 0),
-								Max = (float)Math.Round(sensor[j].Max ?? 0),
-							});
+					// CPU Clock
+					for (int j = 0; j < clockSensors.Length; j++) {
+						var data = new Sensor {
+							Name = clockSensors[j].Name,
+							Value = (float)Math.Round(clockSensors[j].Value ?? 0),
+							Min = (float)Math.Round(clockSensors[j].Min ?? 0),
+							Max = (float)Math.Round(clockSensors[j].Max ?? 0),
+						};
+
+
+						if (firstRun) {
+							API.CPU.Clock.Add(data);
+						} else {
+							API.CPU.Clock[j] = data;
 						}
+					}
 
-						// CPU voltage
-						if (sensor[j].SensorType == SensorType.Voltage && sensor[j].Name.Contains("#")) {
-							API.CPU.Voltage.Add(new Sensor {
-								Name = sensor[j].Name.ToString(),
-								Value = (float)Math.Round(sensor[j].Value ?? 0, 2),
-								Min = (float)Math.Round(sensor[j].Min ?? 0, 2),
-								Max = (float)Math.Round(sensor[j].Max ?? 0, 2),
-							});
+					// CPU Voltage
+					for (int j = 0; j < voltageSensors.Length; j++) {
+						var data = new Sensor {
+							Name = voltageSensors[j].Name.ToString(),
+							Value = (float)Math.Round(voltageSensors[j].Value ?? 0, 2),
+							Min = (float)Math.Round(voltageSensors[j].Min ?? 0, 2),
+							Max = (float)Math.Round(voltageSensors[j].Max ?? 0, 2),
+						};
+
+
+						if (firstRun) {
+							API.CPU.Voltage.Add(data);
+						} else {
+							API.CPU.Voltage[j] = data;
 						}
 					}
 				}
@@ -371,7 +406,7 @@ public class HardwareInfo {
 
 						// Drive throughput
 						if (sensor[j].SensorType == SensorType.Throughput) {
-							// find disk by ide and overwrite value
+							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
 									if (sensor[j].Name.Contains("Read")) {
@@ -502,7 +537,7 @@ public class HardwareInfo {
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
 						// Throughput
 						if (sensor[j].SensorType == SensorType.Throughput) {
-							// find interface by name and overwrite value
+							// find interface by id and overwrite value
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier) {
 									if (sensor[j].Name.Contains("Download")) {
@@ -519,7 +554,7 @@ public class HardwareInfo {
 
 						// Load
 						if (sensor[j].SensorType == SensorType.Data) {
-							// find interface by name and overwrite value
+							// find interface by id and overwrite value
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 								if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
 									if (sensor[j].Name.Contains("Download")) {
