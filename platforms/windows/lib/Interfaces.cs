@@ -118,21 +118,31 @@ public class NetInterface {
 	public string Name {
 		get; set;
 	}
+
+	public Identifier Id {
+		get; set;
+	}
+
 	public string Description {
 		get; set;
 	}
+
 	public string MACAddress {
 		get; set;
 	}
+
 	public string IPAddress {
 		get; set;
 	}
+
 	public string Mask {
 		get; set;
 	}
+
 	public string Gateway {
 		get; set;
 	}
+
 	public string DNS {
 		get; set;
 	}

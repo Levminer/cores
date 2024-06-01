@@ -52,23 +52,33 @@ public class HardwareInfo {
 					if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
 						var temp = new NetInterface {
 							Name = ni.Name,
+							Id = new Identifier("nic", ni.Id),
 							Description = ni.Description,
-							MACAddress = ni.GetPhysicalAddress().ToString(),
 							Speed = (ni.Speed / 1000 / 1000).ToString()
 						};
 
+						// Mac address
+						var mac = ni.GetPhysicalAddress().ToString();
+						temp.MACAddress = string.Join(":", Enumerable.Range(0, mac.Length)
+													.Where(x => x % 2 == 0)
+													.Select(x => mac.Substring(x, 2))
+													.ToArray());
+
+						// DNS
 						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
 							temp.DNS = ni.GetIPProperties().DnsAddresses[0].ToString();
 						} else {
 							temp.DNS = "N/A";
 						}
 
+						// Gateway
 						if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
 							temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
 						} else {
 							temp.Gateway = "N/A";
 						}
 
+						// Current IP
 						foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
 							if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
 								temp.IPAddress = ip.Address.ToString();
@@ -494,7 +504,7 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Throughput) {
 							// find interface by name and overwrite value
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
-								if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
+								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier) {
 									if (sensor[j].Name.Contains("Download")) {
 										API.System.Network.Interfaces[k].ThroughputDownload = (float)Math.Round(sensor[j].Value ?? 0);
 									}
