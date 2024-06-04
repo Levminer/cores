@@ -24,6 +24,14 @@
 <script lang="ts">
 	import "ui/styles/index.css"
 	import { onNavigate } from "$app/navigation"
+	import posthog from "posthog-js"
+	import { browser } from "$app/environment"
+	import { beforeNavigate, afterNavigate } from "$app/navigation"
+
+	if (browser) {
+		beforeNavigate(() => posthog.capture("$pageleave"))
+		afterNavigate(() => posthog.capture("$pageview"))
+	}
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return
