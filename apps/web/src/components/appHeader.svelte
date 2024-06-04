@@ -5,6 +5,9 @@
 			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
+			{#if $state.state === "connected"}
+				<PowerDropdown />
+			{/if}
 			<ConnectionDropdown {connect} />
 		</div>
 	</div>
@@ -13,9 +16,11 @@
 <script lang="ts">
 	import { goto } from "$app/navigation"
 	import ConnectionDropdown from "ui/components/connectionDropdown.svelte"
+	import PowerDropdown from "ui/components/powerDropdown.svelte"
 	import { settings } from "ui/stores/settings"
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
+	import { hardwareInfo } from "ui/stores/hardwareInfo"
 
 	const connect = (code: string) => {
 		$settings.connectionCode = code
