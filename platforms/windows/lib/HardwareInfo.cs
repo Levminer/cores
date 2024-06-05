@@ -389,6 +389,8 @@ public class HardwareInfo {
 						data.SystemDrive = systemDrive;
 
 						API.System.Storage.Disks.Add(data);
+
+						API.System.Storage.Disks = API.System.Storage.Disks.OrderByDescending(item => item.SystemDrive).ToList();
 					}
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {

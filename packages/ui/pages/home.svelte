@@ -90,7 +90,7 @@
 			</div>
 			<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
-					{#each $hardwareInfo.system.storage.disks.sort((a, b) => (b.systemDrive ? 1 : 0) - (a.systemDrive ? 1 : 0)) as item, i}
+					{#each $hardwareInfo.system.storage.disks as item, i}
 						<div>
 							<div class="flex w-[95%] flex-row justify-between">
 								<p class="text-sm">{item.name} Read Speed</p>
