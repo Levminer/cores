@@ -50,12 +50,14 @@
 
 			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
 				{
-					urls: "stun:stun.relay.metered.ca:80",
-				},
-				{
-					urls: "turn:standard.relay.metered.ca:80",
-					username: "56feef2e09dcd8d33c5f67eb",
-					credential: "ynk5rIg6gGh4lEAk",
+					urls: [
+						"stun:stun.cloudflare.com:3478",
+						"turn:turn.cloudflare.com:3478?transport=udp",
+						"turn:turn.cloudflare.com:3478?transport=tcp",
+						"turns:turn.cloudflare.com:5349?transport=tcp",
+					],
+					username: "fb223515f7951ff1a0df74572785c5f0c07026f6840cd21bcb259fb102b27930be9b17814d148e255f0189dc17a002ef",
+					credential: "7e0d734323e9671cdeb8067eabde1d80e0018280cfb7f5e91ada94e13218fd3af1d268c45705e1bd8f929b3bc1cd8f71",
 				},
 			])
 		}
