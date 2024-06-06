@@ -27,14 +27,8 @@
 		</div>
 
 		<div class="flex w-full flex-row flex-wrap items-center justify-center">
-			<img width="850" loading="lazy" height="474" src="https://cdn.levminer.com/cores/laptop.png" alt="Cores on desktop computer" />
-			<img
-				width="250"
-				loading="lazy"
-				height="483"
-				src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores%2Fphone.png"
-				alt="Cores on on a phone"
-			/>
+			<img width="850" loading="lazy" height="474" src="https://cdn.levminer.com/cores/laptop.webp" alt="Cores on desktop computer" />
+			<img width="250" loading="lazy" height="483" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
 		</div>
 	</div>
 
@@ -220,7 +214,7 @@
 			<h1 class="mb-10 text-5xl font-bold sm:text-3xl">Packed with features</h1>
 			<div class="flex max-w-2xl flex-wrap items-center justify-center gap-1">
 				{#each features as item}
-					<div class="rounded-xl border border-gray-500 transparent-900 p-3 text-lg shadow-xl backdrop-blur-xl">
+					<div class="transparent-900 rounded-xl border border-gray-500 p-3 text-lg shadow-xl backdrop-blur-xl">
 						<p class="text-[#d3cfcf]">{item}</p>
 					</div>
 				{/each}
