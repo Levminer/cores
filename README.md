@@ -1,23 +1,39 @@
 # Cores
 
--   Modern hardware monitor for Windows.
+-   Cores is a hardware monitor background service with remote connection support and a modern UI. With Cores, you can monitor temperature sensors, fan speeds, voltages, load sensors, and clock speeds. It allows you to view detailed information about your motherboard, CPU, GPU, RAM, BIOS, drives, fans, monitors, and network interfaces. Additionally, Cores enables you to monitor your system remotely from anywhere using a web browser.
 
 ## Features
 
--   💻 Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage
--   🌡️ Monitor CPU/GPU temperature
+-   💻 Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage and load
+-   📡 You can monitor your system from any device with a web browser
+-   🌡️ CPU/GPU/Drive temperatures
 -   📈 See beautiful CPU/RAM/GPU graphs
--   💾 Monitor SSD health and temperature
+-   💾 Keep an eye on your SSD health and usage
+-   ❄️ Fan speed and RPM information
+-   🛜 Network speed and usage stats
 -   🖥️ See detailed info about your computer
 
 ## Screenshot
 
 <img src="https://raw.githubusercontent.com/Levminer/cores/dev/screenshots/home.png?raw=true">
 
-## Download (.msix)
+## Download
 
--   Download from the: [Microsoft Store](https://www.microsoft.com/store/apps/9PF137SC1MJL).
+-   Latest release version for users that want a stable and polished experience.
 
-## Download (.exe)
+[![Latest release](https://img.shields.io/github/v/release/levminer/cores?label=Release)](https://github.com/Levminer/cores/releases/latest)
+[![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://cores.levminer.com/#downloads)
+[![Updated](https://img.shields.io/github/last-commit/levminer/cores/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/cores)
 
--   Download from: [Releases](https://github.com/Levminer/cores/releases). Requires the [Windows App Runtime](https://aka.ms/windowsappsdk/1.2/latest/windowsappruntimeinstall-x64.exe).
+-   Also available on the [Microsoft Store](https://link.levminer.com/cores-ms-store).
+
+## Project structure and motivation
+
+-   Cores is a background service that runs in the background and monitors your computer's hardware components. It's built on top of [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor). It provides additional features like GPU usage and drive health monitoring. On Windows it's written in C# and runs as a Windows service. It provides an option to connect to your computer remotely with a P2P connection for monitoring. It also provides a REST API and a WebSocket server if you want to use the data.
+
+-   The UI is built with Svelte and it's available on the desktop as a Tauri desktop app. You can access it on the [website](https://cores.levminer.com/home) and you can remotely connect to your computer if you enabled remote connections and copied your connection code.
+
+## License
+
+-   This software is licensed under: [GPL-3.0](https://github.com/Levminer/cores/blob/dev/LICENSE.md)
+-   You can buy the software as an individual on the [website](https://cores.levminer.com/#pricing). If you are planning to use this software as a business please contact me at: cores@levminer.com
