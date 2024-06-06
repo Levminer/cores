@@ -5,7 +5,7 @@
 			<span class="ml-5 text-xl text-gray-200">Cores</span>
 		</a>
 		<p class="text-center text-xl text-gray-200">
-			Copyright © 2023 Cores - Created by <a href="https://www.levminer.com" target="_blank" rel="noreferrer">Levminer</a>
+			Copyright © 2024 Cores - Created by <a href="https://www.levminer.com" target="_blank" rel="noreferrer">Levminer</a>
 		</p>
 		<div class="space-x-4 text-lg text-white">
 			<a href="https://www.levminer.com/policies/privacy" class="hover:text-gray-200 duration-200" target="_blank" rel="noreferrer">Privacy</a>

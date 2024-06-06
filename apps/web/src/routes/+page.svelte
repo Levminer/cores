@@ -14,10 +14,10 @@
 		{/key}
 
 		<h3 class="mt-5">
-			Unleash the power of real-time PC monitoring from anywhere. <br /> Access detailed information about your computer anytime.
+			Unleash the power of real-time PC monitoring from anywhere. <br /> Access detailed information about your computer anytime, anywhere.
 		</h3>
 
-		<div class="mt-5 flex flex-row items-center justify-center gap-5">
+		<div class="my-5 flex flex-row items-center justify-center gap-5">
 			<a
 				href="#download"
 				class="bg-cores-current hover:text-cores-current transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
@@ -26,13 +26,14 @@
 			<a class="flex text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
 		</div>
 
-		<div>
+		<div class="flex w-full flex-row flex-wrap items-center justify-center">
+			<img width="850" loading="lazy" height="474" src="https://cdn.levminer.com/cores/laptop.png" alt="Cores on desktop computer" />
 			<img
-				width="1000"
+				width="250"
 				loading="lazy"
-				height="650"
-				src="https://cdn.levminer.com/cores/landing.webp"
-				alt="Cores on desktop computer and on a phone"
+				height="483"
+				src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores%2Fphone.png"
+				alt="Cores on on a phone"
 			/>
 		</div>
 	</div>
@@ -181,7 +182,7 @@
 					<!-- card 0 -->
 					<div class="mx-auto flex w-full flex-col items-start justify-center rounded-xl bg-gray-900 p-10 text-left">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-4xl font-extrabold text-transparent">Remote access</h2>
-						<h3>Monitor your device from anywhere.</h3>
+						<h3>Monitor your device easily from anywhere.</h3>
 					</div>
 
 					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
@@ -215,12 +216,12 @@
 			</div>
 		</div>
 
-		<div id="features4" class="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-blue-800 to-indigo-900 py-20">
+		<div id="features4" class="flex flex-col items-center justify-center rounded-xl py-20">
 			<h1 class="mb-10 text-5xl font-bold sm:text-3xl">Packed with features</h1>
 			<div class="flex max-w-2xl flex-wrap items-center justify-center gap-1">
 				{#each features as item}
-					<div class="rounded-xl border border-white/40 bg-white/30 p-3 text-lg shadow-xl backdrop-blur-xl">
-						<p>{item}</p>
+					<div class="rounded-xl border border-gray-500 transparent-900 p-3 text-lg shadow-xl backdrop-blur-xl">
+						<p class="text-[#d3cfcf]">{item}</p>
 					</div>
 				{/each}
 			</div>
@@ -244,27 +245,16 @@
 										<Microsoft width="24" height="24" />
 										<h2>Windows Installer</h2>
 									</div>
-									<h3>Download the installer for the best experience.</h3>
+									<h3>Download the installer or get the app from the Microsoft Store.</h3>
 								</div>
 								<div class="flex flex-col gap-3 md:flex-row">
+									<a href="https://link.levminer.com/cores-installer" target="_blank" class="smallButton">
+										<Download width="24" height="24" />
+										Download
+									</a>
 									<a href="https://link.levminer.com/cores-ms-store" target="_blank" class="smallButton">
 										<Microsoft width="24" height="24" />
 										Microsoft Store
-									</a>
-								</div>
-							</div>
-							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex flex-col">
-									<div class="flex flex-row items-center gap-3">
-										<Microsoft width="24" height="24" />
-										<h2>Windows Portable</h2>
-									</div>
-									<h3>Download the portable version if you want to try out Cores.</h3>
-								</div>
-								<div class="flex flex-col gap-3 md:flex-row">
-									<a href="https://link.levminer.com/cores-gh-portable" class="smallButton">
-										<Download />
-										Download
 									</a>
 								</div>
 							</div>
@@ -376,7 +366,7 @@
 	import GetStarted from "../components/getStarted.svelte"
 
 	// prettier-ignore
-	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date","Remote Access","Runs In The Background", "Minimal Resource Usage"]
+	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date", "Fan Speed","Remote Access","Runs In The Background", "Minimal Resource Usage"]
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0
 	let roller: NodeJS.Timeout
