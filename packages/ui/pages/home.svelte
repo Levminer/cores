@@ -96,14 +96,14 @@
 								<p class="text-sm">{item.name} Read Speed</p>
 								<p class="text-sm text-[#969696]">{parseFloat((item.throughputRead / 1_048_576).toFixed(2))} MB/s</p>
 							</div>
-							<Progress value={parseFloat((item.throughputRead / 125_000).toFixed(2))} />
+							<Progress value={parseFloat((item.throughputRead / 1_048_576).toFixed(2))} />
 						</div>
 						<div>
 							<div class="flex w-[95%] flex-row justify-between">
 								<p class="text-sm">{item.name} Write Speed</p>
 								<p class="text-sm text-[#969696]">{parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} MB/s</p>
 							</div>
-							<Progress value={parseFloat((item.throughputWrite / 125_000).toFixed(2))} />
+							<Progress value={parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} />
 						</div>
 					{/each}
 				</div>

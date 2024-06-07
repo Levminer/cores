@@ -27,8 +27,8 @@
 		</div>
 
 		<div class="flex w-full flex-row flex-wrap items-center justify-center">
-			<img width="850" loading="lazy" height="474" src="https://cdn.levminer.com/cores/laptop.webp" alt="Cores on desktop computer" />
-			<img width="250" loading="lazy" height="483" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
+			<img width="850" height="474" src="https://cdn.levminer.com/cores/laptop.webp" alt="Cores on desktop computer" />
+			<img width="250" height="483" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
 		</div>
 	</div>
 
