@@ -12,7 +12,6 @@ jobs:
 
         env:
             Solution_Name: cores.sln
-            Project_Directory: platforms/windows/desktop
             AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
             AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
             AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
@@ -73,7 +72,6 @@ jobs:
             - name: Sign service installer
               run: |
                 npm run sign target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
-
 
             - name: Remove useless folders
               run: |
