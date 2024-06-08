@@ -1,5 +1,5 @@
 [workspace]
-members = ["platforms/core"]
+members = ["platforms/core", "platforms/rtc"]
 resolver = "2"
 
 [profile.release]
@@ -7,4 +7,3 @@ lto = true
 opt-level = "s"
 panic = "abort"
 codegen-units = 1
-

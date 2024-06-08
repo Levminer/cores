@@ -366,4 +366,5 @@ dist
 build.json
 platforms/windows/desktop/Assets/assets
 platforms/windows/desktop/lib.dll
+platforms/windows/service/lib.dll
 target

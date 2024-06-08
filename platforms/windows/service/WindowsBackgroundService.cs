@@ -1,4 +1,5 @@
 using lib;
+using System.Runtime.InteropServices;
 
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
@@ -12,6 +13,12 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		this.logger = logger;
 	}
 
+	[DllImport("rtc.dll")]
+	private static extern void start();
+
+	[DllImport("rtc.dll")]
+	private static extern void stop();
+
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		logger.LogWarning("Starting Cores service");
 		HardwareInfo.GetInfo();
@@ -19,7 +26,9 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		WSServer.Start(HardwareInfo);
 
 		if (Program.Settings.remoteConnections) {
-			RTCServer.Start(HardwareInfo);
+			Task.Run(() => {
+				start();
+			});
 		}
 
 		while (!stoppingToken.IsCancellationRequested) {
@@ -28,9 +37,9 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval), stoppingToken);
 			}
 			catch (OperationCanceledException) {
+				stop();
 				HTTPServer.Stop();
 				WSServer.Stop();
-				RTCServer.Stop();
 				HardwareInfo.Stop();
 			}
 			catch (Exception ex) {

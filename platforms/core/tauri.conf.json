@@ -40,7 +40,7 @@
 		"windows": {
 			"wix": {
 				"fragmentPaths": ["wix/service.wxs"],
-				"componentRefs": ["ServiceEntry"]
+				"componentRefs": ["ServiceEntry", "Rtc"]
 			}
 		},
 		"resources": ["icons/32x32.png"]

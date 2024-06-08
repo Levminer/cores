@@ -39,6 +39,9 @@ jobs:
             - name: Setup MSBuild.exe
               uses: microsoft/setup-msbuild@v1.0.2
 
+            - name: Build RTC
+              run: npm run build:rtc
+
             # Restore the application to populate the obj folder with RuntimeIdentifiers
             - name: Restore the application
               run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
@@ -57,6 +60,7 @@ jobs:
             - name: Sign service executable
               run: |
                 npm run sign platforms/windows/service/bin/exe/CoresService.exe
+                npm run sign platforms/windows/service/bin/exe/rtc.dll
 
             # Build service installer
             - name: Build service installer
