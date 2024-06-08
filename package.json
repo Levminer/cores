@@ -14,7 +14,7 @@
 		"dev:core": "tauri dev",
 		"dev:app": "node scripts/buildNumber.cjs alpha true && npm run dev -w app",
 		"dev:web": "node scripts/buildNumber.cjs alpha true && npm run dev -w web",
-		"build:core": "node scripts/buildNumber.cjs alpha false && tauri build",
+		"build:core": "node scripts/buildNumber.cjs alpha false && tauri build --verbose",
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build -w web",
 		"build:rtc": "cargo build --manifest-path platforms/rtc/Cargo.toml --release && node scripts/copyRTC.js",
