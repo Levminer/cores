@@ -8,9 +8,6 @@
 			<ServiceInstall Id="ServiceInstaller" Name="CoresService" Type="ownProcess" Vital="yes" DisplayName="Cores Service" Description="Cores background service." Start="auto" Account="LocalSystem" ErrorControl="normal" Interactive="no" />
 				<ServiceControl Id="StartService" Name="CoresService" Stop="both" Start="install" Remove="uninstall" Wait="yes" />
 			</Component>
-			<Component Id="Rtc" Guid="*">
-				<File Source="$(sys.SOURCEFILEDIR)../../windows/service/bin/exe/rtc.dll" />
-			</Component>
 		</DirectoryRef>
 	</Fragment>
 </Wix>
