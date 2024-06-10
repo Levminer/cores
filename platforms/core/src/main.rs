@@ -4,7 +4,7 @@
 use tauri::{
     image::Image,
     menu::{MenuBuilder, MenuItemBuilder},
-    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    tray::{ClickType, TrayIconBuilder},
     Manager,
 };
 
@@ -61,12 +61,7 @@ fn main() {
                     _ => (),
                 })
                 .on_tray_icon_event(|tray, event| {
-                    if let TrayIconEvent::Click {
-                        button: MouseButton::Left,
-                        button_state: MouseButtonState::Up,
-                        ..
-                    } = event
-                    {
+                    if event.click_type == ClickType::Left {
                         let app = tray.app_handle();
                         let window = app.get_webview_window("main").unwrap();
 
