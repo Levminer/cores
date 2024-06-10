@@ -42,6 +42,13 @@ public class Program {
 			SentrySdk.CaptureException(e);
 		}
 
+		// Set firewall rules
+		var ruleExists = Commands.ExecuteCommand(@"netsh advfirewall firewall show rule name='CoresService'");
+
+		if (ruleExists.Contains("No rules match the specified criteria.")) {
+			var exe = Path.Join(AppContext.BaseDirectory, "CoresService.exe");
+			var res = Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
+		}
 
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 		builder.Services.AddWindowsService(options => {
