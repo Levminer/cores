@@ -43,7 +43,7 @@
 				"componentRefs": ["ServiceEntry"]
 			}
 		},
-		"resources": ["icons/32x32.png", "rtc.dll"]
+		"resources": ["icons/32x32.png"]
 	},
 	"plugins": {
 		"updater": {
