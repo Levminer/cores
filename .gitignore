@@ -365,6 +365,6 @@ FodyWeavers.xsd
 dist
 build.json
 platforms/windows/desktop/Assets/assets
-platforms/windows/desktop/lib.dll
-platforms/windows/service/lib.dll
+platforms/core/rtc.dll
+platforms/windows/service/rtc.dll
 target
