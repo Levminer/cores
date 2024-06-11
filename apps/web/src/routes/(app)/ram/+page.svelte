@@ -1,16 +1,14 @@
-{#if $hardwareInfo.cpu !== undefined}
-	<RAM/>
+{#if $state.state === "connected"}
+	<RAM />
+{:else if $state.state === "loading"}
+	<Loading />
+{:else}
+	<Connect />
 {/if}
 
 <script>
-	import { goto } from "$app/navigation"
-	import { onMount } from "svelte"
 	import RAM from "ui/pages/ram.svelte"
-	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
-
-	onMount(() => {
-		if ($hardwareInfo.cpu === undefined) {
-			goto("/connect")
-		}
-	})
+	import { state } from "../../../stores/state"
+	import Loading from "ui/navigation/loading.svelte"
+	import Connect from "../../../components/connect.svelte"
 </script>

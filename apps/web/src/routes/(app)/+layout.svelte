@@ -1,12 +1,8 @@
 <AppHeader />
 <Navigation />
 
-{#if $state.state === "loading" && url !== "/settings"}
-	<Loading />
-{:else}
-	<slot />
-	<div class="mb-32" />
-{/if}
+<slot />
+<div class="mb-32" />
 
 <script lang="ts">
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
@@ -17,16 +13,9 @@
 	import { page } from "$app/stores"
 	import { onNavigate } from "$app/navigation"
 	import { EzRTCClient } from "ezrtc"
-	import Loading from "ui/navigation/loading.svelte"
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
 	import AppHeader from "../../components/appHeader.svelte"
-
-	$: url = $page.url.pathname
-
-	onNavigate((navigation) => {
-		url = navigation.to?.url.pathname ?? "/"
-	})
 
 	onMount(() => {
 		// Connect to server when user selected a connection
