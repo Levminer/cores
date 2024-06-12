@@ -2,14 +2,37 @@
 	<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
 		<!-- remote connections -->
 		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
-			<div class="flex items-center gap-3">
-				<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-					<Cable />
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Cable />
+					</div>
+					<h2>Remote connections</h2>
 				</div>
-				<h2>Remote connections</h2>
-			</div>
-			<div class="mt-5 flex w-full flex-col gap-5">
 				<h3>Get your connection code from the Cores desktop app.</h3>
+			</div>
+
+			<div class="flex flex-col items-start gap-3 sm:my-5">
+				<Dialog
+					title={"Add Remote Connection"}
+					description={"You can copy your connection code from the Cores desktop app in the settings."}
+					action={addConnectionCode}
+				>
+					<div class="flex flex-row flex-wrap gap-3">
+						<div>
+							<h5>Name</h5>
+							<input class="input mt-1" type="text" id="name" />
+						</div>
+
+						<div>
+							<h5>Connection code</h5>
+							<input class="input mt-1" type="text" id="code" />
+						</div>
+					</div>
+				</Dialog>
+			</div>
+
+			<div class="mt-5 flex w-full flex-col gap-5">
 				{#each $settings.connectionCodes as item}
 					<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
 						<div class="flex flex-row flex-wrap gap-3">
@@ -32,24 +55,6 @@
 						</div>
 					</div>
 				{/each}
-				<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
-					<div class="flex flex-row flex-wrap gap-3">
-						<div>
-							<h5>Name</h5>
-							<input class="input mt-1" type="text" id="name" />
-						</div>
-
-						<div>
-							<h5>Connection code</h5>
-							<input class="input mt-1" type="text" id="code" />
-						</div>
-					</div>
-
-					<button class="button mt-6" on:click={addConnectionCode}>
-						<Plus />
-						<span>Add</span>
-					</button>
-				</div>
 			</div>
 		</div>
 
@@ -82,12 +87,17 @@
 
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
-	import { Plus, RefreshCcw, Trash2, Cable, Info } from "lucide-svelte"
+	import Dialog from "ui/components/dialog.svelte"
+	import { Trash2, Cable, Info } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../build.json"
 
 	const addConnectionCode = () => {
 		const name = document.getElementById("name") as HTMLInputElement
 		const code = document.getElementById("code") as HTMLInputElement
+
+		if (!code.value.startsWith("crs_")) {
+			return alert("Invalid connection code! The connection code must start with: crs_")
+		}
 
 		$settings.connectionCodes = [
 			...$settings.connectionCodes,

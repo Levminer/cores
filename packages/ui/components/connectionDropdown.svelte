@@ -11,6 +11,19 @@
 		transition={flyAndScale}
 		sideOffset={8}
 	>
+		{#if $settings.connectionCodes.length === 0}
+			<DropdownMenu.Item
+				class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+			>
+				<div class="flex items-center">
+					<Plug />
+				</div>
+				<div class="flex flex-col items-start">
+					<h4>No connections</h4>
+					<h5>Go to settings</h5>
+				</div>
+			</DropdownMenu.Item>
+		{/if}
 		{#each $settings.connectionCodes as item, i}
 			{#if i > 0}
 				<DropdownMenu.Separator class="my-1 -ml-1 -mr-1 block h-px bg-gray-600" />
@@ -19,7 +32,7 @@
 				on:click={() => {
 					connect(item.code)
 				}}
-				class="flex cursor-pointer select-none gap-3 items-center rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+				class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
 			>
 				<div class="flex items-center">
 					<Plug />
@@ -34,9 +47,9 @@
 </DropdownMenu.Root>
 
 <script lang="ts">
-	import { Avatar, DropdownMenu } from "bits-ui"
+	import { DropdownMenu } from "bits-ui"
 	import { flyAndScale } from "../utils/transitions.ts"
-	import { Plug, UserCircle } from "lucide-svelte"
+	import { Plug } from "lucide-svelte"
 	import { settings } from "ui/stores/settings.ts"
 
 	export let connect = (item: string) => {}
