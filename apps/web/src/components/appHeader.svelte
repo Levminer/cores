@@ -25,13 +25,7 @@
 	const connect = (code: string) => {
 		$settings.connectionCode = code
 		$state.currentCode = code
-		$state.state = "loading"
-
-		if ($hardwareInfo.cpu !== undefined) {
-			location.href = "/home"
-		} else {
-			goto("home")
-		}
+		$state.state = "swapping"
 	}
 
 	onMount(() => {

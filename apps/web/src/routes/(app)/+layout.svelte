@@ -10,18 +10,34 @@
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import { settings } from "ui/stores/settings"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
-	import { page } from "$app/stores"
-	import { onNavigate } from "$app/navigation"
 	import { EzRTCClient } from "ezrtc"
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
 	import AppHeader from "../../components/appHeader.svelte"
+
+	let client: EzRTCClient | undefined
 
 	onMount(() => {
 		// Connect to server when user selected a connection
 		state.subscribe((data) => {
 			if (data.currentCode !== "" && data.state === "waiting") {
 				connect()
+			}
+
+			if (data.state === "disconnected") {
+				client?.peerConnection.close()
+				sessionStorage.removeItem("hardwareInfo")
+				sessionStorage.removeItem("hardwareStatistics")
+				location.reload()
+			}
+
+			if (data.state === "swapping") {
+				client?.peerConnection.close()
+				sessionStorage.removeItem("hardwareInfo")
+				sessionStorage.removeItem("hardwareStatistics")
+				// @ts-ignore
+				$hardwareInfo.cpu = {}
+				location.reload()
 			}
 		})
 
@@ -32,8 +48,6 @@
 	})
 
 	const connect = () => {
-		let client: EzRTCClient | undefined
-
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
@@ -88,7 +102,9 @@
 		client?.onMessage((message) => {
 			const WSData: NetworkMessage = JSON.parse(message)
 
-			$state.state = "connected"
+			if ($state.state !== "connected") {
+				$state.state = "connected"
+			}
 
 			if (WSData.type == "data" || WSData.type == "initialData") {
 				// Check if RAM load data is available
