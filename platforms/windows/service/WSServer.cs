@@ -65,6 +65,9 @@ public class WSServer {
 				await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
 				connectedClients.TryRemove(socket, out _);
 				break;
+			} else if (result.MessageType == WebSocketMessageType.Text) {
+				string receivedText = Encoding.UTF8.GetString(receiveBuffer.Array, receiveBuffer.Offset, result.Count);
+				HandleMessage(receivedText);
 			}
 		}
 
@@ -74,5 +77,30 @@ public class WSServer {
 
 	public void Stop() {
 		listener.Stop();
+	}
+
+	static void HandleMessage(string message) {
+		try {
+			var netMessage = JsonSerializer.Deserialize<Message>(message, Program.SerializerOptions);
+
+			switch (netMessage?.Data) {
+				case "shutdown":
+					Commands.ExecuteCommand(@"shutdown /s /t 30");
+					break;
+
+				case "sleep":
+					Commands.ExecuteCommand("Start-Process rundll32.exe -ArgumentList 'powrprof.dll,SetSuspendState 0,1,0'");
+					break;
+
+				case "restart":
+					Commands.ExecuteCommand("shutdown /r /t 30");
+					break;
+			}
+
+			return;
+		}
+		catch (Exception) {
+			Console.WriteLine("Invalid message");
+		}
 	}
 }

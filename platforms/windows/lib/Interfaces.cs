@@ -30,11 +30,11 @@ public class NetworkMessage {
 }
 
 public class Message {
-	public string Name {
+	public string Type {
 		get; set;
 	}
 
-	public string Content {
+	public string Data {
 		get; set;
 	}
 }
