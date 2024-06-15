@@ -12,7 +12,7 @@
 				{#each $hardwareInfo.ram.info as { manufacturerName, configuredSpeed, configuredVoltage, size, bankLocator }}
 					<div class="mt-5 select-text">
 						<h3>Vendor: {manufacturerName}</h3>
-						<h3>Speed: {configuredSpeed} MHz</h3>
+						<h3>Speed: {configuredSpeed} MT/s</h3>
 						<h3>Voltage: {configuredVoltage / 1000} V</h3>
 						<h3>Capacity: {size / 1024} GB</h3>
 					</div>
