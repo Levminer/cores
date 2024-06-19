@@ -7,7 +7,6 @@ public sealed class WindowsBackgroundService : BackgroundService {
 	internal static HardwareInfo HardwareInfo = new();
 	internal static HTTPServer HTTPServer = new();
 	internal static WSServer WSServer = new();
-	internal static RTCServer RTCServer = new();
 
 	public WindowsBackgroundService(ILogger<WindowsBackgroundService> logger) {
 		this.logger = logger;

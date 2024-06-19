@@ -66,38 +66,6 @@ public class Settings : DefaultSettings {
 		}
 	}
 
-	[Obsolete("Deprecated, remove when desktop is removed")]
-	public void GetSettings() {
-		var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-		// check if Cores folder exists
-		if (!File.Exists(Path.Join(appData, "Cores"))) {
-			Directory.CreateDirectory(Path.Join(appData, "Cores"));
-		}
-
-		// check if settings.json exists
-		if (!File.Exists(Path.Join(appData, "Cores", "settings.json"))) {
-			// create settings.json
-			File.WriteAllText(Path.Join(appData, "Cores", "settings.json"), JsonSerializer.Serialize(this));
-		}
-
-		// read settings.json
-		try {
-			var settings = JsonSerializer.Deserialize<Settings>(File.ReadAllText(Path.Join(appData, "Cores", "settings.json")));
-
-			interval = settings.interval;
-			minimizeToTray = settings.minimizeToTray;
-			launchOnStartup = settings.launchOnStartup;
-			remoteConnections = settings.remoteConnections;
-			optionalAnalytics = settings.optionalAnalytics;
-			connectionCode = settings.connectionCode;
-			version = settings.version;
-		}
-		catch (Exception e) {
-			SentrySdk.CaptureException(e);
-		}
-	}
-
 	public void SetSettings() {
 		var programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
 
