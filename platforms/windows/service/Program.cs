@@ -8,6 +8,11 @@ using System.Text.Json;
 
 namespace service;
 
+internal class HardwareStats {
+	public List<string> seconds = new();
+	public List<string> minutes = new();
+}
+
 [SupportedOSPlatform("Windows")]
 public class Program {
 	internal static JsonSerializerOptions CompressedSerializerOptions = new() {
@@ -18,6 +23,7 @@ public class Program {
 		WriteIndented = true,
 	};
 
+	internal static HardwareStats HardwareStats = new();
 	internal static Settings Settings = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {

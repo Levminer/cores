@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace service;
 
@@ -44,15 +45,34 @@ public class WSServer {
 	}
 
 	static async Task ProcessWebSocketRequestAsync(WebSocket socket, HardwareInfo hardwareInfo) {
-		byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new NetworkMessage() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+		// Send the initial data
+		byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 		await socket.SendAsync(new ArraySegment<byte>(initialBuffer, 0, initialBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 
 		var receiveBuffer = new ArraySegment<byte>(new byte[1024 * 4]);
 		WebSocketReceiveResult result;
 
+		// Send last 60s and last 60 minutes data
+		await Task.Run(async () => {
+			var secondsList = Program.HardwareStats.seconds.Where((x, i) => (i + 1) % 3 == 0).ToList();
+
+			for (int i = 0; i < secondsList.Count; i++) {
+				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = JsonNode.Parse(secondsList[i]) }, Program.CompressedSerializerOptions));
+				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+			}
+
+			var minutesList = Program.HardwareStats.minutes.Where((x, i) => (i + 1) % 3 == 0).ToList();
+
+			for (int i = 0; i < minutesList.Count; i++) {
+				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = JsonNode.Parse(minutesList[i]) }, Program.CompressedSerializerOptions));
+				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+			}
+		});
+
+		// Send updated data every 2s
 		Task sendTask = Task.Run(async () => {
 			while (socket.State == WebSocketState.Open) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new NetworkMessage() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 				await Task.Delay(2000);
 			}
@@ -81,7 +101,7 @@ public class WSServer {
 
 	static void HandleMessage(string message) {
 		try {
-			var netMessage = JsonSerializer.Deserialize<Message>(message, Program.SerializerOptions);
+			var netMessage = JsonSerializer.Deserialize<GenericMessage<string>>(message, Program.SerializerOptions);
 
 			switch (netMessage?.Data) {
 				case "shutdown":

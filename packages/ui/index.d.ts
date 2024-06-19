@@ -3,7 +3,7 @@
 
 declare global {
 	interface NetworkMessage {
-		type: "data" | "initialData"
+		type: "data" | "initialData" | "secondsData" | "minutesData"
 		data: HardwareInfo
 	}
 
@@ -140,7 +140,7 @@ declare global {
 				date: string
 			}
 
-			superIO:{
+			superIO: {
 				name: string
 				fan: Sensor[]
 				fanControl: Sensor[]

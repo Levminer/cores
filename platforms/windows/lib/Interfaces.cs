@@ -20,23 +20,9 @@ public class Sensor {
 	}
 }
 
-public class NetworkMessage {
-	public string Type {
-		get; set;
-	}
-	public API Data {
-		get; set;
-	}
-}
-
-public class Message {
-	public string Type {
-		get; set;
-	}
-
-	public string Data {
-		get; set;
-	}
+public class GenericMessage<T> {
+	public string Type { get; set; }
+	public T Data { get; set; }
 }
 
 public class ProtocolData {
