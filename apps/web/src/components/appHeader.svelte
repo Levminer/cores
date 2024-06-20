@@ -6,7 +6,7 @@
 		</a>
 		<div class="flex space-x-2 md:order-2">
 			{#if $state.state === "connected"}
-				<PowerDropdown />
+				<PowerDropdown {action} />
 			{/if}
 			<ConnectionDropdown {connect} />
 		</div>
@@ -14,13 +14,22 @@
 </nav>
 
 <script lang="ts">
-	import { goto } from "$app/navigation"
 	import ConnectionDropdown from "ui/components/connectionDropdown.svelte"
 	import PowerDropdown from "ui/components/powerDropdown.svelte"
 	import { settings } from "ui/stores/settings"
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
-	import { hardwareInfo } from "ui/stores/hardwareInfo"
+
+	const action = (type: string) => {
+		if (type === "disconnect") {
+			return ($state.state = "disconnected")
+		}
+
+		$state.message = JSON.stringify({
+			type: "power",
+			data: type,
+		})
+	}
 
 	const connect = (code: string) => {
 		$settings.connectionCode = code

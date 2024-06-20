@@ -39,6 +39,12 @@
 				$hardwareInfo.cpu = {}
 				location.reload()
 			}
+
+			if (data.message !== "") {
+				console.log("Message sent to host")
+				client?.sendMessage(data.message)
+				data.message = ""
+			}
 		})
 
 		// Reconnect if data is present from previous session
@@ -57,8 +63,13 @@
 				},
 				{
 					urls: "turn:standard.relay.metered.ca:80",
-					username: "56feef2e09dcd8d33c5f67eb",
-					credential: "ynk5rIg6gGh4lEAk",
+					username: "34a987bde7c718428704bde7",
+					credential: "hZA1e3RHAhw70JoP",
+				},
+				{
+					urls: "turn:standard.relay.metered.ca:443",
+					username: "34a987bde7c718428704bde7",
+					credential: "hZA1e3RHAhw70JoP",
 				},
 			])
 		}
