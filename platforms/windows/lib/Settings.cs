@@ -18,6 +18,8 @@ public class DefaultSettings {
 	public bool remoteConnections { get; set; } = false;
 	public bool optionalAnalytics { get; set; } = true;
 	public string connectionCode { get; set; } = ConnectionCode.Generate();
+	public string licenseKey { get; set; } = "";
+	public string licenseActivated { get; set; } = "";
 	public int version { get; set; } = 2;
 }
 
@@ -59,6 +61,8 @@ public class Settings : DefaultSettings {
 			remoteConnections = settings?.remoteConnections ?? defaultSettings.remoteConnections;
 			optionalAnalytics = settings?.optionalAnalytics ?? defaultSettings.optionalAnalytics;
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
+			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
+			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			version = settings?.version ?? defaultSettings.version;
 		}
 		catch (Exception e) {

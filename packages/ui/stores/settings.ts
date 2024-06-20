@@ -16,6 +16,8 @@ const defaultSettings: LibSettings = {
 	version: 1,
 	remoteConnections: false,
 	optionalAnalytics: true,
+	licenseKey: "",
+	licenseActivated: "",
 }
 
 // Create store

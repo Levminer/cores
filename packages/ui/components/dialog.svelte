@@ -1,7 +1,9 @@
 <Dialog.Root>
 	<Dialog.Trigger class="button">
-		<Plus />
-		Add
+		<slot name="button">
+			<Plus />
+			Add
+		</slot>
 	</Dialog.Trigger>
 	<Dialog.Portal>
 		<Dialog.Overlay transition={fade} transitionConfig={{ duration: 150 }} class="fixed inset-0 z-50 bg-black/70" />
@@ -19,8 +21,10 @@
 			</div>
 			<div class="flex w-full justify-end">
 				<Dialog.Close on:click={action} class="smallButton">
-					<Plus />
-					Add
+					<slot name="button">
+						<Plus />
+						Add
+					</slot>
 				</Dialog.Close>
 			</div>
 			<Dialog.Close
@@ -43,5 +47,5 @@
 
 	export let title = ""
 	export let description = ""
-    export let action = () => {}
+	export let action = () => {}
 </script>

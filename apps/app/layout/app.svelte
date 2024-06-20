@@ -1,5 +1,7 @@
 <div class="flex h-screen">
-	<DesktopNavigation />
+	{#if $settings.licenseKey !== ""}
+		<DesktopNavigation />
+	{/if}
 
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
 		<BuildNumber />
@@ -10,6 +12,8 @@
 			<DesktopLoading />
 		{:else}
 			<RouteTransition>
+				<Route path="/onboarding"><Onboarding /></Route>
+
 				<Boundary onError={console.error}>
 					<Route path="/home"><Home /></Route>
 				</Boundary>
@@ -59,10 +63,11 @@
 	import Storage from "ui/pages/storage.svelte"
 	import Network from "ui/pages/network.svelte"
 	import System from "ui/pages/system.svelte"
+	import Onboarding from "ui/pages/onboarding.svelte"
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { initializeSettings } from "ui/stores/settings"
+	import { initializeSettings, settings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import DesktopLoading from "ui/navigation/desktopLoading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
@@ -80,7 +85,7 @@
 		let sendAnalytics = true
 		let retries = 0
 
-		initializeSettings()
+		await initializeSettings()
 
 		// Change background color if Mica
 		const setBackgroundColor = async () => {
@@ -165,7 +170,20 @@
 		analytics()
 
 		// Navigate to the home page on load (webview bug)
-		router.goto("/home")
+		if ($settings.licenseKey === "" || $settings.licenseKey === "free") {
+			router.goto("/onboarding")
+
+			let dateActivated = new Date($settings.licenseActivated)
+			let dateNow = new Date()
+			let diff = dateNow.getTime() - dateActivated.getTime()
+			let days = Math.ceil(diff / (1000 * 3600 * 24))
+
+			if (days > 7) {
+				$settings.licenseKey = ""
+			}
+		} else {
+			router.goto("/home")
+		}
 
 		// Scroll to the top of the page on route change
 		router.subscribe(() => {

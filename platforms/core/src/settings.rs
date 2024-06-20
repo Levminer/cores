@@ -2,6 +2,10 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 use uuid::Uuid;
 
+const fn default_string() -> String {
+    String::new()
+}
+
 const fn default_value() -> u32 {
     2
 }
@@ -36,6 +40,10 @@ pub struct Settings {
     pub remote_connections: bool,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
     pub connection_code: String,
+    #[serde(rename = "licenseKey", default = "default_string")]
+    pub license_key: String,
+    #[serde(rename = "licenseActivated", default = "default_string")]
+    pub license_activated: String,
     pub version: Option<u8>,
 }
 
@@ -47,6 +55,8 @@ fn check_if_settings_exits() {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        license_key: "".to_string(),
+        license_activated: "".to_string(),
     };
 
     let program_data = Path::new("C:\\ProgramData");
@@ -75,6 +85,8 @@ pub fn get_settings() -> Settings {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        license_key: "".to_string(),
+        license_activated: "".to_string(),
     };
 
     println!("Getting settings");

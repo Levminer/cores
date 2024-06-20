@@ -209,6 +209,8 @@ declare global {
 		version: number
 		remoteConnections: boolean
 		optionalAnalytics: boolean
+		licenseKey: string
+		licenseActivated: string
 	}
 
 	interface SystemInfo {
