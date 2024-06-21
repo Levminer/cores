@@ -1,5 +1,5 @@
 [workspace]
-members = ["platforms/core", "platforms/rtc"]
+members = ["platforms/core"]
 resolver = "2"
 
 [profile.release]

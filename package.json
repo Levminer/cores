@@ -17,7 +17,6 @@
 		"build:core": "node scripts/buildNumber.cjs alpha false && tauri build",
 		"build:app": "node scripts/buildNumber.cjs alpha false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs alpha false && npm run build -w web",
-		"build:rtc": "cargo build --manifest-path platforms/rtc/Cargo.toml --release && node scripts/copyRTC.js",
 		"check": "npm run check -w app",
 		"rename": "node scripts/rename.js",
 		"sign": "node scripts/sign.js",

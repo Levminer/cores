@@ -16,6 +16,7 @@ jobs:
             AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
             AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
             TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+            SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -39,9 +40,6 @@ jobs:
             - name: Setup MSBuild.exe
               uses: microsoft/setup-msbuild@v1.0.2
 
-            - name: Build RTC
-              run: npm run build:rtc
-
             # Restore the application to populate the obj folder with RuntimeIdentifiers
             - name: Restore the application
               run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
@@ -60,7 +58,6 @@ jobs:
             - name: Sign service executable
               run: |
                 npm run sign platforms/windows/service/bin/exe/CoresService.exe
-                npm run sign platforms/windows/service/bin/exe/rtc.dll
 
             # Build service installer
             - name: Build service installer

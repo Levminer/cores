@@ -1,5 +1,4 @@
 using lib;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace service;
@@ -8,16 +7,11 @@ public sealed class WindowsBackgroundService : BackgroundService {
 	internal static HardwareInfo HardwareInfo = new();
 	internal static HTTPServer HTTPServer = new();
 	internal static WSServer WSServer = new();
+	internal static RTCServer RTCServer = new();
 
 	public WindowsBackgroundService(ILogger<WindowsBackgroundService> logger) {
 		this.logger = logger;
 	}
-
-	[DllImport("rtc.dll")]
-	private static extern void start();
-
-	[DllImport("rtc.dll")]
-	private static extern void stop();
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		logger.LogWarning("Starting Cores service");
@@ -27,7 +21,9 @@ public sealed class WindowsBackgroundService : BackgroundService {
 
 		// Start remote connection
 		if (Program.Settings.remoteConnections) {
-			_ = Task.Run(start);
+			_ = Task.Run(() => {
+				RTCServer.Start(HardwareInfo);
+			});
 		}
 
 		// Store last 60 minutes statistics
@@ -61,7 +57,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval), stoppingToken);
 			}
 			catch (OperationCanceledException) {
-				stop();
+				RTCServer.Stop();
 				HTTPServer.Stop();
 				WSServer.Stop();
 				HardwareInfo.Stop();
