@@ -34,12 +34,13 @@ pub fn system_info() -> SystemInfo {
     let cpu_name = sys.cpus()[0].brand().to_string();
     let total_mem = sys.total_memory();
 
-    let gpu_name_json = powershell_script::run(
+    let gpu_name_json = if let Ok(gpu_name) = powershell_script::run(
         "Get-WmiObject -class Win32_VideoController | Select-Object Name | ConvertTo-Json",
-    )
-    .unwrap()
-    .stdout()
-    .unwrap();
+    ) {
+        gpu_name.stdout().unwrap()
+    } else {
+        "{\"Name\": \"N/A\"}".to_string()
+    };
 
     let gpu_name = serde_json::from_str::<PowershellGPUOutput>(&gpu_name_json)
         .unwrap()

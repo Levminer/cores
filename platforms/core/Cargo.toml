@@ -25,3 +25,4 @@ directories = "4.0.1"
 sysinfo = "0.30.11"
 runas = "1.2.0"
 powershell_script = "1.1.0"
+sentry = { version = "0.34", features = ["debug-images"] }
