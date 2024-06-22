@@ -18,7 +18,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
 		<PackageReference Include="Sentry" Version="4.5.0" />
-		<PackageReference Include="ezrtc" Version="0.7.0" />
+		<PackageReference Include="ezrtc" Version="0.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>

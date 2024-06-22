@@ -7,7 +7,7 @@
 		"bits-ui": "^0.21.8",
 		"chart.js": "^4.4.1",
 		"chartjs-plugin-stacked100": "^1.5.2",
-		"lucide-svelte": "^0.294.0",
+		"lucide-svelte": "^0.396.0",
 		"svelte": "^4.2.10",
 		"svelte-bootstrap-icons": "^3.1.0",
 		"svelte-chartjs": "^3.1.5"

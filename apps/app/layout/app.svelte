@@ -43,6 +43,10 @@
 				</Boundary>
 
 				<Boundary onError={console.error}>
+					<Route path="/connections"><Connections /></Route>
+				</Boundary>
+
+				<Boundary onError={console.error}>
 					<Route path="/settings"><Settings /></Route>
 				</Boundary>
 			</RouteTransition>
@@ -64,6 +68,7 @@
 	import Network from "ui/pages/network.svelte"
 	import System from "ui/pages/system.svelte"
 	import Onboarding from "ui/pages/onboarding.svelte"
+	import Connections from "ui/pages/connections.svelte"
 	import RouteTransition from "ui/navigation/routeTransition.svelte"
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"

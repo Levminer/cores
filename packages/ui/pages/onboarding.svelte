@@ -1,24 +1,26 @@
-<div class="flex min-h-screen flex-col items-center justify-center">
+<div class="from-cores-current to-cores-max flex min-h-screen flex-col items-center justify-center bg-gradient-to-r">
 	<!-- step 1 -->
-	<div class="transparent-900 step1 m-10 mx-auto flex flex-col justify-center rounded-2xl p-10">
+	<div class="step1 mx-auto flex w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-20 shadow-md backdrop-blur-xl">
 		<div class="mb-10 text-center">
-			<h2 class="mb-2">Welcome to Cores!</h2>
-			<h3>Thanks for downloading Cores, let's get started!</h3>
+			<h1 class="mb-2">Let's start monitoring!</h1>
 		</div>
-		<button on:click={step2} class="button">
-			<Power />
-			Get started
-		</button>
+		<div class="mx-auto flex w-full items-center justify-center">
+			<button
+				on:click={step2}
+				class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
+			>
+				<MoveRight />
+			</button>
+		</div>
 	</div>
 
 	<!-- step 2 -->
-	<div class="transparent-900 step2 m-10 mx-auto hidden w-2/5 flex-col justify-center rounded-2xl p-10">
+	<div class="step2 mx-auto hidden w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-10 shadow-md backdrop-blur-xl">
 		<div class="mb-10 text-center">
-			<h2 class="mb-2">Activate Cores</h2>
-			<h3>Please activate Cores to continue.</h3>
+			<h1 class="mb-2">Activate Cores</h1>
 		</div>
 		<div class="flex w-full flex-1 flex-row gap-5">
-			<div class="flex w-1/2 flex-col justify-center rounded-xl border-2 border-purple-400 p-3 text-center">
+			<div class="flex w-1/2 flex-col justify-center rounded-xl border-2 border-purple-600 bg-purple-700 p-3 text-center">
 				<h2 class="mb-2">Activate Cores</h2>
 				<h3 class="mb-10">Use the license key from your purchase confirmation email to activate Cores.</h3>
 
@@ -28,7 +30,7 @@
 					description={"Use the license key from your purchase confirmation email to activate Cores."}
 				>
 					<span class="flex flex-row items-center justify-center gap-1" slot="button">
-						<Check />
+						<CircleCheck />
 						Activate
 					</span>
 					<div>
@@ -37,9 +39,9 @@
 					</div>
 				</Dialog>
 			</div>
-			<div class="flex w-1/2 flex-col justify-center rounded-xl border-2 border-pink-400 p-3 text-center">
+			<div class="flex w-1/2 flex-col justify-center rounded-xl border-2 border-pink-600 bg-pink-700 p-3 text-center">
 				<h2 class="mb-2">Buy Cores</h2>
-				<h3 class="mb-16">If you didn't purchase Cores yet you can buy it for $14<sup>99</sup> now.</h3>
+				<h3 class="mb-10">If you didn't purchase Cores yet you can buy it for $14<sup>99</sup> now.</h3>
 				<button
 					on:click={() => {
 						open("https://link.levminer.com/buy-cores-app")
@@ -57,18 +59,16 @@
 					>Get started for free</Popover.Trigger
 				>
 				<Popover.Content
-					class="border-cores-min z-30 w-full max-w-[300px] rounded-[12px] border bg-gray-800 p-3 text-left"
+					class="z-30 w-full max-w-[300px] rounded-[12px] border border-cyan-600 bg-cyan-700 p-3 text-left"
 					transition={flyAndScale}
 					sideOffset={8}
 				>
 					<div class="flex flex-col text-center">
 						<h4 class="mb-2">Get started for free</h4>
-						<ul>
-							<li>You can use Cores for 7 days, after that you will need to buy it.</li>
-						</ul>
+						<h5>You can use Cores for 7 days, after that you will need to buy it.</h5>
 					</div>
 					<Popover.Close on:click={free} class="smallButton my-4 w-full">
-						<Check />
+						<CircleCheck />
 						Continue</Popover.Close
 					>
 				</Popover.Content>
@@ -77,22 +77,40 @@
 	</div>
 
 	<!-- step 3 -->
-	<div class="transparent-900 step3 m-10 mx-auto hidden flex-col justify-center rounded-2xl p-10">
-		<div class="mb-10 flex flex-col items-center justify-center text-center">
-			<h2 class="mb-2">Setup completed</h2>
-			<h3>You can watch this short video to get started with Cores.</h3>
-			<div class="my-5 flex flex-col items-center justify-center">
-				<video controls class="aspect-video w-96" src="https://cdn.levminer.com/cores%2Fcharts.webm" muted />
+	<div class="step3 mx-auto hidden w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-20 shadow-md backdrop-blur-xl">
+		<div class="mb-10 text-center">
+			<h1 class="mb-2">Welcome to Cores!</h1>
+		</div>
+		<div class="mx-auto flex w-full flex-col items-center justify-center">
+			<div class="flex flex-col gap-3">
+				<button
+					on:click={() => {
+						router.goto("/home")
+					}}
+					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
+				>
+					<Home />
+					Explore the home screen
+				</button>
+				<button
+					on:click={() => {
+						router.goto("/connections")
+					}}
+					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
+				>
+					<Globe />
+					Setup remote connections
+				</button>
+				<button
+					on:click={() => {
+						router.goto("/settings")
+					}}
+					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
+				>
+					<Settings />
+					Configure monitoring settings
+				</button>
 			</div>
-			<button
-				on:click={() => {
-					router.goto("/home")
-				}}
-				class="button"
-			>
-				<Check />
-				Complete onboarding
-			</button>
 		</div>
 	</div>
 </div>
@@ -101,7 +119,7 @@
 	import { open } from "@tauri-apps/plugin-shell"
 	import Dialog from "ui/components/dialog.svelte"
 	import { router } from "@baileyherbert/tinro"
-	import { Check, Power, ShoppingCart } from "lucide-svelte"
+	import { Globe, MoveRight, ShoppingCart, Home, CircleCheck, Settings } from "lucide-svelte"
 	import { settings } from "../stores/settings.ts"
 	import { Popover } from "bits-ui"
 	import { flyAndScale } from "../utils/transitions.ts"
