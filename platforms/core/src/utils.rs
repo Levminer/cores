@@ -1,9 +1,8 @@
 use std::env;
-
 use serde::{Deserialize, Serialize};
 use sysinfo::System;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SystemInfo {
     pub os_name: String,
@@ -27,7 +26,7 @@ pub fn system_info() -> SystemInfo {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    let mut os_name = System::name().unwrap();
+    let mut os_name = System::name().unwrap_or(String::from("N/A"));
     let os_version = tauri_plugin_os::version().to_string();
     let tauri_version = tauri::VERSION.to_string();
     let mut os_arch = env::consts::ARCH.to_string();
@@ -35,16 +34,21 @@ pub fn system_info() -> SystemInfo {
     let total_mem = sys.total_memory();
 
     let gpu_name_json = if let Ok(gpu_name) = powershell_script::run(
-        "Get-WmiObject -class Win32_VideoController | Select-Object Name | ConvertTo-Json",
+        "Get-CimInstance -ClassName Win32_VideoController | Select-Object Name | ConvertTo-Json",
     ) {
-        gpu_name.stdout().unwrap()
+        gpu_name.stdout().unwrap_or(String::from("N/A"))
     } else {
-        "{\"Name\": \"N/A\"}".to_string()
+        String::from("N/A")
     };
 
-    let gpu_name = serde_json::from_str::<PowershellGPUOutput>(&gpu_name_json)
-        .unwrap()
-        .name;
+    println!("GPU name: {}", gpu_name_json);
+
+    let gpu_name = match serde_json::from_str::<PowershellGPUOutput>(&gpu_name_json) {
+        Ok(parsed) => parsed.name,
+        Err(_) => "N/A".to_string(),
+    };
+
+    println!("GPU name: {}", gpu_name);
 
     os_name = match os_name.as_str() {
         "Darwin" => "macOS".to_string(),
