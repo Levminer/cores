@@ -30,7 +30,7 @@
 					>
 				</li>
 				<li>
-					<a href="/#download" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
+					<a href="/#downloads" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
 						>Download</a
 					>
 				</li>

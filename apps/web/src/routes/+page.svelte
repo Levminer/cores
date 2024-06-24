@@ -19,7 +19,7 @@
 
 		<div class="my-5 flex flex-row items-center justify-center gap-5">
 			<a
-				href="#download"
+				href="#downloads"
 				class="bg-cores-current hover:text-cores-current transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
 				>Get Cores</a
 			>
@@ -324,7 +324,7 @@
 												Buy
 											</a>
 											<div class="mt-3">
-												<a rel="noreferrer" href="#download" class="underline duration-200 hover:text-gray-200"
+												<a rel="noreferrer" href="#downloads" class="underline duration-200 hover:text-gray-200"
 													>Get started for free</a
 												>
 											</div>

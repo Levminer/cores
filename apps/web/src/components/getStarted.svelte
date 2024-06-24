@@ -10,7 +10,7 @@
 			<h3>Download and install Cores on your computer.</h3>
 			<a
 				class="bg-cores-min hover:text-cores-min mt-5 rounded-2xl px-5 py-3 text-2xl font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
-				href="/#download">Download</a
+				href="/#downloads">Download</a
 			>
 		</div>
 
