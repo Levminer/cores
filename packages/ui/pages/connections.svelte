@@ -46,7 +46,7 @@
 							}}
 						>
 							<ExternalLink />
-							<span class="copy">Setup</span>
+							<span class="copy">Open</span>
 						</button>
 					</div>
 				</div>

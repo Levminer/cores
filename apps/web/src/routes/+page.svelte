@@ -254,7 +254,7 @@
 			</div>
 		</div>
 
-		<div id="download" class="flex min-h-screen justify-center rounded-xl py-20">
+		<div id="downloads" class="flex min-h-screen justify-center rounded-xl py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->

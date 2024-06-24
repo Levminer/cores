@@ -1,5 +1,5 @@
-use std::env;
 use serde::{Deserialize, Serialize};
+use std::env;
 use sysinfo::System;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -41,14 +41,10 @@ pub fn system_info() -> SystemInfo {
         String::from("N/A")
     };
 
-    println!("GPU name: {}", gpu_name_json);
-
     let gpu_name = match serde_json::from_str::<PowershellGPUOutput>(&gpu_name_json) {
         Ok(parsed) => parsed.name,
         Err(_) => "N/A".to_string(),
     };
-
-    println!("GPU name: {}", gpu_name);
 
     os_name = match os_name.as_str() {
         "Darwin" => "macOS".to_string(),

@@ -498,6 +498,7 @@
 						<h3>Name: {name}</h3>
 						<h3>Description: {description}</h3>
 						<h3>Address: {ipAddress} ({mask})</h3>
+						<h3>MAC address: {macAddress}</h3>
 						<h3>Gateway: {gateway} ({dns})</h3>
 						<h3>Speed: {speed} Mbit/s</h3>
 					</div>

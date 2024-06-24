@@ -153,7 +153,9 @@
 	const free = () => {
 		$settings.licenseKey = "free"
 		$settings.licenseActivated = new Date().toISOString()
-		step3()
+		setTimeout(() => {
+			step3()
+		}, 250)
 	}
 
 	const activate = async () => {

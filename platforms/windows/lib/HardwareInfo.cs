@@ -30,6 +30,8 @@ public class HardwareInfo {
 	}
 
 	public void GetInfo() {
+		var errorSent = false;
+
 		try {
 			var computerHardware = computer.Hardware;
 
@@ -651,7 +653,10 @@ public class HardwareInfo {
 			firstRun = false;
 		}
 		catch (Exception e) {
-			SentrySdk.CaptureException(e);
+			if (errorSent == false) {
+				SentrySdk.CaptureException(e);
+				errorSent = true;
+			}
 		}
 	}
 
