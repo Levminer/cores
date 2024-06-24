@@ -1,4 +1,4 @@
-<Dialog.Root>
+<Dialog.Root bind:open={open}>
 	<Dialog.Trigger class="button">
 		<slot name="button">
 			<Plus />
@@ -48,4 +48,5 @@
 	export let title = ""
 	export let description = ""
 	export let action = () => {}
+	export let open = false
 </script>
