@@ -2,7 +2,7 @@
 
 namespace lib;
 
-public class ConnectionCode {
+public class DefaultValues {
 	public static string Generate() {
 		// get first 10 characters of guid
 		var id = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
@@ -17,9 +17,10 @@ public class DefaultSettings {
 	public bool launchOnStartup { get; set; } = false;
 	public bool remoteConnections { get; set; } = false;
 	public bool optionalAnalytics { get; set; } = true;
-	public string connectionCode { get; set; } = ConnectionCode.Generate();
+	public string connectionCode { get; set; } = DefaultValues.Generate();
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
+	public string userId { get; set; } = DefaultValues.Generate();
 	public int version { get; set; } = 2;
 }
 
@@ -63,6 +64,7 @@ public class Settings : DefaultSettings {
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
 			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
 			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
+			userId = settings?.userId ?? defaultSettings.userId;
 			version = settings?.version ?? defaultSettings.version;
 		}
 		catch (Exception e) {

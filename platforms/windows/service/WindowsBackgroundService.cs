@@ -8,12 +8,18 @@ public sealed class WindowsBackgroundService : BackgroundService {
 	internal static HTTPServer HTTPServer = new();
 	internal static WSServer WSServer = new();
 	internal static RTCServer RTCServer = new();
+	internal static Analytics Analytics = new();
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		Log.Information("Starting Cores service");
 		HardwareInfo.GetInfo();
 		HTTPServer.Start(HardwareInfo);
-		WSServer.Start(HardwareInfo);
+		WSServer.Start(HardwareInfo)
+
+		// Send analytics
+		_ = Task.Run(async () => {
+			await Analytics.SendEvent(Program.Settings);
+		});
 
 		// Start remote connection
 		if (Program.Settings.remoteConnections) {

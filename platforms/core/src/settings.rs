@@ -44,6 +44,8 @@ pub struct Settings {
     pub license_key: String,
     #[serde(rename = "licenseActivated", default = "default_string")]
     pub license_activated: String,
+    #[serde(rename = "userId", default = "default_connection_code")]
+    pub user_id: String,
     pub version: Option<u8>,
 }
 
@@ -55,6 +57,7 @@ fn check_if_settings_exits() {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),
     };
@@ -63,7 +66,7 @@ fn check_if_settings_exits() {
 
     // Check if folder exists
     if !program_data.join("Cores").exists() {
-        std::fs::create_dir(program_data.join("Cores")).unwrap();
+        std::fs::create_dir(program_data.join("Cores")).expect("Failed to create settings folder");
     }
 
     // Check if file exists
@@ -72,7 +75,7 @@ fn check_if_settings_exits() {
             program_data.join("Cores").join("settings.json"),
             serde_json::to_string(&sample_settings).unwrap(),
         )
-        .unwrap();
+        .expect("Failed to create settings file");
     }
 }
 
@@ -85,6 +88,7 @@ pub fn get_settings() -> Settings {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),
     };
@@ -95,7 +99,7 @@ pub fn get_settings() -> Settings {
 
     check_if_settings_exits();
 
-    let file = std::fs::read_to_string(program_data.join("Cores").join("settings.json")).unwrap();
+    let file = std::fs::read_to_string(program_data.join("Cores").join("settings.json")).expect("Failed to read settings file");
     let settings: Result<Settings, _> = serde_json::from_str(&file);
 
     match settings {
@@ -107,7 +111,7 @@ pub fn get_settings() -> Settings {
                 program_data.join("Cores").join("settings.json"),
                 serde_json::to_string(&sample_settings).unwrap(),
             )
-            .unwrap();
+            .expect("Failed to create a missing settings file");
 
             return sample_settings;
         }
@@ -122,5 +126,5 @@ pub fn set_settings(settings: String) {
 
     check_if_settings_exits();
 
-    std::fs::write(program_data.join("Cores").join("settings.json"), settings).unwrap();
+    std::fs::write(program_data.join("Cores").join("settings.json"), settings).expect("Failed to write settings file");
 }
