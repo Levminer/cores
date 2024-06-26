@@ -27,6 +27,6 @@
 	},
 	"dependencies": {
 		"ezrtc": "^0.6.0",
-		"posthog-js": "^1.136.7"
+		"posthog-js": "^1.141.3"
 	}
 }

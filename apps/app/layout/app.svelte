@@ -76,15 +76,13 @@
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import DesktopLoading from "ui/navigation/desktopLoading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
-	import { init as initAnalytics, trackEvent } from "@aptabase/web"
 	import build from "../../../build.json"
 	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { check } from "@tauri-apps/plugin-updater"
 	import { relaunch } from "@tauri-apps/plugin-process"
 	import { ask } from "@tauri-apps/plugin-dialog"
-
-	initAnalytics("A-EU-8117718240", { appVersion: build.version })
+	import posthog from "posthog-js"
 
 	onMount(async () => {
 		let sendAnalytics = true
@@ -156,9 +154,17 @@
 
 		const analytics = async () => {
 			if (sendAnalytics && !build.dev) {
+				posthog.init("phc_2zbUPXXhnelCYP2VLXeWZvKy0hykzQA7edSOsFrYZaa", {
+					api_host: "https://eu.i.posthog.com",
+					capture_pageview: false,
+					capture_pageleave: false,
+					persistence: "localStorage",
+					autocapture: false,
+				})
+
 				const systemInfo: SystemInfo = await invoke("system_info")
 
-				trackEvent("hardware_info", {
+				posthog.capture("hardware_info", {
 					version: build.version,
 					build: build.number,
 					cpu: systemInfo.cpuName,
