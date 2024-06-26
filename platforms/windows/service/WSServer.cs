@@ -1,4 +1,5 @@
 ﻿using lib;
+using Serilog;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.WebSockets;
@@ -78,17 +79,23 @@ public class WSServer {
 			}
 		});
 
-		while (socket.State == WebSocketState.Open) {
-			result = await socket.ReceiveAsync(receiveBuffer, CancellationToken.None);
+		try {
+			while (socket.State == WebSocketState.Open) {
+				result = await socket.ReceiveAsync(receiveBuffer, CancellationToken.None);
 
-			if (result.MessageType == WebSocketMessageType.Close) {
-				await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-				connectedClients.TryRemove(socket, out _);
-				break;
-			} else if (result.MessageType == WebSocketMessageType.Text) {
-				string receivedText = Encoding.UTF8.GetString(receiveBuffer.Array, receiveBuffer.Offset, result.Count);
-				HandleMessage(receivedText);
+				if (result.MessageType == WebSocketMessageType.Close) {
+					await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+					connectedClients.TryRemove(socket, out _);
+					break;
+				} else if (result.MessageType == WebSocketMessageType.Text) {
+					string receivedText = Encoding.UTF8.GetString(receiveBuffer.Array, receiveBuffer.Offset, result.Count);
+					HandleMessage(receivedText);
+				}
 			}
+		}
+		catch (Exception) {
+			Log.Error("Failed to close WS connection");
+			connectedClients.TryRemove(socket, out _);
 		}
 
 		// Wait for the send task to complete
@@ -120,7 +127,7 @@ public class WSServer {
 			return;
 		}
 		catch (Exception) {
-			Console.WriteLine("Invalid message");
+			Log.Error("Received invalid message from WS client");
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using lib;
+using Serilog;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -86,7 +87,7 @@ public class HTTPServer {
 
 				if (message.Type == "new_settings") {
 					var newSettings = JsonSerializer.Deserialize<Settings>(message.Data.Settings);
-					Console.WriteLine(newSettings.ToString());
+					Log.Information("New settings: {@Settings}", newSettings);
 					Program.Settings = newSettings;
 				}
 

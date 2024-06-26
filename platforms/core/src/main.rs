@@ -13,10 +13,14 @@ pub mod settings;
 pub mod utils;
 
 fn main() {
-    let _sentry = sentry::init(("https://da874903dead91a5de908b045a106aca@o4506670275428352.ingest.us.sentry.io/4507476699578368", sentry::ClientOptions {
-        release: sentry::release_name!(),
-        ..Default::default()
-         }));
+    let _sentry = sentry::init((
+        "https://da874903dead91a5de908b045a106aca@o4506670275428352.ingest.us.sentry.io/4507476699578368",
+        sentry::ClientOptions {
+            release: sentry::release_name!(),
+            auto_session_tracking: true,
+            ..Default::default()
+        },
+    ));
 
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())

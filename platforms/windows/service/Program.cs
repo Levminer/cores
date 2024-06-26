@@ -1,8 +1,6 @@
 using H.NotifyIcon.EfficiencyMode;
 using lib;
-using Microsoft.Extensions.Logging.Configuration;
-using Microsoft.Extensions.Logging.EventLog;
-using System.Diagnostics;
+using Serilog;
 using System.Runtime.Versioning;
 using System.Text.Json;
 
@@ -22,12 +20,11 @@ public class Program {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 		WriteIndented = true,
 	};
-
 	internal static HardwareStats HardwareStats = new();
 	internal static Settings Settings = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-		Debug.WriteLine("App crashed");
+		Log.Error("App crashed with an unhandled exception");
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
 	}
 
@@ -39,16 +36,23 @@ public class Program {
 			settings.EnableTracing = true;
 		});
 
+		Log.Logger = new LoggerConfiguration()
+				.WriteTo.Console()
+				.WriteTo.File("./service.log")
+				.CreateLogger();
+
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
+		// Turn on Windows Efficiency mode for process
 		try {
 			EfficiencyModeUtilities.SetEfficiencyMode(true);
 		}
 		catch (Exception e) {
+			Log.Error("Failed to turn on efficiency mode");
 			SentrySdk.CaptureException(e);
 		}
 
-		// Set firewall rules
+		// Check if the firewall rule exists
 		var ruleExists = Commands.ExecuteCommand(@"netsh advfirewall firewall show rule name='CoresService'");
 
 		if (ruleExists.Contains("No rules match the specified criteria.")) {
@@ -56,13 +60,11 @@ public class Program {
 			var res = Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
 		}
 
+		// Create the service
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 		builder.Services.AddWindowsService(options => {
 			options.ServiceName = "Cores Service";
 		});
-
-		LoggerProviderOptions.RegisterProviderOptions<
-			EventLogSettings, EventLogLoggerProvider>(builder.Services);
 
 		builder.Services.AddHostedService<WindowsBackgroundService>();
 

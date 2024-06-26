@@ -1,20 +1,16 @@
 using lib;
+using Serilog;
 using System.Text.Json;
 
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
-	private readonly ILogger<WindowsBackgroundService> logger;
 	internal static HardwareInfo HardwareInfo = new();
 	internal static HTTPServer HTTPServer = new();
 	internal static WSServer WSServer = new();
 	internal static RTCServer RTCServer = new();
 
-	public WindowsBackgroundService(ILogger<WindowsBackgroundService> logger) {
-		this.logger = logger;
-	}
-
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
-		logger.LogWarning("Starting Cores service");
+		Log.Information("Starting Cores service");
 		HardwareInfo.GetInfo();
 		HTTPServer.Start(HardwareInfo);
 		WSServer.Start(HardwareInfo);
@@ -63,7 +59,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				HardwareInfo.Stop();
 			}
 			catch (Exception ex) {
-				logger.LogError(ex, "{Message}", ex.Message);
+				Log.Error("Exception in main service loop: {@error}", ex.Message);
 				SentrySdk.CaptureException(ex);
 
 				Environment.Exit(1);
