@@ -2,9 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{
-    image::Image,
     menu::{MenuBuilder, MenuItemBuilder},
-    tray::{ClickType, TrayIconBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIconEvent},
     Manager,
 };
 
@@ -49,40 +48,43 @@ fn main() {
                 .items(&[&toggle_window_item, &exit_item])
                 .build()?;
 
-            let _tray = TrayIconBuilder::new()
-                .icon(Image::from_path("icons/32x32.png").unwrap())
-                .tooltip("Cores")
-                .menu(&menu)
-                .on_menu_event(move |app, event| match event.id().as_ref() {
-                    "toggle_windows" => {
-                        let window = app.get_webview_window("main").unwrap();
+            let tray = app.tray_by_id("main").unwrap();
+            tray.set_menu(Some(menu)).unwrap();
+            tray.on_menu_event(move |app, event| match event.id().as_ref() {
+                "toggle_windows" => {
+                    let window = app.get_webview_window("main").unwrap();
 
-                        if window.is_visible().unwrap() {
-                            window.hide().unwrap();
-                        } else {
-                            window.show().unwrap();
-                            window.set_focus().unwrap();
-                        }
+                    if window.is_visible().unwrap() {
+                        window.hide().unwrap();
+                    } else {
+                        window.show().unwrap();
+                        window.set_focus().unwrap();
                     }
-                    "exit" => {
-                        app.exit(0);
-                    }
-                    _ => (),
-                })
-                .on_tray_icon_event(|tray, event| {
-                    if event.click_type == ClickType::Left {
-                        let app = tray.app_handle();
-                        let window = app.get_webview_window("main").unwrap();
+                }
+                "exit" => {
+                    app.exit(0);
+                }
+                _ => (),
+            });
 
-                        if window.is_visible().unwrap() {
-                            window.hide().unwrap();
-                        } else {
-                            window.show().unwrap();
-                            window.set_focus().unwrap();
-                        }
+            tray.on_tray_icon_event(|tray, event| {
+                if let TrayIconEvent::Click {
+                    button: MouseButton::Left,
+                    button_state: MouseButtonState::Up,
+                    ..
+                } = event
+                {
+                    let app = tray.app_handle();
+                    let window = app.get_webview_window("main").unwrap();
+
+                    if window.is_visible().unwrap() {
+                        window.hide().unwrap();
+                    } else {
+                        window.show().unwrap();
+                        window.set_focus().unwrap();
                     }
-                })
-                .build(app);
+                }
+            });
 
             Ok(())
         })
