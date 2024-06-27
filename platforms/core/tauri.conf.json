@@ -48,7 +48,7 @@
 				"componentRefs": ["ServiceEntry"]
 			},
 			"webviewInstallMode": {
-				"type": "embedBootstrapper"
+				"type": "skip"
 			}
 		}
 	},

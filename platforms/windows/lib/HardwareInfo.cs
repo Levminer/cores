@@ -1,5 +1,5 @@
 ﻿using LibreHardwareMonitor.Hardware;
-using System.Diagnostics;
+using Serilog;
 using System.Net.NetworkInformation;
 using WindowsDisplayAPI;
 
@@ -78,6 +78,8 @@ public class HardwareInfo {
 						API.System.Network.Interfaces.Add(temp);
 					}
 				}
+
+				Log.Information("HW firstRun");
 			}
 
 			for (int i = 0; i < computer.Hardware.Count; i++) {
@@ -303,7 +305,7 @@ public class HardwareInfo {
 							API.GPU.MaxLoad = GPULoad.MaxLoad;
 						}
 						catch (Exception) {
-							Debug.WriteLine("Error in GPULoad");
+							Log.Error("Error in GPULoad");
 						}
 					});
 				}
@@ -609,7 +611,7 @@ public class HardwareInfo {
 					API.System.OS.Name = Commands.GetOSInfo();
 				}
 				catch (Exception) {
-					Debug.WriteLine("Failed to get GPU and OS name");
+					Log.Error("Failed to get GPU and OS name");
 				}
 
 				// RAM modules

@@ -14,7 +14,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		Log.Information("Starting Cores service");
 		HardwareInfo.GetInfo();
 		HTTPServer.Start(HardwareInfo);
-		WSServer.Start(HardwareInfo)
+		WSServer.Start(HardwareInfo);
 
 		// Send analytics
 		_ = Task.Run(async () => {

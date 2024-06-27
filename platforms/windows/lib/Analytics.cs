@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Serilog;
+using System.Text;
 using System.Text.Json;
 
 namespace lib {
@@ -29,7 +30,7 @@ namespace lib {
 				var responseContent = await response.Content.ReadAsStringAsync();
 			}
 			catch (Exception ex) {
-				Console.WriteLine($"An error occurred: {ex.Message}");
+				Log.Error("Failed to send analytics");
 			}
 		}
 	}
