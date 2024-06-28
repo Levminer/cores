@@ -137,16 +137,15 @@
 			ws.onclose = (e) => {
 				console.log("Socket is closed.  Reconnecting...", e.reason)
 				setTimeout(() => {
-					if (retries == 3) {
-						sessionStorage.clear()
-						location.reload()
+					if (retries == 10) {
+						retries = 0
 					}
 
 					connectToWSServer()
 
 					console.log(`Reconnecting... (Retry #${retries + 1})`)
 					retries++
-				}, 1000)
+				}, 1000 * retries)
 			}
 		}
 

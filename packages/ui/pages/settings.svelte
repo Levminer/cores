@@ -145,7 +145,8 @@
 		])
 
 		if (ua.fullVersionList !== undefined && ua.fullVersionList.length > 0) {
-			chromium_version = ua.fullVersionList?.[0]?.version || "N/A"
+			// @ts-ignore
+			chromium_version = ua.fullVersionList.filter((item) => item.brand === "Chromium")[0]?.version || "N/A"
 		}
 
 		const systemInfo: SystemInfo = await invoke("system_info")

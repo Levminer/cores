@@ -85,7 +85,7 @@
 			<div class="flex flex-col gap-3">
 				<button
 					on:click={() => {
-						router.goto("/home")
+						router.goto("/home", true)
 					}}
 					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
 				>
@@ -94,7 +94,7 @@
 				</button>
 				<button
 					on:click={() => {
-						router.goto("/connections")
+						router.goto("/connections", true)
 					}}
 					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
 				>
@@ -103,7 +103,7 @@
 				</button>
 				<button
 					on:click={() => {
-						router.goto("/settings")
+						router.goto("/settings", true)
 					}}
 					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
 				>
@@ -123,6 +123,7 @@
 	import { settings } from "../stores/settings.ts"
 	import { Popover } from "bits-ui"
 	import { flyAndScale } from "../utils/transitions.ts"
+	import build from "../../../build.json"
 
 	let trialOver = false
 
@@ -166,7 +167,7 @@
 			const options = {
 				method: "POST",
 				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ license_key: key.value, instance_name: "CoresDesktop" }),
+				body: JSON.stringify({ license_key: key.value, instance_name: `CoresDesktop-${build.number}` }),
 			}
 
 			try {

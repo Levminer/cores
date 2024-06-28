@@ -12,6 +12,9 @@
 			<li>
 				Make sure the Cores Service is running: <button class="underline" on:click={startService}>Launch service</button>
 			</li>
+			<li>
+				Restart Cores: <button class="underline" on:click={reload}>Restart</button>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -22,6 +25,11 @@
 
 	const startService = async () => {
 		await invoke("start_service")
+	}
+
+	const reload = () => {
+		sessionStorage.clear()
+		location.reload()
 	}
 
 	onMount(async () => {

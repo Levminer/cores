@@ -6,15 +6,16 @@
 	</div>
 
 	<h1>Loading...</h1>
-	<div class="transparent-900 m-3 my-10 rounded-xl p-8 text-left">
+	<div class="error transparent-900 m-3 my-10 hidden rounded-xl border-2 border-red-700 p-8 text-left">
 		<h2 class="mb-5">App not loading?</h2>
 		<ul class="list-inside list-disc">
+			<li>The connection might be slow, try waiting a few seconds</li>
 			<li>
 				Try to <button class="underline" on:click={reload}>Refresh</button> this page
 			</li>
-			<li>Restart your Cores app</li>
+			<li>Restart your Cores app on your computer</li>
 			<li>
-				Make sure you typed in the <button class="underline" on:click={connectionCode}>connection code</button> in the settings right
+				Make sure the <button class="underline" on:click={connectionCode}>connection code</button> in the settings is correct
 			</li>
 			<li>
 				Go back to the <a class="underline" href="/">home</a> page
@@ -34,4 +35,10 @@
 	const connectionCode = () => {
 		location.href = "/settings"
 	}
+
+	onMount(() => {
+		setInterval(() => {
+			document.querySelector(".error").classList.remove("hidden")
+		}, 5000)
+	})
 </script>

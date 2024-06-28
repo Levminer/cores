@@ -38,7 +38,7 @@ public class Program {
 
 		Log.Logger = new LoggerConfiguration()
 				.WriteTo.Console()
-				.WriteTo.File("./cores-service.log")
+				.WriteTo.File(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Cores", "service.log"))
 				.CreateLogger();
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
