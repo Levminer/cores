@@ -46,9 +46,6 @@
 			"wix": {
 				"fragmentPaths": ["wix/service.wxs"],
 				"componentRefs": ["ServiceEntry"]
-			},
-			"webviewInstallMode": {
-				"type": "skip"
 			}
 		}
 	},
