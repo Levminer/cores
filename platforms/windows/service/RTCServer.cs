@@ -2,6 +2,7 @@
 using lib;
 using SIPSorcery.Net;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace service;
 public class RTCServer {
@@ -14,8 +15,22 @@ public class RTCServer {
 				EzRTCHost.Start();
 			});
 
-			EzRTCHost.dataChannelOpen += (data) => {
+			EzRTCHost.dataChannelOpen += (RTCDataChannel data) => {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+
+				if (data.readyState == RTCDataChannelState.open) {
+					var secondsList = Program.HardwareStats.seconds.Where((x, i) => (i + 1) % 3 == 0).ToList();
+
+					for (int i = 0; i < secondsList.Count; i++) {
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = JsonNode.Parse(secondsList[i]) }, Program.CompressedSerializerOptions));
+					}
+
+					var minutesList = Program.HardwareStats.minutes.Where((x, i) => (i + 1) % 3 == 0).ToList();
+
+					for (int i = 0; i < minutesList.Count; i++) {
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = JsonNode.Parse(minutesList[i]) }, Program.CompressedSerializerOptions));
+					}
+				}
 			};
 
 			EzRTCHost.dataChannelMessage += (data) => {
