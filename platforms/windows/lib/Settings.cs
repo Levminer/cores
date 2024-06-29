@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text.Json;
 
 namespace lib;
 
@@ -38,6 +40,16 @@ public class Settings : DefaultSettings {
 		if (!File.Exists(Path.Join(prorgamData, "Cores"))) {
 			Directory.CreateDirectory(Path.Join(prorgamData, "Cores"));
 		}
+
+		// set folder permissions
+		var folderInfo = new DirectoryInfo(Path.Join(prorgamData, "Cores"));
+		var folderSecurity = folderInfo.GetAccessControl();
+		folderSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null),
+		FileSystemRights.FullControl,
+		InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
+		PropagationFlags.None,
+		AccessControlType.Allow));
+		folderInfo.SetAccessControl(folderSecurity);
 
 		// check if settings.json exists
 		if (!File.Exists(Path.Join(prorgamData, "Cores", "settings.json"))) {
