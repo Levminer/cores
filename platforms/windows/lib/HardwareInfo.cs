@@ -16,6 +16,7 @@ public class HardwareInfo {
 		IsMotherboardEnabled = true,
 		IsStorageEnabled = true,
 		IsNetworkEnabled = true,
+		IsBatteryEnabled = true,
 	};
 
 	public API API {
@@ -592,6 +593,64 @@ public class HardwareInfo {
 								}
 							}
 						}
+					}
+				}
+
+				// Battery
+				if (hardware.HardwareType == HardwareType.Battery) {
+					var energySensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Energy).ToArray();
+					var levelSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Level).ToArray();
+					var timeSpanSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.TimeSpan).ToArray();
+
+					// Energy capacity
+					for (int j = 0; j < energySensors.Length; j++) {
+						var data = new Sensor {
+							Name = energySensors[j].Name,
+							Value = energySensors[j].Value ?? 0,
+							Min = energySensors[j].Min ?? 0,
+							Max = energySensors[j].Max ?? 0,
+						};
+
+						if (firstRun) {
+							API.System.Battery.Capacity.Add(data);
+						} else {
+							API.System.Battery.Capacity[j] = data;
+						}
+					}
+
+					// Charge level
+					for (int j = 0; j < levelSensors.Length; j++) {
+						var data = new Sensor {
+							Name = levelSensors[j].Name,
+							Value = levelSensors[j].Value ?? 0,
+							Min = levelSensors[j].Min ?? 0,
+							Max = levelSensors[j].Max ?? 0,
+						};
+
+						if (firstRun) {
+							API.System.Battery.Level.Add(data);
+						} else {
+							API.System.Battery.Level[j] = data;
+						}
+					}
+
+					// Remaining time
+					for (int j = 0; j < timeSpanSensors.Length; j++) {
+						var data = new Sensor {
+							Name = timeSpanSensors[j].Name,
+							Value = timeSpanSensors[j].Value ?? 0,
+							Min = timeSpanSensors[j].Min ?? 0,
+							Max = timeSpanSensors[j].Max ?? 0,
+						};
+
+						API.System.Battery.RemainingTime = data;
+					}
+
+					// Cycle count
+					if (firstRun) {
+						var cycles = Commands.GetCycleCount();
+
+						API.System.Battery.CycleCount = cycles;
 					}
 				}
 			}

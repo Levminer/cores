@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Serilog;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace lib;
@@ -55,5 +56,34 @@ public class Commands {
 		var foramttedDate = $"{unformattedDate.Substring(0, 4)}. {unformattedDate.Substring(4, 2)}. {unformattedDate.Substring(6, 2)}.";
 
 		return foramttedDate;
+	}
+
+	public class CycleCountInfo {
+		public int? CycleCount { get; set; }
+	}
+
+	public static string GetCycleCount() {
+		try {
+			var command = ExecuteCommand("Get-WmiObject -Class MSBatteryClass -Namespace ROOT/WMI | Select-Object CycleCount | ConvertTo-Json");
+
+			var cycles = JsonSerializer.Deserialize<List<CycleCountInfo>>(command);
+			var c = 0;
+
+			if (cycles?.Count > 0) {
+				foreach (var cycle in cycles) {
+					c += cycle.CycleCount ?? 0;
+				}
+			}
+
+			if (c == 0) {
+				return "N/A";
+			} else {
+				return c.ToString();
+			}
+		}
+		catch (Exception) {
+			Log.Error("Failed to get cycle count");
+			return "N/A";
+		}
 	}
 }

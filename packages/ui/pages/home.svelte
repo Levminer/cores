@@ -453,21 +453,57 @@
 				</div>
 			</div>
 
-			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Monitor />
+			{#if $hardwareInfo.system.battery?.capacity.length ?? 0 > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Battery />
+						</div>
+						<h2>Battery</h2>
 					</div>
-					<h2>Monitors</h2>
-				</div>
-				{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
+
 					<div class="mt-5 select-text">
-						<h3>Name: {name}</h3>
-						<h3>Resolution: {resolution}</h3>
-						<h3>Refresh rate: {refreshRate} Hz</h3>
+						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[1].value)}%</h3>
+						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[0].value)}%</h3>
+						<h3>Cycle count: {$hardwareInfo.system.battery.cycleCount}</h3>
+						<h3>
+							Capacity: {Math.round($hardwareInfo.system.battery.capacity[2].value / 1000)}/{Math.round(
+								$hardwareInfo.system.battery.capacity[1].value / 1000,
+							)} Wh
+						</h3>
+						<h3>
+							Remaining time: {#if $hardwareInfo.system.battery.remainingTime.value !== null}
+								{`${Math.floor($hardwareInfo.system.battery.remainingTime.value / 60)}:${(
+									$hardwareInfo.system.battery.remainingTime.value % 60
+								)
+									.toString()
+									.padStart(2, "0")}`}
+							{:else}
+								N/A
+							{/if}
+						</h3>
 					</div>
-				{/each}
-			</div>
+				</div>
+			{/if}
+
+			{#if $hardwareInfo.system.monitor.monitors.length > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Monitor />
+						</div>
+						<h2>Monitors</h2>
+					</div>
+
+					{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
+						<div class="mt-5 select-text">
+							<h3>Name: {name}</h3>
+							<h3>Resolution: {resolution}</h3>
+							<h3>Refresh rate: {refreshRate} Hz</h3>
+						</div>
+					{/each}
+				</div>
+			{/if}
 
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
@@ -512,7 +548,7 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
-	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu } from "lucide-svelte"
+	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu, Battery } from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import Progress from "ui/components/progress.svelte"
 </script>

@@ -126,6 +126,13 @@ declare global {
 				name: string
 			}
 
+			battery?: {
+				capacity: Sensor[]
+				level: Sensor[]
+				remainingTime?: Sensor
+				cycleCount: string
+			}
+
 			monitor: {
 				monitors: Monitor[]
 			}

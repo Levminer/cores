@@ -293,6 +293,17 @@ public class NetworkInfo {
 	} = new();
 }
 
+public class BatteryInfo {
+	public List<Sensor> Capacity {
+		get; set;
+	} = new();
+	public List<Sensor> Level {
+		get; set;
+	} = new();
+	public Sensor RemainingTime { get; set; }
+	public string CycleCount { get; set; }
+}
+
 public class SystemAPI {
 	public OSInfo OS {
 		get; set;
@@ -303,6 +314,10 @@ public class SystemAPI {
 	} = new();
 
 	public MotherboardInfo Motherboard {
+		get; set;
+	} = new();
+
+	public BatteryInfo Battery {
 		get; set;
 	} = new();
 
