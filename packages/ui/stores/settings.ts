@@ -18,6 +18,7 @@ const defaultSettings: LibSettings = {
 	optionalAnalytics: true,
 	licenseKey: "",
 	licenseActivated: "",
+	userId: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
 }
 
 // Create store

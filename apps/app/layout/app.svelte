@@ -9,7 +9,7 @@
 		<div class="top" />
 
 		{#if $hardwareInfo.cpu === undefined}
-			<DesktopLoading />
+			<Loading mode="desktop" />
 		{:else}
 			<RouteTransition>
 				<Route path="/onboarding"><Onboarding /></Route>
@@ -74,7 +74,7 @@
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import { initializeSettings, settings } from "ui/stores/settings"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
-	import DesktopLoading from "ui/navigation/desktopLoading.svelte"
+	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import build from "../../../build.json"
 	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
@@ -164,6 +164,8 @@
 				const systemInfo: SystemInfo = await invoke("system_info")
 
 				posthog.capture("hardware_info", {
+					distinct_id: $settings.userId,
+					remote_connections: $settings.remoteConnections,
 					version: build.version,
 					build: build.number,
 					cpu: systemInfo.cpuName,

@@ -211,6 +211,7 @@ declare global {
 		optionalAnalytics: boolean
 		licenseKey: string
 		licenseActivated: string
+		userId: string
 	}
 
 	interface SystemInfo {

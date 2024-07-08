@@ -13,9 +13,12 @@
 		"menu:default",
 		"tray:default",
 		"shell:allow-open",
+		"dialog:default",
 		"dialog:allow-message",
 		"dialog:allow-save",
 		"dialog:allow-ask",
-		"updater:default"
+		"updater:default",
+		"process:default",
+		"process:allow-restart"
 	]
 }

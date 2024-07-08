@@ -6,7 +6,7 @@
 	</div>
 
 	<h1>Loading...</h1>
-	<div class="error transparent-900 m-3 my-10 hidden rounded-xl border-2 border-red-700 p-8 text-left">
+	<div class="webError transparent-900 m-3 my-10 hidden rounded-xl border-2 border-red-700 p-8 text-left">
 		<h2 class="mb-5">App not loading?</h2>
 		<ul class="list-inside list-disc">
 			<li>The connection might be slow, try waiting a few seconds</li>
@@ -22,10 +22,25 @@
 			</li>
 		</ul>
 	</div>
+
+	<div class="desktopError transparent-900 m-3 my-10 hidden rounded-xl border-2 border-red-700 p-8 text-left">
+		<h2 class="mb-5">Cores service is not running</h2>
+		<ul class="list-inside list-disc">
+			<li>
+				Make sure the Cores Service is running: <button class="underline" on:click={startService}>Launch service</button>
+			</li>
+			<li>
+				Restart Cores: <button class="underline" on:click={reload}>Restart</button>
+			</li>
+		</ul>
+	</div>
 </div>
 
 <script lang="ts">
 	import { onMount } from "svelte"
+	import { invoke } from "@tauri-apps/api/core"
+
+	export let mode = "web" as "web" | "desktop"
 
 	const reload = () => {
 		sessionStorage.clear()
@@ -36,9 +51,25 @@
 		location.href = "/settings"
 	}
 
+	const startService = async () => {
+		await invoke("start_service")
+	}
+
 	onMount(() => {
-		setInterval(() => {
-			document.querySelector(".error").classList.remove("hidden")
-		}, 5000)
+		let interval: NodeJS.Timeout
+
+		if (mode === "desktop") {
+			fetch("http://localhost:5390").catch(() => {
+				document.querySelector(".desktopError").classList.remove("hidden")
+			})
+		} else {
+			interval = setInterval(() => {
+				document.querySelector(".webError").classList.remove("hidden")
+			}, 5000)
+		}
+
+		return () => {
+			clearInterval(interval)
+		}
 	})
 </script>
