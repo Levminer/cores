@@ -5,7 +5,7 @@
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Globe />
+						<MonitorSmartphone />
 					</div>
 					<h2>Remote connections</h2>
 				</div>
@@ -23,7 +23,7 @@
 				<div class="flex flex-col items-start gap-3">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Cable />
+							<KeyRound />
 						</div>
 						<h2>Connection code</h2>
 					</div>
@@ -56,7 +56,7 @@
 </div>
 
 <script lang="ts">
-	import { Clipboard, Globe, Cable, ExternalLink } from "lucide-svelte"
+	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound } from "lucide-svelte"
 	import Toggle from "ui/components/toggle.svelte"
 	import { settings } from "ui/stores/settings.ts"
 	import { invoke } from "@tauri-apps/api/core"

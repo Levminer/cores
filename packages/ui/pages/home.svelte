@@ -463,24 +463,13 @@
 					</div>
 
 					<div class="mt-5 select-text">
-						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[1].value)}%</h3>
-						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[0].value)}%</h3>
+						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[0].value)}%</h3>
+						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[1].value)}%</h3>
 						<h3>Cycle count: {$hardwareInfo.system.battery.cycleCount}</h3>
 						<h3>
 							Capacity: {Math.round($hardwareInfo.system.battery.capacity[2].value / 1000)}/{Math.round(
 								$hardwareInfo.system.battery.capacity[1].value / 1000,
 							)} Wh
-						</h3>
-						<h3>
-							Remaining time: {#if $hardwareInfo.system.battery.remainingTime.value !== null}
-								{`${Math.floor($hardwareInfo.system.battery.remainingTime.value / 60)}:${(
-									$hardwareInfo.system.battery.remainingTime.value % 60
-								)
-									.toString()
-									.padStart(2, "0")}`}
-							{:else}
-								N/A
-							{/if}
 						</h3>
 					</div>
 				</div>

@@ -5,7 +5,7 @@
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Cable />
+						<MonitorSmartphone />
 					</div>
 					<h2>Remote connections</h2>
 				</div>
@@ -54,6 +54,38 @@
 						</div>
 
 						<div class="flex flex-row flex-wrap gap-3">
+							<div class="mt-6">
+								<Dialog
+									open={dialogOpen}
+									title={"Edit Remote Connection"}
+									description={"You can get your connection code from the Cores desktop app."}
+									action={() => {
+										editConnectionCode(item.code)
+									}}
+								>
+									<slot slot="button">
+										<Pencil />
+										Edit
+									</slot>
+									<div class="flex flex-col flex-wrap gap-3">
+										<div>
+											<h5>Name <span class="text-red-500">*</span></h5>
+											<input value={item.name} placeholder="My Home PC" class="input mt-1" type="text" id="name" />
+										</div>
+
+										<div>
+											<h5>Connection code <span class="text-red-500">*</span></h5>
+											<input value={item.code} placeholder="crs_abcde12345" class="input mt-1" type="text" id="code" />
+										</div>
+
+										<div>
+											<h5>MAC address</h5>
+											<input value={item.mac ?? ""} placeholder="AA:BB:CC:DD:EE:FF" class="input mt-1" type="text" id="mac" />
+										</div>
+									</div>
+								</Dialog>
+							</div>
+
 							<button class="button mt-6" on:click={() => deleteConnectionCode(item.code)}>
 								<Trash2 />
 								<span>Delete</span>
@@ -94,7 +126,7 @@
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
 	import Dialog from "ui/components/dialog.svelte"
-	import { Trash2, Cable, Info } from "lucide-svelte"
+	import { Trash2, MonitorSmartphone, Info, Pencil } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../build.json"
 	import { onMount } from "svelte"
 
@@ -127,27 +159,47 @@
 	})
 
 	const addConnectionCode = () => {
-		const name = document.getElementById("name") as HTMLInputElement
-		const code = document.getElementById("code") as HTMLInputElement
+		const nameInput = document.getElementById("name") as HTMLInputElement
+		const codeInput = document.getElementById("code") as HTMLInputElement
+		const macInput = document.getElementById("mac") as HTMLInputElement
 
-		if (name.value === "") {
+		if (nameInput.value === "") {
 			return alert("Please enter a name for your connection")
 		}
 
-		if (!code.value.startsWith("crs_")) {
+		if (!codeInput.value.startsWith("crs_")) {
 			return alert("Invalid connection code! The connection code must start with: crs_")
 		}
 
 		$settings.connectionCodes = [
 			...$settings.connectionCodes,
 			{
-				name: name.value,
-				code: code.value,
+				name: nameInput.value,
+				code: codeInput.value,
+				mac: macInput.value,
 			},
 		]
+	}
 
-		name.value = ""
-		code.value = ""
+	const editConnectionCode = (code: string) => {
+		const nameInput = document.getElementById("name") as HTMLInputElement
+		const codeInput = document.getElementById("code") as HTMLInputElement
+		const macInput = document.getElementById("mac") as HTMLInputElement
+
+		if (nameInput.value === "") {
+			return alert("Please enter a name for your connection")
+		}
+
+		if (!codeInput.value.startsWith("crs_")) {
+			return alert("Invalid connection code! The connection code must start with: crs_")
+		}
+
+		let idx = $settings.connectionCodes.findIndex((item) => item.code === code)
+		$settings.connectionCodes[idx] = {
+			name: nameInput.value,
+			code: codeInput.value,
+			mac: macInput.value,
+		}
 	}
 
 	const deleteConnectionCode = (code: string) => {

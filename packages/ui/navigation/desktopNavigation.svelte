@@ -31,7 +31,7 @@
 
 	<div class="flex flex-col space-y-3">
 		<a href="/connections" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Globe class="h-5 w-5" />
+			<MonitorSmartphone class="h-5 w-5" />
 		</a>
 		<a href="/settings" use:active data-active-class="selectedMenuButton" class="menuButton">
 			<Settings class="h-5 w-5" />
@@ -41,6 +41,6 @@
 
 <script lang="ts">
 	import { active } from "@baileyherbert/tinro"
-	import { Cpu, Globe, HardDrive, Home, Network, Settings } from "lucide-svelte"
+	import { Cpu, HardDrive, Home, MonitorSmartphone, Network, Settings } from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 </script>
