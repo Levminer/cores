@@ -15,7 +15,7 @@
 						goto("/get-started")
 					}
 				}}
-				class="bg-cores-current hover:text-cores-current rounded-2xl px-4 py-2 text-xl font-semibold duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
+				class="bg-cores-alternative hover:text-cores-alternative rounded-2xl px-4 py-2 text-xl font-bold duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
 			>
 				Launch app
 			</button>
@@ -30,8 +30,9 @@
 					>
 				</li>
 				<li>
-					<a href="/#downloads" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
-						>Download</a
+					<a
+						href="/#downloads"
+						class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0">Download</a
 					>
 				</li>
 				<li>

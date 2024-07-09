@@ -56,7 +56,6 @@
 						<div class="flex flex-row flex-wrap gap-3">
 							<div class="mt-6">
 								<Dialog
-									open={dialogOpen}
 									title={"Edit Remote Connection"}
 									description={"You can get your connection code from the Cores desktop app."}
 									action={() => {

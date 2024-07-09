@@ -20,7 +20,7 @@
 		<div class="my-5 flex flex-row items-center justify-center gap-5">
 			<a
 				href="#downloads"
-				class="bg-cores-current hover:text-cores-current transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
+				class="bg-cores-alternative hover:text-cores-alternative transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
 				>Get Cores</a
 			>
 			<a class="flex text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
@@ -203,7 +203,9 @@
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
-						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Detailed statistics</h2>
+						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
+							Detailed statistics
+						</h2>
 						<h3 class="italic text-gray-100">Detailed charts for every component.</h3>
 					</div>
 
@@ -319,7 +321,7 @@
 										<div class="text-center">
 											<a
 												href="https://link.levminer.com/buy-cores-app"
-												class="button hover:border-cores-current hover:text-cores-current mt-5 w-full hover:translate-y-0.5 hover:animate-pulse"
+												class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 											>
 												Buy
 											</a>

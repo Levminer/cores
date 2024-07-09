@@ -24,6 +24,7 @@ export default {
 					min: "#35cbfd",
 					current: "#ff5380",
 					max: "#9d0cfd",
+					alternative: "#d800ef",
 				},
 				html: {
 					gray: "#808080",
