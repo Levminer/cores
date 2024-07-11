@@ -15,7 +15,7 @@
 
 ## Screenshot
 
-<img src="https://raw.githubusercontent.com/Levminer/cores/dev/screenshots/home.png?raw=true">
+<img src="https://raw.githubusercontent.com/Levminer/cores/dev/.github/screenshots/home.png?raw=true">
 
 ## Download
 
