@@ -77,7 +77,7 @@ public class Disk {
 		get; set;
 	}
 
-	public bool SystemDrive {
+	public bool Primary {
 		get; set;
 	}
 }
@@ -133,6 +133,10 @@ public class NetInterface {
 		get; set;
 	}
 	public string Speed {
+		get; set;
+	}
+
+	public bool Primary {
 		get; set;
 	}
 

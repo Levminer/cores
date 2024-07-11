@@ -47,6 +47,10 @@ public class HardwareInfo {
 							Speed = (ni.Speed / 1000 / 1000).ToString()
 						};
 
+						if (!temp.Description.Contains("Virtual")) {
+							temp.Primary = true;
+						}
+
 						// Mac address
 						var mac = ni.GetPhysicalAddress().ToString();
 						temp.MACAddress = string.Join(":", Enumerable.Range(0, mac.Length)
@@ -79,6 +83,8 @@ public class HardwareInfo {
 						API.System.Network.Interfaces.Add(temp);
 					}
 				}
+
+				API.System.Network.Interfaces = API.System.Network.Interfaces.OrderByDescending(item => item.Primary).ToList();
 
 				Log.Information("HW firstRun");
 			}
@@ -347,7 +353,7 @@ public class HardwareInfo {
 						long total = 0;
 						long free = 0;
 						string health = "N/A";
-						bool systemDrive = false;
+						bool primary = false;
 
 						foreach (var line in report) {
 							if (line.StartsWith("Total Size")) {
@@ -359,7 +365,7 @@ public class HardwareInfo {
 							}
 
 							if (line.StartsWith("Logical Drive Name: C")) {
-								systemDrive = true;
+								primary = true;
 							}
 
 							// Sandforce
@@ -391,11 +397,11 @@ public class HardwareInfo {
 						data.TotalSpace = (int)total;
 						data.Health = health;
 						data.FreeSpace = (int)free;
-						data.SystemDrive = systemDrive;
+						data.Primary = primary;
 
 						API.System.Storage.Disks.Add(data);
 
-						API.System.Storage.Disks = API.System.Storage.Disks.OrderByDescending(item => item.SystemDrive).ToList();
+						API.System.Storage.Disks = API.System.Storage.Disks.OrderByDescending(item => item.Primary).ToList();
 					}
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
