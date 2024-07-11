@@ -392,10 +392,10 @@
 	import { onDestroy, onMount } from "svelte"
 	import { GpuCard, Memory, PcDisplay, Microsoft } from "svelte-bootstrap-icons"
 	import { slide } from "svelte/transition"
-	import Footer from "../components/footer.svelte"
-	import Header from "../components/header.svelte"
-	import GetStarted from "../components/getStarted.svelte"
-	import OSSelector from "../components/OSSelector.svelte"
+	import Footer from "../../components/footer.svelte"
+	import Header from "../../components/header.svelte"
+	import GetStarted from "../../components/getStarted.svelte"
+	import OSSelector from "../../components/OSSelector.svelte"
 
 	// prettier-ignore
 	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date", "Fan Speed","Remote Access","Runs In The Background", "Minimal Resource Usage"]
