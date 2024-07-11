@@ -123,7 +123,7 @@
 	import { settings } from "../stores/settings.ts"
 	import { Popover } from "bits-ui"
 	import { flyAndScale } from "../utils/transitions.ts"
-	import build from "../../../build.json"
+	import build from "../../../../build.json"
 
 	let trialOver = false
 

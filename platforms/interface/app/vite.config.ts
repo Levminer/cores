@@ -18,6 +18,6 @@ export default defineConfig({
 			},
 		},
 		emptyOutDir: true,
-		outDir: "../../dist",
+		outDir: "../../../dist",
 	},
 })

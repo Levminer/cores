@@ -116,7 +116,7 @@
 <script lang="ts">
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { settings } from "ui/stores/settings.ts"
-	import build from "../../../build.json"
+	import build from "../../../../build.json"
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"
 	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"

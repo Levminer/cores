@@ -126,7 +126,7 @@
 	import { settings } from "ui/stores/settings.ts"
 	import Dialog from "ui/components/dialog.svelte"
 	import { Trash2, MonitorSmartphone, Info, Pencil } from "lucide-svelte"
-	import { version, number, date } from "../../../../../../build.json"
+	import { version, number, date } from "../../../../../../../build.json"
 	import { onMount } from "svelte"
 
 	$: dialogOpen = false

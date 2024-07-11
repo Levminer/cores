@@ -76,7 +76,7 @@
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
-	import build from "../../../build.json"
+	import build from "../../../../build.json"
 	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { check } from "@tauri-apps/plugin-updater"
