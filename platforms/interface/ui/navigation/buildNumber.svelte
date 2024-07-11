@@ -3,5 +3,5 @@
 </div>
 
 <script lang="ts">
-	import build from "../../../build.json"
+	import build from "../../../../build.json"
 </script>
