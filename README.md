@@ -5,13 +5,13 @@
 ## Features
 
 -   💻 Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage and load
--   📡 You can monitor your system from any device with a web browser
+-   📡 Remote monitoring, you can monitor your system from any device with a web browser
 -   🌡️ CPU/GPU/Drive temperatures
--   📈 See beautiful CPU/RAM/GPU graphs
+-   📈 See historical charts 
 -   💾 Keep an eye on your SSD health and usage
 -   ❄️ Fan speed and RPM information
 -   🛜 Network speed and usage stats
--   🖥️ See detailed info about your computer
+-   🔋 Battery health, cycles and capacity
 
 ## Screenshot
 
