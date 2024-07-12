@@ -1,5 +1,8 @@
 ﻿using Serilog;
 using System.Diagnostics;
+using System.Globalization;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.Json;
 
 namespace lib;
@@ -84,6 +87,54 @@ public class Commands {
 		catch (Exception) {
 			Log.Error("Failed to get cycle count");
 			return "N/A";
+		}
+	}
+
+	public static void HandleRemoteMessage(string message) {
+		try {
+			var netMessage = JsonSerializer.Deserialize<GenericMessage<string>>(message, new JsonSerializerOptions {
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+			});
+
+			switch (netMessage?.Type) {
+				case "shutdown":
+					ExecuteCommand(@"shutdown /s /t 30");
+					break;
+
+				case "sleep":
+					ExecuteCommand("Start-Process rundll32.exe -ArgumentList 'powrprof.dll,SetSuspendState 0,1,0'");
+					break;
+
+				case "restart":
+					ExecuteCommand("shutdown /r /t 30");
+					break;
+
+				case "wol":
+					var macAddress = netMessage.Data;
+					var port = 9;
+
+					UdpClient client = new UdpClient() { EnableBroadcast = true };
+					client.Connect(IPAddress.Broadcast, port);
+
+					int counter = 0;
+					byte[] bytes = new byte[102];
+
+					for (int x = 0; x < 6; x++) {
+						bytes[counter++] = 0xFF;
+					}
+
+					for (int macPackets = 0; macPackets < 16; macPackets++) {
+						for (int macBytes = 0; macBytes < 12; macBytes += 2) {
+							bytes[counter++] = byte.Parse(macAddress.Substring(macBytes, 2), NumberStyles.HexNumber);
+						}
+					}
+
+					client.Send(bytes, bytes.Length);
+					break;
+			}
+		}
+		catch (Exception) {
+			Log.Error("Failed to handle remote message");
 		}
 	}
 }

@@ -34,21 +34,7 @@ public class RTCServer {
 			};
 
 			EzRTCHost.dataChannelMessage += (data) => {
-				var netMessage = JsonSerializer.Deserialize<GenericMessage<string>>(data, Program.SerializerOptions);
-
-				switch (netMessage?.Data) {
-					case "shutdown":
-						Commands.ExecuteCommand(@"shutdown /s /t 30");
-						break;
-
-					case "sleep":
-						Commands.ExecuteCommand("Start-Process rundll32.exe -ArgumentList 'powrprof.dll,SetSuspendState 0,1,0'");
-						break;
-
-					case "restart":
-						Commands.ExecuteCommand("shutdown /r /t 30");
-						break;
-				}
+				Commands.HandleRemoteMessage(data);
 			};
 
 			while (!stop) {

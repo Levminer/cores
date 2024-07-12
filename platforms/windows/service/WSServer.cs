@@ -107,27 +107,6 @@ public class WSServer {
 	}
 
 	static void HandleMessage(string message) {
-		try {
-			var netMessage = JsonSerializer.Deserialize<GenericMessage<string>>(message, Program.SerializerOptions);
-
-			switch (netMessage?.Data) {
-				case "shutdown":
-					Commands.ExecuteCommand(@"shutdown /s /t 30");
-					break;
-
-				case "sleep":
-					Commands.ExecuteCommand("Start-Process rundll32.exe -ArgumentList 'powrprof.dll,SetSuspendState 0,1,0'");
-					break;
-
-				case "restart":
-					Commands.ExecuteCommand("shutdown /r /t 30");
-					break;
-			}
-
-			return;
-		}
-		catch (Exception) {
-			Log.Error("Received invalid message from WS client");
-		}
+		Commands.HandleRemoteMessage(message);
 	}
 }
