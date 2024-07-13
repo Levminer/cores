@@ -368,3 +368,4 @@ platforms/windows/desktop/Assets/assets
 platforms/core/rtc.dll
 platforms/windows/service/rtc.dll
 target
+.DS_Store

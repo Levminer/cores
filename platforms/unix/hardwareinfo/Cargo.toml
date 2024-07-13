@@ -1,0 +1,10 @@
+[package]
+name = "hardwareinfo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+netdev = "0.29.0"
+sysinfo = "0.30.12"
+starship-battery = "0.8.3"
+indexmap = "2.2.6"
