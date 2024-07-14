@@ -1,5 +1,8 @@
 use indexmap::IndexMap;
 use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
+use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
+use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
+use nvml_wrapper::Nvml;
 use std::{
     env,
     net::{IpAddr, Ipv4Addr},
@@ -13,6 +16,7 @@ pub struct Data {
     pub network: Networks,
     pub hw_info: HardwareInfo,
     pub first_run: bool,
+    pub nvml: Result<Nvml, nvml_wrapper::error::NvmlError>,
 }
 
 #[derive(Debug, Clone)]
@@ -39,6 +43,19 @@ pub struct CoresCPU {
     pub max_load: f64,
     pub load: Vec<CoresSensor>,
     pub clock: Vec<CoresSensor>,
+}
+
+#[derive(Debug)]
+pub struct CoresGPU {
+    pub name: String,
+    pub temperature: Vec<CoresSensor>,
+    pub memory: Vec<CoresSensor>,
+    pub max_load: f64,
+    pub load: Vec<CoresSensor>,
+    pub clock: Vec<CoresSensor>,
+    pub power: Vec<CoresSensor>,
+    pub info: String,
+    pub fan: Vec<CoresSensor>,
 }
 
 #[derive(Debug)]
@@ -97,6 +114,7 @@ pub struct CoresSystem {
 pub struct HardwareInfo {
     pub cpu: CoresCPU,
     pub ram: CoresRAM,
+    pub gpu: CoresGPU,
     pub system: CoresSystem,
 }
 
@@ -117,6 +135,17 @@ impl HardwareInfo {
                     thread_count: 0,
                 },
             },
+            gpu: CoresGPU {
+                name: "N/A".to_string(),
+                temperature: Vec::new(),
+                memory: Vec::new(),
+                max_load: 0.0,
+                load: Vec::new(),
+                clock: Vec::new(),
+                power: Vec::new(),
+                info: "N/A".to_string(),
+                fan: Vec::new(),
+            },
             system: CoresSystem {
                 storage: CoresStorage { disks: Vec::new() },
                 os: CoresOS {
@@ -126,6 +155,17 @@ impl HardwareInfo {
                     interfaces: Vec::new(),
                 },
             },
+        }
+    }
+}
+
+impl CoresSensor {
+    pub fn default() -> CoresSensor {
+        CoresSensor {
+            name: "N/A".to_string(),
+            value: 0.0,
+            min: 0.0,
+            max: 0.0,
         }
     }
 }
@@ -268,6 +308,97 @@ pub fn refresh_hardware_info(data: &mut Data) {
         }
     }
 
+    //GPU
+    match &data.nvml {
+        Ok(nvml) => {
+            let device = nvml.device_by_index(0);
+
+            match device {
+                Ok(device) => {
+                    let power = device.power_usage().unwrap_or(1000) / 1000;
+                    let temperature = device.temperature(TemperatureSensor::Gpu).unwrap_or(0);
+                    let memory = device.memory_info().unwrap_or(MemoryInfo {
+                        free: 0,
+                        total: 0,
+                        used: 0,
+                    });
+                    let gpu_clock = device.clock_info(Clock::Graphics).unwrap_or(0);
+                    let mem_clock = device.clock_info(Clock::Memory).unwrap_or(0);
+                    let gpu_usage = device
+                        .utilization_rates()
+                        .unwrap_or(Utilization { gpu: 0, memory: 0 });
+
+                    if data.first_run {
+                        data.hw_info.gpu.name = device.name().unwrap();
+                        data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+                        data.hw_info.gpu.info =
+                            nvml.sys_driver_version().unwrap_or("N/A".to_string());
+
+                        data.hw_info.gpu.power.push(CoresSensor {
+                            name: "Power Usage".to_string(),
+                            value: power as f64,
+                            min: power as f64,
+                            max: power as f64,
+                        });
+
+                        data.hw_info.gpu.temperature.push(CoresSensor {
+                            name: "Temperature".to_string(),
+                            value: temperature as f64,
+                            min: temperature as f64,
+                            max: temperature as f64,
+                        });
+
+                        data.hw_info.gpu.memory.push(CoresSensor::default());
+                        data.hw_info.gpu.memory.push(CoresSensor::default());
+
+                        data.hw_info.gpu.load.push(CoresSensor {
+                            name: "GPU Memory Total".to_string(),
+                            value: memory.total as f64 / gb,
+                            min: memory.total as f64 / gb,
+                            max: memory.total as f64 / gb,
+                        });
+
+                        data.hw_info.gpu.load.push(CoresSensor {
+                            name: "GPU Memory Free".to_string(),
+                            value: memory.free as f64 / gb,
+                            min: memory.free as f64 / gb,
+                            max: memory.free as f64 / gb,
+                        });
+
+                        data.hw_info.gpu.load.push(CoresSensor {
+                            name: "GPU Memory Used".to_string(),
+                            value: memory.used as f64 / gb,
+                            min: memory.used as f64 / gb,
+                            max: memory.used as f64 / gb,
+                        });
+
+                        data.hw_info.gpu.clock.push(CoresSensor {
+                            name: "GPU Core".to_string(),
+                            value: gpu_clock as f64,
+                            min: gpu_clock as f64,
+                            max: gpu_clock as f64,
+                        });
+
+                        data.hw_info.gpu.clock.push(CoresSensor {
+                            name: "GPU Memory".to_string(),
+                            value: mem_clock as f64,
+                            min: mem_clock as f64,
+                            max: mem_clock as f64,
+                        });
+                    } else {
+                        // TODO: Update sensors
+                    }
+                }
+                Err(err) => {
+                    println!("Error getting GPU device: {:#?}", err);
+                }
+            }
+        }
+        Err(err) => {
+            println!("Error initializing NVML: {:#?}", err);
+        }
+    }
+
     //Display processes ID, name na disk usage:
     // for (_pid, process) in data.sys.processes() {}
 
@@ -293,40 +424,44 @@ pub fn refresh_hardware_info(data: &mut Data) {
     match get_default_interface() {
         Ok(int) => {
             if data.first_run {
-                data.hw_info.system.network.interfaces.push(CoresNetInterface {
-                    name: int.friendly_name.unwrap_or(int.name),
-                    description: int.description.unwrap_or("N/A".to_string()),
-                    mac_address: int.mac_addr.unwrap_or(MacAddr::default()).address(),
-                    ip_address: int
-                        .ipv4
-                        .get(0)
-                        .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
-                        .addr
-                        .to_string(),
-                    mask: int
-                        .ipv4
-                        .get(0)
-                        .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
-                        .netmask()
-                        .to_string(),
-                    gateway: int
-                        .gateway
-                        .unwrap_or(NetworkDevice::new())
-                        .ipv4
-                        .get(0)
-                        .unwrap_or(&Ipv4Addr::new(0, 0, 0, 0))
-                        .to_string(),
-                    dns: int
-                        .dns_servers
-                        .get(0)
-                        .unwrap_or(&IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)))
-                        .to_string(),
-                    speed: "N/A".to_string(),
-                    upload_data: 0.0,
-                    download_data: 0.0,
-                    throughput_upload: 0.0,
-                    throughput_download: 0.0,
-                });
+                data.hw_info
+                    .system
+                    .network
+                    .interfaces
+                    .push(CoresNetInterface {
+                        name: int.friendly_name.unwrap_or(int.name),
+                        description: int.description.unwrap_or("N/A".to_string()),
+                        mac_address: int.mac_addr.unwrap_or(MacAddr::default()).address(),
+                        ip_address: int
+                            .ipv4
+                            .get(0)
+                            .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
+                            .addr
+                            .to_string(),
+                        mask: int
+                            .ipv4
+                            .get(0)
+                            .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
+                            .netmask()
+                            .to_string(),
+                        gateway: int
+                            .gateway
+                            .unwrap_or(NetworkDevice::new())
+                            .ipv4
+                            .get(0)
+                            .unwrap_or(&Ipv4Addr::new(0, 0, 0, 0))
+                            .to_string(),
+                        dns: int
+                            .dns_servers
+                            .get(0)
+                            .unwrap_or(&IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)))
+                            .to_string(),
+                        speed: "N/A".to_string(),
+                        upload_data: 0.0,
+                        download_data: 0.0,
+                        throughput_upload: 0.0,
+                        throughput_download: 0.0,
+                    });
             }
 
             for (_interface_name, net_data) in data.network.iter() {

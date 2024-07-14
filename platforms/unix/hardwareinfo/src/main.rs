@@ -1,4 +1,5 @@
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo};
+use nvml_wrapper::Nvml;
 use sysinfo::{Networks, System};
 
 fn main() {
@@ -7,6 +8,7 @@ fn main() {
         sys: System::new_all(),
         network: Networks::new_with_refreshed_list(),
         hw_info: HardwareInfo::default(),
+        nvml: Nvml::init(),
     };
 
     loop {
