@@ -345,7 +345,7 @@
 						</div>
 						<h2>GPU Memory Usage</h2>
 					</div>
-					<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value} GB`} GB</h3>
+					<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value}`} GB</h3>
 					<div>
 						<MeterChart
 							readings={[$hardwareInfo.gpu.memory[0]]}

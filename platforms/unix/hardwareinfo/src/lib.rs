@@ -351,21 +351,21 @@ pub fn refresh_hardware_info(data: &mut Data) {
                         data.hw_info.gpu.memory.push(CoresSensor::default());
                         data.hw_info.gpu.memory.push(CoresSensor::default());
 
-                        data.hw_info.gpu.load.push(CoresSensor {
+                        data.hw_info.gpu.memory.push(CoresSensor {
                             name: "GPU Memory Total".to_string(),
                             value: memory.total as f64 / gb,
                             min: memory.total as f64 / gb,
                             max: memory.total as f64 / gb,
                         });
 
-                        data.hw_info.gpu.load.push(CoresSensor {
+                        data.hw_info.gpu.memory.push(CoresSensor {
                             name: "GPU Memory Free".to_string(),
                             value: memory.free as f64 / gb,
                             min: memory.free as f64 / gb,
                             max: memory.free as f64 / gb,
                         });
 
-                        data.hw_info.gpu.load.push(CoresSensor {
+                        data.hw_info.gpu.memory.push(CoresSensor {
                             name: "GPU Memory Used".to_string(),
                             value: memory.used as f64 / gb,
                             min: memory.used as f64 / gb,
@@ -386,7 +386,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             max: mem_clock as f64,
                         });
                     } else {
-                        // TODO: Update sensors
+                        data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
                     }
                 }
                 Err(err) => {

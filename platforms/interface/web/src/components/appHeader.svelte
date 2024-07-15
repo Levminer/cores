@@ -26,7 +26,7 @@
 		}
 
 		$state.message = JSON.stringify({
-			type: "power",
+			type,
 			data: type,
 		})
 	}
