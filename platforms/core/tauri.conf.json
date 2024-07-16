@@ -23,11 +23,7 @@
 				"minWidth": 600,
 				"minHeight": 500,
 				"maximized": true,
-				"theme": "Dark",
-				"transparent": true,
-				"windowEffects": {
-					"effects": ["mica"]
-				}
+				"theme": "Dark"
 			}
 		],
 		"security": {

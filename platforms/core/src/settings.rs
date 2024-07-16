@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::path::Path;
 use uuid::Uuid;
 
 const fn default_string() -> String {
@@ -49,6 +48,25 @@ pub struct Settings {
     pub version: Option<u8>,
 }
 
+#[cfg(target_os = "windows")]
+fn get_settings_path() -> std::path::PathBuf {
+    std::path::PathBuf::from("C:\\ProgramData\\Cores")
+}
+
+#[cfg(not(target_os = "windows"))]
+fn get_settings_path() -> std::path::PathBuf {
+    use directories::BaseDirs;
+
+    match BaseDirs::new() {
+        Some(base_dirs) => {
+            return base_dirs.config_dir().to_path_buf();
+        }
+        None => {
+            return std::path::PathBuf::from("/");
+        }
+    };
+}
+
 fn check_if_settings_exits() {
     let sample_settings = Settings {
         version: Some(1),
@@ -62,7 +80,7 @@ fn check_if_settings_exits() {
         license_activated: "".to_string(),
     };
 
-    let program_data = Path::new("C:\\ProgramData");
+    let program_data = get_settings_path();
 
     // Check if folder exists
     if !program_data.join("Cores").exists() {
@@ -95,11 +113,12 @@ pub fn get_settings() -> Settings {
 
     println!("Getting settings");
 
-    let program_data = Path::new("C:\\ProgramData");
+    let program_data = get_settings_path();
 
     check_if_settings_exits();
 
-    let file = std::fs::read_to_string(program_data.join("Cores").join("settings.json")).expect("Failed to read settings file");
+    let file = std::fs::read_to_string(program_data.join("Cores").join("settings.json"))
+        .expect("Failed to read settings file");
     let settings: Result<Settings, _> = serde_json::from_str(&file);
 
     match settings {
@@ -120,11 +139,12 @@ pub fn get_settings() -> Settings {
 
 #[tauri::command]
 pub fn set_settings(settings: String) {
-    let program_data = Path::new("C:\\ProgramData");
+    let program_data = get_settings_path();
 
     println!("Setting settings");
 
     check_if_settings_exits();
 
-    std::fs::write(program_data.join("Cores").join("settings.json"), settings).expect("Failed to write settings file");
+    std::fs::write(program_data.join("Cores").join("settings.json"), settings)
+        .expect("Failed to write settings file");
 }

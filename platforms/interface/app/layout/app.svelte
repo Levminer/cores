@@ -94,6 +94,10 @@
 		const setBackgroundColor = async () => {
 			const systemInfo: SystemInfo = await invoke("system_info")
 
+			if (systemInfo.osName !== "Windows") {
+				document.querySelector("body").style.background = "#0a0a0a"
+			}
+
 			if (systemInfo.osName === "Windows" && systemInfo.osVersion < "10.0.22000") {
 				document.querySelector("body").style.background = "#0a0a0a"
 			}

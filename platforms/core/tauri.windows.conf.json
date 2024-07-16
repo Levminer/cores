@@ -1,0 +1,12 @@
+{
+	"app": {
+		"windows": [
+			{
+				"transparent": true,
+				"windowEffects": {
+					"effects": ["mica"]
+				}
+			}
+		]
+	}
+}
