@@ -50,7 +50,7 @@ pub struct Settings {
 
 #[cfg(target_os = "windows")]
 fn get_settings_path() -> std::path::PathBuf {
-    std::path::PathBuf::from("C:\\ProgramData\\Cores")
+    std::path::PathBuf::from("C:\\ProgramData")
 }
 
 #[cfg(not(target_os = "windows"))]

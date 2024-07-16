@@ -2,6 +2,13 @@
 	"app": {
 		"windows": [
 			{
+				"title": "Cores",
+				"width": 1900,
+				"height": 1000,
+				"minWidth": 600,
+				"minHeight": 500,
+				"maximized": true,
+				"theme": "Dark",
 				"transparent": true,
 				"windowEffects": {
 					"effects": ["mica"]
