@@ -107,7 +107,7 @@
 
 		// Connect to local WebSocket server
 		const connectToWSServer = () => {
-			let ws = new WebSocket("ws://localhost:5391")
+			let ws = new WebSocket("ws://localhost:5390/ws")
 
 			ws.onopen = () => {
 				console.log("Local WS Connection established")

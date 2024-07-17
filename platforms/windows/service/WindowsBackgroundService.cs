@@ -5,16 +5,14 @@ using System.Text.Json;
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
 	internal static HardwareInfo HardwareInfo = new();
-	internal static HTTPServer HTTPServer = new();
-	internal static WSServer WSServer = new();
 	internal static RTCServer RTCServer = new();
 	internal static Analytics Analytics = new();
+	internal static Server Server = new();
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 		Log.Information("Starting Cores service");
 		HardwareInfo.GetInfo();
-		HTTPServer.Start(HardwareInfo);
-		WSServer.Start(HardwareInfo);
+		Server.Start(HardwareInfo);
 
 		// Send analytics
 		_ = Task.Run(async () => {
@@ -60,8 +58,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			}
 			catch (OperationCanceledException) {
 				RTCServer.Stop();
-				HTTPServer.Stop();
-				WSServer.Stop();
+				Server.Stop();
 				HardwareInfo.Stop();
 			}
 			catch (Exception ex) {
