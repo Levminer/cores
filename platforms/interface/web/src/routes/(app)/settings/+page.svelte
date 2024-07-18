@@ -66,6 +66,15 @@
 										<Pencil />
 										Edit
 									</slot>
+									<slot slot="delete">
+										<button
+											class="smallButton border-red-600 bg-red-600 text-white hover:text-red-600"
+											on:click={() => deleteConnectionCode(item.code)}
+										>
+											<Trash2 />
+											Delete
+										</button>
+									</slot>
 									<div class="flex flex-col flex-wrap gap-3">
 										<div>
 											<h5>Name <span class="text-red-500">*</span></h5>
@@ -85,10 +94,22 @@
 								</Dialog>
 							</div>
 
-							<button class="button mt-6" on:click={() => deleteConnectionCode(item.code)}>
-								<Trash2 />
-								<span>Delete</span>
-							</button>
+							{#if $state.state === "connected" && item.mac}
+								<button
+									class="button mt-6"
+									on:click={() => {
+										console.log(item.mac?.replaceAll(":", ""))
+
+										$state.message = JSON.stringify({
+											type: "wol",
+											data: item.mac?.replaceAll(":", ""),
+										})
+									}}
+								>
+									<Power />
+									<span>Turn on</span>
+								</button>
+							{/if}
 						</div>
 					</div>
 				{/each}
@@ -125,9 +146,10 @@
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
 	import Dialog from "ui/components/dialog.svelte"
-	import { Trash2, MonitorSmartphone, Info, Pencil } from "lucide-svelte"
+	import { Trash2, MonitorSmartphone, Info, Pencil, Power } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import { onMount } from "svelte"
+	import { state } from "../../../stores/state.ts"
 
 	$: dialogOpen = false
 

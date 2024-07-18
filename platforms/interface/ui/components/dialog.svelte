@@ -1,4 +1,4 @@
-<Dialog.Root bind:open={open}>
+<Dialog.Root bind:open>
 	<Dialog.Trigger class="button">
 		<slot name="button">
 			<Plus />
@@ -19,7 +19,8 @@
 			<div class="flex flex-col items-start gap-1 pb-11 pt-7">
 				<slot />
 			</div>
-			<div class="flex w-full justify-end">
+			<div class="flex w-full justify-between">
+				<slot name="delete" />
 				<Dialog.Close on:click={action} class="smallButton">
 					<slot name="button">
 						<Plus />
@@ -27,6 +28,7 @@
 					</slot>
 				</Dialog.Close>
 			</div>
+
 			<Dialog.Close
 				class="focus-visible:ring-foreground focus-visible:ring-offset-background active:scale-98 absolute right-5 top-5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
 			>

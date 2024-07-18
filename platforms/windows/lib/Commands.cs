@@ -96,6 +96,8 @@ public class Commands {
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 			});
 
+			Log.Information("Remote message: {@netMessage}", netMessage);
+
 			switch (netMessage?.Type) {
 				case "shutdown":
 					ExecuteCommand(@"shutdown /s /t 30");
