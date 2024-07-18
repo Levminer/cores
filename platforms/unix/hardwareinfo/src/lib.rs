@@ -2,12 +2,13 @@ use indexmap::IndexMap;
 use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
-use nvml_wrapper::Nvml;
+use serde::{Deserialize, Serialize};
 use std::{
     env,
     net::{IpAddr, Ipv4Addr},
 };
 
+pub use nvml_wrapper::Nvml;
 pub use sysinfo::{Components, Disks, Networks, System, MINIMUM_CPU_UPDATE_INTERVAL};
 
 #[derive(Debug)]
@@ -19,7 +20,7 @@ pub struct Data {
     pub nvml: Result<Nvml, nvml_wrapper::error::NvmlError>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoresSensor {
     pub name: String,
     pub value: f64,
@@ -27,7 +28,8 @@ pub struct CoresSensor {
     pub max: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CoresCPUInfo {
     pub manufacturer_name: String,
     pub socket_designation: String,
@@ -36,16 +38,21 @@ pub struct CoresCPUInfo {
     pub thread_count: u32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CoresCPU {
     pub name: String,
-    pub info: CoresCPUInfo,
+    pub info: Vec<CoresCPUInfo>,
     pub max_load: f64,
     pub load: Vec<CoresSensor>,
     pub clock: Vec<CoresSensor>,
+    pub temperature: Vec<CoresSensor>,
+    pub voltage: Vec<CoresSensor>,
+    pub power: Vec<CoresSensor>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CoresGPU {
     pub name: String,
     pub temperature: Vec<CoresSensor>,
@@ -58,31 +65,45 @@ pub struct CoresGPU {
     pub fan: Vec<CoresSensor>,
 }
 
-#[derive(Debug)]
-pub struct CoresRAM {
-    pub load: Vec<CoresSensor>,
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresRAMInfo {
+    pub manufacturer_name: String,
+    pub configured_speed: u32,
+    // TODO
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CoresRAM {
+    pub load: Vec<CoresSensor>,
+    pub info: Vec<CoresRAMInfo>,
+    pub layout: Vec<CoresRAMInfo>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresOS {
     pub name: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CoresDisks {
     pub name: String,
     pub total_space: u64,
     pub free_space: u64,
     pub throughput_read: f64,
     pub throughput_write: f64,
+    pub temperature: CoresSensor,
+    pub health: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresStorage {
     pub disks: Vec<CoresDisks>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct CoresNetInterface {
     pub name: String,
     pub description: String,
@@ -98,19 +119,58 @@ pub struct CoresNetInterface {
     pub throughput_download: f64,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresNetwork {
     pub interfaces: Vec<CoresNetInterface>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresMonitorDevice {
+    pub name: String,
+    pub resolution: String,
+    pub refresh_rate: String,
+    pub primary: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CoresMonitor {
+    pub monitors: Vec<CoresMonitorDevice>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CoresMotherboard {
+    pub name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct CoresBIOS {
+    pub vendor: String,
+    pub version: String,
+    pub date: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresSuperIO {
+    pub name: String,
+    pub fan: Vec<CoresSensor>,
+    pub fan_control: Vec<CoresSensor>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[allow(non_snake_case)]
 pub struct CoresSystem {
     pub network: CoresNetwork,
     pub storage: CoresStorage,
     pub os: CoresOS,
+    pub motherboard: CoresMotherboard,
+    pub bios: CoresBIOS,
+    pub superIO: CoresSuperIO,
+    pub monitor: CoresMonitor,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct HardwareInfo {
     pub cpu: CoresCPU,
     pub ram: CoresRAM,
@@ -121,19 +181,26 @@ pub struct HardwareInfo {
 impl HardwareInfo {
     pub fn default() -> HardwareInfo {
         HardwareInfo {
-            ram: CoresRAM { load: Vec::new() },
+            ram: CoresRAM {
+                load: Vec::new(),
+                info: Vec::new(),
+                layout: Vec::new(),
+            },
             cpu: CoresCPU {
                 name: "N/A".to_string(),
                 max_load: 0.0,
                 load: Vec::new(),
                 clock: Vec::new(),
-                info: CoresCPUInfo {
+                temperature: Vec::new(),
+                voltage: Vec::new(),
+                power: Vec::new(),
+                info: vec![CoresCPUInfo {
                     manufacturer_name: "N/A".to_string(),
                     socket_designation: "N/A".to_string(),
                     max_speed: 0.0,
                     core_count: 0,
                     thread_count: 0,
-                },
+                }],
             },
             gpu: CoresGPU {
                 name: "N/A".to_string(),
@@ -153,6 +220,22 @@ impl HardwareInfo {
                 },
                 network: CoresNetwork {
                     interfaces: Vec::new(),
+                },
+                motherboard: CoresMotherboard {
+                    name: "N/A".to_string(),
+                },
+                bios: CoresBIOS {
+                    vendor: "N/A".to_string(),
+                    version: "N/A".to_string(),
+                    date: "N/A".to_string(),
+                },
+                superIO: CoresSuperIO {
+                    name: "N/A".to_string(),
+                    fan: Vec::new(),
+                    fan_control: Vec::new(),
+                },
+                monitor: CoresMonitor {
+                    monitors: Vec::new(),
                 },
             },
         }
@@ -246,8 +329,8 @@ pub fn refresh_hardware_info(data: &mut Data) {
     data.hw_info.cpu.max_load = cpu_info.cpu_usage() as f64;
 
     if data.first_run {
-        data.hw_info.cpu.info.core_count = data.sys.physical_core_count().unwrap() as u32;
-        data.hw_info.cpu.info.thread_count = data.sys.cpus().len() as u32;
+        data.hw_info.cpu.info[0].core_count = data.sys.physical_core_count().unwrap() as u32;
+        data.hw_info.cpu.info[0].thread_count = data.sys.cpus().len() as u32;
     }
 
     let mut cpu_count = 0;
@@ -258,24 +341,26 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
         if data.first_run {
             data.hw_info.cpu.load.push(CoresSensor {
-                name: format!("{} #{}", brand, name),
+                name: format!("{} #{}", brand, cpu_count),
                 value: cpu.cpu_usage() as f64,
                 min: cpu.cpu_usage() as f64,
                 max: cpu.cpu_usage() as f64,
             });
 
             data.hw_info.cpu.clock.push(CoresSensor {
-                name: format!("{} #{}", brand, name),
+                name: format!("{} #{}", brand, cpu_count),
                 value: cpu.frequency() as f64,
                 min: cpu.frequency() as f64,
                 max: cpu.frequency() as f64,
             });
+
+            cpu_count += 1;
         } else {
             let prev_load = &data.hw_info.cpu.load[cpu_count];
             let prev_clock = &data.hw_info.cpu.clock[cpu_count];
 
             data.hw_info.cpu.load[cpu_count] = CoresSensor {
-                name: format!("{} #{}", brand, name),
+                name: format!("{} #{}", brand, cpu_count),
                 value: cpu.cpu_usage() as f64,
                 min: if (cpu.cpu_usage() as f64) < prev_load.min {
                     cpu.cpu_usage() as f64
@@ -290,7 +375,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
             };
 
             data.hw_info.cpu.clock[cpu_count] = CoresSensor {
-                name: format!("{} #{}", brand, name),
+                name: format!("{} #{}", brand, cpu_count),
                 value: cpu.frequency() as f64,
                 min: if (cpu.frequency() as f64) < prev_clock.min {
                     cpu.frequency() as f64
@@ -348,7 +433,12 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             max: temperature as f64,
                         });
 
-                        data.hw_info.gpu.memory.push(CoresSensor::default());
+                        data.hw_info.gpu.memory.push(CoresSensor {
+                            name: "GPU Memory Used".to_string(),
+                            value: memory.used as f64 / gb,
+                            min: memory.used as f64 / gb,
+                            max: memory.used as f64 / gb,
+                        });
                         data.hw_info.gpu.memory.push(CoresSensor::default());
 
                         data.hw_info.gpu.memory.push(CoresSensor {
@@ -416,6 +506,8 @@ pub fn refresh_hardware_info(data: &mut Data) {
                 free_space: free_space as u64,
                 throughput_read: 0.0,
                 throughput_write: 0.0,
+                temperature: CoresSensor::default(),
+                health: "N/A".to_string(),
             });
         }
     }

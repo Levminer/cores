@@ -1,5 +1,5 @@
 [workspace]
-members = ["platforms/core", "platforms/unix/hardwareinfo"]
+members = ["platforms/core", "platforms/unix/daemon", "platforms/unix/hardwareinfo"]
 resolver = "2"
 
 [profile.release]

@@ -1,0 +1,23 @@
+[package]
+name = "coresd"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7.5", features = ["ws"] }
+axum-extra = { version = "0.9.3", features = ["typed-header"] }
+futures = "0.3"
+futures-util = { version = "0.3", default-features = false, features = [
+    "sink",
+    "std",
+] }
+headers = "0.4"
+tokio = { version = "1.0", features = ["full"] }
+tokio-tungstenite = "0.21"
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5.0", features = ["fs", "trace", "cors"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+hardwareinfo = { path = "../hardwareinfo" }
+simplelog = "0.12"
+log = "0.4"
