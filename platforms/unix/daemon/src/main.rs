@@ -1,5 +1,6 @@
 use axum::extract::connect_info::ConnectInfo;
 use axum::extract::ws::CloseFrame;
+use axum::extract::State;
 use axum::{
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
     http::Method,
@@ -7,24 +8,32 @@ use axum::{
     routing::get,
     Router,
 };
-use axum_extra::TypedHeader;
+use ezrtc::host::EzRTCHost;
+use ezrtc::socket::DataChannelHandler;
 use futures::{sink::SinkExt, stream::StreamExt};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
-use log::{info, LevelFilter};
+use log::{error, info, warn, LevelFilter};
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
+use std::sync::Arc;
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
 };
+use webrtc::data_channel::RTCDataChannel;
+use webrtc::ice_transport::ice_server::RTCIceServer;
 
 #[derive(Serialize, Deserialize)]
 struct NetworkData {
     pub r#type: String,
     pub data: HardwareInfo,
+}
+
+struct AppState {
+    hardware_info_receiver: async_channel::Receiver<HardwareInfo>,
 }
 
 #[tokio::main]
@@ -38,6 +47,22 @@ async fn main() {
     )])
     .unwrap();
 
+    // Hardware info channel
+    let (s, r) = async_channel::unbounded();
+
+    let mut data = Data {
+        first_run: true,
+        sys: System::new_all(),
+        network: Networks::new_with_refreshed_list(),
+        hw_info: HardwareInfo::default(),
+        nvml: Nvml::init(),
+    };
+
+    let app_state = Arc::new(AppState {
+        hardware_info_receiver: r.clone(),
+    });
+
+    // Setup HTTP server routes
     let app = Router::new()
         .route("/", get(handle_root_request))
         .route("/ws", get(ws_handler))
@@ -49,18 +74,115 @@ async fn main() {
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::default().include_headers(true)),
-        );
+        )
+        .with_state(app_state);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5390")
         .await
         .unwrap();
-    info!("listening on http://{}", listener.local_addr().unwrap());
-    axum::serve(
-        listener,
-        app.into_make_service_with_connect_info::<SocketAddr>(),
-    )
-    .await
-    .unwrap();
+
+    info!(
+        "HTTP server listening on http://{}",
+        listener.local_addr().unwrap()
+    );
+
+    // Refresh hardware info every 5 seconds
+    let hw_task = tokio::spawn(async move {
+        loop {
+            data.sys.refresh_all();
+            std::thread::sleep(hardwareinfo::MINIMUM_CPU_UPDATE_INTERVAL);
+            data.sys.refresh_all();
+            data.network.refresh();
+            refresh_hardware_info(&mut data);
+
+            s.send(data.hw_info.clone()).await.unwrap();
+
+            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        }
+    });
+
+    // Start HTTP server
+    let server_task = tokio::spawn(async move {
+        axum::serve(
+            listener,
+            app.into_make_service_with_connect_info::<SocketAddr>(),
+        )
+        .await
+        .unwrap();
+    });
+
+    // Start RTC server
+    let rtc_task = tokio::spawn(async move {
+        // Define your STUN and TURN servers here
+        let ice_servers = vec![RTCIceServer {
+            urls: vec!["stun:stun.cloudflare.com:3478".to_owned()],
+            ..Default::default()
+        }];
+
+        // Define your data channel handler
+        struct MyDataChannelHandler {
+            receiver: async_channel::Receiver<HardwareInfo>,
+        }
+
+        impl DataChannelHandler for MyDataChannelHandler {
+            fn handle_data_channel_open(&self, dc: Arc<RTCDataChannel>) {
+                warn!("Data channel opened!");
+
+                let receiver = self.receiver.clone();
+
+                tokio::spawn(async move {
+                    loop {
+                        let hw_message = receiver.recv().await.unwrap();
+                        let network_data = NetworkData {
+                            r#type: "data".to_string(),
+                            data: hw_message.clone(),
+                        };
+
+                        dc.send_text(serde_json::to_string(&network_data).unwrap())
+                            .await
+                            .unwrap();
+                        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+                    }
+                });
+            }
+
+            fn handle_data_channel_message(&self, message: String) {
+                warn!("Data channel message received: {:?}", message);
+            }
+        }
+
+        // Start the connection
+        let _host = EzRTCHost::new(
+            "wss://rtc-usw.levminer.com/one-to-many".to_string(),
+            //"ws://localhost:5391".to_string(),
+            "crs_4444".to_string(),
+            ice_servers,
+            Arc::new(Box::new(MyDataChannelHandler {
+                receiver: r.clone(),
+            })),
+        )
+        .await;
+
+        info!("RTC started");
+
+        loop {
+            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        }
+    });
+
+    tokio::select! {
+        _ = server_task => {
+            info!("Server stopped");
+        },
+        _ = rtc_task => {
+            info!("RTC stopped");
+        }
+        _ = hw_task => {
+            info!("HW stopped");
+        }
+    };
+
+    error!("Daemon stopped");
 }
 
 async fn handle_root_request() -> impl IntoResponse {
@@ -69,51 +191,38 @@ async fn handle_root_request() -> impl IntoResponse {
 
 async fn ws_handler(
     ws: WebSocketUpgrade,
-    user_agent: Option<TypedHeader<headers::UserAgent>>,
     ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
-    info!("WS Client connected");
+    info!("WS Client connected: {addr}");
 
-    ws.on_upgrade(move |socket| handle_socket(socket, addr))
+    ws.on_upgrade(move |socket| handle_socket(socket, addr, state))
 }
 
-/// Actual websocket statemachine (one will be spawned per connection)
-async fn handle_socket(mut socket: WebSocket, who: SocketAddr) {
-    // send a ping (unsupported by some browsers) just to kick things off and get a response
+// Handle websocket connection and send data to the client
+// One websocket connection will be spawned per client
+async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppState>) {
+    // Send initial ping
     if socket.send(Message::Ping(vec![1, 2, 3])).await.is_ok() {
-        info!("Pinged {who}...");
+        info!("Pinged {addr}...");
     } else {
-        info!("Could not send ping {who}!");
+        info!("Could not send ping {addr}!");
 
         return;
     }
 
+    // Split socket into sender and receiver
     let (mut sender, mut receiver) = socket.split();
 
-    // Spawn a task that will push several messages to the client (does not matter what client does)
+    // Spawn a sender task to send data to the client
     let mut send_task = tokio::spawn(async move {
-        let mut data = Data {
-            first_run: true,
-            sys: System::new_all(),
-            network: Networks::new_with_refreshed_list(),
-            hw_info: HardwareInfo::default(),
-            nvml: Nvml::init(),
-        };
-
-        let str = serde_json::to_string(&data.hw_info).unwrap();
-
-        let msg = format!("{}", str);
+        let receiver = state.hardware_info_receiver.clone();
 
         loop {
-            data.sys.refresh_all();
-            std::thread::sleep(hardwareinfo::MINIMUM_CPU_UPDATE_INTERVAL);
-            data.sys.refresh_all();
-            data.network.refresh();
-            refresh_hardware_info(&mut data);
-
+            let hw_message = receiver.recv().await.unwrap();
             let network_data = NetworkData {
                 r#type: "data".to_string(),
-                data: data.hw_info.clone(),
+                data: hw_message.clone(),
             };
 
             if sender
@@ -127,56 +236,49 @@ async fn handle_socket(mut socket: WebSocket, who: SocketAddr) {
             tokio::time::sleep(std::time::Duration::from_secs(5)).await;
         }
 
-        info!("Sending close to {who}...");
-        if let Err(e) = sender
+        match sender
             .send(Message::Close(Some(CloseFrame {
                 code: axum::extract::ws::close_code::NORMAL,
                 reason: Cow::from("Goodbye"),
             })))
             .await
         {
-            info!("Could not send Close due to {e}, probably it is ok?");
+            Ok(_) => info!("Sent close to {addr}"),
+            Err(e) => info!("Failed to close: {e}"),
         }
-
-        return msg;
     });
 
-    // This second task will receive messages from client and print them on server console
+    // Spawn a receiver task to receive data from the client
     let mut recv_task = tokio::spawn(async move {
-        let mut cnt = 0;
         while let Some(Ok(msg)) = receiver.next().await {
-            cnt += 1;
-            // print message and break if instructed to do so
-            if process_message(msg, who).is_break() {
+            if process_message(msg, addr).is_break() {
                 break;
             }
         }
-        cnt
     });
 
     // If any one of the tasks exit, abort the other.
     tokio::select! {
         rv_a = (&mut send_task) => {
             match rv_a {
-                Ok(a) => info!("{a} messages sent to {who}"),
+                Ok(_) => info!("Sender task stopped"),
                 Err(a) => info!("Error sending messages {a:?}")
             }
             recv_task.abort();
         },
         rv_b = (&mut recv_task) => {
             match rv_b {
-                Ok(b) => info!("Received {b} messages"),
+                Ok(_) => info!("Receiver task stopped"),
                 Err(b) => info!("Error receiving messages {b:?}")
             }
             send_task.abort();
         }
     }
 
-    // returning from the handler closes the websocket connection
-    info!("Websocket context {who} destroyed");
+    info!("Websocket context {addr} destroyed");
 }
 
-/// helper to print contents of messages to stdout. Has special treatment for Close.
+// Process incoming messages
 fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), ()> {
     match msg {
         Message::Text(t) => {
