@@ -23,6 +23,7 @@ use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
 };
+use webrtc::data_channel::data_channel_state::RTCDataChannelState;
 use webrtc::data_channel::RTCDataChannel;
 use webrtc::ice_transport::ice_server::RTCIceServer;
 
@@ -132,16 +133,19 @@ async fn main() {
 
                 tokio::spawn(async move {
                     loop {
-                        let hw_message = receiver.recv().await.unwrap();
-                        let network_data = NetworkData {
-                            r#type: "data".to_string(),
-                            data: hw_message.clone(),
-                        };
+                        if dc.ready_state() == RTCDataChannelState::Open {
+                            let hw_message = receiver.recv().await.unwrap();
+                            let network_data = NetworkData {
+                                r#type: "data".to_string(),
+                                data: hw_message.clone(),
+                            };
 
-                        dc.send_text(serde_json::to_string(&network_data).unwrap())
-                            .await
-                            .unwrap();
-                        tokio::time::sleep(std::time::Duration::from_secs(3)).await;
+                            dc.send_text(serde_json::to_string(&network_data).unwrap())
+                                .await
+                                .unwrap();
+                        }
+
+                        tokio::time::sleep(std::time::Duration::from_secs(2)).await;
                     }
                 });
             }
@@ -166,7 +170,7 @@ async fn main() {
         info!("RTC started");
 
         loop {
-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+            tokio::time::sleep(std::time::Duration::from_secs(100)).await;
         }
     });
 
