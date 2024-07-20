@@ -18,6 +18,7 @@ pub struct Data {
     pub hw_info: HardwareInfo,
     pub first_run: bool,
     pub nvml: Result<Nvml, nvml_wrapper::error::NvmlError>,
+    pub nvml_available: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -253,6 +254,23 @@ impl CoresSensor {
     }
 }
 
+fn compare_sensor(prev_sensor: &CoresSensor, value: f64) -> CoresSensor {
+    return CoresSensor {
+        name: prev_sensor.name.clone(),
+        value,
+        min: if value < prev_sensor.min {
+            value
+        } else {
+            prev_sensor.min
+        },
+        max: if value > prev_sensor.max {
+            value
+        } else {
+            prev_sensor.max
+        },
+    };
+}
+
 pub fn refresh_hardware_info(data: &mut Data) {
     let gb = 1024_f64.powi(3);
     let mb = 1024_f64.powi(2);
@@ -287,19 +305,19 @@ pub fn refresh_hardware_info(data: &mut Data) {
     let memory_available = total_memory - used_memory;
     let virtual_memory_available = total_swap - used_swap;
 
-    let mut map = IndexMap::<String, f64>::new();
-    map.insert("Memory Used".to_string(), used_memory);
-    map.insert("Memory Available".to_string(), memory_available);
-    map.insert("Memory".to_string(), ram_used);
-    map.insert("Virtual Memory Used".to_string(), used_swap);
-    map.insert(
+    let mut mem_map = IndexMap::<String, f64>::new();
+    mem_map.insert("Memory Used".to_string(), used_memory);
+    mem_map.insert("Memory Available".to_string(), memory_available);
+    mem_map.insert("Memory".to_string(), ram_used);
+    mem_map.insert("Virtual Memory Used".to_string(), used_swap);
+    mem_map.insert(
         "Virtual Memory Available".to_string(),
         virtual_memory_available,
     );
-    map.insert("Virtual Memory".to_string(), swap_used);
+    mem_map.insert("Virtual Memory".to_string(), swap_used);
 
     if data.hw_info.ram.load.len() == 0 {
-        for (name, value) in map {
+        for (name, value) in mem_map {
             data.hw_info.ram.load.push(CoresSensor {
                 name,
                 value,
@@ -309,16 +327,10 @@ pub fn refresh_hardware_info(data: &mut Data) {
         }
     } else {
         let mut i = 0;
+        for (_name, value) in mem_map {
+            let prev = &data.hw_info.ram.load[i].clone();
 
-        for (name, value) in map {
-            let prev = &data.hw_info.ram.load[i];
-
-            data.hw_info.ram.load[i] = CoresSensor {
-                name,
-                value,
-                min: if value < prev.min { value } else { prev.min },
-                max: if value > prev.max { value } else { prev.max },
-            };
+            data.hw_info.ram.load[i] = compare_sensor(prev, value);
 
             i += 1;
         }
@@ -337,7 +349,6 @@ pub fn refresh_hardware_info(data: &mut Data) {
     for cpu in data.sys.cpus() {
         data.hw_info.cpu.name = cpu.brand().to_string();
         let brand = cpu.brand().to_string();
-        let name = cpu.name().to_string();
 
         if data.first_run {
             data.hw_info.cpu.load.push(CoresSensor {
@@ -358,134 +369,124 @@ pub fn refresh_hardware_info(data: &mut Data) {
         } else {
             let prev_load = &data.hw_info.cpu.load[cpu_count];
             let prev_clock = &data.hw_info.cpu.clock[cpu_count];
+            let cpu_usage = cpu.cpu_usage() as f64;
+            let clock_speed = cpu.frequency() as f64;
 
-            data.hw_info.cpu.load[cpu_count] = CoresSensor {
-                name: format!("{} #{}", brand, cpu_count),
-                value: cpu.cpu_usage() as f64,
-                min: if (cpu.cpu_usage() as f64) < prev_load.min {
-                    cpu.cpu_usage() as f64
-                } else {
-                    prev_load.min
-                },
-                max: if (cpu.cpu_usage() as f64) > prev_load.max {
-                    cpu.cpu_usage() as f64
-                } else {
-                    prev_load.max
-                },
-            };
+            data.hw_info.cpu.load[cpu_count] = compare_sensor(prev_load, cpu_usage);
 
-            data.hw_info.cpu.clock[cpu_count] = CoresSensor {
-                name: format!("{} #{}", brand, cpu_count),
-                value: cpu.frequency() as f64,
-                min: if (cpu.frequency() as f64) < prev_clock.min {
-                    cpu.frequency() as f64
-                } else {
-                    prev_clock.min
-                },
-                max: if (cpu.frequency() as f64) > prev_clock.max {
-                    cpu.frequency() as f64
-                } else {
-                    prev_clock.max
-                },
-            };
+            data.hw_info.cpu.clock[cpu_count] = compare_sensor(prev_clock, clock_speed);
 
             cpu_count += 1;
         }
     }
 
     //GPU
-    match &data.nvml {
-        Ok(nvml) => {
-            let device = nvml.device_by_index(0);
+    if data.nvml_available {
+        match &data.nvml {
+            Ok(nvml) => {
+                let device = nvml.device_by_index(0);
 
-            match device {
-                Ok(device) => {
-                    let power = device.power_usage().unwrap_or(1000) / 1000;
-                    let temperature = device.temperature(TemperatureSensor::Gpu).unwrap_or(0);
-                    let memory = device.memory_info().unwrap_or(MemoryInfo {
-                        free: 0,
-                        total: 0,
-                        used: 0,
-                    });
-                    let gpu_clock = device.clock_info(Clock::Graphics).unwrap_or(0);
-                    let mem_clock = device.clock_info(Clock::Memory).unwrap_or(0);
-                    let gpu_usage = device
-                        .utilization_rates()
-                        .unwrap_or(Utilization { gpu: 0, memory: 0 });
-
-                    if data.first_run {
-                        data.hw_info.gpu.name = device.name().unwrap();
-                        data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
-                        data.hw_info.gpu.info =
-                            nvml.sys_driver_version().unwrap_or("N/A".to_string());
-
-                        data.hw_info.gpu.power.push(CoresSensor {
-                            name: "Power Usage".to_string(),
-                            value: power as f64,
-                            min: power as f64,
-                            max: power as f64,
+                match device {
+                    Ok(device) => {
+                        let power = device.power_usage().unwrap_or(1000) / 1000;
+                        let temperature = device.temperature(TemperatureSensor::Gpu).unwrap_or(0);
+                        let memory = device.memory_info().unwrap_or(MemoryInfo {
+                            free: 0,
+                            total: 0,
+                            used: 0,
                         });
+                        let gpu_clock = device.clock_info(Clock::Graphics).unwrap_or(0);
+                        let mem_clock = device.clock_info(Clock::Memory).unwrap_or(0);
+                        let gpu_usage = device
+                            .utilization_rates()
+                            .unwrap_or(Utilization { gpu: 0, memory: 0 });
 
-                        data.hw_info.gpu.temperature.push(CoresSensor {
-                            name: "Temperature".to_string(),
-                            value: temperature as f64,
-                            min: temperature as f64,
-                            max: temperature as f64,
-                        });
+                        let mut gpu_mem_map = IndexMap::<String, f64>::new();
 
-                        data.hw_info.gpu.memory.push(CoresSensor {
-                            name: "GPU Memory Used".to_string(),
-                            value: memory.used as f64 / gb,
-                            min: memory.used as f64 / gb,
-                            max: memory.used as f64 / gb,
-                        });
-                        data.hw_info.gpu.memory.push(CoresSensor::default());
+                        gpu_mem_map.insert("GPU Memory Used".to_string(), memory.used as f64);
+                        gpu_mem_map.insert("N/A".to_string(), 0.0);
+                        gpu_mem_map.insert("GPU Memory Total".to_string(), memory.total as f64);
+                        gpu_mem_map.insert("GPU Memory Free".to_string(), memory.free as f64);
+                        gpu_mem_map.insert("GPU Memory Used".to_string(), memory.used as f64);
 
-                        data.hw_info.gpu.memory.push(CoresSensor {
-                            name: "GPU Memory Total".to_string(),
-                            value: memory.total as f64 / gb,
-                            min: memory.total as f64 / gb,
-                            max: memory.total as f64 / gb,
-                        });
+                        if data.first_run {
+                            data.hw_info.gpu.name = device.name().unwrap();
+                            data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+                            data.hw_info.gpu.info =
+                                nvml.sys_driver_version().unwrap_or("N/A".to_string());
 
-                        data.hw_info.gpu.memory.push(CoresSensor {
-                            name: "GPU Memory Free".to_string(),
-                            value: memory.free as f64 / gb,
-                            min: memory.free as f64 / gb,
-                            max: memory.free as f64 / gb,
-                        });
+                            data.hw_info.gpu.power.push(CoresSensor {
+                                name: "Power Usage".to_string(),
+                                value: power as f64,
+                                min: power as f64,
+                                max: power as f64,
+                            });
 
-                        data.hw_info.gpu.memory.push(CoresSensor {
-                            name: "GPU Memory Used".to_string(),
-                            value: memory.used as f64 / gb,
-                            min: memory.used as f64 / gb,
-                            max: memory.used as f64 / gb,
-                        });
+                            data.hw_info.gpu.temperature.push(CoresSensor {
+                                name: "Temperature".to_string(),
+                                value: temperature as f64,
+                                min: temperature as f64,
+                                max: temperature as f64,
+                            });
 
-                        data.hw_info.gpu.clock.push(CoresSensor {
-                            name: "GPU Core".to_string(),
-                            value: gpu_clock as f64,
-                            min: gpu_clock as f64,
-                            max: gpu_clock as f64,
-                        });
+                            for (name, value) in gpu_mem_map {
+                                data.hw_info.gpu.memory.push(CoresSensor {
+                                    name,
+                                    value,
+                                    min: value,
+                                    max: value,
+                                });
+                            }
 
-                        data.hw_info.gpu.clock.push(CoresSensor {
-                            name: "GPU Memory".to_string(),
-                            value: mem_clock as f64,
-                            min: mem_clock as f64,
-                            max: mem_clock as f64,
-                        });
-                    } else {
-                        data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+                            data.hw_info.gpu.clock.push(CoresSensor {
+                                name: "GPU Core".to_string(),
+                                value: gpu_clock as f64,
+                                min: gpu_clock as f64,
+                                max: gpu_clock as f64,
+                            });
+
+                            data.hw_info.gpu.clock.push(CoresSensor {
+                                name: "GPU Memory".to_string(),
+                                value: mem_clock as f64,
+                                min: mem_clock as f64,
+                                max: mem_clock as f64,
+                            });
+                        } else {
+                            data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+
+                            data.hw_info.gpu.power[0] =
+                                compare_sensor(&data.hw_info.gpu.power[0], power as f64);
+
+                            data.hw_info.gpu.temperature[0] = compare_sensor(
+                                &data.hw_info.gpu.temperature[0],
+                                temperature as f64,
+                            );
+
+                            let mut i = 0;
+                            for (_name, value) in gpu_mem_map {
+                                let prev = &data.hw_info.gpu.memory[i];
+
+                                data.hw_info.gpu.memory[i] = compare_sensor(prev, value);
+
+                                i += 1;
+                            }
+
+                            data.hw_info.gpu.clock[0] =
+                                compare_sensor(&data.hw_info.gpu.clock[0], gpu_clock as f64);
+
+                            data.hw_info.gpu.clock[1] =
+                                compare_sensor(&data.hw_info.gpu.clock[1], mem_clock as f64);
+                        }
+                    }
+                    Err(err) => {
+                        println!("Error getting GPU device: {:#?}", err);
                     }
                 }
-                Err(err) => {
-                    println!("Error getting GPU device: {:#?}", err);
-                }
             }
-        }
-        Err(err) => {
-            println!("Error initializing NVML: {:#?}", err);
+            Err(err) => {
+                data.nvml_available = false;
+                println!("Error initializing NVML: {:#?}", err);
+            }
         }
     }
 

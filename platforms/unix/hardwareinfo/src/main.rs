@@ -9,6 +9,7 @@ fn main() {
         network: Networks::new_with_refreshed_list(),
         hw_info: HardwareInfo::default(),
         nvml: Nvml::init(),
+        nvml_available: true,
     };
 
     loop {
