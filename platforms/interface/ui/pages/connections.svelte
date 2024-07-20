@@ -42,7 +42,11 @@
 						<button
 							class="button"
 							on:click={() => {
-								open(`https://cores.levminer.com/settings?connectionCode=${$settings.connectionCode}`)
+								open(
+									`https://cores.levminer.com/settings?connectionCode=${$settings.connectionCode}&mac=${
+										$hardwareInfo.system.network.interfaces[0]?.macAddress ?? ""
+									}`,
+								)
 							}}
 						>
 							<ExternalLink />
@@ -61,6 +65,7 @@
 	import { settings } from "ui/stores/settings.ts"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
+	import { hardwareInfo } from "../stores/hardwareInfo.ts"
 
 	const remoteConnections = () => {
 		invoke("restart_service")

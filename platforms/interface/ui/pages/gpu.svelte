@@ -14,7 +14,10 @@
 					<h3>Name: {$hardwareInfo.gpu.name ?? "N/A"}</h3>
 					<h3>GPU memory: {$hardwareInfo.gpu.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2]?.value ?? 0) : "N/A"} GB</h3>
 					<h3>Driver date: {$hardwareInfo.gpu.info}</h3>
-					<h3>Primary monitor: {primaryMonitor?.resolution ?? "N/A"} {primaryMonitor?.refreshRate ?? "N/A"} Hz</h3>
+					<h3>
+						Primary monitor: {$hardwareInfo.system.monitor.monitors.find((monitor) => monitor.primary)?.resolution ?? "N/A"}
+						{$hardwareInfo.system.monitor.monitors.find((monitor) => monitor.primary)?.refreshRate ?? "N/A"} Hz
+					</h3>
 				</div>
 			</div>
 
@@ -258,7 +261,4 @@
 	import ToggleButton from "ui/components/toggleButton.svelte"
 
 	let minutes = false
-
-	// get primary monitor
-	let primaryMonitor = $hardwareInfo.system.monitor.monitors.find((monitor) => monitor.primary)
 </script>

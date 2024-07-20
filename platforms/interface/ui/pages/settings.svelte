@@ -133,25 +133,29 @@
 			fullVersionList?: { version: string }[]
 		}
 
-		let chromium_version = "N/A"
+		let runtimeVersion = "N/A"
 
-		// @ts-ignore
-		const ua: userAgentData = await navigator.userAgentData.getHighEntropyValues([
-			"architecture",
-			"model",
-			"platform",
-			"platformVersion",
-			"fullVersionList",
-		])
-
-		if (ua.fullVersionList !== undefined && ua.fullVersionList.length > 0) {
+		try {
 			// @ts-ignore
-			chromium_version = ua.fullVersionList.filter((item) => item.brand === "Chromium")[0]?.version || "N/A"
+			const ua: userAgentData = await navigator.userAgentData.getHighEntropyValues([
+				"architecture",
+				"model",
+				"platform",
+				"platformVersion",
+				"fullVersionList",
+			])
+
+			if (ua.fullVersionList !== undefined && ua.fullVersionList.length > 0) {
+				// @ts-ignore
+				runtimeVersion = ua.fullVersionList.filter((item) => item.brand === "Chromium")[0]?.version || "N/A"
+			}
+		} catch (error) {
+			console.log(error)
 		}
 
 		const systemInfo: SystemInfo = await invoke("system_info")
 
-		let dialogMessage = `Cores: ${build.version} \n\nTauri: ${systemInfo.tauriVersion} \nChromium: ${chromium_version}\n\nOS version: ${
+		let dialogMessage = `Cores: ${build.version} \n\nTauri: ${systemInfo.tauriVersion} \nRuntime: ${runtimeVersion}\n\nOS version: ${
 			$hardwareInfo.system.os.name
 		} \nHardware info: ${$hardwareInfo.cpu.name} ${Math.round(systemInfo.totalMem / 1024 / 1024 / 1024)} GB RAM\n\nRelease date: ${
 			build.date
