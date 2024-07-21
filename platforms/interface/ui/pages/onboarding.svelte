@@ -65,7 +65,8 @@
 				>
 					<div class="flex flex-col text-center">
 						<h4 class="mb-2">Get started for free</h4>
-						<h5>You can use Cores for 7 days, after that you will need to buy it.</h5>
+						<!-- <h5>You can use Cores for 7 days, after that you will need to buy it.</h5> -->
+						 <h5>During the beta period you can use Cores for free, please consider buying it to support the development.</h5>
 					</div>
 					<Popover.Close on:click={free} class="smallButton my-4 w-full">
 						<CircleCheck />
@@ -128,7 +129,7 @@
 	let trialOver = false
 
 	// Check if trial is over
-	if ($settings.licenseActivated) {
+	/* if ($settings.licenseActivated) {
 		let dateActivated = new Date($settings.licenseActivated)
 		let dateNow = new Date()
 		let diff = dateNow.getTime() - dateActivated.getTime()
@@ -137,7 +138,7 @@
 		if (days > 7) {
 			trialOver = true
 		}
-	}
+	} */
 
 	const step2 = () => {
 		document.querySelector(".step1").classList.add("hidden")
