@@ -275,9 +275,9 @@
 					<h3 class="italic text-gray-100">Monitor your device easily from anywhere.</h3>
 				</div>
 				<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video id="video2" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
+					<video id="video1" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
 					<div class="absolute flex items-center justify-center">
-						<Play id="play2" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
 				</div>
 				<div class="flex w-[900px] flex-col sm:w-full">
@@ -639,7 +639,8 @@
 		else index++
 
 		// play videos on hover
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 2; i++) {
+			console.log(i)
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
 

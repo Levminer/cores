@@ -33,6 +33,7 @@
 	"bundle": {
 		"active": true,
 		"targets": "all",
+		"createUpdaterArtifacts": "v1Compatible",
 		"category": "Utility",
 		"publisher": "Levminer",
 		"shortDescription": "Cores - Modern hardware monitor for Windows",
@@ -42,6 +43,9 @@
 			"wix": {
 				"fragmentPaths": ["wix/service.wxs"],
 				"componentRefs": ["ServiceEntry"]
+			},
+			"webviewInstallMode": {
+				"type": "skip"
 			}
 		}
 	},
