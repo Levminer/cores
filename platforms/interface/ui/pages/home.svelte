@@ -150,32 +150,30 @@
 				</div>
 			</div>
 
-			{#if $hardwareInfo.system.superIO.fanControl.length > 0}
-				<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Fan />
-						</div>
-						<h2>Fans</h2>
+			<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
+				<div class="mb-5 flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Fan />
 					</div>
+					<h2>Fans</h2>
+				</div>
 
-					<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
-						<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
-							{#each $hardwareInfo.system.superIO.fan as item, i}
-								{#if item.value != 0}
-									<div>
-										<div class="flex w-[95%] flex-row justify-between">
-											<p class="text-sm">{item.name}</p>
-											<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.system.superIO.fanControl[i].value)}%</p>
-										</div>
-										<Progress value={$hardwareInfo.system.superIO.fanControl[i].value} />
+				<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
+					<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
+						{#each $hardwareInfo.system.superIO.fan as item, i}
+							{#if item.value != 0}
+								<div>
+									<div class="flex w-[95%] flex-row justify-between">
+										<p class="text-sm">{item.name}</p>
+										<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.system.superIO.fanControl[i].value)}%</p>
 									</div>
-								{/if}
-							{/each}
-						</div>
+									<Progress value={$hardwareInfo.system.superIO.fanControl[i].value} />
+								</div>
+							{/if}
+						{/each}
 					</div>
 				</div>
-			{/if}
+			</div>
 
 			<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
 				<div class="mb-5 flex items-center gap-3">

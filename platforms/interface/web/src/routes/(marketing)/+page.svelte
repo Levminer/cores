@@ -14,7 +14,7 @@
 		{/key}
 
 		<h3 class="mt-5">
-			Unleash the power of real-time PC monitoring from anywhere. <br /> Access detailed information about your computer anytime, anywhere.
+			Monitor your computer in real-time. <br /> Access detailed information about your computer anytime, anywhere.
 		</h3>
 
 		<div class="my-5 flex flex-row items-center justify-center gap-5">
@@ -41,7 +41,7 @@
 						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
 							Monitor every component in your PC
 						</h2>
-						<h3 class="italic text-gray-100">Track every component in your PC from your phone or a web browser.</h3>
+						<h3 class="italic text-gray-100">Track every component in your PC with detailed charts and visualizations.</h3>
 					</div>
 
 					<div class="relative flex w-[80%] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
@@ -53,7 +53,7 @@
 				</div>
 
 				<div class="w-[80%]">
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
 						<!-- card 1 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
@@ -147,7 +147,7 @@
 						</div>
 					</div>
 
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
 						<!-- card 3 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
@@ -197,7 +197,7 @@
 						</div>
 					</div>
 
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
 						<!-- card 5 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
@@ -342,22 +342,19 @@
 
 		<div id="features3" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 py-20">
 			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-					<video id="video1" muted loop src="https://cdn.levminer.com/cores/charts.webm" />
-					<div class="absolute flex items-center justify-center">
-						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
-					</div>
+				<div>
+					<img width="700" height="1353" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
 				</div>
 				<div class="flex w-full flex-col">
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
-						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
-							Detailed statistics
+						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
+							Your PC Stats In Your Pocket
 						</h2>
-						<h3 class="italic text-gray-100">Detailed charts for every component.</h3>
+						<h3 class="italic text-gray-100">Use your phone or a web browser to monitor your PC.</h3>
 					</div>
 
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+					<div class="mx-auto mt-5 flex w-[60%] flex-col items-center justify-center gap-5 sm:w-full">
 						<!-- card 1 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
@@ -557,21 +554,20 @@
 			</div>
 		</div>
 
-		<div id="newsletter" class="flex flex-col items-center justify-center rounded-xl py-44">
+		<div id="newsletter" class="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-black py-44">
 			<div class="mb-10 text-center">
 				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Interested in Cores?</h2>
 				<h3 class="italic text-gray-100">Subscribe to the newsletter and get the latest updates.</h3>
 			</div>
-			<div class="flex max-w-6xl flex-wrap items-center justify-center">
-				<form class="flex w-full flex-col space-y-4" action="https://cores.lemonsqueezy.com/email-subscribe/external" method="post">
-					<div>
-						<label for="email">Email</label><br />
-						<input class="input" type="email" name="email" id="email" required />
-					</div>
 
-					<button class="button w-full" type="submit">Subscribe</button>
-				</form>
-			</div>
+			<form class="flex w-1/4 flex-col space-y-4 sm:w-[60%]" action="https://cores.lemonsqueezy.com/email-subscribe/external" method="post">
+				<div>
+					<label for="email">Email</label><br />
+					<input class="input w-full" type="email" name="email" id="email" required />
+				</div>
+
+				<button class="button w-full" type="submit">Subscribe</button>
+			</form>
 		</div>
 	</div>
 
