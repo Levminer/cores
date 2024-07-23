@@ -640,7 +640,6 @@
 
 		// play videos on hover
 		for (let i = 0; i < 2; i++) {
-			console.log(i)
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
 
@@ -666,7 +665,7 @@
 
 		document.querySelector("#layout")?.classList.remove("scroll-smooth")
 
-		for (let i = 0; i < 3; i++) {
+		for (let i = 0; i < 2; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
 
