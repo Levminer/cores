@@ -913,6 +913,7 @@ dependencies = [
  "tower",
  "tower-http",
  "webrtc",
+ "wol-rs",
 ]
 
 [[package]]
@@ -7234,6 +7235,12 @@ dependencies = [
  "cfg-if",
  "windows-sys 0.48.0",
 ]
+
+[[package]]
+name = "wol-rs"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c5a8a033ef9b208ec8b5946761958ed2b2693ac49b04f647fdc013000870b8f"
 
 [[package]]
 name = "wrapcenum-derive"

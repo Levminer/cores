@@ -18,6 +18,7 @@ use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
+use std::str::FromStr;
 use std::sync::Arc;
 use tower_http::{
     cors::{Any, CorsLayer},
@@ -26,11 +27,12 @@ use tower_http::{
 use webrtc::data_channel::data_channel_state::RTCDataChannelState;
 use webrtc::data_channel::RTCDataChannel;
 use webrtc::ice_transport::ice_server::RTCIceServer;
+use wol::MacAddr;
 
 #[derive(Serialize, Deserialize)]
-struct NetworkData {
+struct GenericMessage<T> {
     pub r#type: String,
-    pub data: HardwareInfo,
+    pub data: T,
 }
 
 struct AppState {
@@ -136,7 +138,7 @@ async fn main() {
                     loop {
                         if dc.ready_state() == RTCDataChannelState::Open {
                             let hw_message = receiver.recv().await.unwrap();
-                            let network_data = NetworkData {
+                            let network_data = GenericMessage::<HardwareInfo> {
                                 r#type: "data".to_string(),
                                 data: hw_message.clone(),
                             };
@@ -153,6 +155,35 @@ async fn main() {
 
             fn handle_data_channel_message(&self, message: String) {
                 warn!("Data channel message received: {:?}", message);
+
+                let network_message: Result<GenericMessage<String>, _> =
+                    serde_json::from_str(&message);
+
+                match network_message {
+                    Ok(message) => match message.r#type.as_str() {
+                        "shutdown" => {
+                            info!("Received shutdown message");
+                        }
+                        "sleep" => {
+                            info!("Received sleep message");
+                        }
+                        "restart" => {
+                            info!("Received restart message");
+                        }
+                        "wol" => {
+                            let formatted_mac = format_mac_address(&message.data);
+                            let mac_addr = MacAddr::from_str(&formatted_mac).unwrap();
+
+                            info!("Sending WOL packet to: {:?}", mac_addr);
+                        }
+                        _ => {
+                            warn!("Unknown message type: {:?}", message.r#type);
+                        }
+                    },
+                    Err(e) => {
+                        warn!("Failed to parse message: {:?}", e);
+                    }
+                }
             }
         }
 
@@ -225,7 +256,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
 
         loop {
             let hw_message = receiver.recv().await.unwrap();
-            let network_data = NetworkData {
+            let network_data = GenericMessage::<HardwareInfo> {
                 r#type: "data".to_string(),
                 data: hw_message.clone(),
             };
@@ -311,4 +342,13 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), ()> {
         }
     }
     ControlFlow::Continue(())
+}
+
+fn format_mac_address(mac: &str) -> String {
+    mac.chars()
+        .collect::<Vec<char>>()
+        .chunks(2)
+        .map(|chunk| chunk.iter().collect::<String>())
+        .collect::<Vec<String>>()
+        .join(":")
 }
