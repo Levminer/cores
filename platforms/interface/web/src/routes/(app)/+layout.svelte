@@ -53,25 +53,24 @@
 		}
 	})
 
-	const connect = () => {
+	const connect = async () => {
+		let iceServers: RTCIceServer[] = [{ urls: "stun:stun.cloudflare.com:3478" }]
+
+		try {
+			const res = await fetch("https://crs-turn-cred.deno.dev/")
+			const data = await res.json()
+
+			iceServers = iceServers.concat(data)
+		} catch (error) {
+			console.log("Failed to fetch TURN credentials", error)
+		}
+
+		console.log({ iceServers })
+
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
-			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, [
-				{
-					urls: "stun:stun.relay.metered.ca:80",
-				},
-				{
-					urls: "turn:standard.relay.metered.ca:80",
-					username: "34a987bde7c718428704bde7",
-					credential: "hZA1e3RHAhw70JoP",
-				},
-				{
-					urls: "turn:standard.relay.metered.ca:443",
-					username: "34a987bde7c718428704bde7",
-					credential: "hZA1e3RHAhw70JoP",
-				},
-			])
+			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, iceServers)
 		}
 
 		// 60s date comparison

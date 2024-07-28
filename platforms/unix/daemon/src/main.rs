@@ -18,6 +18,7 @@ use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
+use std::process::Command;
 use std::str::FromStr;
 use std::sync::Arc;
 use tower_http::{
@@ -26,8 +27,9 @@ use tower_http::{
 };
 use webrtc::data_channel::data_channel_state::RTCDataChannelState;
 use webrtc::data_channel::RTCDataChannel;
+use webrtc::ice_transport::ice_credential_type::RTCIceCredentialType;
 use webrtc::ice_transport::ice_server::RTCIceServer;
-use wol::MacAddr;
+use wol::{send_wol, MacAddr};
 
 #[derive(Serialize, Deserialize)]
 struct GenericMessage<T> {
@@ -143,9 +145,13 @@ async fn main() {
                                 data: hw_message.clone(),
                             };
 
-                            dc.send_text(serde_json::to_string(&network_data).unwrap())
+                            if dc
+                                .send_text(serde_json::to_string(&network_data).unwrap())
                                 .await
-                                .unwrap();
+                                .is_err()
+                            {
+                                info!("Failed to send data to client");
+                            };
                         }
 
                         tokio::time::sleep(std::time::Duration::from_secs(2)).await;
@@ -162,19 +168,50 @@ async fn main() {
                 match network_message {
                     Ok(message) => match message.r#type.as_str() {
                         "shutdown" => {
-                            info!("Received shutdown message");
+                            if Command::new("sudo")
+                                .arg("shutdown")
+                                .arg("-h")
+                                .arg("+1")
+                                .spawn()
+                                .is_err()
+                            {
+                                error!("Failed to execute shutdown command");
+                            }
                         }
                         "sleep" => {
-                            info!("Received sleep message");
+                            if Command::new("sudo")
+                                .arg("systemctl")
+                                .arg("suspend")
+                                .spawn()
+                                .is_err()
+                            {
+                                error!("Failed to execute sleep command");
+                            }
                         }
                         "restart" => {
-                            info!("Received restart message");
+                            if Command::new("sudo")
+                                .arg("shutdown")
+                                .arg("-r")
+                                .arg("+1")
+                                .spawn()
+                                .is_err()
+                            {
+                                error!("Failed to execute restart command");
+                            }
                         }
                         "wol" => {
                             let formatted_mac = format_mac_address(&message.data);
-                            let mac_addr = MacAddr::from_str(&formatted_mac).unwrap();
+                            let mac_addr = MacAddr::from_str(&formatted_mac);
 
-                            info!("Sending WOL packet to: {:?}", mac_addr);
+                            match mac_addr {
+                                Ok(mac) => {
+                                    send_wol(mac, None, None).expect("Failed to send WOL packet");
+                                    info!("Sending WOL packet to: {:?}", mac);
+                                }
+                                Err(e) => {
+                                    warn!("Failed to parse MAC address: {:?}", e);
+                                }
+                            }
                         }
                         _ => {
                             warn!("Unknown message type: {:?}", message.r#type);
