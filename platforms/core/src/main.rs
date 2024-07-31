@@ -67,24 +67,26 @@ fn main() {
                 _ => (),
             });
 
-            tray.on_tray_icon_event(|tray, event| {
-                if let TrayIconEvent::Click {
-                    button: MouseButton::Left,
-                    button_state: MouseButtonState::Up,
-                    ..
-                } = event
-                {
-                    let app = tray.app_handle();
-                    let window = app.get_webview_window("main").unwrap();
+            if cfg!(target_os = "windows") {
+                tray.on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        let window = app.get_webview_window("main").unwrap();
 
-                    if window.is_visible().unwrap() {
-                        window.hide().unwrap();
-                    } else {
-                        window.show().unwrap();
-                        window.set_focus().unwrap();
+                        if window.is_visible().unwrap() {
+                            window.hide().unwrap();
+                        } else {
+                            window.show().unwrap();
+                            window.set_focus().unwrap();
+                        }
                     }
-                }
-            });
+                });
+            }
 
             Ok(())
         })
