@@ -8,6 +8,7 @@ use axum::{
     routing::get,
     Router,
 };
+use hardwareinfo::settings::get_settings;
 use ezrtc::host::EzRTCHost;
 use ezrtc::socket::DataChannelHandler;
 use futures::{sink::SinkExt, stream::StreamExt};
@@ -27,7 +28,6 @@ use tower_http::{
 };
 use webrtc::data_channel::data_channel_state::RTCDataChannelState;
 use webrtc::data_channel::RTCDataChannel;
-use webrtc::ice_transport::ice_credential_type::RTCIceCredentialType;
 use webrtc::ice_transport::ice_server::RTCIceServer;
 use wol::{send_wol, MacAddr};
 
@@ -224,11 +224,15 @@ async fn main() {
             }
         }
 
+        // Get settings
+        let settings = get_settings();
+
+        info!("Connection code: {:?}", settings.connection_code);
+
         // Start the connection
         let _host = EzRTCHost::new(
             "wss://rtc-usw.levminer.com/one-to-many".to_string(),
-            //"ws://localhost:5391".to_string(),
-            "crs_4444".to_string(),
+            settings.connection_code,
             ice_servers,
             Arc::new(Box::new(MyDataChannelHandler {
                 receiver: r.clone(),

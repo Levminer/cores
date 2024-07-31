@@ -875,6 +875,7 @@ name = "cores"
 version = "0.22.0"
 dependencies = [
  "directories",
+ "hardwareinfo",
  "powershell_script",
  "runas",
  "sentry",
@@ -2136,13 +2137,16 @@ dependencies = [
 name = "hardwareinfo"
 version = "0.1.0"
 dependencies = [
+ "directories",
  "indexmap 2.2.6",
+ "log",
  "netdev",
  "nvml-wrapper",
  "serde",
  "serde_json",
  "starship-battery",
  "sysinfo",
+ "uuid",
 ]
 
 [[package]]

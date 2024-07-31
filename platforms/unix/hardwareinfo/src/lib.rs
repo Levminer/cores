@@ -1,4 +1,5 @@
 use indexmap::IndexMap;
+use log::error;
 use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
@@ -10,6 +11,8 @@ use std::{
 
 pub use nvml_wrapper::Nvml;
 pub use sysinfo::{Components, Disks, Networks, System, MINIMUM_CPU_UPDATE_INTERVAL};
+
+pub mod settings;
 
 #[derive(Debug)]
 pub struct Data {
@@ -479,13 +482,13 @@ pub fn refresh_hardware_info(data: &mut Data) {
                         }
                     }
                     Err(err) => {
-                        println!("Error getting GPU device: {:#?}", err);
+                        error!("Error getting GPU device: {:#?}", err);
                     }
                 }
             }
-            Err(err) => {
+            Err(_err) => {
                 data.nvml_available = false;
-                println!("Error initializing NVML: {:#?}", err);
+                error!("Error initializing nvidia");
             }
         }
     }
@@ -578,7 +581,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
             data.first_run = false;
         }
         Err(err) => {
-            println!("Error getting default interface: {:#?}", err)
+            error!("Error getting default interface: {:#?}", err)
         }
     };
 
