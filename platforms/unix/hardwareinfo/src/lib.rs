@@ -1,5 +1,5 @@
 use indexmap::IndexMap;
-use log::error;
+use log::{error, warn};
 use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
@@ -12,7 +12,19 @@ use std::{
 pub use nvml_wrapper::Nvml;
 pub use sysinfo::{Components, Disks, Networks, System, MINIMUM_CPU_UPDATE_INTERVAL};
 
+pub mod metrics;
 pub mod settings;
+pub mod sources;
+
+trait Round {
+    fn fmt_num(self) -> f64;
+}
+
+impl Round for f64 {
+    fn fmt_num(self) -> f64 {
+        (self * 10.0).round() / 10.0
+    }
+}
 
 #[derive(Debug)]
 pub struct Data {
@@ -578,13 +590,85 @@ pub fn refresh_hardware_info(data: &mut Data) {
                     data.hw_info.system.network.interfaces[0].throughput_upload = throughput_upload;
                 }
             }
-
-            data.first_run = false;
         }
         Err(err) => {
             error!("Error getting default interface: {:#?}", err)
         }
     };
+
+    // MAC os
+    if cfg!(target_os = "macos") {
+        let mut sampler = metrics::Sampler::new().unwrap();
+        let soc = sources::SocInfo::new().unwrap();
+        // println!("{:?}", soc);
+
+        let m = sampler.get_metrics(100).unwrap();
+        // println!("{:?}", m);
+
+        if data.first_run {
+            data.hw_info.gpu.name = soc.chip_name.clone();
+            data.hw_info.system.motherboard.name = soc.mac_model.clone();
+
+            data.hw_info.gpu.temperature.push(CoresSensor {
+                name: "SOC".to_string(),
+                value: (m.temp.gpu_temp_avg as f64).fmt_num(),
+                min: (m.temp.gpu_temp_avg as f64).fmt_num(),
+                max: (m.temp.gpu_temp_avg as f64).fmt_num(),
+            });
+
+            data.hw_info.gpu.power.push(CoresSensor {
+                name: "SOC".to_string(),
+                value: (m.gpu_power as f64).fmt_num(),
+                min: (m.gpu_power as f64).fmt_num(),
+                max: (m.gpu_power as f64).fmt_num(),
+            });
+
+            data.hw_info.cpu.temperature.push(CoresSensor {
+                name: "SOC".to_string(),
+                value: (m.temp.cpu_temp_avg as f64).fmt_num(),
+                min: (m.temp.cpu_temp_avg as f64).fmt_num(),
+                max: (m.temp.cpu_temp_avg as f64).fmt_num(),
+            });
+
+            data.hw_info.cpu.power.push(CoresSensor {
+                name: "SOC".to_string(),
+                value: (m.cpu_power as f64).fmt_num(),
+                min: (m.cpu_power as f64).fmt_num(),
+                max: (m.cpu_power as f64).fmt_num(),
+            });
+
+            data.hw_info.gpu.load.push(CoresSensor {
+                name: "Load".to_string(),
+                value: (m.gpu_usage.1 as f64 * 100.0).fmt_num(),
+                min: (m.gpu_usage.1 as f64 * 100.0).fmt_num(),
+                max: (m.gpu_usage.1 as f64 * 100.0).fmt_num(),
+            });
+
+            data.hw_info.gpu.max_load = (data.hw_info.gpu.load[0].value as f64).fmt_num();
+        } else {
+            let prev_gpu_temp = data.hw_info.gpu.temperature[0].clone();
+            let prev_gpu_power = data.hw_info.gpu.power[0].clone();
+            let prev_cpu_temp = data.hw_info.cpu.temperature[0].clone();
+            let prev_cpu_power = data.hw_info.cpu.power[0].clone();
+            let prev_gpu_load = data.hw_info.gpu.load[0].clone();
+
+            data.hw_info.gpu.temperature[0] =
+                compare_sensor(&prev_gpu_temp, (m.temp.gpu_temp_avg as f64).fmt_num());
+            data.hw_info.gpu.power[0] =
+                compare_sensor(&prev_gpu_power, (m.gpu_power as f64).fmt_num());
+            data.hw_info.cpu.temperature[0] =
+                compare_sensor(&prev_cpu_temp, (m.temp.cpu_temp_avg as f64).fmt_num());
+            data.hw_info.cpu.power[0] =
+                compare_sensor(&prev_cpu_power, (m.cpu_power as f64).fmt_num());
+            data.hw_info.gpu.load[0] =
+                compare_sensor(&prev_gpu_load, (m.gpu_usage.1 as f64 * 100.0).fmt_num());
+
+            data.hw_info.gpu.max_load = (data.hw_info.gpu.load[0].value as f64).fmt_num();
+        }
+    }
+
+    // END
+    data.first_run = false;
 
     // Components temperature:
     // let components = Components::new_with_refreshed_list();
