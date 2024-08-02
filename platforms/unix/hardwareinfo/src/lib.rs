@@ -277,6 +277,7 @@ fn compare_sensor(prev_sensor: &CoresSensor, value: f64) -> CoresSensor {
 pub fn refresh_hardware_info(data: &mut Data) {
     let gb = 1024_f64.powi(3);
     let mb = 1024_f64.powi(2);
+    let interval = 5.0;
 
     // OS Info
     if data.first_run {
@@ -564,11 +565,11 @@ pub fn refresh_hardware_info(data: &mut Data) {
                 if net_data.mac_address().to_string()
                     == data.hw_info.system.network.interfaces[0].mac_address
                 {
-                    let download_data = net_data.total_received() as f64 / gb;
-                    let upload_data = net_data.total_transmitted() as f64 / gb;
+                    let download_data = (net_data.total_received() as f64 / gb).fmt_num();
+                    let upload_data = (net_data.total_transmitted() as f64 / gb).fmt_num();
 
-                    let throughput_download = net_data.received() as f64 / mb;
-                    let throughput_upload = net_data.transmitted() as f64 / mb;
+                    let throughput_download = net_data.received() as f64 / interval;
+                    let throughput_upload = net_data.transmitted() as f64 / interval;
 
                     data.hw_info.system.network.interfaces[0].download_data = download_data;
                     data.hw_info.system.network.interfaces[0].upload_data = upload_data;

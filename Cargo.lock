@@ -2137,8 +2137,10 @@ dependencies = [
 name = "hardwareinfo"
 version = "0.1.0"
 dependencies = [
+ "core-foundation",
  "directories",
  "indexmap 2.2.6",
+ "libc",
  "log",
  "netdev",
  "nvml-wrapper",
