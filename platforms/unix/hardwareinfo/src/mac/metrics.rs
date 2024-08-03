@@ -1,6 +1,6 @@
 use core_foundation::dictionary::CFDictionaryRef;
 
-use crate::sources::{
+use crate::mac::sources::{
   cfio_get_residencies, cfio_watts, libc_ram, libc_swap, IOHIDSensors, IOReport, SocInfo, SMC,
 };
 
