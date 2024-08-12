@@ -13,6 +13,8 @@ pub fn macos_hardware_info(data: &mut Data) {
     let metrics = sampler.get_metrics(100).unwrap();
 
     if data.first_run {
+        data.hw_info.cpu.info[0].manufacturer_name = "Apple".to_string();
+        data.hw_info.cpu.info[0].socket_designation = soc.mac_model.clone();
         data.hw_info.gpu.name = soc.chip_name.clone();
         data.hw_info.system.motherboard.name = soc.mac_model.clone();
 
@@ -28,6 +30,13 @@ pub fn macos_hardware_info(data: &mut Data) {
             value: (metrics.gpu_power as f64).fmt_num(),
             min: (metrics.gpu_power as f64).fmt_num(),
             max: (metrics.gpu_power as f64).fmt_num(),
+        });
+
+        data.hw_info.gpu.clock.push(CoresSensor {
+            name: "SOC".to_string(),
+            value: (metrics.gpu_usage.0 as f64).fmt_num(),
+            min: (metrics.gpu_usage.0 as f64).fmt_num(),
+            max: (metrics.gpu_usage.0 as f64).fmt_num(),
         });
 
         data.hw_info.cpu.temperature.push(CoresSensor {
@@ -58,6 +67,7 @@ pub fn macos_hardware_info(data: &mut Data) {
         let prev_cpu_temp = data.hw_info.cpu.temperature[0].clone();
         let prev_cpu_power = data.hw_info.cpu.power[0].clone();
         let prev_gpu_load = data.hw_info.gpu.load[0].clone();
+        let prev_gpu_clock = data.hw_info.gpu.clock[0].clone();
 
         data.hw_info.gpu.temperature[0] =
             compare_sensor(&prev_gpu_temp, (metrics.temp.gpu_temp_avg as f64).fmt_num());
@@ -72,5 +82,7 @@ pub fn macos_hardware_info(data: &mut Data) {
             (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
         );
         data.hw_info.gpu.max_load = (data.hw_info.gpu.load[0].value as f64).fmt_num();
+        data.hw_info.gpu.clock[0] =
+            compare_sensor(&prev_gpu_clock, (metrics.gpu_usage.0 as f64).fmt_num());
     }
 }
