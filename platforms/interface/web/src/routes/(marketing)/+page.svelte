@@ -470,22 +470,22 @@
 				<div class="flex w-full flex-col">
 					<div class="mb-10">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Pricing</h2>
-						<h3 class="italic text-gray-100">Do you hate subscriptions too? Buy Cores now and get life time access.</h3>
+						<h3 class="text-center italic text-gray-100">Do you hate subscriptions too? Buy Cores now and get life time access.</h3>
 					</div>
 
 					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<OSSelector bind:selected={pricingSelected} />
-
-							{#if pricingSelected === "windows"}
+							<div class=" flex flex-row flex-wrap gap-3">
 								<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
 									<h1
 										class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
 									>
-										Cores for Windows
+										Cores for Personal
 									</h1>
 									<div class="px-5 text-center sm:w-full">
-										<h2 class="text-[3rem] font-semibold">$14<sup>99</sup></h2>
+										<h2 class="text-[3rem] font-semibold">
+											$9.99 <p class="text-sm text-gray-200">One time purchase</p>
+										</h2>
 
 										<div class="text-center">
 											<a
@@ -520,33 +520,59 @@
 											<Check class="h-5 w-5 text-green-500" />
 											<p>Use on up to 5 devices</p>
 										</div>
-
-										<!-- <p>Access to free updates for a year</p> -->
 									</div>
 								</div>
-							{:else if pricingSelected === "linux"}
-								<h1
-									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
-								>
-									Coming soon!
-								</h1>
-								<div class="flex items-center justify-center">
-									<a href="#newsletter" class="underline">Subscribe to get notified</a>
+								<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
+									<h1
+										class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
+									>
+										Cores for Business
+									</h1>
+									<div class="px-5 text-center sm:w-full">
+										<h2 class="text-[3rem] font-semibold">
+											$4.99 <p class="text-sm text-gray-200">/month/device</p>
+										</h2>
+
+										<div class="text-center">
+											<a
+												href="mailto:cores@levminer.com"
+												class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+											>
+												Get a quote
+											</a>
+											<div class="mt-3">
+												<a rel="noreferrer" href="#downloads" class="underline duration-200 hover:text-gray-200"
+													>Get started for free</a
+												>
+											</div>
+										</div>
+									</div>
+									<div
+										class="flex flex-col justify-center space-y-2 border-t-2 border-gray-600 px-5 pt-3 text-left text-lg sm:w-full"
+									>
+										<div class="flex items-center space-x-2">
+											<Check class="h-5 w-5 text-green-500" />
+											<p>For business & commercial use</p>
+										</div>
+										<div class="flex items-center space-x-2">
+											<Check class="h-5 w-5 text-green-500" />
+											<p>Monthly subscription, cancel anytime</p>
+										</div>
+										<div class="flex items-center space-x-2">
+											<Check class="h-5 w-5 text-green-500" />
+											<p>Access any device remotely</p>
+										</div>
+										<div class="flex items-center space-x-2">
+											<Check class="h-5 w-5 text-green-500" />
+											<p>Volume discount</p>
+										</div>
+									</div>
 								</div>
-							{:else}
-								<h1
-									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
-								>
-									Coming soon!
-								</h1>
-								<div class="flex items-center justify-center">
-									<a href="#newsletter" class="underline">Subscribe to get notified</a>
-								</div>
-							{/if}
+							</div>
 
 							<div class="mt-4 flex flex-wrap justify-center gap-2 text-center text-lg">
-								<p>Want to use Cores as a business?</p>
-								<a class="underline" href="mailto:cores@levminer.com">Contact</a>
+								<p>Want to use Cores as a business or have a question?</p>
+								<a class="underline" href="mailto:cores@levminer.com">Reach out</a>
 							</div>
 						</div>
 					</div>

@@ -13,7 +13,11 @@
 
 					{#if $settings.licenseKey === "" || $settings.licenseKey === "free"}
 						<h2 class="text-cores-alternative">Free</h2>
-						<h3 class="cursor-pointer underline"><a href="/onboarding">Upgrade</a></h3>
+
+						<a
+							class="bg-cores-alternative border-cores-alternative mt-2 cursor-pointer rounded-xl border-2 px-2 py-0.5 text-xl font-medium text-white duration-200 ease-in hover:border-white"
+							href="/onboarding">Upgrade</a
+						>
 					{/if}
 				</div>
 				<!-- <div class="flex items-center justify-center">
@@ -599,6 +603,7 @@
 		Battery,
 		LayoutGrid,
 		LayoutList,
+		TriangleAlert,
 	} from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import Progress from "ui/components/progress.svelte"
