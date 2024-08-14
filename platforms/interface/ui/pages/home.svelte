@@ -20,6 +20,17 @@
 						>
 					{/if}
 				</div>
+				<div>
+					<button
+						on:click={() => {
+							open("https://cores.canny.io/feature-requests")
+						}}
+						class="button"
+					>
+						<Megaphone />
+						Feedback</button
+					>
+				</div>
 				<!-- <div class="flex items-center justify-center">
 					<button
 						on:click={() => {
@@ -604,11 +615,13 @@
 		LayoutGrid,
 		LayoutList,
 		TriangleAlert,
+		Megaphone,
 	} from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import Progress from "ui/components/progress.svelte"
 	import { settings } from "ui/stores/settings.ts"
 	import HomeList from "ui/components/homeList.svelte"
+	import { open } from "@tauri-apps/plugin-shell"
 
 	$: page = "grid" as "grid" | "list"
 </script>
