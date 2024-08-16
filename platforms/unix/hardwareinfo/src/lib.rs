@@ -12,6 +12,8 @@ use std::{
 pub use nvml_wrapper::Nvml;
 pub use sysinfo::{Components, Disks, Networks, System, MINIMUM_CPU_UPDATE_INTERVAL};
 
+#[cfg(target_os = "linux")]
+pub mod linux;
 #[cfg(target_os = "macos")]
 pub mod mac;
 pub mod settings;
@@ -86,7 +88,8 @@ pub struct CoresGPU {
 pub struct CoresRAMInfo {
     pub manufacturer_name: String,
     pub configured_speed: u32,
-    // TODO
+    pub configured_voltage: f32,
+    pub size: u64,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -103,7 +106,7 @@ pub struct CoresOS {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct CoresDisks {
+pub struct CoresDisk {
     pub name: String,
     pub total_space: u64,
     pub free_space: u64,
@@ -115,7 +118,7 @@ pub struct CoresDisks {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresStorage {
-    pub disks: Vec<CoresDisks>,
+    pub disks: Vec<CoresDisk>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -312,14 +315,14 @@ pub fn refresh_hardware_info(data: &mut Data) {
     }
 
     // RAM Info
-    let total_memory = data.sys.total_memory() as f64 / gb;
-    let used_memory = data.sys.used_memory() as f64 / gb;
-    let total_swap = data.sys.total_swap() as f64 / gb;
-    let used_swap = data.sys.used_swap() as f64 / gb;
-    let ram_used = (used_memory / total_memory) * 100.0;
-    let swap_used = (used_swap / total_swap) * 100.0;
-    let memory_available = total_memory - used_memory;
-    let virtual_memory_available = total_swap - used_swap;
+    let total_memory = (data.sys.total_memory() as f64 / gb).fmt_num();
+    let used_memory = (data.sys.used_memory() as f64 / gb).fmt_num();
+    let total_swap = (data.sys.total_swap() as f64 / gb).fmt_num();
+    let used_swap = (data.sys.used_swap() as f64 / gb).fmt_num();
+    let ram_used = ((used_memory / total_memory) * 100.0).fmt_num();
+    let swap_used = ((used_swap / total_swap) * 100.0).fmt_num();
+    let memory_available = (total_memory - used_memory).fmt_num();
+    let virtual_memory_available = (total_swap - used_swap).fmt_num();
 
     let mut mem_map = IndexMap::<String, f64>::new();
     mem_map.insert("Memory Used".to_string(), used_memory);
@@ -368,14 +371,14 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
         if data.first_run {
             data.hw_info.cpu.load.push(CoresSensor {
-                name: format!("{} #{}", brand, cpu_count),
+                name: format!("Core #{}", cpu_count),
                 value: cpu.cpu_usage() as f64,
                 min: cpu.cpu_usage() as f64,
                 max: cpu.cpu_usage() as f64,
             });
 
             data.hw_info.cpu.clock.push(CoresSensor {
-                name: format!("{} #{}", brand, cpu_count),
+                name: format!("Core #{}", cpu_count),
                 value: cpu.frequency() as f64,
                 min: cpu.frequency() as f64,
                 max: cpu.frequency() as f64,
@@ -510,24 +513,24 @@ pub fn refresh_hardware_info(data: &mut Data) {
     // for (_pid, process) in data.sys.processes() {}
 
     // Disks
-    if data.first_run {
-        let disks = Disks::new_with_refreshed_list();
-        for disk in disks.list() {
-            let free_space = disk.available_space() as f64 / gb;
-            let total_space = disk.total_space() as f64 / gb;
-            let name = disk.name().to_str().unwrap().to_string();
+    // if data.first_run {
+    //     let disks = Disks::new_with_refreshed_list();
+    //     for disk in disks.list() {
+    //         let free_space = disk.available_space() as f64 / gb;
+    //         let total_space = disk.total_space() as f64 / gb;
+    //         let name = disk.name().to_str().unwrap().to_string();
 
-            data.hw_info.system.storage.disks.push(CoresDisks {
-                name: name.clone(),
-                total_space: total_space as u64,
-                free_space: free_space as u64,
-                throughput_read: 0.0,
-                throughput_write: 0.0,
-                temperature: CoresSensor::default(),
-                health: "N/A".to_string(),
-            });
-        }
-    }
+    //         data.hw_info.system.storage.disks.push(CoresDisk {
+    //             name: name.clone(),
+    //             total_space: total_space as u64,
+    //             free_space: free_space as u64,
+    //             throughput_read: 0.0,
+    //             throughput_write: 0.0,
+    //             temperature: CoresSensor::default(),
+    //             health: "N/A".to_string(),
+    //         });
+    //     }
+    // }
 
     // Network info
     match get_default_interface() {
@@ -596,9 +599,13 @@ pub fn refresh_hardware_info(data: &mut Data) {
         }
     };
 
-    // MAC os
+    // macOS
     #[cfg(target_os = "macos")]
     mac::macos_hardware_info(data);
+
+    // Linux
+    #[cfg(target_os = "linux")]
+    linux::linux_hardware_info(data);
 
     // END
     data.first_run = false;
