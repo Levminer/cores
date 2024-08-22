@@ -607,13 +607,42 @@ pub fn refresh_hardware_info(data: &mut Data) {
     #[cfg(target_os = "linux")]
     linux::linux_hardware_info(data);
 
+    // Raspberry Pi
+    let model_file = std::fs::read_to_string("/proc/device-tree/model");
+
+    if let Ok(model) = model_file {
+        if model.contains("Raspberry Pi") {
+            data.hw_info.system.motherboard.name = model;
+
+            // Components temperature:
+            let components = Components::new_with_refreshed_list();
+
+            if data.first_run {
+                for component in &components {
+                    let temp = (component.temperature() as f64).fmt_num();
+
+                    data.hw_info.cpu.temperature.push(CoresSensor {
+                        name: component.label().to_string(),
+                        value: temp,
+                        min: temp,
+                        max: temp,
+                    });
+                }
+            } else {
+                let mut i = 0;
+
+                for component in &components {
+                    let prev = &data.hw_info.cpu.temperature[i];
+
+                    data.hw_info.cpu.temperature[i] =
+                        compare_sensor(prev, (component.temperature() as f64).fmt_num());
+
+                    i += 1;
+                }
+            }
+        }
+    }
+
     // END
     data.first_run = false;
-
-    // Components temperature:
-    // let components = Components::new_with_refreshed_list();
-    // println!("=> components:");
-    // for component in &components {
-    //     println!("{component:?}");
-    // }
 }
