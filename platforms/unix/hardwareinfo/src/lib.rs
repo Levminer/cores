@@ -367,7 +367,6 @@ pub fn refresh_hardware_info(data: &mut Data) {
     let mut cpu_count = 0;
     for cpu in data.sys.cpus() {
         data.hw_info.cpu.name = cpu.brand().to_string();
-        let brand = cpu.brand().to_string();
 
         if data.first_run {
             data.hw_info.cpu.load.push(CoresSensor {

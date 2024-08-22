@@ -33,7 +33,7 @@ pub fn linux_hardware_info(data: &mut Data) {
         if let Ok(mem) = mem {
             for mem_device in mem {
                 data.hw_info.ram.info.push(CoresRAMInfo {
-                    manufacturer_name: mem_device.manufacturer.unwrap_or("N/A".to_string()),
+                    manufacturer_name: mem_device.manufacturer.unwrap_or("Drive".to_string()),
                     configured_speed: mem_device.speed_mts.unwrap_or(0),
                     configured_voltage: mem_device.configured_voltage.unwrap_or(0.0) * 1000.0,
                     size: mem_device.size.unwrap_or(1) / 1024 / 1024,

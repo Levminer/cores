@@ -136,92 +136,100 @@
 
 		<!-- Row 1.1 -->
 		<div class="mx-10 flex justify-evenly gap-5 pt-5 sm:mx-3 sm:flex-wrap">
-			<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<HardDrive />
+			<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
+				<div class="transparent-800 flex flex-1 flex-col rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<HardDrive />
+						</div>
+						<h2>Drives</h2>
 					</div>
-					<h2>Drives</h2>
-				</div>
-				<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
-					<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
-						{#each $hardwareInfo.system.storage.disks as item, i}
-							<div>
-								<div class="flex w-[95%] flex-row justify-between">
-									<p class="text-sm">{item.name} Read Speed</p>
-									<p class="text-sm text-[#969696]">{parseFloat((item.throughputRead / 1_048_576).toFixed(2))} MB/s</p>
-								</div>
-								<Progress value={parseFloat((item.throughputRead / 1_048_576).toFixed(2))} />
-							</div>
-							<div>
-								<div class="flex w-[95%] flex-row justify-between">
-									<p class="text-sm">{item.name} Write Speed</p>
-									<p class="text-sm text-[#969696]">{parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} MB/s</p>
-								</div>
-								<Progress value={parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} />
-							</div>
-						{/each}
-					</div>
-				</div>
-			</div>
-
-			<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Fan />
-					</div>
-					<h2>Fans</h2>
-				</div>
-
-				<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
-					<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
-						{#each $hardwareInfo.system.superIO.fan as item, i}
-							{#if item.value != 0}
+					<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
+						<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
+							{#each $hardwareInfo.system.storage.disks as item, i}
 								<div>
 									<div class="flex w-[95%] flex-row justify-between">
-										<p class="text-sm">{item.name}</p>
-										<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.system.superIO.fanControl[i].value)}%</p>
+										<p class="text-sm">{item.name} Read Speed</p>
+										<p class="text-sm text-[#969696]">{parseFloat((item.throughputRead / 1_048_576).toFixed(2))} MB/s</p>
 									</div>
-									<Progress value={$hardwareInfo.system.superIO.fanControl[i].value} />
+									<Progress value={parseFloat((item.throughputRead / 1_048_576).toFixed(2))} />
 								</div>
-							{/if}
-						{/each}
+								<div>
+									<div class="flex w-[95%] flex-row justify-between">
+										<p class="text-sm">{item.name} Write Speed</p>
+										<p class="text-sm text-[#969696]">{parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} MB/s</p>
+									</div>
+									<Progress value={parseFloat((item.throughputWrite / 1_048_576).toFixed(2))} />
+								</div>
+							{/each}
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="transparent-800 flex w-1/3 flex-col rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Network />
+			<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
+				{#if $hardwareInfo.system.superIO.fan.length > 0}
+					<div class="transparent-800 flex flex-1 flex-col rounded-xl p-8 sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Fan />
+							</div>
+							<h2>Fans</h2>
+						</div>
+
+						<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
+							<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
+								{#each $hardwareInfo.system.superIO.fan as item, i}
+									{#if item.value != 0}
+										<div>
+											<div class="flex w-[95%] flex-row justify-between">
+												<p class="text-sm">{item.name}</p>
+												<p class="text-sm text-[#969696]">{Math.round($hardwareInfo.system.superIO.fanControl[i].value)}%</p>
+											</div>
+											<Progress value={$hardwareInfo.system.superIO.fanControl[i].value} />
+										</div>
+									{/if}
+								{/each}
+							</div>
+						</div>
 					</div>
-					<h2>Interfaces</h2>
-				</div>
-				<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
-					<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
-						{#each $hardwareInfo.system.network.interfaces as item, i}
-							<div>
-								<div class="flex w-[95%] flex-row justify-between">
-									<p class="text-sm">{item.name} Download Speed</p>
-									<p class="text-sm text-[#969696]">{parseFloat((item.throughputDownload / 1_048_576).toFixed(2))} MB/s</p>
+				{/if}
+			</div>
+
+			<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
+				<div class="transparent-800 flex flex-1 flex-col rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Network />
+						</div>
+						<h2>Interfaces</h2>
+					</div>
+					<div class="flex flex-col items-start justify-start gap-5 md:flex-row">
+						<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-20">
+							{#each $hardwareInfo.system.network.interfaces as item, i}
+								<div>
+									<div class="flex w-[95%] flex-row justify-between">
+										<p class="text-sm">{item.name} Download Speed</p>
+										<p class="text-sm text-[#969696]">{parseFloat((item.throughputDownload / 1_048_576).toFixed(2))} MB/s</p>
+									</div>
+									<Progress value={parseFloat((item.throughputDownload / 125_000).toFixed(2))} />
 								</div>
-								<Progress value={parseFloat((item.throughputDownload / 125_000).toFixed(2))} />
-							</div>
-							<div>
-								<div class="flex w-[95%] flex-row justify-between">
-									<p class="text-sm">{item.name} Upload Speed</p>
-									<p class="text-sm text-[#969696]">{parseFloat((item.throughputUpload / 1_048_576).toFixed(2))} MB/s</p>
+								<div>
+									<div class="flex w-[95%] flex-row justify-between">
+										<p class="text-sm">{item.name} Upload Speed</p>
+										<p class="text-sm text-[#969696]">{parseFloat((item.throughputUpload / 1_048_576).toFixed(2))} MB/s</p>
+									</div>
+									<Progress value={parseFloat((item.throughputUpload / 125_000).toFixed(2))} />
 								</div>
-								<Progress value={parseFloat((item.throughputUpload / 125_000).toFixed(2))} />
-							</div>
-						{/each}
+							{/each}
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Row 2 -->
-		<div class="mx-10 mt-10 flex justify-evenly gap-5 sm:mx-3 sm:flex-wrap">
+		<div class="mx-10 flex justify-evenly gap-5 pt-5 sm:mx-3 sm:flex-wrap">
 			<!-- CPU info -->
 			<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
@@ -267,43 +275,48 @@
 					</div>
 				</div>
 
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Plug />
+				{#if $hardwareInfo.cpu.power.length > 0}
+					<div class="transparent-800 rounded-xl p-8 sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Plug />
+							</div>
+							<h2>CPU Power Usage</h2>
 						</div>
-						<h2>CPU Power Usage</h2>
+						<h3>Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
+						<div>
+							<MeterChart
+								readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)}
+								categories={$hardwareInfo.cpu.power
+									.filter((power) => power.value !== 0)
+									.map((temp) => `${temp.name.replaceAll("CPU", "")} (${temp.value} W)`)}
+								type={{ name: "power usage", unit: "W" }}
+							/>
+						</div>
 					</div>
-					<h3>Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
-					<div>
-						<MeterChart
-							readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)}
-							categories={$hardwareInfo.cpu.power
-								.filter((power) => power.value !== 0)
-								.map((temp) => `${temp.name.replaceAll("CPU", "")} (${temp.value} W)`)}
-							type={{ name: "power usage", unit: "W" }}
-						/>
-					</div>
-				</div>
+				{/if}
 
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Zap />
+				{#if $hardwareInfo.cpu.voltage.length > 0}
+					<div class="transparent-800 rounded-xl p-8 sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Zap />
+							</div>
+							<h2>CPU Voltage</h2>
 						</div>
-						<h2>CPU Voltage</h2>
+						<h3>
+							Avg. voltage: {($hardwareInfo.cpu.voltage.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.voltage.length).toFixed(1)}
+							V
+						</h3>
+						<div>
+							<MeterChart
+								readings={$hardwareInfo.cpu.voltage}
+								categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i + 1} (${temp.value} V)`)}
+								type={{ name: "voltage", unit: "V" }}
+							/>
+						</div>
 					</div>
-					<h3>
-						Avg. voltage: {($hardwareInfo.cpu.voltage.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.voltage.length).toFixed(1)} V
-					</h3>
-					<div>
-						<MeterChart
-							readings={$hardwareInfo.cpu.voltage}
-							categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i + 1} (${temp.value} V)`)}
-							type={{ name: "voltage", unit: "V" }}
-						/>
-					</div>
-				</div>
+				{/if}
 			</div>
 
 			<!-- RAM info -->
@@ -458,7 +471,7 @@
 		</div>
 
 		<!-- Row 3 -->
-		<div class="mx-10 mt-10 flex justify-evenly gap-5 pb-10 sm:mx-3 sm:flex-wrap">
+		<div class="mx-10 flex justify-evenly gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
 			<!-- Drives -->
 			<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
@@ -553,19 +566,21 @@
 					</div>
 				{/if}
 
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<CircuitBoard />
+				{#if $hardwareInfo.system.bios.vendor !== "N/A"}
+					<div class="transparent-800 rounded-xl p-8 sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<CircuitBoard />
+							</div>
+							<h2>BIOS</h2>
 						</div>
-						<h2>BIOS</h2>
+						<div class="mt-5 select-text">
+							<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
+							<h3>Version: {$hardwareInfo.system.bios.version}</h3>
+							<h3>Date: {$hardwareInfo.system.bios.date}</h3>
+						</div>
 					</div>
-					<div class="mt-5 select-text">
-						<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
-						<h3>Version: {$hardwareInfo.system.bios.version}</h3>
-						<h3>Date: {$hardwareInfo.system.bios.date}</h3>
-					</div>
-				</div>
+				{/if}
 			</div>
 
 			<!-- Network -->

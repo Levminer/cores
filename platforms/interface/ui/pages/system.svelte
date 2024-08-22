@@ -1,7 +1,7 @@
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mx-10 flex gap-5 pt-10 sm:mx-3 sm:flex-wrap">
 		<div class="flex w-full flex-row items-start justify-start gap-5 sm:flex-wrap">
-			<!-- drive info -->
+			<!-- System info -->
 			<div class="transparent-800 w-3/5 rounded-xl p-8 sm:w-full sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -18,20 +18,22 @@
 				</div>
 			</div>
 
-			<!-- drive usage -->
-			<div class="transparent-800 w-3/5 rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<CircuitBoard />
+			<!-- BIOS info -->
+			{#if $hardwareInfo.system.bios.vendor !== "N/A"}
+				<div class="transparent-800 w-3/5 rounded-xl p-8 sm:w-full sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<CircuitBoard />
+						</div>
+						<h2>BIOS</h2>
 					</div>
-					<h2>BIOS</h2>
+					<div class="mt-5 select-text">
+						<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
+						<h3>Version: {$hardwareInfo.system.bios.version}</h3>
+						<h3>Date: {$hardwareInfo.system.bios.date}</h3>
+					</div>
 				</div>
-				<div class="mt-5 select-text">
-					<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
-					<h3>Version: {$hardwareInfo.system.bios.version}</h3>
-					<h3>Date: {$hardwareInfo.system.bios.date}</h3>
-				</div>
-			</div>
+			{/if}
 		</div>
 	</div>
 
