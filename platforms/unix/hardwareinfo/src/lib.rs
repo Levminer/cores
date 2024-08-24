@@ -20,11 +20,16 @@ pub mod settings;
 
 trait Round {
     fn fmt_num(self) -> f64;
+    fn fmt_num2(self) -> f64;
 }
 
 impl Round for f64 {
     fn fmt_num(self) -> f64 {
         (self * 10.0).round() / 10.0
+    }
+
+    fn fmt_num2(self) -> f64 {
+        (self * 100.0).round() / 100.0
     }
 }
 
@@ -315,14 +320,14 @@ pub fn refresh_hardware_info(data: &mut Data) {
     }
 
     // RAM Info
-    let total_memory = (data.sys.total_memory() as f64 / gb).fmt_num();
-    let used_memory = (data.sys.used_memory() as f64 / gb).fmt_num();
-    let total_swap = (data.sys.total_swap() as f64 / gb).fmt_num();
-    let used_swap = (data.sys.used_swap() as f64 / gb).fmt_num();
-    let ram_used = ((used_memory / total_memory) * 100.0).fmt_num();
-    let swap_used = ((used_swap / total_swap) * 100.0).fmt_num();
-    let memory_available = (total_memory - used_memory).fmt_num();
-    let virtual_memory_available = (total_swap - used_swap).fmt_num();
+    let total_memory = (data.sys.total_memory() as f64 / gb).fmt_num2();
+    let used_memory = (data.sys.used_memory() as f64 / gb).fmt_num2();
+    let total_swap = (data.sys.total_swap() as f64 / gb).fmt_num2();
+    let used_swap = (data.sys.used_swap() as f64 / gb).fmt_num2();
+    let ram_used = ((used_memory / total_memory) * 100.0).fmt_num2();
+    let swap_used = ((used_swap / total_swap) * 100.0).fmt_num2();
+    let memory_available = (total_memory - used_memory).fmt_num2();
+    let virtual_memory_available = (total_swap - used_swap).fmt_num2();
 
     let mut mem_map = IndexMap::<String, f64>::new();
     mem_map.insert("Memory Used".to_string(), used_memory);
@@ -421,11 +426,23 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
                         let mut gpu_mem_map = IndexMap::<String, f64>::new();
 
-                        gpu_mem_map.insert("GPU Memory Used".to_string(), memory.used as f64);
+                        gpu_mem_map.insert(
+                            "GPU Memory Used".to_string(),
+                            (memory.used as f64 / gb).fmt_num(),
+                        );
                         gpu_mem_map.insert("N/A".to_string(), 0.0);
-                        gpu_mem_map.insert("GPU Memory Total".to_string(), memory.total as f64);
-                        gpu_mem_map.insert("GPU Memory Free".to_string(), memory.free as f64);
-                        gpu_mem_map.insert("GPU Memory Used".to_string(), memory.used as f64);
+                        gpu_mem_map.insert(
+                            "GPU Memory Total".to_string(),
+                            (memory.total as f64 / gb).fmt_num(),
+                        );
+                        gpu_mem_map.insert(
+                            "GPU Memory Free".to_string(),
+                            (memory.free as f64 / gb).fmt_num(),
+                        );
+                        gpu_mem_map.insert(
+                            "GPU Memory Used".to_string(),
+                            (memory.used as f64 / gb).fmt_num(),
+                        );
 
                         if data.first_run {
                             data.hw_info.gpu.name = device.name().unwrap();
@@ -611,7 +628,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
     if let Ok(model) = model_file {
         if model.contains("Raspberry Pi") {
-            data.hw_info.system.motherboard.name = model;
+            data.hw_info.system.motherboard.name = model.trim().to_string();
 
             // Components temperature:
             let components = Components::new_with_refreshed_list();

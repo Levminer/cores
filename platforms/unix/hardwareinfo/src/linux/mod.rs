@@ -47,8 +47,6 @@ pub fn linux_hardware_info(data: &mut Data) {
 
         data.hw_info.cpu.info[0].max_speed = cpu_info.max_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
 
-        info!("{cpu_info:?}");
-
         let cpu_data = cpu::CpuData::new(logical_cpus);
         if let Ok(temp) = cpu_data.temperature {
             data.hw_info.cpu.temperature.push(CoresSensor {
@@ -77,6 +75,28 @@ pub fn linux_hardware_info(data: &mut Data) {
                 });
                 drive_data.push(drive::DriveData::new(path));
             }
+        }
+
+        // System
+        let board_name = std::fs::read_to_string("/sys/devices/virtual/dmi/id/board_name");
+        let bios_date = std::fs::read_to_string("/sys/devices/virtual/dmi/id/bios_date");
+        let bios_version = std::fs::read_to_string("/sys/devices/virtual/dmi/id/bios_version");
+        let bios_vendor = std::fs::read_to_string("/sys/devices/virtual/dmi/id/bios_vendor");
+
+        if let Ok(model) = board_name {
+            data.hw_info.system.motherboard.name = model.trim().to_string();
+        }
+
+        if let Ok(date) = bios_date {
+            data.hw_info.system.bios.date = date.trim().to_string();
+        }
+
+        if let Ok(version) = bios_version {
+            data.hw_info.system.bios.version = version.trim().to_string();
+        }
+
+        if let Ok(vendor) = bios_vendor {
+            data.hw_info.system.bios.vendor = vendor.trim().to_string();
         }
     } else {
         // CPU
