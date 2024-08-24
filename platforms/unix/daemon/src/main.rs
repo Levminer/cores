@@ -137,11 +137,25 @@ async fn main() {
     let last_60m_hardware_info_task = tokio::spawn(async move {
         loop {
             let data = rcv.recv().await.unwrap();
-            app_state_clone
-                .last_60m_hardware_info
-                .lock()
-                .unwrap()
-                .push(data);
+
+            if app_state_clone.last_60m_hardware_info.lock().unwrap().len() > 60 {
+                app_state_clone
+                    .last_60m_hardware_info
+                    .lock()
+                    .unwrap()
+                    .remove(0);
+                app_state_clone
+                    .last_60m_hardware_info
+                    .lock()
+                    .unwrap()
+                    .push(data);
+            } else {
+                app_state_clone
+                    .last_60m_hardware_info
+                    .lock()
+                    .unwrap()
+                    .push(data);
+            }
 
             tokio::time::sleep(std::time::Duration::from_secs(60)).await;
         }
