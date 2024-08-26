@@ -15,16 +15,16 @@
 	</div>
 
 	<!-- step 2 -->
-	<div class="step2 hidden justify-center rounded-2xl bg-black/30 p-10 py-20 shadow-md backdrop-blur-xl">
+	<div class="step2 hidden justify-center rounded-2xl bg-black/30 p-10 py-10 shadow-md backdrop-blur-xl">
 		<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 			<div class="flex w-full flex-col">
 				<div class="mb-10">
-					<h2 class="mb-1 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Activate Cores</h2>
+					<h1 class="mb-1 bg-gradient-to-r bg-clip-text text-center font-extrabold text-white md:text-8xl">Activate Cores</h1>
 				</div>
 
 				<div class="mt-1 flex flex-row justify-between gap-5 sm:flex-col">
 					<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-						<div class=" flex flex-row flex-wrap gap-3">
+						<div class="flex flex-row flex-wrap gap-3">
 							<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
 								<h1
 									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
@@ -139,31 +139,24 @@
 							</div>
 						</div>
 
-						<div class="mt-4 flex flex-wrap justify-center gap-2 text-center text-lg">
-							<Popover.Root>
-								<Popover.Trigger
-									title="Trial over! Activate Cores!"
-									class="disabled:cursor-not-allowed disabled:opacity-50"
-									disabled={trialOver}>Get started for free</Popover.Trigger
-								>
-								<Popover.Content
-									class="z-30 w-full max-w-[300px] rounded-[12px] border border-cyan-600 bg-cyan-700 p-3 text-left"
-									transition={flyAndScale}
-									sideOffset={8}
-								>
-									<div class="flex flex-col text-center">
-										<h4 class="mb-2">Get started for free</h4>
-										<!-- <h5>You can use Cores for 7 days, after that you will need to buy it.</h5> -->
-										<h5>
-											During the beta period you can use Cores for free, please consider buying it to support the development.
-										</h5>
-									</div>
-									<Popover.Close on:click={free} class="smallButton my-4 w-full">
-										<CircleCheck />
-										Continue</Popover.Close
+						<div class="mt-4 flex flex-wrap justify-center text-center text-lg">
+							<div
+								class="mx-auto flex w-full flex-row items-center justify-between rounded-xl border-2 border-purple-400 p-5 text-left"
+							>
+								<div>
+									<h2
+										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
 									>
-								</Popover.Content>
-							</Popover.Root>
+										Get started for free
+									</h2>
+									<p class="text-base leading-tight">
+										During the beta period you can use Cores for free, <br /> please consider buying it to support the development.
+									</p>
+								</div>
+								<div>
+									<button on:click={free} class="smallButton">Continue</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -173,39 +166,54 @@
 
 	<!-- step 3 -->
 	<div class="step3 mx-auto hidden w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-20 shadow-md backdrop-blur-xl">
-		<div class="mb-10 text-center">
+		<div class="text-center">
 			<h1 class="mb-2">Welcome to Cores!</h1>
 		</div>
-		<div class="mx-auto flex w-full flex-col items-center justify-center">
-			<div class="flex flex-col gap-3">
-				<button
-					on:click={() => {
-						router.goto("/home", true)
-					}}
-					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
-				>
-					<Home />
-					Explore the home screen
-				</button>
-				<button
-					on:click={() => {
-						router.goto("/connections", true)
-					}}
-					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
-				>
-					<Globe />
-					Setup remote connections
-				</button>
-				<button
-					on:click={() => {
-						router.goto("/settings", true)
-					}}
-					class="transparent-900 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
-				>
-					<Settings />
-					Configure monitoring settings
-				</button>
-			</div>
+		<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
+			<button
+				on:click={() => {
+					router.goto("/home", true)
+				}}
+				class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
+			>
+				<Home size="30" />
+
+				<div class="text-left">
+					<h2>Explore the home screen</h2>
+
+					<h3>You can see every component on the home screen.</h3>
+				</div>
+			</button>
+
+			<button
+				on:click={() => {
+					router.goto("/connections", true)
+				}}
+				class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
+			>
+				<Globe size="30" />
+
+				<div class="text-left">
+					<h2>Setup remote connections</h2>
+
+					<h3>You can setup remote connections to monitor <br /> your computer from anywhere.</h3>
+				</div>
+			</button>
+
+			<button
+				on:click={() => {
+					router.goto("/connections", true)
+				}}
+				class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
+			>
+				<Settings size="30" />
+
+				<div class="text-left">
+					<h2>Configure monitoring settings</h2>
+
+					<h3>You can configure the refresh rate and interval of the sensors.</h3>
+				</div>
+			</button>
 		</div>
 	</div>
 </div>
@@ -214,10 +222,8 @@
 	import { open } from "@tauri-apps/plugin-shell"
 	import Dialog from "ui/components/dialog.svelte"
 	import { router } from "@baileyherbert/tinro"
-	import { Globe, MoveRight, ShoppingCart, Home, CircleCheck, Settings, Check } from "lucide-svelte"
+	import { Globe, MoveRight, Home, CircleCheck, Settings, Check } from "lucide-svelte"
 	import { settings } from "../stores/settings.ts"
-	import { Popover } from "bits-ui"
-	import { flyAndScale } from "../utils/transitions.ts"
 	import build from "../../../../build.json"
 	import { onMount } from "svelte"
 
