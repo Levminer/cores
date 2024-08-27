@@ -6,7 +6,6 @@
 		"beforeDevCommand": "npm run dev:app",
 		"devUrl": "http://localhost:3000",
 		"beforeBuildCommand": "npm run build:app",
-		"beforeBundleCommand": "npm run sign ./target/release/Cores.exe",
 		"frontendDist": "../../dist"
 	},
 	"app": {
@@ -31,7 +30,7 @@
 	},
 	"bundle": {
 		"active": true,
-		"targets": "all",
+		"targets": ["deb", "rpm", "appimage", "msi", "app", "dmg"],
 		"createUpdaterArtifacts": "v1Compatible",
 		"category": "Utility",
 		"publisher": "Levminer",
@@ -43,6 +42,7 @@
 				"fragmentPaths": ["wix/service.wxs"],
 				"componentRefs": ["ServiceEntry"]
 			},
+			"signCommand": "trusted-signing-cli %1 -e 'https://wus2.codesigning.azure.net' -a mnr -c Profile3",
 			"webviewInstallMode": {
 				"type": "skip"
 			}

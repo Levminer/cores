@@ -55,7 +55,7 @@ jobs:
 
             - name: Sign service executable
               run: |
-                npm run sign platforms/windows/service/bin/exe/CoresService.exe
+                trusted-signing-cli platforms/windows/service/bin/exe/CoresService.exe -e 'https://wus2.codesigning.azure.net' -a mnr -c Profile3
 
             # Build service installer
             - name: Build service installer
@@ -67,10 +67,6 @@ jobs:
               with:
                   path: package.json
                   prop_path: version
-
-            - name: Sign service installer
-              run: |
-                npm run sign target/release/bundle/msi/Cores_${{steps.version.outputs.prop}}_x64_en-US.msi
 
             - name: Remove useless folders
               run: |

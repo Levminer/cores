@@ -18,7 +18,6 @@
 		"build:web": "node scripts/buildNumber.cjs beta false && npm run build -w web",
 		"check": "npm run check -w app",
 		"rename": "node scripts/rename.js",
-		"sign": "node scripts/sign.js",
 		"tauri": "tauri"
 	},
 	"devDependencies": {
