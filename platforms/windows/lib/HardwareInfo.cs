@@ -137,17 +137,20 @@ public class HardwareInfo {
 
 					// CPU Power
 					for (int j = 0; j < powerSensors.Length; j++) {
-						var data2 = new Sensor {
-							Name = powerSensors[j].Name,
-							Value = (float)Math.Round(powerSensors[j].Value ?? 0),
-							Min = (float)Math.Round(powerSensors[j].Min ?? 0),
-							Max = (float)Math.Round(powerSensors[j].Max ?? 0),
-						};
+						// CPU power is buggy on wake from sleep
+						if (powerSensors[j].Max < 2000 && powerSensors[j].Value < 2000) {
+							var data2 = new Sensor {
+								Name = powerSensors[j].Name,
+								Value = (float)Math.Round(powerSensors[j].Value ?? 0),
+								Min = (float)Math.Round(powerSensors[j].Min ?? 0),
+								Max = (float)Math.Round(powerSensors[j].Max ?? 0),
+							};
 
-						if (firstRun) {
-							API.CPU.Power.Add(data2);
-						} else {
-							API.CPU.Power[j] = data2;
+							if (firstRun) {
+								API.CPU.Power.Add(data2);
+							} else {
+								API.CPU.Power[j] = data2;
+							}
 						}
 					}
 
@@ -531,6 +534,21 @@ public class HardwareInfo {
 						}
 					}
 
+					for (int j = 0; j < fanControlSensors.Length; j++) {
+						var data = new Sensor {
+							Name = fanControlSensors[j].Name,
+							Value = (float)Math.Round(fanControlSensors[j].Value ?? 0),
+							Min = (float)Math.Round(fanControlSensors[j].Min ?? 0),
+							Max = (float)Math.Round(fanControlSensors[j].Max ?? 0),
+						};
+
+						if (firstRun) {
+							API.System.SuperIO.FanControl.Add(data);
+						} else {
+							API.System.SuperIO.FanControl[j] = data;
+						}
+					}
+
 					for (int j = 0; j < fanSensors.Length; j++) {
 						var data = new Sensor {
 							Name = fanSensors[j].Name,
@@ -544,20 +562,33 @@ public class HardwareInfo {
 						} else {
 							API.System.SuperIO.Fan[j] = data;
 						}
-					}
 
-					for (int j = 0; j < fanControlSensors.Length; j++) {
-						var data = new Sensor {
-							Name = fanControlSensors[j].Name,
-							Value = (float)Math.Round(fanControlSensors[j].Value ?? 0),
-							Min = (float)Math.Round(fanControlSensors[j].Min ?? 0),
-							Max = (float)Math.Round(fanControlSensors[j].Max ?? 0),
-						};
+						try {
+							if (fanSensors[j].Value != 0 && fanControlSensors[j].Value == null) {
+								var maxRPM = 2000;
 
-						if (firstRun) {
-							API.System.SuperIO.FanControl.Add(data);
-						} else {
-							API.System.SuperIO.FanControl[j] = data;
+								if (j == 0) {
+									maxRPM = 1700;
+								} else if (j == 1) {
+									maxRPM = 2500;
+								}
+
+								var data2 = new Sensor {
+									Name = fanSensors[j].Name,
+									Value = (float)Math.Round(fanSensors[j].Value / maxRPM * 100 ?? 0),
+									Min = (float)Math.Round(fanSensors[j].Min / maxRPM * 100 ?? 0),
+									Max = (float)Math.Round(fanSensors[j].Max / maxRPM * 100 ?? 0),
+								};
+
+								if (firstRun) {
+									API.System.SuperIO.FanControl.Add(data2);
+								} else {
+									API.System.SuperIO.FanControl[j] = data2;
+								}
+							}
+						}
+						catch (Exception) {
+							Log.Error("Failed to calculate fan speed");
 						}
 					}
 				}

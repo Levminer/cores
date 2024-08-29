@@ -18,8 +18,8 @@
 	<div class="step2 hidden justify-center rounded-2xl bg-black/30 p-10 py-10 shadow-md backdrop-blur-xl">
 		<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 			<div class="flex w-full flex-col">
-				<div class="mb-10">
-					<h1 class="mb-1 bg-gradient-to-r bg-clip-text text-center font-extrabold text-white md:text-8xl">Activate Cores</h1>
+				<div class="mb-5">
+					<h1 class="bg-gradient-to-r bg-clip-text text-center font-extrabold text-white">Activate Cores</h1>
 				</div>
 
 				<div class="mt-1 flex flex-row justify-between gap-5 sm:flex-col">
