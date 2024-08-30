@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace service;
 public class RTCServer {
-	internal static EzRTCHost EzRTCHost = new(new Uri("wss://rtc-usw.levminer.com/one-to-many"), Program.Settings.connectionCode, new List<RTCIceServer> { new RTCIceServer { urls = "stun:openrelay.metered.ca:80" }, new RTCIceServer { urls = "turn:standard.relay.metered.ca:443", credential = "hZA1e3RHAhw70JoP", username = "34a987bde7c718428704bde7", credentialType = RTCIceCredentialType.password }, new RTCIceServer { urls = "turn:standard.relay.metered.ca:80", credential = "hZA1e3RHAhw70JoP", username = "34a987bde7c718428704bde7", credentialType = RTCIceCredentialType.password } });
+	internal static EzRTCHost EzRTCHost = new(new Uri("wss://rtc-usw.levminer.com/one-to-many"), Program.Settings.connectionCode, new List<RTCIceServer> { new RTCIceServer { urls = "stun:stun.cloudflare.com:3478" } });
 	internal static bool stop = false;
 
 	public void Start(HardwareInfo hardwareInfo) {
