@@ -6,7 +6,7 @@
 		<p class="hidden md:block">Power</p>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content
-		class="bg-background shadow-popover w-full max-w-[229px] rounded-xl bg-gray-700 p-1"
+		class="bg-background shadow-xl w-full max-w-[230px] overflow-hidden rounded-xl bg-gray-600"
 		transition={flyAndScale}
 		sideOffset={8}
 	>
@@ -14,7 +14,7 @@
 			on:click={() => {
 				action("disconnect")
 			}}
-			class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
 		>
 			<div class="flex items-center">
 				<ScreenShareOff />
@@ -23,12 +23,12 @@
 				<h4>Disconnect</h4>
 			</div>
 		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="my-1 -ml-1 -mr-1 block h-px bg-gray-600" />
+		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
 		<DropdownMenu.Item
 			on:click={() => {
 				action("sleep")
 			}}
-			class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
 		>
 			<div class="flex items-center">
 				<Moon />
@@ -37,12 +37,12 @@
 				<h4>Sleep</h4>
 			</div>
 		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="my-1 -ml-1 -mr-1 block h-px bg-gray-600" />
+		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
 		<DropdownMenu.Item
 			on:click={() => {
 				action("shutdown")
 			}}
-			class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
 		>
 			<div class="flex items-center">
 				<Power />
@@ -51,12 +51,12 @@
 				<h4>Shut down</h4>
 			</div>
 		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="my-1 -ml-1 -mr-1 block h-px bg-gray-600" />
+		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
 		<DropdownMenu.Item
 			on:click={() => {
 				action("restart")
 			}}
-			class="flex cursor-pointer select-none items-center gap-3 rounded-xl p-2 duration-200 ease-in-out data-[highlighted]:bg-gray-600"
+			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
 		>
 			<div class="flex items-center">
 				<RotateCcw />
