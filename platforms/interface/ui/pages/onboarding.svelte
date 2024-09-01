@@ -41,25 +41,33 @@
 											on:click={() => {
 												open("https://link.levminer.com/buy-cores-app")
 											}}
-											class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+											class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 										>
+											<ShoppingCart />
 											Buy
 										</button>
 										<div class="mt-3 flex justify-center">
-											<Dialog
-												action={activate}
+											<ModularDialog
 												title={"Activate Cores"}
 												description={"Use the license key from your purchase confirmation email to activate Cores."}
 											>
-												<span class="flex flex-row items-center justify-center gap-1" slot="button">
-													<CircleCheck />
-													Activate license
-												</span>
+												<slot slot="openButton">
+													<Dialog.Trigger class="smallButton w-full">
+														<CircleCheck />
+														Activate license
+													</Dialog.Trigger>
+												</slot>
+												<slot slot="confirmButton">
+													<Dialog.Close on:click={() => activate()} class="smallButton">
+														<CircleCheck />
+														Activate license
+													</Dialog.Close>
+												</slot>
 												<div>
 													<h5>License key</h5>
 													<input class="input mt-1" type="text" id="key" />
 												</div>
-											</Dialog>
+											</ModularDialog>
 										</div>
 									</div>
 								</div>
@@ -98,23 +106,31 @@
 											href="mailto:cores@levminer.com"
 											class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 										>
+											<Mail />
 											Get a quote
 										</a>
 										<div class="mt-3 flex justify-center">
-											<Dialog
-												action={activate}
+											<ModularDialog
 												title={"Activate Cores"}
 												description={"Use the license key from your purchase confirmation email to activate Cores."}
 											>
-												<span class="flex flex-row items-center justify-center gap-1" slot="button">
-													<CircleCheck />
-													Activate license
-												</span>
+												<slot slot="openButton">
+													<Dialog.Trigger class="smallButton w-full">
+														<CircleCheck />
+														Activate license
+													</Dialog.Trigger>
+												</slot>
+												<slot slot="confirmButton">
+													<Dialog.Close on:click={() => activate()} class="smallButton">
+														<CircleCheck />
+														Activate license
+													</Dialog.Close>
+												</slot>
 												<div>
 													<h5>License key</h5>
 													<input class="input mt-1" type="text" id="key" />
 												</div>
-											</Dialog>
+											</ModularDialog>
 										</div>
 									</div>
 								</div>
@@ -220,9 +236,10 @@
 
 <script lang="ts">
 	import { open } from "@tauri-apps/plugin-shell"
-	import Dialog from "ui/components/dialog.svelte"
+	import ModularDialog from "ui/components/modularDialog.svelte"
+	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
-	import { Globe, MoveRight, Home, CircleCheck, Settings, Check } from "lucide-svelte"
+	import { Globe, MoveRight, Home, CircleCheck, Settings, Check, ShoppingCart, Mail } from "lucide-svelte"
 	import { settings } from "../stores/settings.ts"
 	import build from "../../../../build.json"
 	import { onMount } from "svelte"

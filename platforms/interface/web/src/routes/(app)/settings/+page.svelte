@@ -2,12 +2,20 @@
 	<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
 		<!-- remote connections link -->
 		<div class="hidden">
-			<Dialog
+			<ModularDialog
 				open={dialogOpen}
 				title={"Add Remote Connection"}
 				description={"You can get your connection code from the Cores desktop app."}
-				action={addConnectionCode}
 			>
+				<slot slot="openButton">
+					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
+				</slot>
+				<slot slot="confirmButton">
+					<Dialog.Close on:click={() => addConnectionCode()} class="smallButton">
+						<Plus class="h-5 w-5" />
+						Add
+					</Dialog.Close>
+				</slot>
 				<div class="flex flex-col flex-wrap gap-3">
 					<div>
 						<h5>Name <span class="text-red-500">*</span></h5>
@@ -24,7 +32,7 @@
 						<input placeholder="AA:BB:CC:DD:EE:FF" class="input mt-1" type="text" id="mac" />
 					</div>
 				</div>
-			</Dialog>
+			</ModularDialog>
 		</div>
 
 		<!-- feedback -->
@@ -81,11 +89,11 @@
 
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
-	import Dialog from "ui/components/dialog.svelte"
-	import { Trash2, MonitorSmartphone, Info, Pencil, Power, Megaphone, Github } from "lucide-svelte"
+	import { Info, Plus, Megaphone, Github } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import { onMount } from "svelte"
-	import { state } from "../../../stores/state.ts"
+	import ModularDialog from "ui/components/modularDialog.svelte"
+	import { Dialog } from "bits-ui"
 
 	$: dialogOpen = false
 
