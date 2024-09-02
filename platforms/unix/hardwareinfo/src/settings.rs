@@ -17,6 +17,11 @@ const fn default_false() -> bool {
 const fn default_true() -> bool {
     true
 }
+
+const fn default_connection_codes() -> Vec<ConnectionCode> {
+    Vec::new()
+}
+
 pub fn default_connection_code() -> String {
     let id: String = Uuid::new_v4()
         .to_string()
@@ -29,6 +34,13 @@ pub fn default_connection_code() -> String {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct ConnectionCode {
+    pub name: String,
+    pub code: String,
+    pub mac: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -38,6 +50,8 @@ pub struct Settings {
     pub launch_on_startup: bool,
     #[serde(rename = "remoteConnections", default = "default_false")]
     pub remote_connections: bool,
+    #[serde(rename = "connectionCodes", default = "default_connection_codes")]
+    pub connection_codes: Vec<ConnectionCode>,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
     pub connection_code: String,
     #[serde(rename = "licenseKey", default = "default_string")]
@@ -76,6 +90,7 @@ fn check_if_settings_exits() {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        connection_codes: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),
@@ -106,6 +121,7 @@ pub fn get_settings() -> Settings {
         launch_on_startup: false,
         remote_connections: false,
         connection_code: default_connection_code(),
+        connection_codes: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),

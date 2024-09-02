@@ -104,52 +104,6 @@
 	import ModularDialog from "ui/components/modularDialog.svelte"
 	import { Plus } from "lucide-svelte"
 	import { Dialog } from "bits-ui"
+	import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "ui/utils/connection.ts"
 
-	const addConnectionCode = () => {
-		const nameInput = document.getElementById("name") as HTMLInputElement
-		const codeInput = document.getElementById("code") as HTMLInputElement
-		const macInput = document.getElementById("mac") as HTMLInputElement
-
-		if (nameInput.value === "") {
-			return alert("Please enter a name for your connection")
-		}
-
-		if (!codeInput.value.startsWith("crs_")) {
-			return alert("Invalid connection code! The connection code must start with: crs_")
-		}
-
-		$settings.connectionCodes = [
-			...$settings.connectionCodes,
-			{
-				name: nameInput.value,
-				code: codeInput.value,
-				mac: macInput.value,
-			},
-		]
-	}
-
-	const deleteConnectionCode = (code: string) => {
-		$settings.connectionCodes = $settings.connectionCodes.filter((item) => item.code !== code)
-	}
-
-	const editConnectionCode = (code: string) => {
-		const nameInput = document.getElementById("name") as HTMLInputElement
-		const codeInput = document.getElementById("code") as HTMLInputElement
-		const macInput = document.getElementById("mac") as HTMLInputElement
-
-		if (nameInput.value === "") {
-			return alert("Please enter a name for your connection")
-		}
-
-		if (!codeInput.value.startsWith("crs_")) {
-			return alert("Invalid connection code! The connection code must start with: crs_")
-		}
-
-		let id = $settings.connectionCodes.findIndex((item) => item.code === code)
-		$settings.connectionCodes[id] = {
-			name: nameInput.value,
-			code: codeInput.value,
-			mac: macInput.value,
-		}
-	}
 </script>

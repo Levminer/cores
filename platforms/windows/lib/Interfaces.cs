@@ -29,11 +29,7 @@ public class ProtocolData {
 	public string FilePath { get; set; }
 	public string SystemInfo { get; set; }
 	public string Settings { get; set; }
-}
-
-public class ProtocolMessage {
-	public string Type { get; set; }
-	public ProtocolData Data { get; set; }
+	public string Mac { get; set; }
 }
 
 public class Disk {

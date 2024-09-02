@@ -99,7 +99,7 @@ public class Server {
 			string requestBody = await reader.ReadToEndAsync();
 
 			try {
-				var message = JsonSerializer.Deserialize<ProtocolMessage>(requestBody, Program.SerializerOptions);
+				var message = JsonSerializer.Deserialize<GenericMessage<ProtocolData>>(requestBody, Program.SerializerOptions);
 
 				if (message.Type == "new_settings") {
 					var newSettings = JsonSerializer.Deserialize<Settings>(message.Data.Settings);
@@ -111,6 +111,10 @@ public class Server {
 					var contents = $"{message.Data.SystemInfo}\n{hardwareInfo.computer.GetReport()}";
 
 					File.WriteAllText(message.Data.FilePath, contents);
+				}
+
+				if (message.Type == "wol") {
+					Commands.HandleRemoteMessage(JsonSerializer.Serialize(new GenericMessage<string> { Data = message.Data.Mac, Type = message.Type }, Program.SerializerOptions));
 				}
 
 				// Send a response

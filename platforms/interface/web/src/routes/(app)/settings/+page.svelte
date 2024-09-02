@@ -36,7 +36,7 @@
 		</div>
 
 		<!-- feedback -->
-		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -47,7 +47,7 @@
 				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (cores@levminer.com).</h3>
 			</div>
 
-			<div class="flex flex-col items-start gap-3">
+			<div class="flex flex-col items-start gap-3 sm:my-5">
 				<button
 					class="button"
 					on:click={() => {
@@ -94,6 +94,7 @@
 	import { onMount } from "svelte"
 	import ModularDialog from "ui/components/modularDialog.svelte"
 	import { Dialog } from "bits-ui"
+	import { addConnectionCode } from "ui/utils/connection.ts"
 
 	$: dialogOpen = false
 
@@ -122,27 +123,4 @@
 			}, 250)
 		}
 	})
-
-	const addConnectionCode = () => {
-		const nameInput = document.getElementById("name") as HTMLInputElement
-		const codeInput = document.getElementById("code") as HTMLInputElement
-		const macInput = document.getElementById("mac") as HTMLInputElement
-
-		if (nameInput.value === "") {
-			return alert("Please enter a name for your connection")
-		}
-
-		if (!codeInput.value.startsWith("crs_")) {
-			return alert("Invalid connection code! The connection code must start with: crs_")
-		}
-
-		$settings.connectionCodes = [
-			...$settings.connectionCodes,
-			{
-				name: nameInput.value,
-				code: codeInput.value,
-				mac: macInput.value,
-			},
-		]
-	}
 </script>

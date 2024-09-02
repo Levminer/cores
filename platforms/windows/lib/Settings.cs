@@ -13,12 +13,19 @@ public class DefaultValues {
 	}
 }
 
+public class ConnectionCode {
+	public string name;
+	public string code;
+	public string mac;
+}
+
 public class DefaultSettings {
 	public int interval { get; set; } = 2;
 	public bool minimizeToTray { get; set; } = true;
 	public bool launchOnStartup { get; set; } = false;
 	public bool remoteConnections { get; set; } = false;
 	public bool optionalAnalytics { get; set; } = true;
+	public List<ConnectionCode> connectionCodes = new();
 	public string connectionCode { get; set; } = DefaultValues.Generate();
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
@@ -74,6 +81,7 @@ public class Settings : DefaultSettings {
 			remoteConnections = settings?.remoteConnections ?? defaultSettings.remoteConnections;
 			optionalAnalytics = settings?.optionalAnalytics ?? defaultSettings.optionalAnalytics;
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
+			connectionCodes = settings?.connectionCodes ?? defaultSettings.connectionCodes;
 			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
 			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			userId = settings?.userId ?? defaultSettings.userId;
