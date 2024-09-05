@@ -110,7 +110,7 @@
 				</div>
 
 				<div class="mt-5 flex w-full flex-col gap-5">
-					{#each $settings.connectionCodes as item}
+					{#each $settings.connectionCodes.filter((item) => item.code !== $settings.connectionCode) as item, i}
 						<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
 							<div class="flex flex-row flex-wrap gap-3">
 								<div>
