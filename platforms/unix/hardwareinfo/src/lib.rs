@@ -4,6 +4,7 @@ use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
 use serde::{Deserialize, Serialize};
+use std::time::SystemTime;
 use std::{
     env,
     net::{IpAddr, Ipv4Addr},
@@ -117,8 +118,13 @@ pub struct CoresDisk {
     pub free_space: u64,
     pub throughput_read: f64,
     pub throughput_write: f64,
+    pub data_read: f64,
+    pub data_written: f64,
     pub temperature: CoresSensor,
     pub health: String,
+    pub read_sectors: usize,
+    pub write_sectors: usize,
+    pub last_timestamp: SystemTime,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
