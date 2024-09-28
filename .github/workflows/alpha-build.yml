@@ -1,4 +1,4 @@
-name: Alpha build
+name: Alpha Windows build
 
 on: push
 

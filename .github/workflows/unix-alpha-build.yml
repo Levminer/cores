@@ -1,0 +1,58 @@
+name: Alpha Unix build
+
+on: push
+
+jobs:
+    build:
+        strategy:
+            matrix:
+                include:
+                    - os: macos-latest
+                      NAME: macos
+                    - os: ubuntu-latest
+                      NAME: linux
+
+        runs-on: ${{ matrix.os}}
+
+        env:
+            TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+            SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install cross-rs
+              run: cargo install cross
+
+            - name: Build service executable
+              if: matrix.NAME == 'linux'
+              run: cd platforms/unix/daemon && cargo build --release && cross build --release --target aarch64-unknown-linux-gnu
+
+            - name: Install node modules
+              run: npm ci
+
+            # Build service installer
+            - name: Build service installer
+              run: npm run build:core
+
+            - name: Get version
+              id: version
+              uses: notiz-dev/github-action-json-property@release
+              with:
+                  path: package.json
+                  prop_path: version
+
+            - name: Remove useless folders
+              run: |
+                  rm -rf target/release/build
+                  rm -rf target/release/deps
+                  rm -rf target/release/bundle/appimage/authme.AppDir
+                  npm run rename
+              shell: bash
+
+            # Upload the unpackaged app
+            - name: Upload service installer
+              uses: actions/upload-artifact@v4
+              with:
+                  name: "cores-service-${{matrix.NAME}}-x64-installer"
+                  path: "target/release"
