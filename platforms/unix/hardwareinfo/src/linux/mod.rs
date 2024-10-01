@@ -1,7 +1,5 @@
+use log::debug;
 use std::{sync::LazyLock, time::SystemTime};
-
-use drive::DriveData;
-use log::{debug, info};
 
 use crate::{compare_sensor, CoresDisk, CoresRAMInfo, CoresSensor, Data, Round};
 
@@ -104,12 +102,14 @@ pub fn linux_hardware_info(data: &mut Data) {
         }
     } else {
         // CPU
-        let logical_cpus = data.sys.cpus().len();
-        let prev_temp = data.hw_info.cpu.temperature[0].clone();
+        if data.hw_info.cpu.temperature.len() > 0 {
+            let logical_cpus = data.sys.cpus().len();
+            let prev_temp = data.hw_info.cpu.temperature[0].clone();
 
-        let cpu_data = cpu::CpuData::new(logical_cpus);
-        if let Ok(temp) = cpu_data.temperature {
-            data.hw_info.cpu.temperature[0] = compare_sensor(&prev_temp, temp as f64);
+            let cpu_data = cpu::CpuData::new(logical_cpus);
+            if let Ok(temp) = cpu_data.temperature {
+                data.hw_info.cpu.temperature[0] = compare_sensor(&prev_temp, temp as f64);
+            }
         }
 
         // Drives
@@ -151,11 +151,4 @@ pub fn linux_hardware_info(data: &mut Data) {
             }
         }
     }
-
-    // let disks = &data.hw_info.system.storage.disks;
-    // for disk in disks {
-    //     let inner = &disk.inner;
-    //     let time_passed = 5.0;
-    //     let delta_write_sectors = inner.clone().sys_stats().unwrap().get("write_sectors").unwrap_or(&0).saturating_sub(rhs);
-    // }
 }
