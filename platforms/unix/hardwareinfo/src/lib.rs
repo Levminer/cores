@@ -42,6 +42,7 @@ pub struct Data {
     pub first_run: bool,
     pub nvml: Result<Nvml, nvml_wrapper::error::NvmlError>,
     pub nvml_available: bool,
+    pub interval: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -303,7 +304,6 @@ fn compare_sensor(prev_sensor: &CoresSensor, value: f64) -> CoresSensor {
 pub fn refresh_hardware_info(data: &mut Data) {
     let gb = 1024_f64.powi(3);
     let _mb = 1024_f64.powi(2);
-    let interval = 5.0;
 
     // OS Info
     if data.first_run {
@@ -605,8 +605,8 @@ pub fn refresh_hardware_info(data: &mut Data) {
                     let download_data = (net_data.total_received() as f64 / gb).fmt_num();
                     let upload_data = (net_data.total_transmitted() as f64 / gb).fmt_num();
 
-                    let throughput_download = net_data.received() as f64 / interval;
-                    let throughput_upload = net_data.transmitted() as f64 / interval;
+                    let throughput_download = net_data.received() as f64 / data.interval;
+                    let throughput_upload = net_data.transmitted() as f64 / data.interval;
 
                     data.hw_info.system.network.interfaces[0].download_data = download_data;
                     data.hw_info.system.network.interfaces[0].upload_data = upload_data;
