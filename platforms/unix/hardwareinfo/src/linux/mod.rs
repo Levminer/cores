@@ -64,10 +64,12 @@ pub fn linux_hardware_info(data: &mut Data) {
             if !d.is_virtual {
                 let inner = &d.inner;
 
+                let drive_space = drive::get_free_space(path);
+
                 data.hw_info.system.storage.disks.push(CoresDisk {
                     name: inner.clone().model.unwrap_or("N/A".to_string()),
                     total_space: inner.clone().capacity().unwrap_or(1) / 1000 / 1000 / 1000,
-                    free_space: 0,
+                    free_space: drive_space,
                     throughput_read: 0.0,
                     throughput_write: 0.0,
                     data_read: 0.0,
