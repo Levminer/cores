@@ -10,6 +10,7 @@ fn main() {
         hw_info: HardwareInfo::default(),
         nvml: Nvml::init(),
         nvml_available: true,
+        interval: 5.0,
     };
 
     loop {

@@ -1,9 +1,11 @@
 use anyhow::{Context, Result};
+use core::str;
 use regex::Regex;
 use std::{
     collections::HashMap,
     fmt::Display,
     path::{Path, PathBuf},
+    process::Command,
     sync::LazyLock,
 };
 
@@ -287,5 +289,31 @@ impl Drive {
             | DriveType::Zram => true,
             _ => self.capacity().unwrap_or(0) == 0,
         }
+    }
+}
+
+pub fn get_free_space(path: &PathBuf) -> u64 {
+    // Define the device path as a variable
+    let path_str = path.to_str().unwrap_or("").replace("/sys/block/", "/dev/");
+
+    // Construct the command string
+    let command = format!(
+        "lsblk -bno FSAVAIL,MOUNTPOINT {} | awk '{{sum += $1}} END {{print sum / (1024^3) \"\"}}'",
+        path_str
+    );
+
+    // Execute the command
+    let output = Command::new("sh").arg("-c").arg(&command).output();
+
+    // Check if the command was successful
+    if let Ok(output) = output {
+        // Print the command's standard output
+        if let Ok(result) = str::from_utf8(&output.stdout) {
+            return (result.trim().parse::<f64>().unwrap_or(0.0) * 1.074) as u64;
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
     }
 }

@@ -11,7 +11,7 @@ use axum::{
 use ezrtc::host::EzRTCHost;
 use ezrtc::socket::DataChannelHandler;
 use futures::{sink::SinkExt, stream::StreamExt};
-use hardwareinfo::settings::get_settings;
+use hardwareinfo::settings::{get_settings, Settings};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
 use serde::{Deserialize, Serialize};
@@ -41,6 +41,7 @@ pub struct AppState {
     hardware_info_receiver: async_channel::Receiver<HardwareInfo>,
     last_60s_hardware_info: Mutex<Vec<HardwareInfo>>,
     last_60m_hardware_info: Mutex<Vec<HardwareInfo>>,
+    settings: Settings,
 }
 
 #[tokio::main]
@@ -54,6 +55,10 @@ async fn main() {
     )])
     .unwrap();
 
+    // Get settings
+    let settings = get_settings();
+    info!("Connection code: {:?}", settings.connection_code);
+
     // Hardware info channel
     let (s, r) = async_channel::unbounded();
 
@@ -64,12 +69,14 @@ async fn main() {
         hw_info: HardwareInfo::default(),
         nvml: Nvml::init(),
         nvml_available: true,
+        interval: settings.interval as f64,
     };
 
     let app_state = Arc::new(AppState {
         hardware_info_receiver: r.clone(),
         last_60s_hardware_info: Mutex::new(Vec::new()),
         last_60m_hardware_info: Mutex::new(Vec::new()),
+        settings: settings.clone(),
     });
 
     // Setup HTTP server routes
@@ -127,7 +134,7 @@ async fn main() {
                     .push(data.hw_info.clone());
             }
 
-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+            tokio::time::sleep(std::time::Duration::from_secs(settings.interval as u64)).await;
         }
     });
 
@@ -347,10 +354,6 @@ async fn main() {
             }
         }
 
-        // Get settings
-        let settings = get_settings();
-        info!("Connection code: {:?}", settings.connection_code);
-
         // Start the connection
         let _host = EzRTCHost::new(
             "wss://rtc-usw.levminer.com/one-to-many".to_string(),
@@ -485,7 +488,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
                 break;
             }
 
-            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+            tokio::time::sleep(std::time::Duration::from_secs(state.settings.interval as u64)).await;
         }
 
         match sender
