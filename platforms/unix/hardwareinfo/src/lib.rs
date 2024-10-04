@@ -4,6 +4,8 @@ use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
 use serde::{Deserialize, Serialize};
+use starship_battery::units::energy::milliwatt_hour;
+use starship_battery::units::ratio::percent;
 use std::time::SystemTime;
 use std::{
     env,
@@ -175,6 +177,15 @@ pub struct CoresMotherboard {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresBattery {
+    pub cycle_count: String,
+    pub level: Vec<CoresSensor>,
+    pub remaining_time: CoresSensor,
+    pub capacity: Vec<CoresSensor>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresBIOS {
     pub vendor: String,
     pub version: String,
@@ -199,6 +210,7 @@ pub struct CoresSystem {
     pub bios: CoresBIOS,
     pub superIO: CoresSuperIO,
     pub monitor: CoresMonitor,
+    pub battery: CoresBattery,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -267,6 +279,12 @@ impl HardwareInfo {
                 },
                 monitor: CoresMonitor {
                     monitors: Vec::new(),
+                },
+                battery: CoresBattery {
+                    cycle_count: "N/A".to_string(),
+                    level: Vec::new(),
+                    remaining_time: CoresSensor::default(),
+                    capacity: Vec::new(),
                 },
             },
         }
@@ -663,6 +681,77 @@ pub fn refresh_hardware_info(data: &mut Data) {
                 }
             }
         }
+    }
+
+    // Battery
+    if data.first_run {
+        let manager = starship_battery::Manager::new();
+
+        match manager {
+            Ok(manager) => {
+                if let Ok(batteries) = manager.batteries() {
+                    for battery in batteries {
+                        if let Ok(battery) = battery {
+                            let cycle_count = battery.cycle_count().unwrap_or(0);
+                            let charge_level = battery.state_of_charge().get::<percent>();
+                            let design_capacity =
+                                battery.energy_full_design().get::<milliwatt_hour>();
+                            let full_charge_capacity =
+                                battery.energy_full().get::<milliwatt_hour>();
+                            let remaining_capacity = battery.energy().get::<milliwatt_hour>();
+                            let health = battery.state_of_health().get::<percent>();
+
+                            data.hw_info.system.battery = CoresBattery {
+                                cycle_count: cycle_count.to_string(),
+                                level: Vec::new(),
+                                remaining_time: CoresSensor::default(),
+                                capacity: Vec::new(),
+                            };
+
+                            data.hw_info.system.battery.level.push(CoresSensor {
+                                name: "Charge level".to_string(),
+                                value: charge_level as f64,
+                                min: charge_level as f64,
+                                max: charge_level as f64,
+                            });
+
+                            data.hw_info.system.battery.level.push(CoresSensor {
+                                name: "Health".to_string(),
+                                value: 100.0 - health as f64,
+                                min: 100.0 - health as f64,
+                                max: 100.0 - health as f64,
+                            });
+
+                            data.hw_info.system.battery.capacity.push(CoresSensor {
+                                name: "Design capacity".to_string(),
+                                value: design_capacity as f64,
+                                min: design_capacity as f64,
+                                max: design_capacity as f64,
+                            });
+
+                            data.hw_info.system.battery.capacity.push(CoresSensor {
+                                name: "Full charge capacity".to_string(),
+                                value: full_charge_capacity as f64,
+                                min: full_charge_capacity as f64,
+                                max: full_charge_capacity as f64,
+                            });
+
+                            data.hw_info.system.battery.capacity.push(CoresSensor {
+                                name: "Remaining capacity".to_string(),
+                                value: remaining_capacity as f64,
+                                min: remaining_capacity as f64,
+                                max: remaining_capacity as f64,
+                            });
+                        } else {
+                            error!("Error getting specific battery info");
+                        }
+                    }
+                }
+            }
+            Err(_err) => {
+                error!("Error getting battery info");
+            }
+        };
     }
 
     // END
