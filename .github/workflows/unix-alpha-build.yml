@@ -28,6 +28,10 @@ jobs:
               if: matrix.NAME == 'linux'
               run: cd platforms/unix/daemon && cargo build --release && cross build --release --target aarch64-unknown-linux-gnu
 
+            - name: Build service executable
+              if: matrix.NAME == 'macos'
+              run: cd platforms/unix/daemon && cargo build --release
+
             - name: Install node modules
               run: npm ci
 
