@@ -30,7 +30,7 @@
 			<h3>Launch Cores Web in any browser and use the connection code from Cores Desktop.</h3>
 			<a
 				class="bg-cores-max hover:text-cores-max mt-5 rounded-2xl px-5 py-3 text-2xl font-medium duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
-				href="/settings">Setup</a
+				href="/connections">Setup</a
 			>
 		</div>
 	</div>

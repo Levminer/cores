@@ -351,13 +351,15 @@
 							($hardwareInfo.ram.load[3]?.value ?? 0) + ($hardwareInfo.ram.load[4]?.value ?? 0)
 						).toFixed(1)} GB`}
 					</h3>
-					<div>
-						<MeterChart
-							readings={[$hardwareInfo.ram.load[3]]}
-							categories={["Virtual RAM usage"]}
-							type={{ name: "virtual memory usage", unit: "GB" }}
-						/>
-					</div>
+					{#if $hardwareInfo.ram.load[3]?.value ?? 0 > 0}
+						<div>
+							<MeterChart
+								readings={[$hardwareInfo.ram.load[3]]}
+								categories={["Virtual RAM usage"]}
+								type={{ name: "virtual memory usage", unit: "GB" }}
+							/>
+						</div>
+					{/if}
 				</div>
 			</div>
 

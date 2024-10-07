@@ -82,51 +82,53 @@
 						</div>
 					</div>
 
-					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-						<div class="flex items-baseline justify-between">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<Thermometer />
+					{#if item.temperature.value > 0}
+						<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
+							<div class="flex items-baseline justify-between">
+								<div class="mb-5 flex items-center gap-3">
+									<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+										<Thermometer />
+									</div>
+									<h2><span class="line-clamp-1">{item.name}</span> Temperature</h2>
 								</div>
-								<h2><span class="line-clamp-1">{item.name}</span> Temperature</h2>
+								<div>
+									<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+								</div>
 							</div>
 							<div>
-								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+								<LineChart
+									props={{
+										statistics: [
+											{
+												label: `Max Temperature`,
+												color: "max",
+												data: minutes
+													? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.max)
+													: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.max),
+											},
+
+											{
+												label: `Current Temperature`,
+												color: "current",
+												data: minutes
+													? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.value)
+													: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.value),
+											},
+											{
+												label: `Min Temperature`,
+												color: "min",
+												data: minutes
+													? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.min)
+													: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.min),
+											},
+										],
+										unit: " °C",
+										time: minutes ? "m" : "s",
+									}}
+								/>
 							</div>
 						</div>
-						<div>
-							<LineChart
-								props={{
-									statistics: [
-										{
-											label: `Max Temperature`,
-											color: "max",
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.max)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.max),
-										},
-
-										{
-											label: `Current Temperature`,
-											color: "current",
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.value)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.value),
-										},
-										{
-											label: `Min Temperature`,
-											color: "min",
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.min)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.min),
-										},
-									],
-									unit: " °C",
-									time: minutes ? "m" : "s",
-								}}
-							/>
-						</div>
-					</div>
+					{/if}
 				</div>
 			{/each}
 		</div>
