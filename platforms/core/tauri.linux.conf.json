@@ -1,0 +1,5 @@
+{
+	"bundle": {
+		"externalBin": ["../../target/release/coresd"]
+	}
+}

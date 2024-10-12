@@ -32,6 +32,9 @@ jobs:
               if: matrix.NAME == 'macos'
               run: cd platforms/unix/daemon && cargo build --release
 
+            - name: Rename service executable
+              run: cp coresd coresd-$(rustc -Vv | grep host | cut -f2 -d' ')
+
             - name: Install node modules
               run: npm ci
 
@@ -64,7 +67,7 @@ jobs:
             - name: Upload service installer
               uses: actions/upload-artifact@v4
               with:
-                  name: "cores-service-${{matrix.NAME}}-x64-installer"
+                  name: "cores-${{matrix.NAME}}-${{runner.arch}}"
                   path: "target/release"
 
             # Upload the unpackaged app
@@ -72,5 +75,5 @@ jobs:
               if: matrix.NAME == 'linux'
               uses: actions/upload-artifact@v4
               with:
-                  name: "cores-service-${{matrix.NAME}}-arm64-service"
+                  name: "coresd-${{matrix.NAME}}-arm64"
                   path: "target/aarch64-unknown-linux-gnu/release"

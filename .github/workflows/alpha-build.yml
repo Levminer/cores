@@ -55,7 +55,7 @@ jobs:
 
             - name: Sign service executable
               run: |
-                trusted-signing-cli platforms/windows/service/bin/exe/CoresService.exe -e 'https://wus2.codesigning.azure.net' -a mnr -c Profile3
+                  trusted-signing-cli platforms/windows/service/bin/exe/CoresService.exe -e 'https://wus2.codesigning.azure.net' -a mnr -c Profile3
 
             # Build service installer
             - name: Build service installer
@@ -80,5 +80,5 @@ jobs:
             - name: Upload service installer
               uses: actions/upload-artifact@v4
               with:
-                  name: "cores-service-latest-windows-x64-installer"
+                  name: "cores-windows-x64"
                   path: "target/release"

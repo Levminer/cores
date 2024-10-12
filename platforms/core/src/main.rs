@@ -6,6 +6,7 @@ use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIconEvent},
     Manager,
 };
+use tauri_plugin_shell::{process::CommandEvent, ShellExt};
 
 pub mod service;
 pub mod settings;
@@ -83,6 +84,22 @@ fn main() {
                         } else {
                             window.show().unwrap();
                             window.set_focus().unwrap();
+                        }
+                    }
+                });
+            }
+
+            if cfg!(target_os = "linux") || cfg!(target_os = "macos") {
+                let sidecar_command = app.shell().sidecar("coresd").unwrap();
+                let (mut rx, mut _child) =
+                    sidecar_command.spawn().expect("Failed to spawn sidecar");
+
+                tauri::async_runtime::spawn(async move {
+                    // read events such as stdout
+                    while let Some(event) = rx.recv().await {
+                        if let CommandEvent::Stdout(line_bytes) = event {
+                            let line = String::from_utf8_lossy(&line_bytes);
+                            println!("sidecar stdout: {}", line);
                         }
                     }
                 });
