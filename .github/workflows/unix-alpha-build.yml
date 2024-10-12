@@ -33,7 +33,7 @@ jobs:
               run: cd platforms/unix/daemon && cargo build --release
 
             - name: Rename service executable
-              run: cp coresd coresd-$(rustc -Vv | grep host | cut -f2 -d' ')
+              run: cp target/release/coresd target/release/coresd-$(rustc -Vv | grep host | cut -f2 -d' ')
 
             - name: Install node modules
               run: npm ci
