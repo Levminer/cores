@@ -444,8 +444,16 @@
 										<Ubuntu width="24" height="24" />
 										<h2>Linux</h2>
 									</div>
-									<a href="#newsletter" class="underline">Subscribe to get notified</a>
 								</div>
+							</div>
+							<div class="flex flex-row items-center justify-center gap-3">
+								<a href="https://github.com/levminer/cores/releases/latest" target="_blank" class="smallButton">
+									<Download width="24" height="24" />
+									Download
+								</a>
+							</div>
+							<div class="border-t-2 pt-6">
+								<h3 class="text-lg">System requirements: Linux, 64bit processor</h3>
 							</div>
 						</div>
 
@@ -635,7 +643,6 @@
 	import Footer from "../../components/footer.svelte"
 	import Header from "../../components/header.svelte"
 	import GetStarted from "../../components/getStarted.svelte"
-	import OSSelector from "../../components/OSSelector.svelte"
 
 	// prettier-ignore
 	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date", "Fan Speed","Remote Access","Runs In The Background", "Minimal Resource Usage"]
