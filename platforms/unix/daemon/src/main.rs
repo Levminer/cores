@@ -96,7 +96,7 @@ async fn main() {
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:5390")
         .await
-        .unwrap();
+        .expect("Port already in use, check if coresd is already running");
 
     info!(
         "HTTP server listening on http://{}",

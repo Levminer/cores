@@ -1,16 +1,25 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::sync::Mutex;
+
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconEvent},
     Manager,
 };
-use tauri_plugin_shell::{process::CommandEvent, ShellExt};
+use tauri_plugin_shell::{
+    process::{CommandChild, CommandEvent},
+    ShellExt,
+};
 
 pub mod service;
 pub mod settings;
 pub mod utils;
+
+struct GlobalState {
+    child: Option<CommandChild>,
+}
 
 fn main() {
     let _sentry = sentry::init((
@@ -42,6 +51,8 @@ fn main() {
             utils::system_info
         ])
         .setup(|app| {
+            app.manage(Mutex::new(GlobalState { child: None }));
+
             let toggle_window_item =
                 MenuItemBuilder::with_id("toggle_windows", "Show/Hide Cores").build(app)?;
             let exit_item = MenuItemBuilder::with_id("exit", "Exit").build(app)?;
@@ -91,8 +102,10 @@ fn main() {
 
             if cfg!(target_os = "linux") || cfg!(target_os = "macos") {
                 let sidecar_command = app.shell().sidecar("coresd").unwrap();
-                let (mut rx, mut _child) =
-                    sidecar_command.spawn().expect("Failed to spawn sidecar");
+                let (mut rx, child) = sidecar_command.spawn().expect("Failed to spawn sidecar");
+
+                let state = app.state::<Mutex<GlobalState>>();
+                state.lock().unwrap().child = Some(child);
 
                 tauri::async_runtime::spawn(async move {
                     // read events such as stdout
@@ -116,11 +129,25 @@ fn main() {
                 if settings.minimize_to_tray {
                     window.hide().unwrap();
                 } else {
-                    window.app_handle().exit(1)
+                    window.app_handle().exit(0)
                 }
             }
             _ => {}
         })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while running tauri application")
+        .run(|app, event| match event {
+            tauri::RunEvent::Exit { .. } => {
+                let window = app.get_webview_window("main").unwrap();
+
+                let state = window.app_handle().state::<Mutex<GlobalState>>();
+                let child = state.lock().unwrap().child.take();
+
+                if let Some(child) = child {
+                    let res = child.kill();
+                    println!("Sent kill to child process: {:?}", res);
+                }
+            }
+            _ => {}
+        });
 }
