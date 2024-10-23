@@ -135,7 +135,7 @@
 										}}
 									>
 										<Power />
-										Turn on
+										Send WOL
 									</button>
 								{/if}
 
