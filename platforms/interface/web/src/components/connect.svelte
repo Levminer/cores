@@ -65,14 +65,18 @@
 						</button>
 					</div>
 				</div>
-				<div class="flex flex-col justify-center space-y-1">
-					<div class="flex flex-row items-center gap-1">
+				<div class="flex flex-row flex-wrap items-center justify-start gap-1 pt-1">
+					<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 						<KeyRound class="h-5 w-5" color={"#d3cfcf"} />
 						<h5>crs_********{item.code.slice(-2)}</h5>
 					</div>
-					<div class="flex flex-row items-center gap-1">
+					<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 						<Network class="h-5 w-5" color={"#d3cfcf"} />
 						<h5>{item.mac || "N/A"}</h5>
+					</div>
+					<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+						<Globe class="h-5 w-5" color={"#d3cfcf"} />
+						<h5>Unknown</h5>
 					</div>
 				</div>
 			</div>
@@ -112,7 +116,7 @@
 
 <script lang="ts">
 	import { settings } from "ui/stores/settings.ts"
-	import { Plug, Trash2, Pencil, Network, KeyRound, Power } from "lucide-svelte"
+	import { Plug, Trash2, Pencil, Network, KeyRound, Power, Globe } from "lucide-svelte"
 	import { goto } from "$app/navigation"
 	import { state } from "../stores/state.ts"
 	import ModularDialog from "ui/components/modularDialog.svelte"
