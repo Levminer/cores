@@ -113,13 +113,11 @@
 			setTimeout(() => {
 				const nameInput = document.getElementById("name") as HTMLInputElement
 				const codeInput = document.getElementById("code") as HTMLInputElement
-				const macInput = document.getElementById("mac") as HTMLInputElement
 
-				console.log(nameInput, codeInput, macInput)
+				console.log(nameInput, codeInput)
 
 				nameInput.value = name
 				codeInput.value = connectionCode
-				macInput.value = mac
 			}, 250)
 		}
 	})

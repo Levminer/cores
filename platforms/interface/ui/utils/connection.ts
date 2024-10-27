@@ -13,7 +13,6 @@ export const editConnectionCode = (code: string) => {
 
 	const nameInput = document.getElementById("name") as HTMLInputElement
 	const codeInput = document.getElementById("code") as HTMLInputElement
-	const macInput = document.getElementById("mac") as HTMLInputElement
 
 	if (nameInput.value === "") {
 		return alert("Please enter a name for your connection")
@@ -27,35 +26,32 @@ export const editConnectionCode = (code: string) => {
 	settings.connectionCodes[id] = {
 		name: nameInput.value,
 		code: codeInput.value,
-		mac: macInput.value,
 	}
 
 	setSettings(settings)
 }
 
 export const addConnectionCode = () => {
-    const settings = getSettings()
+	const settings = getSettings()
 
-    const nameInput = document.getElementById("name") as HTMLInputElement
-    const codeInput = document.getElementById("code") as HTMLInputElement
-    const macInput = document.getElementById("mac") as HTMLInputElement
+	const nameInput = document.getElementById("name") as HTMLInputElement
+	const codeInput = document.getElementById("code") as HTMLInputElement
 
-    if (nameInput.value === "") {
-        return alert("Please enter a name for your connection")
-    }
+	if (nameInput.value === "") {
+		return alert("Please enter a name for your connection")
+	}
 
-    if (!codeInput.value.startsWith("crs_")) {
-        return alert("Invalid connection code! The connection code must start with: crs_")
-    }
+	if (!codeInput.value.startsWith("crs_")) {
+		return alert("Invalid connection code! The connection code must start with: crs_")
+	}
 
-    settings.connectionCodes = [
-        ...settings.connectionCodes,
-        {
-            name: nameInput.value,
-            code: codeInput.value,
-            mac: macInput.value,
-        },
-    ]
+	settings.connectionCodes = [
+		...settings.connectionCodes,
+		{
+			name: nameInput.value,
+			code: codeInput.value,
+		},
+	]
 
-    setSettings(settings)
+	setSettings(settings)
 }

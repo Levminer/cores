@@ -64,11 +64,6 @@
 								<h5>Connection code <span class="text-red-500">*</span></h5>
 								<input value={item.code} placeholder="crs_abcde12345" class="input mt-1" type="text" id="code" />
 							</div>
-
-							<div>
-								<h5>MAC address</h5>
-								<input value={item.mac ?? ""} placeholder="AA:BB:CC:DD:EE:FF" class="input mt-1" type="text" id="mac" />
-							</div>
 						</div>
 					</ModularDialog>
 					<button
@@ -102,11 +97,6 @@
 					<div>
 						<h5>Connection code <span class="text-red-500">*</span></h5>
 						<input placeholder="crs_abcde12345" class="input mt-1" type="text" id="code" />
-					</div>
-
-					<div>
-						<h5>MAC address</h5>
-						<input placeholder="AA:BB:CC:DD:EE:FF" class="input mt-1" type="text" id="mac" />
 					</div>
 				</div>
 			</ModularDialog>
