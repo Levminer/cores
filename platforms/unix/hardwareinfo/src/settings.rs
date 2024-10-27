@@ -100,7 +100,7 @@ fn check_if_settings_exits() {
 
     // Check if folder exists
     if !program_data.join("Cores").exists() {
-        std::fs::create_dir(program_data.join("Cores")).expect("Failed to create settings folder");
+        std::fs::create_dir_all(program_data.join("Cores")).expect("Failed to create settings folder");
     }
 
     // Check if file exists

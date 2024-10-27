@@ -488,7 +488,10 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
                 break;
             }
 
-            tokio::time::sleep(std::time::Duration::from_secs(state.settings.interval as u64)).await;
+            tokio::time::sleep(std::time::Duration::from_secs(
+                state.settings.interval as u64,
+            ))
+            .await;
         }
 
         match sender
