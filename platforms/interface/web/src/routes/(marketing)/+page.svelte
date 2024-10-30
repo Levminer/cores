@@ -14,7 +14,7 @@
 		{/key}
 
 		<h3 class="mt-5">
-			Monitor your computer in real-time. <br /> Access detailed information about your computer anytime, anywhere.
+			Monitor your devices in real-time. <br /> Access detailed information about your devices anytime, anywhere.
 		</h3>
 
 		<div class="my-5 flex flex-row items-center justify-center gap-5">
@@ -33,246 +33,11 @@
 	</div>
 
 	<div class="mb-20 space-y-20">
-		<div id="features" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
-			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-full flex-col items-center justify-center">
-					<!-- card 0 -->
-					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
-							Monitor every component in your PC
-						</h2>
-						<h3 class="italic text-gray-100">Track every component in your PC with detailed charts and visualizations.</h3>
-					</div>
-
-					<div class="relative flex w-[80%] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-						<video id="video0" muted loop src="https://cdn.levminer.com/cores/home.webm" />
-						<div class="absolute flex items-center justify-center">
-							<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
-						</div>
-					</div>
-				</div>
-
-				<div class="w-[80%]">
-					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Cpu />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">CPU</h2>
-							</div>
-							<div class="grid grid-cols-3 gap-3">
-								<div
-									class="transparent-900 group flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-3"
-								>
-									<Gauge class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Load</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-3"
-								>
-									<Thermometer class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Temperature</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-3"
-								>
-									<Clock class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Clock Speed</h3>
-								</div>
-								<div
-									class="transparent-900 group flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-3"
-								>
-									<Zap class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Voltage</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-3 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-3"
-								>
-									<Plug class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Power Usage</h3>
-								</div>
-							</div>
-						</div>
-
-						<!-- card 2 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<GpuCard height="24" width="24" />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">GPU</h2>
-							</div>
-							<div class="grid grid-cols-4 gap-3">
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Thermometer class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Temperature</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Clock class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Clock Speed</h3>
-								</div>
-
-								<div
-									class="transparent-900 group col-span-1 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Gauge class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Load</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-3 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Fan class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Fan Speed</h3>
-								</div>
-
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Memory class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" height="24" width="24" />
-									<h3>Memory Usage</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Plug class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Power Usage</h3>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
-						<!-- card 3 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Memory height="24" width="24" />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">RAM</h2>
-							</div>
-							<div class="grid grid-cols-4 gap-3">
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Gauge class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Memory</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Gauge class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Virtual Memory</h3>
-								</div>
-							</div>
-						</div>
-
-						<!-- card 4 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<PcDisplay height="24" width="24" />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">System</h2>
-							</div>
-							<div class="grid grid-cols-4 gap-3">
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Fan class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Fan Speed</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-4"
-								>
-									<Battery class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Battery Info</h3>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="mt-5 flex flex-col justify-between gap-5 2xl:flex-row">
-						<!-- card 5 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<HardDrive />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Drives</h2>
-							</div>
-							<div class="grid grid-cols-5 gap-3">
-								<div
-									class="transparent-900 group col-span-3 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<Activity class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Read/Write Speed</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<Thermometer class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Temperature</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<Heart class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Health</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-3 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<PieChart class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Data Read/Written</h3>
-								</div>
-							</div>
-						</div>
-
-						<!-- card 6 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Network />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Network</h2>
-							</div>
-							<div class="grid grid-cols-5 gap-3">
-								<div
-									class="transparent-900 group col-span-5 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<Activity class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Download/Upload Speed</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-3 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<Gauge class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Interface Speed</h3>
-								</div>
-								<div
-									class="transparent-900 group col-span-2 flex transform flex-row gap-3 rounded-xl border-2 border-orange-500 p-3 text-lg shadow-xl backdrop-blur-xl duration-200 ease-in-out hover:border-gray-500 sm:col-span-5"
-								>
-									<PieChart class="text-orange-500 duration-200 ease-in group-hover:text-gray-500" />
-									<h3>Data Usage</h3>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="features2" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
+		<div id="features" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="mb-10 text-center">
 					<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Easy Remote Access</h2>
-					<h3 class="italic text-gray-100">Monitor your device easily from anywhere.</h3>
+					<h3 class="text-2xl italic text-gray-100">Monitor your devices from anywhere.</h3>
 				</div>
 				<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
 					<video id="video1" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
@@ -304,7 +69,7 @@
 								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h2>
 							</div>
 							<div class="select-text">
-								<h3>You can connect directly to multiple host systems. No cloud, no central server.</h3>
+								<h3>You can connect directly to multiple computers. No cloud, no central server powered by WebRTC.</h3>
 							</div>
 						</div>
 					</div>
@@ -332,7 +97,57 @@
 								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote start</h2>
 							</div>
 							<div class="select-text">
-								<h3>If you have another computer with Cores installed at home, you can start your computer remotely.</h3>
+								<h3>If you have other devices on your network, you can start them remotely with Wake On LAN.</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="features2" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
+			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
+				<div class="flex w-full flex-col items-center justify-center">
+					<!-- card 0 -->
+					<div class="mb-10 text-center">
+						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
+							Monitor every component
+						</h2>
+						<h3 class="text-2xl italic text-gray-100">Track every component with detailed charts and visualizations.</h3>
+					</div>
+
+					<div class="relative flex w-[80%] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
+						<video id="video0" muted loop src="https://cdn.levminer.com/cores/home.webm" />
+						<div class="absolute flex items-center justify-center">
+							<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+						</div>
+					</div>
+				</div>
+
+				<div class="flex w-[900px] flex-col sm:w-full">
+					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+						<!-- card 1 -->
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<MonitorSmartphone />
+								</div>
+								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-platform</h2>
+							</div>
+							<div class="select-text">
+								<h3>You can monitor your system on Windows, Linux and MacOS.</h3>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Gauge />
+								</div>
+								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Light on your system</h2>
+							</div>
+							<div class="select-text">
+								<h3>Cores runs as a background service with minimal resource usage.</h3>
 							</div>
 						</div>
 					</div>
@@ -444,6 +259,7 @@
 										<Ubuntu width="24" height="24" />
 										<h2>Linux</h2>
 									</div>
+									<h3>Download the package for your distro or get the daemon.</h3>
 								</div>
 							</div>
 							<div class="flex flex-row items-center justify-center gap-3">
@@ -453,7 +269,7 @@
 								</a>
 							</div>
 							<div class="border-t-2 pt-6">
-								<h3 class="text-lg">System requirements: Linux, 64bit processor</h3>
+								<h3 class="text-lg">System requirements: Linux, 64bit or ARM64 processor</h3>
 							</div>
 						</div>
 
@@ -613,39 +429,16 @@
 <Footer />
 
 <script lang="ts">
-	import {
-		ArrowRight,
-		BarChart3,
-		Check,
-		Cpu,
-		Info,
-		Network,
-		Play,
-		Radio,
-		Download,
-		Power,
-		Moon,
-		Gauge,
-		Thermometer,
-		Clock,
-		Plug,
-		Zap,
-		Fan,
-		HardDrive,
-		Activity,
-		PieChart,
-		Heart,
-		Battery,
-	} from "lucide-svelte"
+	import { ArrowRight, BarChart3, Check, Gauge, Info, Network, Play, Radio, Download, Power, Moon, MonitorSmartphone } from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
-	import { GpuCard, Memory, PcDisplay, Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
+	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
 	import { slide } from "svelte/transition"
 	import Footer from "../../components/footer.svelte"
 	import Header from "../../components/header.svelte"
 	import GetStarted from "../../components/getStarted.svelte"
 
 	// prettier-ignore
-	const features=["CPU Temperature","CPU Clock Speed","CPU Load","CPU Voltage","CPU Power Usage","RAM Usage","RAM Speed","Virtual RAM Usage","GPU Load","GPU Temperature","GPU Power Usage","GPU Clock Speed","GPU Fan Speed","GPU Driver Date","Network Speed","Network Usage","Drive Temperature","Drive Health","Drive Usage","BIOS Date", "Fan Speed","Remote Access","Runs In The Background", "Minimal Resource Usage"]
+	const features=["CPU Load", "CPU Temperature", "CPU Clock Speed", "CPU Voltage", "CPU Power Usage", "RAM Usage", "RAM Speed", "Virtual RAM Usage", "GPU Load", "GPU Temperature", "GPU Power Usage", "GPU Clock Speed", "GPU Fan Speed", "GPU Driver Date", "Network Interface Speed", "Network Upload/Download Speed", "Network Data Usage", "Drive Temperature", "Drive Health", "Drive Read/Write Speed", "BIOS Date", "Fan Speed","Battery info", "Remote Access", "Runs In The Background", "Minimal Resource Usage"]
 	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
 	let index = 0
 	let roller: NodeJS.Timeout

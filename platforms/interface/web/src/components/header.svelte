@@ -17,7 +17,7 @@
 				}}
 				class="bg-cores-alternative hover:text-cores-alternative rounded-2xl px-4 py-2 text-xl font-bold duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
 			>
-				Launch app
+				Dashboard
 			</button>
 		</div>
 		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
