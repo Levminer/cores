@@ -1,27 +1,36 @@
 <Header />
 
-<div class="mx-auto w-11/12 rounded-xl sm:w-full">
-	<div class="mb-60 mt-10 flex flex-col items-center justify-center text-center">
-		<h1 class="mt-10 text-4xl font-medium md:text-6xl">Modern hardware monitor for your</h1>
+<div class="mx-auto w-full rounded-xl">
+	<div class="headerBg mb-60 flex flex-col items-center justify-center py-20 text-center">
+		<h1 class="mb-3 mt-10 text-4xl font-medium md:text-6xl">Modern hardware monitor for your</h1>
 
-		{#key index}
-			<h2
-				class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-4xl font-medium italic text-transparent md:text-6xl"
-				transition:slide
-			>
-				{greetings[index]}
-			</h2>
-		{/key}
+		<div class="flex flex-row flex-wrap items-center justify-center gap-1">
+			<div class="rounded-xl bg-white px-3 py-2">
+				<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-2xl font-medium italic text-transparent md:text-4xl">
+					Windows PC
+				</h2>
+			</div>
+			<div class="rounded-xl bg-white px-3 py-2">
+				<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-2xl font-medium italic text-transparent md:text-4xl">
+					Linux Server
+				</h2>
+			</div>
+			<div class="rounded-xl bg-white px-3 py-2">
+				<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-2xl font-medium italic text-transparent md:text-4xl">
+					MacBook Pro
+				</h2>
+			</div>
+		</div>
 
 		<h3 class="mt-5">
-			Monitor your devices in real-time. <br /> Access detailed information about your devices anytime, anywhere.
+			Monitor your devices in real-time. <br /> Access detailed information about your computers anytime, anywhere.
 		</h3>
 
-		<div class="my-5 flex flex-row items-center justify-center gap-5">
+		<div class="mb-10 mt-5 flex flex-row items-center justify-center gap-5">
 			<a
 				href="#downloads"
 				class="bg-cores-alternative hover:text-cores-alternative transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
-				>Get Cores</a
+				>Download Cores</a
 			>
 			<a class="flex text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
 		</div>
@@ -32,7 +41,7 @@
 		</div>
 	</div>
 
-	<div class="mb-20 space-y-20">
+	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
 		<div id="features" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="mb-10 text-center">
@@ -155,51 +164,6 @@
 			</div>
 		</div>
 
-		<div id="features3" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 py-20">
-			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div>
-					<img width="700" height="1353" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
-				</div>
-				<div class="flex w-full flex-col">
-					<!-- card 0 -->
-					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
-							Your PC Stats In Your Pocket
-						</h2>
-						<h3 class="italic text-gray-100">Use your phone or a web browser to monitor your PC.</h3>
-					</div>
-
-					<div class="mx-auto mt-5 flex w-[60%] flex-col items-center justify-center gap-5 sm:w-full">
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Info />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Information</h2>
-							</div>
-							<div class="select-text">
-								<h3>Detailed information about each component in its own page.</h3>
-							</div>
-						</div>
-
-						<!-- card 2 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<BarChart3 />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Useful Charts</h2>
-							</div>
-							<div class="select-text">
-								<h3>Track your components status with informative charts.</h3>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<div id="features4" class="flex flex-col items-center justify-center rounded-xl py-20">
 			<div class="mb-10 text-center">
 				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Packed with features</h2>
@@ -225,18 +189,42 @@
 						<h3 class="italic text-gray-100">Download the latest version of Cores now to get started.</h3>
 					</div>
 
-					<div class="flex w-full flex-col justify-between gap-5 sm:flex-col">
+					<div class="flex w-full flex-row justify-between gap-5 sm:flex-col">
 						<!-- windows installer -->
-						<div class="transparent-900 w-full space-y-8 rounded-xl border border-gray-500 p-8 shadow-xl sm:p-4">
-							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex flex-col">
-									<div class="flex flex-row items-center gap-3">
-										<Microsoft width="24" height="24" />
-										<h2>Windows</h2>
-									</div>
-									<h3>Download the installer or get the app from the Microsoft Store.</h3>
-								</div>
-							</div>
+						<button
+							on:click={() => {
+								changeDownload("windows")
+							}}
+							class={selectedDownload === "windows" ? "selectedDownloadButton" : "downloadButton"}
+						>
+							<Microsoft class="h-12 w-12 text-current" />
+							<h2 class="text-current">Windows</h2>
+						</button>
+
+						<button
+							on:click={() => {
+								changeDownload("linux")
+							}}
+							class={selectedDownload === "linux" ? "selectedDownloadButton" : "downloadButton"}
+						>
+							<Ubuntu class="h-12 w-12 text-current" />
+							<h2 class="text-current">Linux</h2>
+						</button>
+
+						<button
+							on:click={() => {
+								changeDownload("macos")
+							}}
+							class={selectedDownload === "macos" ? "selectedDownloadButton" : "downloadButton"}
+						>
+							<Apple class="h-12 w-12 text-current" />
+							<h2 class="text-current">macOS</h2>
+						</button>
+					</div>
+
+					<div class="transparent-900 mt-10 w-full space-y-8 rounded-xl border border-gray-500 p-8 text-center shadow-xl sm:p-4">
+						{#if selectedDownload === "windows"}
+							<h3>Download the installer or get the app from the Microsoft Store.</h3>
 							<div class="flex flex-row items-center justify-center gap-3">
 								<a href="https://link.levminer.com/cores-installer" target="_blank" class="smallButton">
 									<Download width="24" height="24" />
@@ -250,18 +238,8 @@
 							<div class="border-t-2 pt-6">
 								<h3 class="text-lg">System requirements: Windows 10 or 11, 64bit processor</h3>
 							</div>
-						</div>
-
-						<div class="transparent-900 w-full space-y-8 rounded-xl border border-gray-500 p-8 shadow-xl sm:p-4">
-							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex flex-col">
-									<div class="flex flex-row items-center gap-3">
-										<Ubuntu width="24" height="24" />
-										<h2>Linux</h2>
-									</div>
-									<h3>Download the package for your distro or get the daemon.</h3>
-								</div>
-							</div>
+						{:else if selectedDownload === "linux"}
+							<h3>Download the package for your distro or get the daemon.</h3>
 							<div class="flex flex-row items-center justify-center gap-3">
 								<a href="https://github.com/levminer/cores/releases/latest" target="_blank" class="smallButton">
 									<Download width="24" height="24" />
@@ -269,21 +247,12 @@
 								</a>
 							</div>
 							<div class="border-t-2 pt-6">
-								<h3 class="text-lg">System requirements: Linux, 64bit or ARM64 processor</h3>
+								<h3 class="text-lg">System requirements: Linux, 64bit or arm64 processor</h3>
 							</div>
-						</div>
-
-						<div class="transparent-900 w-full space-y-8 rounded-xl border border-gray-500 p-8 shadow-xl sm:p-4">
-							<div class="flex flex-col justify-between gap-10 md:flex-row">
-								<div class="flex flex-col">
-									<div class="flex flex-row items-center gap-3">
-										<Apple width="24" height="24" />
-										<h2>macOS</h2>
-									</div>
-									<a href="#newsletter" class="underline">Subscribe to get notified</a>
-								</div>
-							</div>
-						</div>
+						{:else}
+							<h3>Coming soon!</h3>
+							<a href="#newsletter" class="underline">Subscribe to get notified</a>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -429,40 +398,51 @@
 <Footer />
 
 <script lang="ts">
-	import { ArrowRight, BarChart3, Check, Gauge, Info, Network, Play, Radio, Download, Power, Moon, MonitorSmartphone } from "lucide-svelte"
+	import { ArrowRight, Check, Gauge, Network, Play, Radio, Download, Power, Moon, MonitorSmartphone } from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
-	import { slide } from "svelte/transition"
 	import Footer from "../../components/footer.svelte"
 	import Header from "../../components/header.svelte"
 	import GetStarted from "../../components/getStarted.svelte"
 
 	// prettier-ignore
-	const features=["CPU Load", "CPU Temperature", "CPU Clock Speed", "CPU Voltage", "CPU Power Usage", "RAM Usage", "RAM Speed", "Virtual RAM Usage", "GPU Load", "GPU Temperature", "GPU Power Usage", "GPU Clock Speed", "GPU Fan Speed", "GPU Driver Date", "Network Interface Speed", "Network Upload/Download Speed", "Network Data Usage", "Drive Temperature", "Drive Health", "Drive Read/Write Speed", "BIOS Date", "Fan Speed","Battery info", "Remote Access", "Runs In The Background", "Minimal Resource Usage"]
-	let greetings = ["Windows PC", "Windows PC", "Linux PC", "MacBook Pro", "MacBook Air", "Home Server", "Gamer PC", "Laptop"]
-	let index = 0
-	let roller: NodeJS.Timeout
+	let selectedDownload = "windows"
+	const features = [
+		"CPU Load",
+		"CPU Temperature",
+		"CPU Clock Speed",
+		"CPU Voltage",
+		"CPU Power Usage",
+		"RAM Usage",
+		"RAM Speed",
+		"Virtual RAM Usage",
+		"GPU Load",
+		"GPU Temperature",
+		"GPU Power Usage",
+		"GPU Clock Speed",
+		"GPU Fan Speed",
+		"GPU Driver Date",
+		"Network Interface Speed",
+		"Network Upload/Download Speed",
+		"Network Data Usage",
+		"Drive Temperature",
+		"Drive Health",
+		"Drive Read/Write Speed",
+		"BIOS Date",
+		"Fan Speed",
+		"Battery info",
+		"Remote Access",
+		"Runs In The Background",
+		"Minimal Resource Usage",
+	]
 
-	$: pricingSelected = "windows"
-
-	$: log(pricingSelected)
-
-	const log = (value: string) => {
-		console.log(value)
+	const changeDownload = (value: string) => {
+		selectedDownload = value
 	}
 
 	onMount(() => {
 		// smooth scroll
 		document.querySelector("#layout")?.classList.add("scroll-smooth")
-
-		// hero text animation
-		roller = setInterval(() => {
-			if (index === greetings.length - 1) index = 0
-			else index++
-		}, 5000)
-
-		if (index === greetings.length - 1) index = 0
-		else index++
 
 		// play videos on hover
 		for (let i = 0; i < 2; i++) {
@@ -487,8 +467,6 @@
 	})
 
 	onDestroy(() => {
-		clearInterval(roller)
-
 		document.querySelector("#layout")?.classList.remove("scroll-smooth")
 
 		for (let i = 0; i < 2; i++) {

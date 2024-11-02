@@ -38,6 +38,14 @@
 	.selectedMenuButton {
 		@apply transparent-900 rounded-lg p-3;
 	}
+
+	.downloadButton {
+		@apply transparent-900 flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-gray-500 p-8 shadow-xl duration-150 ease-in-out hover:bg-white hover:text-black sm:p-4;
+	}
+
+	.selectedDownloadButton {
+		@apply flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-white p-8 shadow-xl duration-150 ease-in-out bg-white text-black sm:p-4;
+	}
 }
 
 /* body */
@@ -147,4 +155,10 @@ h5 {
 
 .overlayScroll::-webkit-scrollbar-thumb:hover {
 	background-color: #9f9f9f;
+}
+
+.headerBg {
+	background-image: radial-gradient(transparent, Canvas), radial-gradient(color-mix(in oklch, Canvastext 33%, Canvas) 0.8px, transparent 1.3px);
+	background-size: 200px 200px, 40px 40px;
+	background-repeat: round, space;
 }

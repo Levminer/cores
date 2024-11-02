@@ -2,7 +2,7 @@
 	<div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-3">
 		<a href="/#cores" class="flex items-center space-x-3">
 			<img class="h-8 w-8" src={"/favicon.ico"} alt="Cores logo" />
-			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
+			<span class="self-center whitespace-nowrap text-xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
 			<button
@@ -15,29 +15,29 @@
 						goto("/get-started")
 					}
 				}}
-				class="bg-cores-alternative hover:text-cores-alternative rounded-2xl px-4 py-2 text-xl font-bold duration-200 ease-in-out hover:bg-white hover:from-transparent hover:to-transparent"
+				class="rounded-2xl border-2 border-white bg-white px-4 py-2 text-lg font-medium text-black duration-200 ease-in-out hover:bg-transparent hover:text-white"
 			>
 				Dashboard
 			</button>
 		</div>
 		<div class="w-full items-center justify-between md:order-1 md:flex md:w-auto">
-			<ul
-				class="mt-4 flex flex-col rounded-lg border border-gray-700 p-4 text-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
-			>
+			<ul class="mt-4 flex flex-col rounded-lg border border-gray-700 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0">
 				<li>
-					<a href="/#features" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
-						>Features</a
+					<a
+						href="/#features"
+						class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-gray-200 duration-200 ease-in md:p-0">Features</a
 					>
 				</li>
 				<li>
 					<a
 						href="/#downloads"
-						class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0">Download</a
+						class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-gray-200 duration-200 ease-in md:p-0">Download</a
 					>
 				</li>
 				<li>
-					<a href="/#pricing" class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-white duration-200 ease-in md:p-0"
-						>Pricing</a
+					<a
+						href="/#pricing"
+						class="hover:text-cores-current block rounded px-3 py-2 font-semibold text-gray-200 duration-200 ease-in md:p-0">Pricing</a
 					>
 				</li>
 			</ul>
