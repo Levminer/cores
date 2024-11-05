@@ -13,6 +13,7 @@ const defaultSettings: LibSettings = {
 	launchOnStartup: false,
 	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
 	connectionCodes: [],
+	networkDevices: [],
 	version: 1,
 	remoteConnections: false,
 	optionalAnalytics: true,
@@ -33,6 +34,10 @@ export const initializeSettings = async () => {
 // Listen for store events
 settings.subscribe(async (data) => {
 	console.log("Settings changed: ", data)
+
+	if (data.networkDevices === undefined) {
+		data.networkDevices = []
+	}
 
 	if (import.meta.env.VITE_CORES_MODE === "host" && initialized) {
 		await invoke("set_settings", { settings: JSON.stringify(data) })

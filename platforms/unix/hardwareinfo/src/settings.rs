@@ -52,6 +52,8 @@ pub struct Settings {
     pub remote_connections: bool,
     #[serde(rename = "connectionCodes", default = "default_connection_codes")]
     pub connection_codes: Vec<ConnectionCode>,
+    #[serde(rename = "networkDevices", default = "default_connection_codes")]
+    pub network_devices: Vec<ConnectionCode>,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
     pub connection_code: String,
     #[serde(rename = "licenseKey", default = "default_string")]
@@ -91,6 +93,7 @@ fn check_if_settings_exits() {
         remote_connections: false,
         connection_code: default_connection_code(),
         connection_codes: default_connection_codes(),
+        network_devices: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),
@@ -100,7 +103,8 @@ fn check_if_settings_exits() {
 
     // Check if folder exists
     if !program_data.join("Cores").exists() {
-        std::fs::create_dir_all(program_data.join("Cores")).expect("Failed to create settings folder");
+        std::fs::create_dir_all(program_data.join("Cores"))
+            .expect("Failed to create settings folder");
     }
 
     // Check if file exists
@@ -122,6 +126,7 @@ pub fn get_settings() -> Settings {
         remote_connections: false,
         connection_code: default_connection_code(),
         connection_codes: default_connection_codes(),
+        network_devices: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),
         license_activated: "".to_string(),

@@ -213,7 +213,11 @@ declare global {
 		connectionCodes: {
 			name: string
 			code: string
-			mac?: string
+		}[]
+		networkDevices: {
+			name: string
+			code: string
+			mac: string
 		}[]
 		version: number
 		remoteConnections: boolean

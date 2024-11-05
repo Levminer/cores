@@ -26,11 +26,6 @@
 						<h5>Connection code <span class="text-red-500">*</span></h5>
 						<input placeholder="crs_abcde12345" class="input mt-1" type="text" id="code" />
 					</div>
-
-					<div>
-						<h5>MAC address</h5>
-						<input placeholder="AA:BB:CC:DD:EE:FF" class="input mt-1" type="text" id="mac" />
-					</div>
 				</div>
 			</ModularDialog>
 		</div>
@@ -103,9 +98,8 @@
 		const urlParams = new URLSearchParams(window.location.search)
 		let connectionCode = urlParams.get("connectionCode")
 		const name = urlParams.get("name") || "My Home PC"
-		const mac = urlParams.get("mac") || ""
 
-		console.log({ connectionCode, name, mac })
+		console.log({ connectionCode, name })
 
 		if (connectionCode) {
 			dialogOpen = true
