@@ -15,7 +15,7 @@
 			</li>
 			<li>Restart your Cores app on your computer</li>
 			<li>
-				Make sure the <button class="underline" on:click={connectionCode}>connection code</button> in the settings is correct
+				Make sure the <button class="underline" on:click={connectionCode}>connection code</button> is correct
 			</li>
 			<li>
 				Go back to the <a class="underline" href="/">home</a> page
@@ -48,7 +48,7 @@
 	}
 
 	const connectionCode = () => {
-		location.href = "/settings"
+		location.href = "/home"
 	}
 
 	const startService = async () => {

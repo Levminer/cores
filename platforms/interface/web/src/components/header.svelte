@@ -15,7 +15,7 @@
 						goto("/get-started")
 					}
 				}}
-				class="rounded-2xl border-2 border-white bg-white px-4 py-2 text-lg font-medium text-black duration-200 ease-in-out hover:bg-transparent hover:text-white"
+				class="rounded-2xl border-2 border-white bg-white px-4 py-2 text-lg font-medium text-black duration-200 ease-in hover:bg-transparent hover:text-white"
 			>
 				Dashboard
 			</button>

@@ -2,7 +2,7 @@
 	<div class="mx-auto flex flex-wrap items-center justify-between p-3">
 		<a href="/home" class="flex items-center space-x-3">
 			<img class="h-8 w-8" src={"/favicon.ico"} alt="Cores logo" />
-			<span class="self-center whitespace-nowrap text-2xl font-semibold text-white">Cores</span>
+			<span class="self-center whitespace-nowrap text-xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
 			{#if $state.state === "connected"}

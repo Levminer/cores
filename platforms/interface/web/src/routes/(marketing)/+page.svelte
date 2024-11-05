@@ -189,7 +189,7 @@
 						<h3 class="italic text-gray-100">Download the latest version of Cores now to get started.</h3>
 					</div>
 
-					<div class="flex w-full flex-row justify-between gap-5 sm:flex-col">
+					<div class="flex w-full flex-row justify-between items-center gap-5 sm:flex-col">
 						<!-- windows installer -->
 						<button
 							on:click={() => {
