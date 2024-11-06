@@ -30,10 +30,10 @@ public class Program {
 
 	public static void Main(string[] args) {
 		SentrySdk.Init(settings => {
-			settings.Dsn = "https://d4ad9ffb8f4333d328052ee6551db833@o4506670275428352.ingest.us.sentry.io/4507197428596736";
+			settings.Dsn = "https://5df3267b294f6e3885f4ccf01b46722b@o4506670275428352.ingest.us.sentry.io/4507197428596736";
 			settings.AutoSessionTracking = true;
 			settings.IsGlobalModeEnabled = true;
-			settings.EnableTracing = true;
+			settings.TracesSampleRate = 0.8;
 		});
 
 		Log.Logger = new LoggerConfiguration()

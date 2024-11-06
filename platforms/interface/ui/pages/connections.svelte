@@ -129,7 +129,7 @@
 									}}
 								>
 									<Power />
-									Send Packet
+									Wake Up
 								</button>
 
 								<button

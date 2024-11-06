@@ -27,6 +27,7 @@ fn main() {
         sentry::ClientOptions {
             release: sentry::release_name!(),
             auto_session_tracking: true,
+            traces_sample_rate: 0.8,
             ..Default::default()
         },
     ));
