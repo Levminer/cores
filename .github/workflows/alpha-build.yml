@@ -59,7 +59,7 @@ jobs:
 
             - name: Upload debug symbols
               run: |
-                  npx sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
+                  sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
 
             # Build service installer
             - name: Build service installer

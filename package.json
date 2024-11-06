@@ -21,6 +21,7 @@
 		"tauri": "tauri"
 	},
 	"devDependencies": {
+		"@sentry/cli": "^2.38.2",
 		"@tauri-apps/cli": "^2.0.4",
 		"cross-env": "^7.0.3"
 	}
