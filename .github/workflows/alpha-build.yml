@@ -57,13 +57,13 @@ jobs:
               run: |
                   trusted-signing-cli platforms/windows/service/bin/exe/CoresService.exe -e 'https://wus2.codesigning.azure.net' -a mnr -c Profile3
 
-            - name: Upload debug symbols
-              run: |
-                  npx sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
-
             # Build service installer
             - name: Build service installer
               run: npm run build:core
+
+            - name: Upload debug symbols
+              run: |
+                  npx sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
 
             - name: Get version
               id: version
