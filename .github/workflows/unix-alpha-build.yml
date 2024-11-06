@@ -55,6 +55,10 @@ jobs:
                   path: package.json
                   prop_path: version
 
+            - name: Upload debug symbols
+              run: |
+                  npx sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
+
             - name: Remove useless folders
               run: |
                   rm -rf target/release/build
