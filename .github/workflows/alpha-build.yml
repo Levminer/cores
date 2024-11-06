@@ -61,6 +61,10 @@ jobs:
             - name: Build service installer
               run: npm run build:core
 
+            - name: Upload debug symbols
+              run: |
+                  npx sentry-cli debug-files upload --include-sources --org levminer --project cores_tauri target/release/cores.pdb
+
             - name: Get version
               id: version
               uses: notiz-dev/github-action-json-property@release
