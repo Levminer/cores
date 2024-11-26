@@ -47,7 +47,6 @@ declare global {
 		throughputUpload: number
 		downloadData: number
 		uploadData: number
-		primary: boolean
 	}
 
 	interface RAM {

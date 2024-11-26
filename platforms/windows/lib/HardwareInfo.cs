@@ -7,6 +7,7 @@ namespace lib;
 
 public class HardwareInfo {
 	public bool firstRun = true;
+	public bool errorSent = false;
 	public HardwareUpdater refresher = new();
 	public Commands commands = new();
 	public Computer computer = new() {
@@ -31,8 +32,6 @@ public class HardwareInfo {
 	}
 
 	public void GetInfo() {
-		var errorSent = false;
-
 		try {
 			var computerHardware = computer.Hardware;
 
@@ -44,11 +43,15 @@ public class HardwareInfo {
 							Name = ni.Name,
 							Id = new Identifier("nic", ni.Id),
 							Description = ni.Description,
-							Speed = (ni.Speed / 1000 / 1000).ToString()
+							Speed = (ni.Speed / 1000 / 1000).ToString(),
 						};
 
-						if (!temp.Description.Contains("Virtual")) {
-							temp.Primary = true;
+						if (!temp.Description.Contains("Virtual") && temp.Name.Contains("Ethernet")) {
+							temp.Priority = 0;
+						} else if (!temp.Description.Contains("Virtual") && temp.Name.Contains("WiFi")) {
+							temp.Priority = 1;
+						} else {
+							temp.Priority = 2;
 						}
 
 						// Mac address
@@ -80,11 +83,13 @@ public class HardwareInfo {
 							}
 						}
 
-						API.System.Network.Interfaces.Add(temp);
+						if (!temp.Name.Contains("Local Area Connection*")) {
+							API.System.Network.Interfaces.Add(temp);
+						}
 					}
 				}
 
-				API.System.Network.Interfaces = API.System.Network.Interfaces.OrderByDescending(item => item.Primary).ToList();
+				API.System.Network.Interfaces = API.System.Network.Interfaces.OrderBy(item => item.Priority).ToList();
 
 				Log.Information("HW firstRun");
 			}

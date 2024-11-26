@@ -132,10 +132,6 @@ public class NetInterface {
 		get; set;
 	}
 
-	public bool Primary {
-		get; set;
-	}
-
 	public float UploadData {
 		get; set;
 	} = new();
@@ -149,6 +145,10 @@ public class NetInterface {
 	} = new();
 
 	public float ThroughputDownload {
+		get; set;
+	} = new();
+
+	public int Priority {
 		get; set;
 	} = new();
 }
