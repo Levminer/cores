@@ -1,5 +1,5 @@
-<div class="flex h-full flex-col justify-between overflow-visible p-2">
-	<div class="flex flex-col space-y-3">
+<div class="transparent-900 flex h-full flex-col justify-between overflow-visible rounded-tr-xl p-2 shadow-2xl">
+	<div class="flex flex-col space-y-2">
 		<a href="/home" use:active data-active-class="selectedMenuButton" class="menuButton">
 			<Home class="h-5 w-5" />
 		</a>
@@ -29,7 +29,7 @@
 		</a>
 	</div>
 
-	<div class="flex flex-col space-y-3">
+	<div class="flex flex-col space-y-2">
 		<a href="/connections" use:active data-active-class="selectedMenuButton" class="menuButton">
 			<MonitorSmartphone class="h-5 w-5" />
 		</a>
