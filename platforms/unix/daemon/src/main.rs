@@ -8,6 +8,7 @@ use axum::{
     routing::get,
     Router,
 };
+use clap::Parser;
 use ezrtc::host::EzRTCHost;
 use ezrtc::socket::DataChannelHandler;
 use futures::{sink::SinkExt, stream::StreamExt};
@@ -31,6 +32,8 @@ use webrtc::data_channel::RTCDataChannel;
 use webrtc::ice_transport::ice_server::RTCIceServer;
 use wol::{send_wol, MacAddr};
 
+mod service;
+
 #[derive(Serialize, Deserialize)]
 pub struct GenericMessage<T> {
     pub r#type: String,
@@ -44,8 +47,20 @@ pub struct AppState {
     settings: Settings,
 }
 
+/// Modern hardware monitor with remote monitoring.
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    /// Setup coresd to run as a service
+    #[arg(required = false, long, short = 's')]
+    service: bool,
+}
+
 #[tokio::main]
 async fn main() {
+    // Parse arguments
+    let args = Args::parse();
+
     // Logger
     CombinedLogger::init(vec![TermLogger::new(
         LevelFilter::Info,
@@ -54,6 +69,14 @@ async fn main() {
         ColorChoice::Auto,
     )])
     .unwrap();
+
+    if args.service {
+        service::setup_service();
+    } else {
+        warn!(
+            "You are running coresd as an executable, to setup it as a service, run `sudo ./coresd --service`"
+        );
+    }
 
     // Get settings
     let settings = get_settings();
