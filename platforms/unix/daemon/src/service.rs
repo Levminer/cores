@@ -36,7 +36,7 @@ WantedBy=multi-user.target";
         std::process::exit(1);
     }
 
-    // enable service
+    // enable service auto-start
     std::process::Command::new("sudo")
         .arg("systemctl")
         .arg("enable")
@@ -53,5 +53,6 @@ WantedBy=multi-user.target";
         .expect("Failed to start coresd service");
 
     info!("Service created successfully, please run `sudo systemctl status coresd` for more information");
+    info!("NOTE: You need to configure settings as root `/root/Cores/settings.json`");
     std::process::exit(0);
 }

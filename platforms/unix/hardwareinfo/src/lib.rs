@@ -131,6 +131,13 @@ pub struct CoresDisk {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresDiskInfo {
+    pub health: String,
+    pub temperature: CoresSensor,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CoresStorage {
     pub disks: Vec<CoresDisk>,
 }

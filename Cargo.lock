@@ -2316,6 +2316,7 @@ dependencies = [
  "libc",
  "log",
  "netdev",
+ "nix 0.29.0",
  "nvml-wrapper",
  "regex",
  "serde",

@@ -1,6 +1,8 @@
 use anyhow::{Context, Result};
 use core::str;
+use nix::unistd::getuid;
 use regex::Regex;
+use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
     fmt::Display,
@@ -8,6 +10,8 @@ use std::{
     process::Command,
     sync::LazyLock,
 };
+
+use crate::{CoresDiskInfo, CoresSensor};
 
 const SYS_STATS: &str = r" *(?P<read_ios>[0-9]*) *(?P<read_merges>[0-9]*) *(?P<read_sectors>[0-9]*) *(?P<read_ticks>[0-9]*) *(?P<write_ios>[0-9]*) *(?P<write_merges>[0-9]*) *(?P<write_sectors>[0-9]*) *(?P<write_ticks>[0-9]*) *(?P<in_flight>[0-9]*) *(?P<io_ticks>[0-9]*) *(?P<time_in_queue>[0-9]*) *(?P<discard_ios>[0-9]*) *(?P<discard_merges>[0-9]*) *(?P<discard_sectors>[0-9]*) *(?P<discard_ticks>[0-9]*) *(?P<flush_ios>[0-9]*) *(?P<flush_ticks>[0-9]*)";
 
@@ -21,6 +25,35 @@ pub struct DriveData {
     pub removable: Result<bool>,
     pub disk_stats: HashMap<String, usize>,
     pub capacity: Result<u64>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct SmartDevice {
+    r#type: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+struct SmartInfo {
+    temperature: u64,
+    percentage_used: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct SmartAttributeArray {
+    name: String,
+    value: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct SmartAttribute {
+    table: Vec<SmartAttributeArray>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct SmartctlDiskInfo {
+    device: SmartDevice,
+    nvme_smart_health_information_log: Option<SmartInfo>,
+    ata_smart_attributes: Option<SmartAttribute>,
 }
 
 impl DriveData {
@@ -316,4 +349,68 @@ pub fn get_free_space(path: &PathBuf) -> u64 {
     } else {
         return 0;
     }
+}
+
+pub fn get_drive_info(path: &PathBuf) -> CoresDiskInfo {
+    // Define the device path as a variable
+    let path_str = path.to_str().unwrap_or("").replace("/sys/block/", "/dev/");
+
+    // Construct the command string
+    let command = format!("sudo smartctl -a {} -j", path_str);
+
+    // Get user id
+    let user_id = getuid();
+
+    let mut disk_info = CoresDiskInfo {
+        health: "N/A".to_string(),
+        temperature: CoresSensor {
+            value: 0.0,
+            max: 0.0,
+            min: 0.0,
+            name: "Temperature".to_string(),
+        },
+    };
+
+    if user_id.is_root() {
+        // Execute the command
+        let output = Command::new("sh").arg("-c").arg(&command).output();
+
+        // parse output JSON
+        if let Ok(output) = output {
+            if let Ok(result) = str::from_utf8(&output.stdout) {
+                let json = serde_json::from_str::<SmartctlDiskInfo>(result);
+
+                if let Ok(json) = json {
+                    if json.device.r#type == "nvme" {
+                        disk_info.health = (100
+                            - json
+                                .nvme_smart_health_information_log
+                                .unwrap()
+                                .percentage_used as u64)
+                            .to_string();
+                        disk_info.temperature.value =
+                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
+                        disk_info.temperature.max =
+                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
+                        disk_info.temperature.min =
+                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
+                    } else {
+                        for attribute in json.ata_smart_attributes.unwrap().table {
+                            if attribute.name == "Temperature_Celsius" {
+                                disk_info.temperature.value = attribute.value as f64;
+                                disk_info.temperature.max = attribute.value as f64;
+                                disk_info.temperature.min = attribute.value as f64;
+                            }
+
+                            if attribute.name == "SSD_Life_Left" {
+                                disk_info.health = attribute.value.to_string();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return disk_info;
 }

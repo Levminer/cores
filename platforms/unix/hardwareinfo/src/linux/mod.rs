@@ -65,6 +65,7 @@ pub fn linux_hardware_info(data: &mut Data) {
                 let inner = &d.inner;
 
                 let drive_space = drive::get_free_space(path);
+                let drive_info = drive::get_drive_info(path);
 
                 data.hw_info.system.storage.disks.push(CoresDisk {
                     name: inner.clone().model.unwrap_or("N/A".to_string()),
@@ -74,8 +75,8 @@ pub fn linux_hardware_info(data: &mut Data) {
                     throughput_write: 0.0,
                     data_read: 0.0,
                     data_written: 0.0,
-                    temperature: CoresSensor::default(),
-                    health: "N/A".to_string(),
+                    temperature: drive_info.temperature,
+                    health: drive_info.health,
                     read_sectors: d.disk_stats.get("read_sectors").unwrap_or(&0).clone(),
                     write_sectors: d.disk_stats.get("write_sectors").unwrap_or(&0).clone(),
                     last_timestamp: SystemTime::now(),
