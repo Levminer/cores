@@ -73,7 +73,7 @@
 						</div>
 						<h2>Wake On LAN</h2>
 					</div>
-					<h3>You can wake up other devices on your network with Wake-on-LAN.</h3>
+					<h3>You can wake up other devices on your network with Wake On LAN.</h3>
 				</div>
 
 				<div class="flex flex-col items-start gap-3 sm:my-5">
@@ -129,7 +129,7 @@
 									}}
 								>
 									<Power />
-									Wake-on-LAN
+									Send WOL packet
 								</button>
 
 								<button

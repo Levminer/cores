@@ -78,24 +78,6 @@ public class Disk {
 	}
 }
 
-public class Monitor {
-	public string Name {
-		get; set;
-	}
-
-	public string Resolution {
-		get; set;
-	}
-
-	public string RefreshRate {
-		get; set;
-	}
-
-	public bool Primary {
-		get; set;
-	}
-}
-
 public class NetInterface {
 	public string Name {
 		get; set;
@@ -281,12 +263,6 @@ public class MotherboardInfo {
 	}
 }
 
-public class MonitorInfo {
-	public List<Monitor> Monitors {
-		get; set;
-	} = new();
-}
-
 public class NetworkInfo {
 	public List<NetInterface> Interfaces {
 		get; set;
@@ -318,10 +294,6 @@ public class SystemAPI {
 	} = new();
 
 	public BatteryInfo Battery {
-		get; set;
-	} = new();
-
-	public MonitorInfo Monitor {
 		get; set;
 	} = new();
 

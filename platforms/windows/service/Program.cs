@@ -3,6 +3,7 @@ using lib;
 using Serilog;
 using System.Runtime.Versioning;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace service;
 
@@ -15,9 +16,11 @@ internal class HardwareStats {
 public class Program {
 	internal static JsonSerializerOptions CompressedSerializerOptions = new() {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
 	};
 	internal static JsonSerializerOptions SerializerOptions = new() {
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
 		WriteIndented = true,
 	};
 	internal static HardwareStats HardwareStats = new();
@@ -30,7 +33,7 @@ public class Program {
 
 	public static void Main(string[] args) {
 		SentrySdk.Init(settings => {
-			settings.Dsn = "https://5df3267b294f6e3885f4ccf01b46722b@o4506670275428352.ingest.us.sentry.io/4507197428596736";
+			settings.Dsn = "https://4e746421f320352c8db806951ee076e1@o4506670275428352.ingest.us.sentry.io/4507197428596736";
 			settings.AutoSessionTracking = true;
 			settings.IsGlobalModeEnabled = true;
 			settings.TracesSampleRate = 0.8;

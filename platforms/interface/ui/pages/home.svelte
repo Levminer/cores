@@ -548,7 +548,7 @@
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.system.monitor.monitors.length > 0}
+			{#if $hardwareInfo.system.monitor?.monitors.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">

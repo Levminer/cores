@@ -111,7 +111,7 @@ fn check_if_settings_exits() {
     if !program_data.join("Cores").join("settings.json").exists() {
         std::fs::write(
             program_data.join("Cores").join("settings.json"),
-            serde_json::to_string(&sample_settings).unwrap(),
+            serde_json::to_string(&sample_settings).expect("Failed to convert to JSON"),
         )
         .expect("Failed to create settings file");
     }
@@ -149,7 +149,7 @@ pub fn get_settings() -> Settings {
         Err(_) => {
             std::fs::write(
                 program_data.join("Cores").join("settings.json"),
-                serde_json::to_string(&sample_settings).unwrap(),
+                serde_json::to_string(&sample_settings).expect("Failed to convert to JSON"),
             )
             .expect("Failed to create a missing settings file");
 

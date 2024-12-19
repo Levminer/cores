@@ -1,13 +1,22 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using Serilog;
 using System.Net.NetworkInformation;
-using WindowsDisplayAPI;
 
 namespace lib;
 
+public static class ArrayExtensions {
+	public static bool TrySetValue<T>(this List<T> list, int index, T value) {
+		if (index >= 0 && index < list.Count) {
+			list[index] = value;
+			return true;
+		}
+		return false;
+	}
+}
+
 public class HardwareInfo {
-	public bool firstRun = true;
-	public bool errorSent = false;
+	private static bool firstRun = true;
+	private static bool errorSent = false;
 	public HardwareUpdater refresher = new();
 	public Commands commands = new();
 	public Computer computer = new() {
@@ -136,7 +145,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.CPU.Temperature.Add(data);
 						} else {
-							API.CPU.Temperature[j] = data;
+							API.CPU.Temperature.TrySetValue(j, data);
 						}
 					}
 
@@ -144,7 +153,7 @@ public class HardwareInfo {
 					for (int j = 0; j < powerSensors.Length; j++) {
 						// CPU power is buggy on wake from sleep
 						if (powerSensors[j].Max < 2000 && powerSensors[j].Value < 2000) {
-							var data2 = new Sensor {
+							var data = new Sensor {
 								Name = powerSensors[j].Name,
 								Value = (float)Math.Round(powerSensors[j].Value ?? 0),
 								Min = (float)Math.Round(powerSensors[j].Min ?? 0),
@@ -152,9 +161,9 @@ public class HardwareInfo {
 							};
 
 							if (firstRun) {
-								API.CPU.Power.Add(data2);
+								API.CPU.Power.Add(data);
 							} else {
-								API.CPU.Power[j] = data2;
+								API.CPU.Power.TrySetValue(j, data);
 							}
 						}
 					}
@@ -172,7 +181,7 @@ public class HardwareInfo {
 							if (firstRun) {
 								API.CPU.Load.Add(data);
 							} else {
-								API.CPU.Load[j] = data;
+								API.CPU.Load.TrySetValue(j, data);
 							}
 						}
 
@@ -195,7 +204,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.CPU.Clock.Add(data);
 						} else {
-							API.CPU.Clock[j] = data;
+							API.CPU.Clock.TrySetValue(j, data);
 						}
 					}
 
@@ -212,7 +221,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.CPU.Voltage.Add(data);
 						} else {
-							API.CPU.Voltage[j] = data;
+							API.CPU.Voltage.TrySetValue(j, data);
 						}
 					}
 				}
@@ -237,7 +246,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.GPU.Temperature.Add(data);
 						} else {
-							API.GPU.Temperature[j] = data;
+							API.GPU.Temperature.TrySetValue(j, data);
 						}
 					}
 
@@ -253,7 +262,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.GPU.Fan.Add(data);
 						} else {
-							API.GPU.Fan[j] = data;
+							API.GPU.Fan.TrySetValue(j, data);
 						}
 					}
 
@@ -269,7 +278,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.GPU.Memory.Add(data);
 						} else {
-							API.GPU.Memory[j] = data;
+							API.GPU.Memory.TrySetValue(j, data);
 						}
 					}
 
@@ -285,7 +294,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.GPU.Power.Add(data);
 						} else {
-							API.GPU.Power[j] = data;
+							API.GPU.Power.TrySetValue(j, data);
 						}
 					}
 
@@ -301,7 +310,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.GPU.Clock.Add(data);
 						} else {
-							API.GPU.Clock[j] = data;
+							API.GPU.Clock.TrySetValue(j, data);
 						}
 					}
 
@@ -319,8 +328,8 @@ public class HardwareInfo {
 							API.GPU.Load = GPULoad.Load;
 							API.GPU.MaxLoad = GPULoad.MaxLoad;
 						}
-						catch (Exception) {
-							Log.Error("Error in GPULoad");
+						catch (Exception ex) {
+							Log.Error("Error in GPULoad: {@ex}", ex);
 						}
 					});
 				}
@@ -341,7 +350,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.RAM.Load.Add(data);
 						} else {
-							API.RAM.Load[j] = data;
+							API.RAM.Load.TrySetValue(j, data);
 						}
 					}
 				}
@@ -519,7 +528,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.SuperIO.Voltage.Add(data);
 						} else {
-							API.System.SuperIO.Voltage[j] = data;
+							API.System.SuperIO.Voltage.TrySetValue(j, data);
 						}
 
 					}
@@ -535,7 +544,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.SuperIO.Temperature.Add(data);
 						} else {
-							API.System.SuperIO.Temperature[j] = data;
+							API.System.SuperIO.Temperature.TrySetValue(j, data);
 						}
 					}
 
@@ -550,7 +559,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.SuperIO.FanControl.Add(data);
 						} else {
-							API.System.SuperIO.FanControl[j] = data;
+							API.System.SuperIO.FanControl.TrySetValue(j, data);
 						}
 					}
 
@@ -565,7 +574,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.SuperIO.Fan.Add(data);
 						} else {
-							API.System.SuperIO.Fan[j] = data;
+							API.System.SuperIO.Fan.TrySetValue(j, data);
 						}
 
 						try {
@@ -588,7 +597,7 @@ public class HardwareInfo {
 								if (firstRun) {
 									API.System.SuperIO.FanControl.Add(data2);
 								} else {
-									API.System.SuperIO.FanControl[j] = data2;
+									API.System.SuperIO.FanControl.TrySetValue(j, data2);
 								}
 							}
 						}
@@ -724,25 +733,6 @@ public class HardwareInfo {
 					API.RAM.Layout.Add(computer.SMBios.MemoryDevices[i]);
 				}
 
-				// Monitors
-				var displays = Display.GetDisplays().ToArray();
-
-				for (int i = 0; i < displays.Length; i++) {
-					var defaultName = "N/A";
-					var name = displays[i].ToPathDisplayTarget().FriendlyName;
-
-					if (name != "") {
-						defaultName = name;
-					}
-
-					API.System.Monitor.Monitors.Add(new Monitor {
-						Name = defaultName,
-						RefreshRate = Convert.ToString(displays[i].CurrentSetting.Frequency),
-						Resolution = $"{displays[i].CurrentSetting.Resolution.Width}x{displays[i].CurrentSetting.Resolution.Height}",
-						Primary = displays[i].IsGDIPrimary
-					});
-				}
-
 				// BIOS info
 				var biosDate = computer.SMBios.Bios.Date ?? new DateTime(1970, 01, 01);
 
@@ -755,9 +745,10 @@ public class HardwareInfo {
 
 			firstRun = false;
 		}
-		catch (Exception e) {
+		catch (Exception ex) {
 			if (errorSent == false) {
-				SentrySdk.CaptureException(e);
+				SentrySdk.CaptureException(ex);
+				Log.Information("HW Info Error: {@errorSent}", ex);
 				errorSent = true;
 			}
 		}

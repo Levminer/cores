@@ -133,7 +133,7 @@ declare global {
 				cycleCount: string
 			}
 
-			monitor: {
+			monitor?: {
 				monitors: Monitor[]
 			}
 

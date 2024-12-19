@@ -199,8 +199,8 @@ public class Server {
 				}
 			}
 		}
-		catch (Exception) {
-			Log.Error("Failed to close WS connection");
+		catch (Exception ex) {
+			Log.Information("Failed to close WS connection: {@errorSent}", ex);
 			connectedClients.TryRemove(socket, out _);
 		}
 
