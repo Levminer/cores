@@ -1,4 +1,4 @@
-use crate::{compare_sensor, CoresSensor, Data, Round};
+use crate::{compare_sensor, CoresDisk, CoresSensor, Data, Round};
 
 #[cfg(target_os = "macos")]
 pub mod metrics;
@@ -7,6 +7,12 @@ pub mod sources;
 
 #[cfg(target_os = "macos")]
 pub fn macos_hardware_info(data: &mut Data) {
+    use core::str;
+    use std::{process::Command, time::SystemTime};
+    use sysinfo::Disks;
+
+    use crate::SmartctlDiskInfo;
+
     let mut sampler = metrics::Sampler::new().unwrap();
     let soc = sources::SocInfo::new().unwrap();
 
@@ -61,6 +67,64 @@ pub fn macos_hardware_info(data: &mut Data) {
         });
 
         data.hw_info.gpu.max_load = (data.hw_info.gpu.load[0].value as f64).fmt_num();
+
+        // Disks
+        let gb = 1024_f64.powi(3);
+        let disks = Disks::new_with_refreshed_list();
+        for disk in disks.list() {
+            let free_space = disk.available_space() as f64 / gb;
+            let total_space = disk.total_space() as f64 / gb;
+            let name = disk.name().to_str().unwrap().to_string();
+
+            if !disk.is_removable() && disk.mount_point().to_str() == Some("/") {
+                let mut primary_disk = CoresDisk {
+                    name: name.clone(),
+                    total_space: total_space as u64,
+                    free_space: free_space as u64,
+                    throughput_read: 0.0,
+                    throughput_write: 0.0,
+                    temperature: CoresSensor::default(),
+                    health: "N/A".to_string(),
+                    data_read: 0.0,
+                    data_written: 0.0,
+                    read_sectors: 0,
+                    write_sectors: 0,
+                    last_timestamp: SystemTime::now(),
+                };
+
+                let command = format!("smartctl -a disk0 -j");
+                let output = Command::new("sh").arg("-c").arg(&command).output();
+
+                if let Ok(output) = output {
+                    if let Ok(result) = str::from_utf8(&output.stdout) {
+                        let json = serde_json::from_str::<SmartctlDiskInfo>(result);
+
+                        if let Ok(json) = json {
+                            if json.device.r#type == "nvme" {
+                                primary_disk.health = (100
+                                    - json
+                                        .nvme_smart_health_information_log
+                                        .unwrap()
+                                        .percentage_used
+                                        as u64)
+                                    .to_string();
+                                primary_disk.temperature.value =
+                                    json.nvme_smart_health_information_log.unwrap().temperature
+                                        as f64;
+                                primary_disk.temperature.max =
+                                    json.nvme_smart_health_information_log.unwrap().temperature
+                                        as f64;
+                                primary_disk.temperature.min =
+                                    json.nvme_smart_health_information_log.unwrap().temperature
+                                        as f64;
+                            }
+                        }
+                    }
+                }
+
+                data.hw_info.system.storage.disks.push(primary_disk);
+            }
+        }
     } else {
         let prev_gpu_temp = data.hw_info.gpu.temperature[0].clone();
         let prev_gpu_power = data.hw_info.gpu.power[0].clone();

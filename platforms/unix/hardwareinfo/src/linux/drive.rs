@@ -11,7 +11,7 @@ use std::{
     sync::LazyLock,
 };
 
-use crate::{CoresDiskInfo, CoresSensor};
+use crate::{CoresDiskInfo, CoresSensor, SmartctlDiskInfo};
 
 const SYS_STATS: &str = r" *(?P<read_ios>[0-9]*) *(?P<read_merges>[0-9]*) *(?P<read_sectors>[0-9]*) *(?P<read_ticks>[0-9]*) *(?P<write_ios>[0-9]*) *(?P<write_merges>[0-9]*) *(?P<write_sectors>[0-9]*) *(?P<write_ticks>[0-9]*) *(?P<in_flight>[0-9]*) *(?P<io_ticks>[0-9]*) *(?P<time_in_queue>[0-9]*) *(?P<discard_ios>[0-9]*) *(?P<discard_merges>[0-9]*) *(?P<discard_sectors>[0-9]*) *(?P<discard_ticks>[0-9]*) *(?P<flush_ios>[0-9]*) *(?P<flush_ticks>[0-9]*)";
 
@@ -25,35 +25,6 @@ pub struct DriveData {
     pub removable: Result<bool>,
     pub disk_stats: HashMap<String, usize>,
     pub capacity: Result<u64>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct SmartDevice {
-    r#type: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
-struct SmartInfo {
-    temperature: u64,
-    percentage_used: u64,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct SmartAttributeArray {
-    name: String,
-    value: u64,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct SmartAttribute {
-    table: Vec<SmartAttributeArray>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct SmartctlDiskInfo {
-    device: SmartDevice,
-    nvme_smart_health_information_log: Option<SmartInfo>,
-    ata_smart_attributes: Option<SmartAttribute>,
 }
 
 impl DriveData {

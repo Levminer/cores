@@ -131,6 +131,35 @@ pub struct CoresDisk {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SmartDevice {
+    r#type: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+pub struct SmartInfo {
+    temperature: u64,
+    percentage_used: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SmartAttributeArray {
+    name: String,
+    value: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SmartAttribute {
+    table: Vec<SmartAttributeArray>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SmartctlDiskInfo {
+    device: SmartDevice,
+    nvme_smart_health_information_log: Option<SmartInfo>,
+    ata_smart_attributes: Option<SmartAttribute>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CoresDiskInfo {
     pub health: String,
@@ -555,29 +584,6 @@ pub fn refresh_hardware_info(data: &mut Data) {
             }
         }
     }
-
-    //Display processes ID, name na disk usage:
-    // for (_pid, process) in data.sys.processes() {}
-
-    // Disks
-    // if data.first_run {
-    //     let disks = Disks::new_with_refreshed_list();
-    //     for disk in disks.list() {
-    //         let free_space = disk.available_space() as f64 / gb;
-    //         let total_space = disk.total_space() as f64 / gb;
-    //         let name = disk.name().to_str().unwrap().to_string();
-
-    //         data.hw_info.system.storage.disks.push(CoresDisk {
-    //             name: name.clone(),
-    //             total_space: total_space as u64,
-    //             free_space: free_space as u64,
-    //             throughput_read: 0.0,
-    //             throughput_write: 0.0,
-    //             temperature: CoresSensor::default(),
-    //             health: "N/A".to_string(),
-    //         });
-    //     }
-    // }
 
     // Network info
     match get_default_interface() {
