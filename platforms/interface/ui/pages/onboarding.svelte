@@ -18,14 +18,14 @@
 	<div class="step2 hidden justify-center rounded-2xl bg-black/30 p-10 py-10 shadow-md backdrop-blur-xl">
 		<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 			<div class="flex w-full flex-col">
-				<div class="mb-5">
+				<div class="mb-10">
 					<h1 class="bg-gradient-to-r bg-clip-text text-center font-extrabold text-white">Activate Cores</h1>
 				</div>
 
-				<div class="mt-1 flex flex-row justify-between gap-5 sm:flex-col">
+				<div class="flex flex-row justify-between sm:flex-col">
 					<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 						<div class="flex flex-row flex-wrap gap-3">
-							<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
+							<div class="mx-auto flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
 								<h1
 									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
 								>
@@ -90,7 +90,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
+							<div class="mx-auto flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
 								<h1
 									class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
 								>
@@ -155,7 +155,7 @@
 							</div>
 						</div>
 
-						<div class="mt-4 flex flex-wrap justify-center text-center text-lg">
+						<div class="mt-3 flex flex-wrap justify-center text-center text-lg">
 							<div
 								class="mx-auto flex w-full flex-row items-center justify-between rounded-xl border-2 border-purple-400 p-5 text-left"
 							>
@@ -166,7 +166,8 @@
 										Get started for free
 									</h2>
 									<p class="text-base leading-tight">
-										During the beta period you can use Cores for free, <br /> please consider buying it to support the development.
+										You can use Cores for free, but features like remote access requires a purchase. <br /> Please consider purchasing
+										Cores to unlock all features and support the development.
 									</p>
 								</div>
 								<div>
@@ -181,9 +182,9 @@
 	</div>
 
 	<!-- step 3 -->
-	<div class="step3 mx-auto hidden w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-20 shadow-md backdrop-blur-xl">
+	<div class="step3 mx-auto hidden w-1/2 flex-col justify-center rounded-2xl bg-black/30 p-10 shadow-md backdrop-blur-xl">
 		<div class="text-center">
-			<h1 class="mb-2">Welcome to Cores!</h1>
+			<h1 class="mb-5">Welcome to Cores!</h1>
 		</div>
 		<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
 			<button
@@ -207,18 +208,18 @@
 				}}
 				class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 			>
-				<Globe size="30" />
+				<MonitorSmartphone size="30" />
 
 				<div class="text-left">
 					<h2>Setup remote connections</h2>
 
-					<h3>You can setup remote connections to monitor <br /> your computer from anywhere.</h3>
+					<h3>Setup remote connections to monitor your computer from anywhere.</h3>
 				</div>
 			</button>
 
 			<button
 				on:click={() => {
-					router.goto("/connections", true)
+					router.goto("/settings", true)
 				}}
 				class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 			>
@@ -239,30 +240,31 @@
 	import ModularDialog from "ui/components/modularDialog.svelte"
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
-	import { Globe, MoveRight, Home, CircleCheck, Settings, Check, ShoppingCart, Mail } from "lucide-svelte"
+	import { Globe, MoveRight, Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone } from "lucide-svelte"
 	import { settings } from "../stores/settings.ts"
 	import build from "../../../../build.json"
 	import { onMount } from "svelte"
 
-	let trialOver = false
-
 	onMount(() => {
+		// Skip to step 2 if key is provided
 		if ($settings.licenseKey === "free") {
 			step2()
 		}
 	})
 
-	// Check if trial is over
-	/* if ($settings.licenseActivated) {
-		let dateActivated = new Date($settings.licenseActivated)
-		let dateNow = new Date()
-		let diff = dateNow.getTime() - dateActivated.getTime()
-		let days = Math.ceil(diff / (1000 * 3600 * 24))
+	onMount(() => {
+		// Check if trial is over
+		if ($settings.licenseActivated) {
+			let dateActivated = new Date($settings.licenseActivated)
+			let dateNow = new Date()
+			let diff = dateNow.getTime() - dateActivated.getTime()
+			let days = Math.ceil(diff / (1000 * 3600 * 24))
 
-		if (days > 7) {
-			trialOver = true
+			if (days > 7) {
+				step2()
+			}
 		}
-	} */
+	})
 
 	const step2 = () => {
 		document.querySelector(".step1").classList.add("hidden")

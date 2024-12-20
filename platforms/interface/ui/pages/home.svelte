@@ -20,35 +20,30 @@
 						>
 					{/if}
 				</div>
-				<div>
+				<div class="flex flex-row gap-3">
+					<a href="/connections" class="transparent-900 flex items-center justify-center gap-2 rounded-lg p-3 font-semibold sm:p-2">
+						<MonitorSmartphone />
+						{#if $settings.remoteConnections}
+							Remote connections
+							<div id="status" class="relative top-0.5 size-3 rounded-full bg-green-500" />
+						{:else}
+							Remote connections
+							<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-500" />
+						{/if}
+					</a>
 					<button
 						on:click={() => {
 							open("https://cores.canny.io/feature-requests")
 						}}
-						class="button"
+						class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2"
 					>
 						<Megaphone />
-						Feedback</button
-					>
-				</div>
-				<!-- <div class="flex items-center justify-center">
-					<button
-						on:click={() => {
-							if (page === "grid") {
-								page = "list"
-							} else {
-								page = "grid"
-							}
-						}}
-						class="transparent-800 rounded-lg p-3"
-					>
-						{#if page === "grid"}
-							<LayoutGrid />
-						{:else if page === "list"}
-							<LayoutList />
-						{/if}
 					</button>
-				</div> -->
+
+					<a href="/settings" class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Settings />
+					</a>
+				</div>
 			</div>
 		</div>
 	{/if}
@@ -612,7 +607,23 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import GaugeChart from "ui/charts/gaugeChart.svelte"
 	import MeterChart from "ui/charts/meterChart.svelte"
-	import { Gauge, CircuitBoard, Clock, Fan, HardDrive, Monitor, Network, Plug, Thermometer, Zap, Cpu, Battery, Megaphone } from "lucide-svelte"
+	import {
+		Gauge,
+		CircuitBoard,
+		Clock,
+		Fan,
+		HardDrive,
+		Monitor,
+		Network,
+		Plug,
+		Thermometer,
+		Zap,
+		Cpu,
+		Battery,
+		Megaphone,
+		Settings,
+		MonitorSmartphone,
+	} from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import Progress from "ui/components/progress.svelte"
 	import { settings } from "ui/stores/settings.ts"

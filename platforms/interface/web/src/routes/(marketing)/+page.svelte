@@ -17,7 +17,7 @@
 			</div>
 			<div class="rounded-xl bg-white px-3 py-2">
 				<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-2xl font-medium italic text-transparent md:text-4xl">
-					MacBook Pro
+					Mac Mini
 				</h2>
 			</div>
 		</div>
@@ -181,15 +181,15 @@
 		</div>
 
 		<div id="downloads" class="flex min-h-screen justify-center rounded-xl py-20">
-			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-full flex-col">
+			<div class="flex w-[50%] select-text flex-wrap items-center justify-between sm:w-full sm:px-2 md:flex-nowrap">
+				<div class="flex w-full flex-col justify-center items-center">
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Download</h2>
 						<h3 class="italic text-gray-100">Download the latest version of Cores now to get started.</h3>
 					</div>
 
-					<div class="flex w-full flex-row justify-between items-center gap-5 sm:flex-col">
+					<div class="flex w-full flex-row items-center justify-center gap-5 sm:flex-col">
 						<!-- windows installer -->
 						<button
 							on:click={() => {
@@ -222,10 +222,10 @@
 						</button>
 					</div>
 
-					<div class="transparent-900 mt-10 w-full space-y-8 rounded-xl border border-gray-500 p-8 text-center shadow-xl sm:p-4">
+					<div class="transparent-900 mt-10 w-[85%] space-y-8 rounded-xl border border-gray-500 p-8 text-center shadow-xl sm:p-4">
 						{#if selectedDownload === "windows"}
 							<h3>Download the installer or get the app from the Microsoft Store.</h3>
-							<div class="flex flex-row items-center justify-center gap-3">
+							<div class="flex flex-row flex-wrap items-center justify-center gap-3">
 								<a href="https://link.levminer.com/cores-installer" target="_blank" class="smallButton">
 									<Download width="24" height="24" />
 									Download
@@ -250,8 +250,16 @@
 								<h3 class="text-lg">System requirements: Linux, 64bit or arm64 processor</h3>
 							</div>
 						{:else}
-							<h3>Coming soon!</h3>
-							<a href="#newsletter" class="underline">Subscribe to get notified</a>
+							<h3>Download and install the app with the installer.</h3>
+							<div class="flex flex-row items-center justify-center gap-3">
+								<a href="https://github.com/levminer/cores/releases/latest" target="_blank" class="smallButton">
+									<Download width="24" height="24" />
+									Download
+								</a>
+							</div>
+							<div class="border-t-2 pt-6">
+								<h3 class="text-lg">System requirements: macOS Big Sur, arm64 (Apple Silicon) processor</h3>
+							</div>
 						{/if}
 					</div>
 				</div>

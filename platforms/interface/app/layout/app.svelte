@@ -4,7 +4,9 @@
 	{/if}
 
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
-		<BuildNumber />
+		{#if build.number.startsWith("alpha") || build.number.startsWith("beta")}
+			<BuildNumber />
+		{/if}
 
 		<div class="top" />
 
@@ -43,7 +45,11 @@
 				</Boundary>
 
 				<Boundary onError={console.error}>
-					<Route path="/connections"><Connections /></Route>
+					{#if $settings.licenseKey !== "" && $settings.licenseKey !== "free"}
+						<Route path="/connections"><Connections /></Route>
+					{:else}
+						<Route path="/connections"><Onboarding /></Route>
+					{/if}
 				</Boundary>
 
 				<Boundary onError={console.error}>
