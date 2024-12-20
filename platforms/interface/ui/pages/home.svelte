@@ -536,8 +536,8 @@
 					</div>
 
 					<div class="mt-5 select-text">
-						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[0].value)}%</h3>
-						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[1].value)}%</h3>
+						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[1].value)}%</h3>
+						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[0].value)}%</h3>
 						<h3>Cycle count: {$hardwareInfo.system.battery.cycleCount}</h3>
 						<h3>
 							Capacity: {Math.round($hardwareInfo.system.battery.capacity[2].value / 1000)}/{Math.round(

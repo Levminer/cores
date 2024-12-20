@@ -57,7 +57,7 @@ public class HardwareInfo {
 
 						if (!temp.Description.Contains("Virtual") && temp.Name.Contains("Ethernet")) {
 							temp.Priority = 0;
-						} else if (!temp.Description.Contains("Virtual") && temp.Name.Contains("WiFi")) {
+						} else if (!temp.Description.Contains("Virtual") && (temp.Name.Contains("WiFi") || temp.Name.Contains("Wi-Fi"))) {
 							temp.Priority = 1;
 						} else {
 							temp.Priority = 2;

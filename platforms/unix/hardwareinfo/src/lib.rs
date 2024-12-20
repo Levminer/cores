@@ -722,17 +722,17 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             };
 
                             data.hw_info.system.battery.level.push(CoresSensor {
-                                name: "Charge level".to_string(),
-                                value: charge_level as f64,
-                                min: charge_level as f64,
-                                max: charge_level as f64,
-                            });
-
-                            data.hw_info.system.battery.level.push(CoresSensor {
                                 name: "Health".to_string(),
                                 value: 100.0 - health as f64,
                                 min: 100.0 - health as f64,
                                 max: 100.0 - health as f64,
+                            });
+
+                            data.hw_info.system.battery.level.push(CoresSensor {
+                                name: "Charge level".to_string(),
+                                value: charge_level as f64,
+                                min: charge_level as f64,
+                                max: charge_level as f64,
                             });
 
                             data.hw_info.system.battery.capacity.push(CoresSensor {
