@@ -169,6 +169,10 @@ public class Server {
 			}
 
 			var minutesList = Program.HardwareStats.minutes.Where((x, i) => (i + 1) % 3 == 0).ToList();
+			if (minutesList.Count > 0) {
+				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = JsonNode.Parse(secondsList[0]) }, Program.CompressedSerializerOptions));
+				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+			}
 
 			for (int i = 0; i < minutesList.Count; i++) {
 				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = JsonNode.Parse(minutesList[i]) }, Program.CompressedSerializerOptions));

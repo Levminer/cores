@@ -137,6 +137,10 @@
 					}
 				}
 
+				if (WSData.type == "initialMinutesData") {
+					$hardwareStatistics.minutes.push(generateSecondsData(WSData.data))
+				}
+
 				if (WSData.type == "minutesData") {
 					for (let i = 0; i < 3; i++) {
 						$hardwareStatistics.minutes.push(generateSecondsData(WSData.data))
@@ -245,11 +249,11 @@
 		// Update hardware statistics
 		const updateHardwareStats = (input: HardwareInfo) => {
 			if (Object.keys(input).length !== 0) {
-				if ($hardwareStatistics.minutes.length > 60) {
+				if ($hardwareStatistics.minutes.length >= 61) {
 					$hardwareStatistics.minutes.shift()
 				}
 
-				if ($hardwareStatistics.seconds.length > 60) {
+				if ($hardwareStatistics.seconds.length >= 61) {
 					$hardwareStatistics.seconds.shift()
 				}
 

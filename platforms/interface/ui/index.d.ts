@@ -3,7 +3,7 @@
 
 declare global {
 	interface NetworkMessage {
-		type: "data" | "initialData" | "secondsData" | "minutesData"
+		type: "data" | "initialData" | "secondsData" | "minutesData" | "initialMinutesData"
 		data: HardwareInfo
 	}
 

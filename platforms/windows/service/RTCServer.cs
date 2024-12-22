@@ -26,6 +26,9 @@ public class RTCServer {
 					}
 
 					var minutesList = Program.HardwareStats.minutes.Where((x, i) => (i + 1) % 3 == 0).ToList();
+					if (minutesList.Count > 0) {
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = JsonNode.Parse(minutesList[0]) }, Program.CompressedSerializerOptions));
+					}
 
 					for (int i = 0; i < minutesList.Count; i++) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = JsonNode.Parse(minutesList[i]) }, Program.CompressedSerializerOptions));
