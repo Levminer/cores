@@ -6,7 +6,7 @@
 				<div class="flex flex-row items-center gap-2">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<img src="https://cores.levminer.com/favicon.ico" height="24" width="24" />
+							<img src="https://www.coresmonitor.com/favicon.ico" height="24" width="24" />
 						</div>
 						<h2>Cores</h2>
 					</div>

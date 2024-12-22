@@ -5,7 +5,7 @@
 		<Dialog.Overlay transition={fade} transitionConfig={{ duration: 150 }} class="fixed inset-0 z-50 bg-black/70" />
 		<Dialog.Content
 			transition={flyAndScale}
-			class="fixed left-[50%] top-[50%] z-50 w-full max-w-xl translate-x-[-50%] translate-y-[-50%] rounded-2xl border border-gray-600 bg-gray-800 p-5 shadow-md outline-none sm:max-w-[490px] md:w-full"
+			class="fixed left-[50%] top-[50%] z-50 w-full max-w-xl translate-x-[-50%] translate-y-[-50%] rounded-xl border border-gray-600 bg-gray-800 p-5 shadow-md outline-none sm:max-w-[490px] md:w-full"
 		>
 			<Dialog.Title class="-mt-1.5 flex w-full items-center justify-center text-lg font-semibold tracking-tight">{title}</Dialog.Title>
 			<Separator.Root class="-mx-5 mb-6 mt-5 block h-px bg-gray-600" />

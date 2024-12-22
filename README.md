@@ -22,7 +22,7 @@
 -   Latest release version for users that want a stable and polished experience.
 
 [![Latest release](https://img.shields.io/github/v/release/levminer/cores?label=Release)](https://github.com/Levminer/cores/releases/latest)
-[![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://cores.levminer.com/#downloads)
+[![Download](https://img.shields.io/badge/Windows,%20Linux,%20macOS-download-brightgreen)](https://www.coresmonitor.com/#downloads)
 [![Updated](https://img.shields.io/github/last-commit/levminer/cores/dev?color=yellowgreen&label=Updated)](https://github.com/Levminer/cores)
 
 -   Also available on the [Microsoft Store](https://link.levminer.com/cores-ms-store).
@@ -31,10 +31,10 @@
 
 -   Cores is a background service that runs in the background and monitors your computer's hardware components. It's built on top of [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor). It provides additional features like GPU usage and drive health monitoring. On Windows it's written in C# and runs as a Windows service. It provides an option to connect to your computer remotely with a P2P connection for monitoring. It also provides a REST API and a WebSocket server if you want to use the data.
 
--   The UI is built with Svelte and it's available on the desktop as a Tauri desktop app. You can access it on the [website](https://cores.levminer.com/home) and you can remotely connect to your computer if you enabled remote connections and copied your connection code.
+-   The UI is built with Svelte and it's available on the desktop as a Tauri desktop app. You can access it on the [website](https://www.coresmonitor.com/home) and you can remotely connect to your computer if you enabled remote connections and copied your connection code.
 
 ## License
 
 -   This software is licensed under: [GPL-3.0](https://github.com/Levminer/cores/blob/dev/LICENSE.md)
--   You can buy the software as an individual on the [website](https://cores.levminer.com/#pricing). If you are planning to use this software as a business please contact me at: cores@levminer.com
+-   You can buy the software as an individual on the [website](https://www.coresmonitor.com/#pricing). If you are planning to use this software as a business please contact me at: cores@levminer.com
 -   Credits: [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), [Mac Monitor](https://github.com/vladkens/macmon), [Resources](https://github.com/nokyan/resources)

@@ -29,7 +29,7 @@
 							<h2>Connection code</h2>
 						</div>
 						<h3>
-							You can use this code on the website (https://cores.levminer.com) <br /> to monitor and control you device, keep it private.
+							You can use this code on the website (www.coresmonitor.com) <br /> to monitor and control you device, keep it private.
 						</h3>
 					</div>
 
@@ -44,7 +44,7 @@
 								class="button"
 								on:click={() => {
 									open(
-										`https://cores.levminer.com/settings?connectionCode=${$settings.connectionCode}&mac=${
+										`https://www.coresmonitor.com/settings?connectionCode=${$settings.connectionCode}&mac=${
 											$hardwareInfo.system.network.interfaces[0]?.macAddress ?? ""
 										}`,
 									)
