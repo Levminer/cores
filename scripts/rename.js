@@ -5,8 +5,8 @@ import json from "../package.json" assert { type: "json" }
 const os = platform()
 const version = json.version
 
-if (!existsSync("./core/target/release/upload")) {
-	mkdirSync("./core/target/release/upload")
+if (!existsSync("./target/release/upload")) {
+	mkdirSync("./target/release/upload")
 }
 
 if (os === "win32") {
