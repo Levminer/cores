@@ -1,2 +1,38 @@
-// TODO: https://github.com/Levminer/authme/blob/dev/scripts/rename.js
+import { mkdirSync, existsSync, copyFileSync } from "fs"
+import { platform } from "os"
+import json from "../package.json" assert { type: "json" }
 
+const os = platform()
+const version = json.version
+
+if (!existsSync("./core/target/release/upload")) {
+	mkdirSync("./core/target/release/upload")
+}
+
+if (os === "win32") {
+	try {
+		copyFileSync(`./target/release/bundle/msi/Cores_${version}_x64_en-US.msi`, `./core/target/release/upload/cores-${version}-windows-x64.msi`)
+		copyFileSync(`./target/release/bundle/msi/Cores_${version}_x64_en-US.msi.zip`, `./core/target/release/upload/cores-${version}-windows-x64.zip`)
+		copyFileSync(`./target/release/bundle/msi/Cores_${version}_x64_en-US.msi.zip.sig`, `./core/target/release/upload/cores-${version}-windows-x64.sig`)
+	} catch (err) {
+		console.log("File not found")
+	}
+} else if (os === "darwin") {
+	try {
+		copyFileSync(`./target/release/bundle/dmg/Cores_${version}_aarch64.dmg`, `./core/target/release/upload/cores-${version}-macos-arm64.dmg`)
+		copyFileSync("./target/release/bundle/macos/Cores.app.tar.gz", `./core/target/release/upload/cores-${version}-macos-arm64.tar.gz`)
+		copyFileSync("./target/release/bundle/macos/Cores.app.tar.gz.sig", `./core/target/release/upload/cores-${version}-macos-arm64.sig`)
+	} catch (err) {
+		console.log("File not found", err)
+	}
+} else {
+	try {
+		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage`, `./core/target/release/upload/cores-${version}-linux-x64.appimage`)
+		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage.tar.gz`, `./core/target/release/upload/cores-${version}-linux-x64.tar.gz`)
+		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage.tar.gz.sig`, `./core/target/release/upload/cores-${version}-linux-x64.sig`)
+		copyFileSync(`./target/release/bundle/deb/Cores_${version}_amd64.deb`, `./core/target/release/upload/cores-${version}-linux-x64.deb`)
+        copyFileSync(`./target/release/bundle/rpm/Cores_${version}-1.x86_64.rpm`, `./core/target/release/upload/cores-${version}-linux-x64.rpm`)
+	} catch (err) {
+		console.log("File not found")
+	}
+}
