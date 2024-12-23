@@ -61,13 +61,27 @@
 						</div>
 						<h2>RAM Usage</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "RAM_Usage",
+								statistics: [
+									{
+										label: "Usage",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
+											: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "RAM_Usage",
 							statistics: [
 								{
 									label: "Usage",
@@ -97,13 +111,27 @@
 						</div>
 						<h2>Virtual RAM Usage</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "Virtual_RAM_Usage",
+								statistics: [
+									{
+										label: "Usage",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
+											: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "Virtual_RAM_Usage",
 							statistics: [
 								{
 									label: "Usage",
@@ -134,6 +162,7 @@
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
 	import { Gauge } from "lucide-svelte"
 	import LineChart from "ui/charts/LineChart.svelte"
+	import SaveDataButton from "../components/saveDataButton.svelte"
 
 	let minutes = false
 </script>

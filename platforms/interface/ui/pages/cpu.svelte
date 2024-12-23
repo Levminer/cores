@@ -12,7 +12,7 @@
 				<div class="select-text">
 					<h3>Vendor: {$hardwareInfo.cpu.info[0].manufacturerName.replaceAll("(R)", "").replaceAll("Corporation", "")}</h3>
 					<h3>Name: {$hardwareInfo.cpu.name}</h3>
-					<h3>Base speed: {($hardwareInfo.cpu.info[0].currentSpeed / 1000).toFixed(1)} GHz</h3> 
+					<h3>Base speed: {($hardwareInfo.cpu.info[0].currentSpeed / 1000).toFixed(1)} GHz</h3>
 					<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].coreCount} C/{$hardwareInfo.cpu.info[0].threadCount} T</h3>
 				</div>
 			</div>
@@ -26,7 +26,32 @@
 						</div>
 						<h2>Average CPU Temperature</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "CPU_Temperature",
+								statistics: [
+									{
+										label: "Max Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.max)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.max),
+									},
+									{
+										label: "Current Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.value)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.value),
+									},
+									{
+										label: "Min Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.temperature.min)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.temperature.min),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
@@ -34,6 +59,7 @@
 				<div>
 					<LineChart
 						props={{
+							id: "CPU_Temperature",
 							statistics: [
 								{
 									label: "Max Temperature",
@@ -73,7 +99,32 @@
 						</div>
 						<h2>Average Clock speed</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "CPU_Clock_Speed",
+								statistics: [
+									{
+										label: "Max Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.clock.max)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.clock.max),
+									},
+									{
+										label: "Current Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.clock.value)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.clock.value),
+									},
+									{
+										label: "Min Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.clock.min)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.clock.min),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
@@ -81,24 +132,22 @@
 				<div>
 					<LineChart
 						props={{
+							id: "CPU_Clock_Speed",
 							statistics: [
 								{
 									label: "Max Clock Speed",
-									color: "max",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.max)
 										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.max),
 								},
 								{
 									label: "Current Clock Speed",
-									color: "current",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.value)
 										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.value),
 								},
 								{
 									label: "Min Clock Speed",
-									color: "min",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.cpu.clock.min)
 										: $hardwareStatistics.seconds.map((value) => value.cpu.clock.min),
@@ -123,7 +172,20 @@
 							</div>
 							<h2>CPU Power Usage</h2>
 						</div>
-						<div>
+						<div class="flex flex-row">
+							<SaveDataButton
+								props={{
+									id: "CPU_Power_Usage",
+									statistics: [
+										{
+											label: "Power Usage",
+											data: minutes
+												? $hardwareStatistics.minutes.map((value) => value.cpu.power)
+												: $hardwareStatistics.seconds.map((value) => value.cpu.power),
+										},
+									],
+								}}
+							/>
 							<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 						</div>
 					</div>
@@ -131,6 +193,7 @@
 					<div>
 						<LineChart
 							props={{
+								id: "CPU_Power_Usage",
 								statistics: [
 									{
 										label: "Power Usage",
@@ -157,7 +220,20 @@
 						</div>
 						<h2>Average CPU Load</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "CPU_Load",
+								statistics: [
+									{
+										label: "Load",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.load)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.load),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
@@ -165,6 +241,7 @@
 				<div>
 					<LineChart
 						props={{
+							id: "CPU_Load",
 							statistics: [
 								{
 									label: "Load",
@@ -194,7 +271,20 @@
 							</div>
 							<h2>CPU Voltage</h2>
 						</div>
-						<div>
+						<div class="flex flex-row">
+							<SaveDataButton
+								props={{
+									id: "CPU_Voltage",
+									statistics: [
+										{
+											label: "Voltage",
+											data: minutes
+												? $hardwareStatistics.minutes.map((value) => value.cpu.voltage)
+												: $hardwareStatistics.seconds.map((value) => value.cpu.voltage),
+										},
+									],
+								}}
+							/>
 							<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 						</div>
 					</div>
@@ -202,6 +292,7 @@
 					<div>
 						<LineChart
 							props={{
+								id: "CPU_Voltage",
 								statistics: [
 									{
 										label: "Voltage",
@@ -228,6 +319,7 @@
 	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { Clock, Cpu, Gauge, Plug, Thermometer, Zap } from "lucide-svelte"
 	import ToggleButton from "ui/components/toggleButton.svelte"
+	import SaveDataButton from "../components/saveDataButton.svelte"
 
 	let minutes = false
 </script>

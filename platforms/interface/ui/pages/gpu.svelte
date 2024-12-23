@@ -30,13 +30,39 @@
 						</div>
 						<h2>Average GPU Temperature</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Temperature",
+								statistics: [
+									{
+										label: "Max Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.temperature.max)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.temperature.max),
+									},
+									{
+										label: "Current Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.temperature.value)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.temperature.value),
+									},
+									{
+										label: "Min Temperature",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.temperature.min)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.temperature.min),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Temperature",
 							statistics: [
 								{
 									label: "Max Temperature",
@@ -76,31 +102,54 @@
 						</div>
 						<h2>Average GPU Core Clock</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Clock_Speed",
+								statistics: [
+									{
+										label: "Max Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.clock.max)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.clock.max),
+									},
+									{
+										label: "Current Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.clock.value)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.clock.value),
+									},
+									{
+										label: "Min Clock Speed",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.clock.min)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.clock.min),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Clock_Speed",
 							statistics: [
 								{
 									label: "Max Clock Speed",
-									color: "max",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.gpu.clock.max)
 										: $hardwareStatistics.seconds.map((value) => value.gpu.clock.max),
 								},
 								{
 									label: "Current Clock Speed",
-									color: "current",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.gpu.clock.value)
 										: $hardwareStatistics.seconds.map((value) => value.gpu.clock.value),
 								},
 								{
 									label: "Min Clock Speed",
-									color: "min",
 									data: minutes
 										? $hardwareStatistics.minutes.map((value) => value.gpu.clock.min)
 										: $hardwareStatistics.seconds.map((value) => value.gpu.clock.min),
@@ -124,13 +173,27 @@
 						</div>
 						<h2>GPU Power Usage</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Power_Usage",
+								statistics: [
+									{
+										label: "Power Usage",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.power)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.power),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Power_Usage",
 							statistics: [
 								{
 									label: "Power Usage",
@@ -156,7 +219,20 @@
 						</div>
 						<h2>Average GPU Load</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Load",
+								statistics: [
+									{
+										label: "Load",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.load)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.load),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
@@ -164,6 +240,7 @@
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Load",
 							statistics: [
 								{
 									label: "Load",
@@ -192,13 +269,27 @@
 						</div>
 						<h2>GPU Fan Speed</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Load",
+								statistics: [
+									{
+										label: "Load",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.load)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.load),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Fan_Speed",
 							statistics: [
 								{
 									label: "Fan Speed",
@@ -225,13 +316,27 @@
 						</div>
 						<h2>GPU Memory Usage</h2>
 					</div>
-					<div>
+					<div class="flex flex-row">
+						<SaveDataButton
+							props={{
+								id: "GPU_Memory_Usage",
+								statistics: [
+									{
+										label: "Memory Usage",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.memory)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.memory),
+									},
+								],
+							}}
+						/>
 						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
 					</div>
 				</div>
 				<div>
 					<LineChart
 						props={{
+							id: "GPU_Memory_Usage",
 							statistics: [
 								{
 									label: "Memory Usage",
@@ -259,6 +364,7 @@
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
 	import { Clock, Fan, Gauge, Thermometer, Zap } from "lucide-svelte"
 	import ToggleButton from "ui/components/toggleButton.svelte"
+	import SaveDataButton from "../components/saveDataButton.svelte"
 
 	let minutes = false
 </script>

@@ -1,4 +1,4 @@
-<Line {data} {options} />
+<Line {data} {options} id={props.id} />
 
 <script lang="ts">
 	import { colors } from "ui/utils/colors.ts"
@@ -7,6 +7,7 @@
 	import { Line } from "svelte-chartjs"
 
 	interface Props {
+		id?: string
 		statistics: {
 			label?: string
 			data?: number[]
@@ -21,6 +22,7 @@
 	}
 
 	export let props: Props = {
+		id: "",
 		statistics: [{}],
 		unit: "",
 		time: "",
@@ -81,8 +83,15 @@
 			},
 			x: {
 				ticks: {
-					display: false,
+					callback: function (val, index) {
+						// @ts-ignore ticks if they're divisible by 10
+						return index % 10 === 0 ? this.getLabelForValue(val) : ""
+					},
+					maxRotation: 0,
+					minRotation: 0,
+					color: "#969696",
 				},
+				// TODO: adjust grid lines
 			},
 		},
 		plugins: {
