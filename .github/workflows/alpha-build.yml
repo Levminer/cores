@@ -76,7 +76,7 @@ jobs:
               run: |
                   rm -rf target/release/build
                   rm -rf target/release/deps
-                  rm -rf target/release/bundle/appimage/authme.AppDir
+                  rm -rf target/release/bundle/appimage/Cores.AppDir
                   npm run rename
               shell: bash
 

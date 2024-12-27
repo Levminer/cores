@@ -28,10 +28,8 @@ if (os === "win32") {
 } else {
 	try {
 		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage`, `./target/release/upload/cores-${version}-linux-x64.appimage`)
-		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage.tar.gz`, `./target/release/upload/cores-${version}-linux-x64.tar.gz`)
-		copyFileSync(`./target/release/bundle/appimage/Cores_${version}_amd64.AppImage.tar.gz.sig`, `./target/release/upload/cores-${version}-linux-x64.sig`)
 		copyFileSync(`./target/release/bundle/deb/Cores_${version}_amd64.deb`, `./target/release/upload/cores-${version}-linux-x64.deb`)
-        copyFileSync(`./target/release/bundle/rpm/Cores_${version}-1.x86_64.rpm`, `./target/release/upload/cores-${version}-linux-x64.rpm`)
+        copyFileSync(`./target/release/bundle/rpm/Cores-${version}-1.x86_64.rpm`, `./target/release/upload/cores-${version}-linux-x64.rpm`)
 	} catch (err) {
 		console.log("File not found")
 	}
