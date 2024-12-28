@@ -1,13 +1,12 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::sync::Mutex;
-
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconEvent},
-    Manager,
+    webview_version, Manager,
 };
+use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
 use tauri_plugin_shell::{
     process::{CommandChild, CommandEvent},
     ShellExt,
@@ -38,7 +37,9 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            let window = app.get_webview_window("main").expect("Failed to get webview window");
+            let window = app
+                .get_webview_window("main")
+                .expect("Failed to get webview window");
 
             window.show().expect("Failed to show window");
             window.set_focus().expect("Failed to set focus");
@@ -52,6 +53,22 @@ fn main() {
             utils::system_info
         ])
         .setup(|app| {
+            let webview_version = webview_version();
+
+            if webview_version.is_err() {
+                app.dialog()
+                    .message(
+                        "Please install Microsoft Edge WebView2 Runtime! \
+                        (https://developer.microsoft.com/en-gb/microsoft-edge/webview2)",
+                    )
+                    .title("Failed to get webview version")
+                    .kind(MessageDialogKind::Error)
+                    .buttons(MessageDialogButtons::OkCustom("Exit".to_string()))
+                    .blocking_show();
+
+                app.app_handle().exit(0);
+            }
+
             app.manage(Mutex::new(GlobalState { child: None }));
 
             let toggle_window_item =
@@ -65,7 +82,9 @@ fn main() {
             tray.set_menu(Some(menu)).expect("Failed to set menu");
             tray.on_menu_event(move |app, event| match event.id().as_ref() {
                 "toggle_windows" => {
-                    let window = app.get_webview_window("main").expect("Failed to get window");
+                    let window = app
+                        .get_webview_window("main")
+                        .expect("Failed to get window");
 
                     if window.is_visible().expect("Failed to check visibility") {
                         window.hide().expect("Failed to hide window");
@@ -89,7 +108,9 @@ fn main() {
                     } = event
                     {
                         let app = tray.app_handle();
-                        let window = app.get_webview_window("main").expect("Failed to get window");
+                        let window = app
+                            .get_webview_window("main")
+                            .expect("Failed to get window");
 
                         if window.is_visible().expect("Failed to check visibility") {
                             window.hide().expect("Failed to hide window");
@@ -102,7 +123,10 @@ fn main() {
             }
 
             if cfg!(target_os = "linux") || cfg!(target_os = "macos") {
-                let sidecar_command = app.shell().sidecar("coresd").expect("Failed to get sidecar");
+                let sidecar_command = app
+                    .shell()
+                    .sidecar("coresd")
+                    .expect("Failed to get sidecar");
                 let (mut rx, child) = sidecar_command.spawn().expect("Failed to spawn sidecar");
 
                 let state = app.state::<Mutex<GlobalState>>();
@@ -139,7 +163,9 @@ fn main() {
         .expect("error while running tauri application")
         .run(|app, event| match event {
             tauri::RunEvent::Exit { .. } => {
-                let window = app.get_webview_window("main").expect("Failed to get webview window");
+                let window = app
+                    .get_webview_window("main")
+                    .expect("Failed to get webview window");
 
                 sentry::end_session_with_status(sentry::protocol::SessionStatus::Exited);
 
