@@ -40,6 +40,7 @@
 	import { Dialog, Tabs } from "bits-ui"
 	import ModularDialog from "./modularDialog.svelte"
 	import { settings } from "../stores/settings.ts"
+	import { state } from "../stores/state.ts"
 
 	interface Props {
 		id: string
@@ -55,7 +56,7 @@
 	}
 
 	const saveFile = () => {
-		if (($settings.licenseKey === "" || $settings.licenseKey === "free") && import.meta.env.VITE_CORES_MODE === "host") {
+		if (!$state.plan && import.meta.env.VITE_CORES_MODE === "host") {
 			return (location.href = "/onboarding")
 		}
 
@@ -85,7 +86,7 @@
 	}
 
 	const saveImage = () => {
-		if (($settings.licenseKey === "" || $settings.licenseKey === "free") && import.meta.env.VITE_CORES_MODE === "host") {
+		if (!$state.plan && import.meta.env.VITE_CORES_MODE === "host") {
 			return (location.href = "/onboarding")
 		}
 

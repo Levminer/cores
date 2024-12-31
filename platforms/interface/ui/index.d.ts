@@ -226,6 +226,12 @@ declare global {
 		userId: string
 	}
 
+	interface LibState {
+		showMenu: boolean
+		updateAvailable: boolean
+		plan: string | null
+	}
+
 	interface SystemInfo {
 		tauriVersion: string
 		osName: string

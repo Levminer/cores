@@ -44,7 +44,7 @@
 	}
 
 	.selectedDownloadButton {
-		@apply flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-white p-8 shadow-xl duration-150 ease-in-out bg-white text-black sm:p-4;
+		@apply flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-white bg-white p-8 text-black shadow-xl duration-150 ease-in-out sm:p-4;
 	}
 }
 
@@ -161,4 +161,11 @@ h5 {
 	background-image: radial-gradient(transparent, Canvas), radial-gradient(color-mix(in oklch, Canvastext 33%, Canvas) 0.8px, transparent 1.3px);
 	background-size: 200px 200px, 40px 40px;
 	background-repeat: round, space;
+}
+
+.radialBg {
+	background: radial-gradient(at 82.92025862068965% 27.291666666666664%, #2f1b41 0px, transparent 50%),
+		radial-gradient(at 16.002155172413794% 59.791666666666664%, #872341 0px, transparent 50%),
+		radial-gradient(at 52.209051724137936% 17.083333333333332%, #be3144 0px, transparent 50%),
+		radial-gradient(at 49.838362068965516% 55.00000000000001%, #f05941 0px, transparent 50%), #2f1b41;
 }

@@ -75,7 +75,7 @@
 					</div>
 					<h2>Feedback</h2>
 				</div>
-				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (cores@levminer.com).</h3>
+				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (feedback@coresmonitor.com).</h3>
 			</div>
 
 			<div class="flex flex-col items-start gap-3">

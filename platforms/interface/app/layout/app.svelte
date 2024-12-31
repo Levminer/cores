@@ -1,5 +1,5 @@
 <div class="flex h-screen">
-	{#if $settings.licenseKey !== ""}
+	{#if $state.showMenu}
 		<DesktopNavigation />
 	{/if}
 
@@ -10,7 +10,7 @@
 
 		<div class="top" />
 
-		{#if $hardwareInfo.cpu === undefined}
+		{#if $hardwareInfo.cpu === undefined || loading}
 			<Loading mode="desktop" />
 		{:else}
 			<RouteTransition>
@@ -45,10 +45,10 @@
 				</Boundary>
 
 				<Boundary onError={console.error}>
-					{#if $settings.licenseKey !== "" && $settings.licenseKey !== "free"}
-						<Route path="/connections"><Connections /></Route>
-					{:else}
+					{#if !$state.plan}
 						<Route path="/connections"><Onboarding /></Route>
+					{:else}
+						<Route path="/connections"><Connections /></Route>
 					{/if}
 				</Boundary>
 
@@ -79,6 +79,7 @@
 	import BuildNumber from "ui/navigation/buildNumber.svelte"
 	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
 	import { initializeSettings, settings } from "ui/stores/settings"
+	import { state } from "ui/stores/state"
 	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
 	import Loading from "ui/navigation/loading.svelte"
 	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
@@ -89,6 +90,9 @@
 	import { relaunch } from "@tauri-apps/plugin-process"
 	import { ask } from "@tauri-apps/plugin-dialog"
 	import posthog from "posthog-js"
+	import { supabaseClient } from "ui/utils/supabase"
+
+	$: loading = true
 
 	onMount(async () => {
 		let sendAnalytics = true
@@ -196,20 +200,32 @@
 		analytics()
 
 		// Navigate to the home page on load (webview bug)
-		if ($settings.licenseKey === "" || $settings.licenseKey === "free") {
-			router.goto("/onboarding")
+		const authenticate = async () => {
+			const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
-			let dateActivated = new Date($settings.licenseActivated)
-			let dateNow = new Date()
-			let diff = dateNow.getTime() - dateActivated.getTime()
-			let days = Math.ceil(diff / (1000 * 3600 * 24))
+			if (!userError && userData !== null) {
+				// User logged in
+				const { data, error } = await supabaseClient.from("user").select("*").single()
 
-			if (days > 7) {
-				$settings.licenseKey = ""
+				if (data.plan === "personal" || data.plan === "business") {
+					// User is on a paid plan
+					$state.showMenu = true
+					$state.plan = data.plan
+					router.goto("/home")
+				} else {
+					// User is on a free plan
+					router.goto("/onboarding")
+				}
+			} else {
+				// User not logged in
+				$state.showMenu = false
+				router.goto("/onboarding")
 			}
-		} else {
-			router.goto("/home")
+
+			loading = false
 		}
+
+		authenticate()
 
 		// Scroll to the top of the page on route change
 		router.subscribe(() => {

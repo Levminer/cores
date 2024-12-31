@@ -11,8 +11,8 @@
 						<h2>Cores</h2>
 					</div>
 
-					{#if $settings.licenseKey === "" || $settings.licenseKey === "free"}
-						<h2 class="text-cores-alternative">Free</h2>
+					{#if !$state.plan}
+						<h2 class="text-cores-alternative">Trial</h2>
 
 						<a
 							class="bg-cores-alternative border-cores-alternative mt-2 cursor-pointer rounded-xl border-2 px-2 py-0.5 text-xl font-medium text-white duration-200 ease-in hover:border-white"
@@ -627,5 +627,6 @@
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import Progress from "ui/components/progress.svelte"
 	import { settings } from "ui/stores/settings.ts"
+	import { state } from "ui/stores/state.ts"
 	import { open } from "@tauri-apps/plugin-shell"
 </script>

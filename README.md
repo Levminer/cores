@@ -36,5 +36,5 @@
 ## License
 
 -   This software is licensed under: [GPL-3.0](https://github.com/Levminer/cores/blob/dev/LICENSE.md)
--   You can buy the software as an individual on the [website](https://www.coresmonitor.com/#pricing). If you are planning to use this software as a business please contact me at: cores@levminer.com
+-   You can buy the software as an individual on the [website](https://www.coresmonitor.com/#pricing). If you are planning to use this software as a business please contact me at: support@coresmonitor.com
 -   Credits: [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), [Mac Monitor](https://github.com/vladkens/macmon), [Resources](https://github.com/nokyan/resources)

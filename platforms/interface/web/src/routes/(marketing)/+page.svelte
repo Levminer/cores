@@ -336,7 +336,7 @@
 
 										<div class="text-center">
 											<a
-												href="mailto:cores@levminer.com"
+												href="mailto:support@coresmonitor.com"
 												class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 											>
 												Get a quote
@@ -373,7 +373,7 @@
 
 							<div class="mt-4 flex flex-wrap justify-center gap-2 text-center text-lg">
 								<p>Want to use Cores as a business or have a question?</p>
-								<a class="underline" href="mailto:cores@levminer.com">Reach out</a>
+								<a class="underline" href="mailto:support@coresmonitor.com">Reach out</a>
 							</div>
 						</div>
 					</div>

@@ -12,6 +12,8 @@
 		"dialog:allow-ask",
 		"updater:default",
 		"process:default",
-		"process:allow-restart"
+		"process:allow-restart",
+		"oauth:allow-start",
+		"oauth:allow-cancel"
 	]
 }
