@@ -10,11 +10,35 @@
 						</div>
 						<h2>Remote connections</h2>
 					</div>
-					<h3>You can access and control your computer from any device with a web browser.</h3>
+					<h3>You can access and control your computer from any device using the web dashboard.</h3>
 				</div>
 
 				<div class="flex flex-col items-start gap-3">
 					<Toggle bind:checked={$settings.remoteConnections} onChange={remoteConnections} />
+				</div>
+			</div>
+
+			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Earth />
+						</div>
+						<h2>Web Dashboard</h2>
+					</div>
+					<h3>Your remote connections are automatically synced with the web dashboard.</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3">
+					<button
+						class="button"
+						on:click={() => {
+							open("https://www.coresmonitor.com/login")
+						}}
+					>
+						<ExternalLink />
+						Open dashboard
+					</button>
 				</div>
 			</div>
 
@@ -29,7 +53,7 @@
 							<h2>Connection code</h2>
 						</div>
 						<h3>
-							You can use this code on the website (www.coresmonitor.com) <br /> to monitor and control you device, keep it private.
+							You can also add this code manually on the dashboard <br /> to monitor and control you device, keep it private.
 						</h3>
 					</div>
 
@@ -39,19 +63,6 @@
 							<button class="button" on:click={copyConnectionCode}>
 								<Clipboard />
 								<span class="copy">Copy</span>
-							</button>
-							<button
-								class="button"
-								on:click={() => {
-									open(
-										`https://www.coresmonitor.com/settings?connectionCode=${$settings.connectionCode}&mac=${
-											$hardwareInfo.system.network.interfaces[0]?.macAddress ?? ""
-										}`,
-									)
-								}}
-							>
-								<ExternalLink />
-								<span class="copy">Open</span>
 							</button>
 						</div>
 					</div>
@@ -151,7 +162,7 @@
 </div>
 
 <script lang="ts">
-	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2 } from "lucide-svelte"
+	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth } from "lucide-svelte"
 	import Toggle from "ui/components/toggle.svelte"
 	import { settings } from "ui/stores/settings.ts"
 	import { invoke } from "@tauri-apps/api/core"
@@ -160,8 +171,21 @@
 	import { addDevice, deleteDevice } from "ui/utils/connection.ts"
 	import { Dialog } from "bits-ui"
 	import ModularDialog from "ui/components/modularDialog.svelte"
+	import { supabaseClient } from "../utils/supabase.ts"
 
-	const remoteConnections = () => {
+	const remoteConnections = async () => {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if ($settings.remoteConnections) {
+			const { data, error } = await supabaseClient.from("remote_connection").insert({
+				code: $settings.connectionCode,
+				name: "Cores Desktop",
+				user_id: userData.user.id,
+			})
+		} else {
+			const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", $settings.connectionCode)
+		}
+
 		invoke("restart_service")
 	}
 

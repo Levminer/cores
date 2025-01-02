@@ -28,6 +28,38 @@ export type Database = {
 	}
 	public: {
 		Tables: {
+			remote_connection: {
+				Row: {
+					code: string | null
+					created_at: string
+					name: string | null
+					remote_connection_id: string
+					user_id: string | null
+				}
+				Insert: {
+					code?: string | null
+					created_at?: string
+					name?: string | null
+					remote_connection_id?: string
+					user_id?: string | null
+				}
+				Update: {
+					code?: string | null
+					created_at?: string
+					name?: string | null
+					remote_connection_id?: string
+					user_id?: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "remote_connection_user_id_fkey"
+						columns: ["user_id"]
+						isOneToOne: false
+						referencedRelation: "user"
+						referencedColumns: ["user_id"]
+					},
+				]
+			}
 			user: {
 				Row: {
 					avatar_url: string | null

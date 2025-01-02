@@ -369,6 +369,7 @@
 
 				if (data.activated && data?.meta.store_id === 62942) {
 					stepTips()
+					$state.plan = "personal"
 				} else {
 					alert(`Failed to activate: ${data.error}. Please reach out to support@coresmonitor.com if you need help.`)
 				}
