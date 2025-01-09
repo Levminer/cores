@@ -1,11 +1,27 @@
 import { getSettings, setSettings } from "../stores/settings.ts"
+import { supabaseClient } from "./supabase.ts"
 
-export const deleteConnectionCode = (code: string) => {
+export const deleteConnectionCode = async (code: string) => {
 	const settings = getSettings()
 
 	settings.connectionCodes = settings.connectionCodes.filter((item) => item.code !== code)
 
 	setSettings(settings)
+
+	// delete connection
+	try {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData.user) {
+			const res = confirm("Do you want to delete the connection from the cloud?")
+
+			if (res) {
+				const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", code)
+			}
+		}
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 export const editConnectionCode = (code: string) => {
@@ -31,7 +47,7 @@ export const editConnectionCode = (code: string) => {
 	setSettings(settings)
 }
 
-export const addConnectionCode = () => {
+export const addConnectionCode = async () => {
 	const settings = getSettings()
 
 	const nameInput = document.getElementById("name") as HTMLInputElement
@@ -45,6 +61,12 @@ export const addConnectionCode = () => {
 		return alert("Invalid connection code! The connection code must start with: crs_")
 	}
 
+	// check if connection code already exists
+	const connectionCodeExists = settings.connectionCodes.find((item) => item.code === codeInput.value)
+	if (connectionCodeExists) {
+		return alert("Connection code already exists! Please enter a unique connection code.")
+	}
+
 	settings.connectionCodes = [
 		...settings.connectionCodes,
 		{
@@ -54,6 +76,21 @@ export const addConnectionCode = () => {
 	]
 
 	setSettings(settings)
+
+	// save connection
+	try {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData.user) {
+			const { data, error } = await supabaseClient.from("remote_connection").insert({
+				code: codeInput.value,
+				name: nameInput.value,
+				user_id: userData.user.id,
+			})
+		}
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 export const addDevice = () => {

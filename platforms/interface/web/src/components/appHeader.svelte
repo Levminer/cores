@@ -8,6 +8,13 @@
 			{#if $state.state === "connected"}
 				<PowerDropdown {action} />
 			{/if}
+			<a
+				href="/account"
+				class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
+			>
+				<User />
+				<p class="hidden md:block">Account</p>
+			</a>
 			<ConnectionDropdown {connect} />
 		</div>
 	</div>
@@ -19,6 +26,7 @@
 	import { settings } from "ui/stores/settings"
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
+	import { User } from "lucide-svelte"
 
 	const action = (type: string) => {
 		if (type === "disconnect") {

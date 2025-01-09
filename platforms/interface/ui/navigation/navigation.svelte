@@ -60,17 +60,9 @@
 		<a
 			aria-label="Connections"
 			href="/connections"
-			class="group inline-flex flex-shrink-0 flex-grow flex-col items-center justify-center px-5 text-gray-200 duration-200 ease-in-out hover:bg-gray-800 hover:text-white"
-		>
-			<MonitorSmartphone />
-		</a>
-
-		<a
-			aria-label="Settings"
-			href="/settings"
 			class="group inline-flex flex-shrink-0 flex-grow flex-col items-center justify-center rounded-e-full px-5 text-gray-200 duration-200 ease-in-out hover:bg-gray-800 hover:text-white sm:rounded-none"
 		>
-			<Settings />
+			<MonitorSmartphone />
 		</a>
 	</div>
 </div>
