@@ -41,11 +41,54 @@
 				/>
 			</div>
 		</div>
+
+		<!-- account -->
+		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<User />
+					</div>
+					<h2>Account</h2>
+				</div>
+				<h3>{user?.email ?? "Loading..."}</h3>
+			</div>
+
+			<div class="flex flex-col items-start gap-3 sm:my-5">
+				<button
+					on:click={async () => {
+						await supabaseClient.auth.signOut()
+						location.href = "/onboarding"
+					}}
+					class="button"
+				>
+					<LogOut />
+					Log out
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 	<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
+		<!-- feedback -->
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Megaphone />
+					</div>
+					<h2>Feedback</h2>
+				</div>
+				<h3>Feedback is always welcome! Report issues or request features.</h3>
+			</div>
+
+			<div class="flex flex-col items-start gap-3">
+				<FeedbackDialog />
+			</div>
+		</div>
+
 		<!-- debug report -->
 		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
@@ -62,31 +105,6 @@
 				<button class="button" on:click={debug}>
 					<FileCog />
 					Save
-				</button>
-			</div>
-		</div>
-
-		<!-- feedback -->
-		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
-			<div class="flex flex-col items-start gap-3">
-				<div class="flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Megaphone />
-					</div>
-					<h2>Feedback</h2>
-				</div>
-				<h3>Thank you for providing feedback! Please report issues or feature requests on GitHub or by Email (feedback@coresmonitor.com).</h3>
-			</div>
-
-			<div class="flex flex-col items-start gap-3">
-				<button
-					class="button"
-					on:click={() => {
-						open("https://github.com/levminer/cores/issues")
-					}}
-				>
-					<Github />
-					GitHub
 				</button>
 			</div>
 		</div>
@@ -119,10 +137,26 @@
 	import build from "../../../../build.json"
 	import Select from "ui/components/select.svelte"
 	import Toggle from "ui/components/toggle.svelte"
-	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog } from "lucide-svelte"
+	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
+	import FeedbackDialog from "ui/components/feedbackDialog.svelte"
+	import { supabaseClient } from "../utils/supabase.ts"
+	import { onMount } from "svelte"
+
+	$: user = null
+
+	
+
+		onMount(async () => {
+		const { data, error } = await supabaseClient.auth.getUser()
+
+		if (!error && data.user) {
+			user = data.user
+		} 
+	})
+
 
 	const launchOnStartup = () => {
 		// @ts-ignore

@@ -31,14 +31,10 @@
 							<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-500" />
 						{/if}
 					</a>
-					<button
-						on:click={() => {
-							open("https://cores.canny.io/feature-requests")
-						}}
-						class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2"
-					>
+
+					<a href="/settings" class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 						<Megaphone />
-					</button>
+					</a>
 
 					<a href="/settings" class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 						<Settings />

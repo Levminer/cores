@@ -258,21 +258,6 @@
 		}
 	})
 
-	/* 
-	onMount(() => {
-		// Check if trial is over
-		if ($settings.licenseActivated) {
-			let dateActivated = new Date($settings.licenseActivated)
-			let dateNow = new Date()
-			let diff = dateNow.getTime() - dateActivated.getTime()
-			let days = Math.ceil(diff / (1000 * 3600 * 24))
-
-			if (days > 7) {
-				stepPricing()
-			}
-		}
-	}) */
-
 	const stepLogin = () => {
 		step = "login"
 	}
@@ -299,6 +284,7 @@
 			// Start server
 			const port = await start({
 				response: `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:Arial,sans-serif;background:#1a1a1a;margin:0;position:fixed;top:0;left:0;right:0;bottom:0"><h2 style="color:white;margin:0">Authentication Completed</h2><p style="color:#999">You can now close this page and return to the app.</p></div><style>body{margin:0;padding:0;background:#1a1a1a}</style>`,
+				ports: [5380, 5385],
 			})
 
 			// Listen for OAuth result
@@ -316,7 +302,7 @@
 
 				if (error || userError) {
 					alert(
-						`Failed to login, please try again or send an email to support@coresmonitor.com if you need help.\nError: ${
+						`Failed to login, please restart the app and try again or send an email to support@coresmonitor.com if you need help.\nError: ${
 							error || userError
 						}`,
 					)
@@ -324,6 +310,7 @@
 
 				if (userData.plan === "personal" || userData.plan === "business") {
 					// User is on a paid plan
+					$state.plan = userData.plan
 					$state.showMenu = true
 					router.goto("/home")
 				}
@@ -342,7 +329,9 @@
 			})
 
 			if (error) {
-				alert(`Failed to login, please try again or send an email to support@coresmonitor.com if you need help.\nError: ${error}`)
+				alert(
+					`Failed to login, please restart the app and try again or send an email to support@coresmonitor.com if you need help.\nError: ${error}`,
+				)
 			}
 
 			if (data) {
@@ -350,7 +339,9 @@
 				open(data.url)
 			}
 		} catch (error) {
-			alert(`Failed to login, please try again or send an email to support@coresmonitor.com if you need help.\nError: ${error}`)
+			alert(
+				`Failed to login, please restart the app and try again or send an email to support@coresmonitor.com if you need help.\nError: ${error}`,
+			)
 		}
 	}
 
