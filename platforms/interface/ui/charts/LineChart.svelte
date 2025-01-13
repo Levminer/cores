@@ -85,7 +85,7 @@
 				ticks: {
 					callback: function (val, index) {
 						// @ts-ignore ticks if they're divisible by 10
-						return index % 10 === 0 ? this.getLabelForValue(val) : ""
+						return index % 30 === 0 ? this.getLabelForValue(val) : ""
 					},
 					maxRotation: 0,
 					minRotation: 0,

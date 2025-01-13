@@ -80,7 +80,7 @@
 		// Update hardware statistics
 		const updateHardwareStats = (input: HardwareInfo) => {
 			if (Object.keys(input).length !== 0) {
-				if ($hardwareStatistics.minutes.length >= 61) {
+				if ($hardwareStatistics.minutes.length >= 62) {
 					$hardwareStatistics.minutes.shift()
 				}
 
