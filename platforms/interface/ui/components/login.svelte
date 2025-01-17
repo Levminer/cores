@@ -1,11 +1,13 @@
-<div class="transparent-900 mx-auto flex w-1/3 sm:w-[95%] flex-col items-center justify-center rounded-2xl p-10 text-center shadow-md backdrop-blur-xl">
+<div
+	class="transparent-900 mx-auto flex w-1/3 flex-col items-center justify-center rounded-2xl p-10 text-center shadow-md backdrop-blur-xl sm:w-[95%]"
+>
 	<div class="mb-10">
 		<h2>Login or create an account</h2>
 		<h3>Continue with your Google account to use Cores for free.</h3>
 	</div>
 	<button
 		on:click={loginFn}
-		class="flex flex-row items-center justify-between gap-3 rounded-xl border-2 hover:bg-gray-200 duration-150 ease-in border-gray-200/50 bg-white px-3 py-2 font-medium text-black shadow-xl"
+		class="flex flex-row items-center justify-between gap-3 rounded-xl border-2 border-gray-200/50 bg-white px-3 py-2 font-medium text-black shadow-xl duration-150 ease-in hover:bg-gray-200"
 	>
 		<svg width="24" height="24"
 			><path
@@ -24,7 +26,9 @@
 		>
 		Continue with Google
 	</button>
-	<!-- <button class="text-sm text-gray-200 mt-1" on:click={withoutLoginFn}>Use without login</button> -->
+	{#if import.meta.env.VITE_CORES_MODE === "host"}
+		<button class="text-sm text-gray-200 mt-1" on:click={withoutLoginFn}>Use without login</button>
+	{/if}
 </div>
 
 <script lang="ts">

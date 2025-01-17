@@ -1,6 +1,6 @@
 <nav class="start-0 top-0 z-20 w-full border-b border-gray-600 bg-gray-900 px-8 sm:px-0">
 	<div class="mx-auto flex flex-wrap items-center justify-between p-3">
-		<a href="/home" class="flex items-center space-x-3">
+		<a href="/" class="flex items-center space-x-3">
 			<img class="h-8 w-8" src={"/favicon.ico"} alt="Cores logo" />
 			<span class="self-center whitespace-nowrap text-xl font-semibold text-white">Cores</span>
 		</a>

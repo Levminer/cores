@@ -126,10 +126,14 @@
 								>
 									Continue for free
 								</h2>
-								<p class="text-base leading-tight">You can use Cores Pro for 7 days free.</p>
+								<!-- <p class="text-base leading-tight">You can use Cores Pro for 7 days free.</p> -->
+								<p class="text-base leading-tight">
+									You can use the basic features of Cores for free. For remote connections and advanced features please activate
+									Cores.
+								</p>
 							</div>
 							<div>
-								<button on:click={free} class="smallButton w-full">
+								<button on:click={free} class="smallButton mt-3 w-full">
 									<CircleCheck />
 									Continue
 								</button>
@@ -145,6 +149,9 @@
 									Activate license
 								</h2>
 								<p class="text-base leading-tight">If you already purchased Cores, please activate your license key.</p>
+								{#if $settings.licenseKey && $settings.licenseKey !== "" && $settings.licenseKey !== "free"}
+									<p class="text-base leading-tight select-text">Your previous license key: <span class="font-bold">{$settings.licenseKey}</span></p>
+								{/if}
 							</div>
 							<div>
 								<ModularDialog
@@ -152,7 +159,7 @@
 									description={"Use the license key from your purchase confirmation email to activate Cores. If you don't remember you key, please contact us at support@coresmonitor.com."}
 								>
 									<slot slot="openButton">
-										<Dialog.Trigger class="smallButton w-full">
+										<Dialog.Trigger class="smallButton mt-3 w-full">
 											<CircleCheck />
 											Activate license
 										</Dialog.Trigger>
@@ -347,6 +354,10 @@
 
 	const activate = async () => {
 		const { data, error } = await supabaseClient.auth.getUser()
+
+		if (error) {
+			return alert("Failed to get user data, please log in.")
+		}
 
 		if (key !== "") {
 			const url = `https://crs-activate.deno.dev?license_key=${key}&user_id=${data.user.id}`

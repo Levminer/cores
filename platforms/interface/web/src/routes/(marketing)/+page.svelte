@@ -32,7 +32,9 @@
 				class="bg-cores-alternative hover:text-cores-alternative transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
 				>Download Cores</a
 			>
-			<a class="flex text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features">More info <ArrowRight /></a>
+			<a class="flex gap-1 text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features"
+				>Features <ArrowRight class="relative top-1" /></a
+			>
 		</div>
 
 		<div class="flex w-full flex-row flex-wrap items-center justify-center">
@@ -44,71 +46,97 @@
 	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
 		<div id="features" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="mb-10 text-center">
-					<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Easy Remote Access</h2>
-					<h3 class="text-2xl italic text-gray-100">Monitor your devices from anywhere.</h3>
-				</div>
-				<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video id="video1" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
-					<div class="absolute flex items-center justify-center">
-						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
+				<div class="flex w-[1000px] flex-col sm:w-full">
+					<div class="mb-10 text-center">
+						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
+							Features
+						</h2>
+						<h3 class="text-2xl italic text-gray-100">Monitor any system with ease.</h3>
 					</div>
-				</div>
-				<div class="flex w-[900px] flex-col sm:w-full">
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+
+					<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
+						<!-- card 1 -->
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Feather />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
+							</div>
+							<div class="select-text">
+								<h5>Cores runs as a background service with minimal resource usage.</h5>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<MonitorSmartphone />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-platform</h4>
+							</div>
+							<div class="select-text">
+								<h5>You can monitor your system on Windows, Linux and MacOS.</h5>
+							</div>
+						</div>
+
 						<!-- card 1 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Radio />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Monitor from anywhere</h2>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote monitoring</h4>
 							</div>
 							<div class="select-text">
-								<h3>You can monitor your system from any device with a web browser.</h3>
+								<h5>You can monitor your system from any device with a web browser.</h5>
 							</div>
 						</div>
+					</div>
 
+					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
 						<!-- card 2 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Network />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h2>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h4>
 							</div>
 							<div class="select-text">
-								<h3>You can connect directly to multiple computers. No cloud, no central server powered by WebRTC.</h3>
+								<h5>You can connect directly to multiple computers. No cloud, no central server powered by WebRTC.</h5>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Terminal />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Commands</h4>
+							</div>
+							<div class="select-text">
+								<h5>Turn on or off your computer remotely with a single click.</h5>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Webhook />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API access</h4>
+							</div>
+							<div class="select-text">
+								<h5>You can access the REST or Websocket API to build your own integration.</h5>
 							</div>
 						</div>
 					</div>
-
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Moon />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Left in a hurry?</h2>
-							</div>
-							<div class="select-text">
-								<h3>You can shut down or put your computer to sleep remotely.</h3>
-							</div>
-						</div>
-
-						<!-- card 2 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Power />
-								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote start</h2>
-							</div>
-							<div class="select-text">
-								<h3>If you have other devices on your network, you can start them remotely with Wake On LAN.</h3>
-							</div>
-						</div>
+				</div>
+				<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
+					<video id="video1" muted loop src="https://cdn.levminer.com/cores/home.webm" />
+					<div class="absolute flex items-center justify-center">
+						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
 				</div>
 			</div>
@@ -120,43 +148,55 @@
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
 						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
-							Monitor every component
+							Easy Remote Access
 						</h2>
-						<h3 class="text-2xl italic text-gray-100">Track every component with detailed charts and visualizations.</h3>
+						<h3 class="text-2xl italic text-gray-100">Monitor your devices from anywhere.</h3>
 					</div>
 
-					<div class="relative flex w-[80%] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-						<video id="video0" muted loop src="https://cdn.levminer.com/cores/home.webm" />
+					<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
+						<video id="video0" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
 						<div class="absolute flex items-center justify-center">
 							<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 						</div>
 					</div>
 				</div>
 
-				<div class="flex w-[900px] flex-col sm:w-full">
+				<div class="flex w-[1000px] flex-col sm:w-full">
 					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
 						<!-- card 1 -->
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<MonitorSmartphone />
+									<Server />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-platform</h2>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Sync your connections</h4>
 							</div>
 							<div class="select-text">
-								<h3>You can monitor your system on Windows, Linux and MacOS.</h3>
+								<h5>You can sync your connections between devices.</h5>
 							</div>
 						</div>
 
 						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Gauge />
+									<Moon />
 								</div>
-								<h2 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Light on your system</h2>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Left in a hurry?</h4>
 							</div>
 							<div class="select-text">
-								<h3>Cores runs as a background service with minimal resource usage.</h3>
+								<h5>You can shut down or put your computer to sleep remotely.</h5>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Power />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote start</h4>
+							</div>
+							<div class="select-text">
+								<h5>If you have other devices on your network, you can start them remotely with Wake On LAN.</h5>
 							</div>
 						</div>
 					</div>
@@ -182,7 +222,7 @@
 
 		<div id="downloads" class="flex min-h-screen justify-center rounded-xl py-20">
 			<div class="flex w-[50%] select-text flex-wrap items-center justify-between sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-full flex-col justify-center items-center">
+				<div class="flex w-full flex-col items-center justify-center">
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Download</h2>
@@ -267,113 +307,102 @@
 		</div>
 
 		<div id="pricing" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-pink-600 py-20">
-			<div class="flex select-text flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
+			<div class="flex select-text flex-wrap items-center justify-between px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col">
 					<div class="mb-10">
 						<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Pricing</h2>
 						<h3 class="text-center italic text-gray-100">Do you hate subscriptions too? Buy Cores now and get life time access.</h3>
 					</div>
 
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class=" flex flex-row flex-wrap gap-3">
-								<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
-									<h1
-										class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
-									>
-										Cores for Personal
-									</h1>
-									<div class="px-5 text-center sm:w-full">
-										<h2 class="text-[3rem] font-semibold">
-											$9.99 <p class="text-sm text-gray-200">One time purchase</p>
+					<div class="mt-5 flex flex-row justify-between gap-5 rounded-xl bg-gray-900 sm:flex-col">
+						<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
+							<div
+								class="transparent-900 border-cores-alternative flex w-full transform flex-col gap-1 rounded-xl border-2 px-5 py-5 text-xl font-semibold shadow-md duration-100 md:flex-row"
+							>
+								<div class="flex w-full flex-col">
+									<div class="mb-3 text-left">
+										<h2 class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text font-extrabold text-transparent">
+											Cores Pro
 										</h2>
-
-										<div class="text-center">
-											<a
-												href="https://link.levminer.com/buy-cores-app"
-												class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
-											>
-												Buy
-											</a>
-											<div class="mt-3">
-												<a rel="noreferrer" href="#downloads" class="underline duration-200 hover:text-gray-200"
-													>Get started for free</a
-												>
-											</div>
-										</div>
 									</div>
-									<div
-										class="flex flex-col justify-center space-y-2 border-t-2 border-gray-600 px-5 pt-3 text-left text-lg sm:w-full"
-									>
-										<div class="flex items-center space-x-2">
+									<div>
+										<div class="flex flex-row items-center gap-1 text-left">
 											<Check class="h-5 w-5 text-green-500" />
-											<p>For personal use</p>
+											<h5>For personal use, one-time purchase, no subscriptions</h5>
 										</div>
-										<div class="flex items-center space-x-2">
+										<div class="flex flex-row items-center gap-1 text-left">
 											<Check class="h-5 w-5 text-green-500" />
-											<p>One-time purchase, no subscriptions</p>
+											<h5>Monitor up to 5 devices</h5>
 										</div>
-										<div class="flex items-center space-x-2">
+										<div class="flex flex-row items-center gap-1 text-left">
 											<Check class="h-5 w-5 text-green-500" />
-											<p>Access your device remotely</p>
+											<h5>Access any device remotely</h5>
 										</div>
-										<div class="flex items-center space-x-2">
+										<div class="flex flex-row items-center gap-1 text-left">
 											<Check class="h-5 w-5 text-green-500" />
-											<p>Use on up to 5 devices</p>
+											<h5>Export data as .csv and image</h5>
 										</div>
 									</div>
 								</div>
-								<div class="mx-auto mt-5 flex max-w-lg flex-col gap-5 rounded-xl border-2 border-purple-400 p-5 sm:flex-col">
-									<h1
-										class="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text px-5 text-center text-4xl font-extrabold text-transparent"
-									>
-										Cores for Business
-									</h1>
-									<div class="px-5 text-center sm:w-full">
-										<h2 class="text-[3rem] font-semibold">
-											$4.99 <p class="text-sm text-gray-200">/month/device</p>
+								<div class="flex flex-col items-end">
+									<div class="flex w-full justify-center md:justify-end">
+										<h2 class="text-center text-3xl font-semibold">
+											$9.99 <p class="text-xs text-gray-200">One time purchase</p>
 										</h2>
+									</div>
 
-										<div class="text-center">
-											<a
-												href="mailto:support@coresmonitor.com"
-												class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
-											>
-												Get a quote
-											</a>
-											<div class="mt-3">
-												<a rel="noreferrer" href="#downloads" class="underline duration-200 hover:text-gray-200"
-													>Get started for free</a
-												>
-											</div>
-										</div>
-									</div>
-									<div
-										class="flex flex-col justify-center space-y-2 border-t-2 border-gray-600 px-5 pt-3 text-left text-lg sm:w-full"
+									<a
+										href="https://link.levminer.com/buy-cores-app?utm_source=app"
+										class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 									>
-										<div class="flex items-center space-x-2">
-											<Check class="h-5 w-5 text-green-500" />
-											<p>For business & commercial use</p>
-										</div>
-										<div class="flex items-center space-x-2">
-											<Check class="h-5 w-5 text-green-500" />
-											<p>Monthly subscription, cancel anytime</p>
-										</div>
-										<div class="flex items-center space-x-2">
-											<Check class="h-5 w-5 text-green-500" />
-											<p>Access any device remotely</p>
-										</div>
-										<div class="flex items-center space-x-2">
-											<Check class="h-5 w-5 text-green-500" />
-											<p>Volume discount</p>
-										</div>
-									</div>
+										<ShoppingCart />
+										Buy
+									</a>
 								</div>
 							</div>
 
-							<div class="mt-4 flex flex-wrap justify-center gap-2 text-center text-lg">
-								<p>Want to use Cores as a business or have a question?</p>
-								<a class="underline" href="mailto:support@coresmonitor.com">Reach out</a>
+							<div
+								class="transparent-900 border-cores-alternative flex w-full transform flex-col gap-1 rounded-xl border-2 px-5 py-5 text-xl font-semibold shadow-md duration-100 md:flex-row"
+							>
+								<div class="flex w-full flex-col">
+									<div class="mb-3 text-left">
+										<h2 class="bg-gradient-to-r from-rose-600 to-violet-400 bg-clip-text font-extrabold text-transparent">
+											Cores Advanced
+										</h2>
+									</div>
+									<div>
+										<div class="flex flex-row items-center gap-1 text-left">
+											<Check class="h-5 w-5 text-green-500" />
+											<h5>For personal and business use, monthly subscription, cancel anytime</h5>
+										</div>
+										<div class="flex flex-row items-center gap-1 text-left">
+											<Check class="h-5 w-5 text-green-500" />
+											<h5>Choose how many devices you want to monitor</h5>
+										</div>
+										<div class="flex flex-row items-center gap-1 text-left">
+											<Check class="h-5 w-5 text-green-500" />
+											<h5>Access any device remotely</h5>
+										</div>
+										<div class="flex flex-row items-center gap-1 text-left">
+											<Check class="h-5 w-5 text-green-500" />
+											<h5>Export data as .csv and image</h5>
+										</div>
+									</div>
+								</div>
+								<div class="flex flex-col items-end">
+									<div class="flex w-full justify-center md:justify-end">
+										<h2 class="text-center text-3xl font-semibold">
+											$2.99 <p class="text-xs text-gray-200">/month/device</p>
+										</h2>
+									</div>
+									<a
+										href="mailto:support@coresmonitor.com"
+										class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+									>
+										<Mail />
+										Get a quote
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -406,7 +435,24 @@
 <Footer />
 
 <script lang="ts">
-	import { ArrowRight, Check, Gauge, Network, Play, Radio, Download, Power, Moon, MonitorSmartphone } from "lucide-svelte"
+	import {
+		ArrowRight,
+		Check,
+		Gauge,
+		Network,
+		Play,
+		Radio,
+		Download,
+		Power,
+		Moon,
+		MonitorSmartphone,
+		ShoppingCart,
+		Mail,
+		Feather,
+		Webhook,
+		Terminal,
+		Server,
+	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
 	import Footer from "../../components/footer.svelte"
