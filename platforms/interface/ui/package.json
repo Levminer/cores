@@ -13,5 +13,12 @@
 		"svelte": "^4.2.10",
 		"svelte-bootstrap-icons": "^3.1.0",
 		"svelte-chartjs": "^3.1.5"
+	},
+	"exports": {
+		".": {
+			"svelte": "./export.ts",
+			"types": "./export.d.ts"
+		},
+		"./*": "./*"
 	}
 }

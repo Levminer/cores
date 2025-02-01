@@ -109,7 +109,7 @@
 	import { flyAndScale } from "../utils/transitions.ts"
 	import { Pencil, Plug, Plus, Trash2 } from "lucide-svelte"
 	import { settings } from "ui/stores/settings.ts"
-	import ModularDialog from "./modularDialog.svelte"
+	import ModularDialog from "./ModularDialog.svelte"
 	import { addConnectionCode, editConnectionCode, deleteConnectionCode } from "ui/utils/connection.ts"
 
 	export let connect = (item: string) => {}

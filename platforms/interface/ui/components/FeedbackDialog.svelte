@@ -49,7 +49,7 @@
 
 <script lang="ts">
 	import { Dialog, Tabs } from "bits-ui"
-	import ModularDialog from "./modularDialog.svelte"
+	import ModularDialog from "./ModularDialog.svelte"
 	import { settings } from "../stores/settings.ts"
 	import { Megaphone, Github } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
