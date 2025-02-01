@@ -16,9 +16,8 @@
 	},
 	"exports": {
 		".": {
-			"svelte": "./export.ts",
-			"types": "./export.d.ts"
-		},
-		"./*": "./*"
+			"svelte": "./index.ts",
+			"types": "./index.d.ts"
+		}
 	}
 }

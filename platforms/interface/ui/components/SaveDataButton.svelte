@@ -38,7 +38,7 @@
 
 <script lang="ts">
 	import { Dialog, Tabs } from "bits-ui"
-	import ModularDialog from "./modularDialog.svelte"
+	import { ModularDialog } from "ui"
 	import { settings } from "../stores/settings.ts"
 	import { state } from "../stores/state.ts"
 

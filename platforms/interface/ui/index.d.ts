@@ -1,246 +1,79 @@
-/// <reference types="svelte" />
-/// <reference types="vite/client" />
+import Home from "./pages/Home.svelte"
+import Cpu from "./pages/Cpu.svelte"
+import Ram from "./pages/Ram.svelte"
+import Gpu from "./pages/Gpu.svelte"
+import Storage from "./pages/Storage.svelte"
+import System from "./pages/System.svelte"
+import Network from "./pages/Network.svelte"
+import Connections from "./pages/Connections.svelte"
+import Onboarding from "./pages/Onboarding.svelte"
+import Settings from "./pages/Settings.svelte"
 
-declare global {
-	interface NetworkMessage {
-		type: "data" | "initialData" | "secondsData" | "minutesData" | "initialMinutesData"
-		data: HardwareInfo
-	}
+import BuildNumber from "./navigation/BuildNumber.svelte"
+import DesktopNavigation from "./navigation/DesktopNavigation.svelte"
+import Loading from "./navigation/Loading.svelte"
+import Navigation from "./navigation/Navigation.svelte"
+import RouteTransition from "./navigation/RouteTransition.svelte"
 
-	interface Sensor {
-		name?: string
-		value: number
-		min: number
-		max: number
-	}
+import GaugeChart from "./charts/GaugeChart.svelte"
+import LineChart from "./charts/LineChart.svelte"
+import MeterChart from "./charts/MeterChart.svelte"
 
-	interface Disk {
-		name: string
-		temperature: Sensor
-		freeSpace: number
-		totalSpace: number
-		health: string
-		throughputRead: number
-		throughputWrite: number
-		dataRead: number
-		dataWritten: number
-		primary: boolean
-	}
+import ConnectionDropdown from "./components/ConnectionDropdown.svelte"
+import FeedbackDialog from "./components/FeedbackDialog.svelte"
+import Login from "./components/Login.svelte"
+import ModularDialog from "./components/ModularDialog.svelte"
+import PowerDropdown from "./components/PowerDropdown.svelte"
+import Progress from "./components/Progress.svelte"
+import SaveDataButton from "./components/SaveDataButton.svelte"
+import Select from "./components/Select.svelte"
+import Toggle from "./components/Toggle.svelte"
+import ToggleButton from "./components/ToggleButton.svelte"
 
-	interface Monitor {
-		name: string
-		resolution: string
-		refreshRate: string
-		primary: boolean
-	}
+import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
+import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
+import { settings, getSettings, setSettings } from "./stores/settings.ts"
+import { state, getState, setState } from "./stores/state.ts"
 
-	interface NetworkInterface {
-		name: string
-		description: string
-		macAddress: string
-		ipAddress: string
-		mask: string
-		gateway: string
-		dns: string
-		speed: string
-		throughputDownload: number
-		throughputUpload: number
-		downloadData: number
-		uploadData: number
-	}
-
-	interface RAM {
-		bankLocator: string
-		deviceLocator: string
-		manufacturerName: string
-		partNumber: string
-		serialNumber: string
-		size: number
-		speed: number
-		configuredSpeed: number
-		configuredVoltage: number
-		type: number
-	}
-
-	interface CPU {
-		coreCount: number
-		coreEnabled: number
-		currentSpeed: number
-		externalClock: number
-		handle: number
-		id: number
-		l1CacheHandle: number
-		l2CacheHandle: number
-		l3CacheHandle: number
-		manufacturerName: string
-		maxSpeed: number
-		serial: string
-		socketDesignation: string
-		threadCount: number
-		version: string
-	}
-
-	interface HardwareInfo {
-		cpu: {
-			name: string
-			temperature: Sensor[]
-			maxLoad: number
-			power: Sensor[]
-			load: Sensor[]
-			info: CPU[]
-			clock: Sensor[]
-			voltage: Sensor[]
-		}
-
-		gpu: {
-			name: string
-			temperature: Sensor[]
-			maxLoad: number
-			fan: Sensor[]
-			memory: Sensor[]
-			power: Sensor[]
-			load: Sensor[]
-			info: string
-			clock: Sensor[]
-		}
-
-		ram: {
-			load: Sensor[]
-			info: RAM[]
-			layout: RAM[]
-		}
-
-		system: {
-			os: {
-				name: string
-				app: string
-				webView: string
-				runtime: string
-			}
-
-			storage: {
-				disks: Disk[]
-			}
-
-			motherboard: {
-				name: string
-			}
-
-			battery?: {
-				capacity: Sensor[]
-				level: Sensor[]
-				remainingTime?: Sensor
-				cycleCount: string
-			}
-
-			monitor?: {
-				monitors: Monitor[]
-			}
-
-			network: {
-				interfaces: NetworkInterface[]
-			}
-
-			bios: {
-				vendor: string
-				version: string
-				date: string
-			}
-
-			superIO: {
-				name: string
-				fan: Sensor[]
-				fanControl: Sensor[]
-				voltage: Sensor[]
-				temperature: Sensor[]
-			}
-		}
-	}
-
-	interface Stats {
-		cpu: {
-			temperature: Sensor
-			clock: Sensor
-			load: number
-			power: number
-			voltage: number
-		}
-
-		gpu: {
-			temperature: Sensor
-			clock: Sensor
-			fan: number
-			load: number
-			power: number
-			memory: number
-		}
-
-		ram: {
-			physicalUsage: number
-			virtualUsage: number
-		}
-
-		network: {
-			throughputDownload: number
-			throughputUpload: number
-			downloadedData: number
-			uploadedData: number
-		}[]
-
-		storage: {
-			throughputRead: number
-			throughputWrite: number
-			temperature: Sensor
-		}[]
-
-		fan: {
-			speed: Sensor
-			control: Sensor
-		}[]
-	}
-
-	interface HardwareStatistics {
-		seconds: Stats[]
-		minutes: Stats[]
-	}
-
-	interface LibSettings {
-		interval: number
-		minimizeToTray: boolean
-		launchOnStartup: boolean
-		connectionCode: string
-		connectionCodes: {
-			name: string
-			code: string
-		}[]
-		networkDevices: {
-			name: string
-			code: string
-			mac: string
-		}[]
-		version: number
-		remoteConnections: boolean
-		optionalAnalytics: boolean
-		licenseKey: string
-		licenseActivated: string
-		userId: string
-	}
-
-	interface LibState {
-		showMenu: boolean
-		updateAvailable: boolean
-		plan: string | null
-	}
-
-	interface SystemInfo {
-		tauriVersion: string
-		osName: string
-		osVersion: string
-		osArch: string
-		cpuName: string
-		totalMem: number
-		gpuName: string
-	}
+export {
+	Home,
+	Loading,
+	Cpu,
+	Ram,
+	Gpu,
+	Storage,
+	System,
+	Network,
+	Connections,
+	Onboarding,
+	Settings,
+	BuildNumber,
+	DesktopNavigation,
+	Navigation,
+	RouteTransition,
+	GaugeChart,
+	LineChart,
+	MeterChart,
+	ConnectionDropdown,
+	FeedbackDialog,
+	Login,
+	ModularDialog,
+	PowerDropdown,
+	Progress,
+	SaveDataButton,
+	Select,
+	Toggle,
+	ToggleButton,
+	hardwareInfo,
+	getHardwareInfo,
+	setHardwareInfo,
+	hardwareStatistics,
+	getHardwareStatistics,
+	setHardwareStatistics,
+	settings,
+	getSettings,
+	setSettings,
+	state,
+	getState,
+	setState,
 }
-
-export {}

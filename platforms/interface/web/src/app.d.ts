@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-pwa/info" />
 /// <reference types="vite-plugin-pwa/client" />
-import "ui/index.d.ts"
+import "../../ui/types.d.ts"
 
 declare global {
 	namespace App {

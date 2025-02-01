@@ -132,31 +132,24 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
-	import { settings } from "ui/stores/settings.ts"
 	import build from "../../../../build.json"
-	import Select from "ui/components/select.svelte"
-	import Toggle from "ui/components/toggle.svelte"
 	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
-	import FeedbackDialog from "ui/components/feedbackDialog.svelte"
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { onMount } from "svelte"
+	import { FeedbackDialog, hardwareInfo, Select, settings, Toggle } from "ui"
 
 	$: user = null
 
-	
-
-		onMount(async () => {
+	onMount(async () => {
 		const { data, error } = await supabaseClient.auth.getUser()
 
 		if (!error && data.user) {
 			user = data.user
-		} 
+		}
 	})
-
 
 	const launchOnStartup = () => {
 		// @ts-ignore

@@ -1,7 +1,7 @@
 import App from "./app.svelte"
-import "ui/styles/index.css"
+import "../../ui/styles/index.css"
 import "./app.css"
-import "ui/index.d.ts"
+import "../../ui/types.d.ts"
 
 const app = new App({
 	target: document.body,

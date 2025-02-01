@@ -21,15 +21,15 @@
 				</Boundary>
 
 				<Boundary onError={console.error}>
-					<Route path="/cpu"><CPU /></Route>
+					<Route path="/cpu"><Cpu /></Route>
 				</Boundary>
 
 				<Boundary onError={console.error}>
-					<Route path="/ram"><RAM /></Route>
+					<Route path="/ram"><Ram /></Route>
 				</Boundary>
 
 				<Boundary onError={console.error}>
-					<Route path="/gpu"><GPU /></Route>
+					<Route path="/gpu"><Gpu /></Route>
 				</Boundary>
 
 				<Boundary onError={console.error}>
@@ -65,32 +65,38 @@
 	import { Boundary } from "@crownframework/svelte-error-boundary"
 	import { onMount } from "svelte"
 	import { Route, router } from "@baileyherbert/tinro"
-	import Home from "ui/pages/home.svelte"
-	import Settings from "ui/pages/settings.svelte"
-	import CPU from "ui/pages/cpu.svelte"
-	import GPU from "ui/pages/gpu.svelte"
-	import RAM from "ui/pages/ram.svelte"
-	import Storage from "ui/pages/storage.svelte"
-	import Network from "ui/pages/network.svelte"
-	import System from "ui/pages/system.svelte"
-	import Onboarding from "ui/pages/onboarding.svelte"
-	import Connections from "ui/pages/connections.svelte"
-	import RouteTransition from "ui/navigation/routeTransition.svelte"
-	import BuildNumber from "ui/navigation/buildNumber.svelte"
-	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { initializeSettings, settings } from "ui/stores/settings"
-	import { state } from "ui/stores/state"
-	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
-	import Loading from "ui/navigation/loading.svelte"
-	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import build from "../../../../build.json"
-	import DesktopNavigation from "ui/navigation/desktopNavigation.svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { check } from "@tauri-apps/plugin-updater"
 	import { relaunch } from "@tauri-apps/plugin-process"
 	import { ask } from "@tauri-apps/plugin-dialog"
 	import posthog from "posthog-js"
-	import { supabaseClient } from "ui/utils/supabase"
+	import {
+		DesktopNavigation,
+		BuildNumber,
+		Loading,
+		RouteTransition,
+		Onboarding,
+		Settings,
+		Home,
+		Cpu,
+		Gpu,
+		Ram,
+		System,
+		Network,
+		Connections,
+		Storage,
+		hardwareStatistics,
+		setHardwareStatistics,
+		initializeSettings,
+		settings,
+		state,
+		generateMinutesData,
+		generateSecondsData,
+		setHardwareInfo,
+		hardwareInfo,
+		supabaseClient,
+	} from "ui"
 
 	$: loading = true
 

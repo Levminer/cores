@@ -1,10 +1,10 @@
 <Line {data} {options} id={props.id} />
 
 <script lang="ts">
-	import { colors } from "ui/utils/colors.ts"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
 	import { Line } from "svelte-chartjs"
+	import { colors } from "../utils/colors.ts"
 
 	interface Props {
 		id?: string

@@ -162,16 +162,13 @@
 </div>
 
 <script lang="ts">
+	import { ModularDialog, settings, Toggle } from "ui"
 	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth } from "lucide-svelte"
-	import Toggle from "ui/components/toggle.svelte"
-	import { settings } from "ui/stores/settings.ts"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
-	import { hardwareInfo } from "../stores/hardwareInfo.ts"
-	import { addDevice, deleteDevice } from "ui/utils/connection.ts"
 	import { Dialog } from "bits-ui"
-	import ModularDialog from "ui/components/modularDialog.svelte"
 	import { supabaseClient } from "../utils/supabase.ts"
+	import { addDevice, deleteDevice } from "../utils/connection.ts"
 
 	const remoteConnections = async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
