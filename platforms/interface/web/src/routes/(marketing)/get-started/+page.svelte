@@ -7,7 +7,7 @@
 <Footer />
 
 <script lang="ts">
-	import Footer from "../../../components/footer.svelte"
-	import GetStarted from "../../../components/getStarted.svelte"
-	import Header from "../../../components/header.svelte"
+	import Footer from "../../../components/Footer.svelte"
+	import GetStarted from "../../../components/GetStarted.svelte"
+	import Header from "../../../components/Header.svelte"
 </script>

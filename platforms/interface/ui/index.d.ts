@@ -32,8 +32,11 @@ import ToggleButton from "./components/ToggleButton.svelte"
 
 import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
-import { settings, getSettings, setSettings } from "./stores/settings.ts"
+import { settings, getSettings, setSettings, initializeSettings } from "./stores/settings.ts"
 import { state, getState, setState } from "./stores/state.ts"
+
+import { generateMinutesData, generateSecondsData } from "./utils/stats.ts"
+import { supabaseClient } from "./utils/supabase.ts"
 
 export {
 	Home,
@@ -73,7 +76,11 @@ export {
 	settings,
 	getSettings,
 	setSettings,
+	initializeSettings,
 	state,
 	getState,
 	setState,
+	generateMinutesData,
+	generateSecondsData,
+	supabaseClient,
 }

@@ -5,15 +5,11 @@
 <div class="mb-32" />
 
 <script lang="ts">
-	import { setHardwareInfo, hardwareInfo } from "ui/stores/hardwareInfo"
-	import Navigation from "ui/navigation/navigation.svelte"
-	import { hardwareStatistics, setHardwareStatistics } from "ui/stores/hardwareStatistics"
-	import { settings } from "ui/stores/settings"
-	import { generateMinutesData, generateSecondsData } from "ui/utils/stats"
 	import { EzRTCClient } from "ezrtc"
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
-	import AppHeader from "../../components/appHeader.svelte"
+	import AppHeader from "../../components/AppHeader.svelte"
+	import{ hardwareStatistics, Navigation, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 
 	let client: EzRTCClient | undefined
 

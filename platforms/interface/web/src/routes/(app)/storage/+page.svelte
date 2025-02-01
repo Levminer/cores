@@ -7,8 +7,7 @@
 {/if}
 
 <script>
-	import Storage from "ui/pages/storage.svelte"
+	import { Loading, Storage } from "ui"
 	import { state } from "../../../stores/state"
-	import Loading from "ui/navigation/loading.svelte"
-	import Connect from "../../../components/connect.svelte"
+	import Connect from "../../../components/Connect.svelte"
 </script>

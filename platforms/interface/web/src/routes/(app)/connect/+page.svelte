@@ -1,5 +1,5 @@
 <Connect />
 
 <script>
-	import Connect from "../../../components/connect.svelte"
+	import Connect from "../../../components/Connect.svelte"
 </script>

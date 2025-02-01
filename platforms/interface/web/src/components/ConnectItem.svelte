@@ -74,14 +74,13 @@
 </div>
 
 <script lang="ts">
+	import { ModularDialog, settings } from "ui"
 	import { Plug, Trash2, Pencil, Network, KeyRound, Globe } from "lucide-svelte"
 	import { goto } from "$app/navigation"
-	import ModularDialog from "ui/components/modularDialog.svelte"
 	import { Dialog } from "bits-ui"
-	import { deleteConnectionCode, editConnectionCode } from "ui/utils/connection.ts"
-	import { settings } from "ui/stores/settings.ts"
 	import { state } from "../stores/state.ts"
 	import { onMount } from "svelte"
+	import { editConnectionCode, deleteConnectionCode } from "../../../ui/utils/connection.ts"
 
 	export let item: LibSettings["connectionCodes"][0]
 

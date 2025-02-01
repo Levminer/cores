@@ -1,5 +1,5 @@
 {#if $state.state === "connected"}
-	<CPU />
+	<Cpu />
 {:else if $state.state === "loading"}
 	<Loading />
 {:else}
@@ -7,8 +7,7 @@
 {/if}
 
 <script>
-	import CPU from "ui/pages/cpu.svelte"
+	import { Cpu, Loading } from "ui"
 	import { state } from "../../../stores/state"
-	import Loading from "ui/navigation/loading.svelte"
-	import Connect from "../../../components/connect.svelte"
+	import Connect from "../../../components/Connect.svelte"
 </script>

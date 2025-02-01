@@ -21,12 +21,10 @@
 </nav>
 
 <script lang="ts">
-	import ConnectionDropdown from "ui/components/connectionDropdown.svelte"
-	import PowerDropdown from "ui/components/powerDropdown.svelte"
-	import { settings } from "ui/stores/settings"
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
 	import { User } from "lucide-svelte"
+	import { ConnectionDropdown, PowerDropdown, settings } from "ui"
 
 	const action = (type: string) => {
 		if (type === "disconnect") {

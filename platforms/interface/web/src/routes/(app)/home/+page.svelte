@@ -7,8 +7,7 @@
 {/if}
 
 <script>
-	import Home from "ui/pages/home.svelte"
+	import { Home, Loading } from "ui"
 	import { state } from "../../../stores/state"
-	import Loading from "ui/navigation/loading.svelte"
-	import Connect from "../../../components/connect.svelte"
+	import Connect from "../../../components/Connect.svelte"
 </script>

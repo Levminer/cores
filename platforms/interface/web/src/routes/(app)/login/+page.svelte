@@ -9,12 +9,10 @@
 {/if}
 
 <script lang="ts">
-	import Login from "ui/components/login.svelte"
-	import { supabaseClient } from "ui/utils/supabase"
 	import { PUBLIC_URL } from "$env/static/public"
 	import { onMount } from "svelte"
-	import Loading from "ui/navigation/loading.svelte"
 	import { goto } from "$app/navigation"
+	import { Loading, Login, supabaseClient } from "ui"
 
 	$: loading = true
 
