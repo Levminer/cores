@@ -68,6 +68,6 @@
 </div>
 
 <script lang="ts">
-	import { Cpu, HardDrive, Home, MonitorSmartphone, Network, Settings } from "lucide-svelte"
+	import { Cpu, HardDrive, Home, MonitorSmartphone, Network } from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 </script>

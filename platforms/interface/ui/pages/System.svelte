@@ -127,7 +127,7 @@
 <script lang="ts">
 	import { Fan, Gauge, CircuitBoard } from "lucide-svelte"
 	import { PcDisplay } from "svelte-bootstrap-icons"
-	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "../index.js"
+	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "ui"
 
 	let minutes = false
 </script>

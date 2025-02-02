@@ -20,7 +20,6 @@ import LineChart from "./charts/LineChart.svelte"
 import MeterChart from "./charts/MeterChart.svelte"
 
 import ConnectionDropdown from "./components/ConnectionDropdown.svelte"
-import FeedbackDialog from "./components/FeedbackDialog.svelte"
 import Login from "./components/Login.svelte"
 import ModularDialog from "./components/ModularDialog.svelte"
 import PowerDropdown from "./components/PowerDropdown.svelte"
@@ -58,7 +57,6 @@ export {
 	LineChart,
 	MeterChart,
 	ConnectionDropdown,
-	FeedbackDialog,
 	Login,
 	ModularDialog,
 	PowerDropdown,

@@ -137,7 +137,7 @@
 
 <script lang="ts">
 	import { Activity, HardDrive, PieChart, Thermometer } from "lucide-svelte"
-	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "../index.js"
+	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "ui"
 
 	let minutes = false
 </script>

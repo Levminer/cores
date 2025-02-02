@@ -75,7 +75,7 @@
 
 <script lang="ts">
 	import { ModularDialog, settings } from "ui"
-	import { Plug, Trash2, Pencil, Network, KeyRound, Globe } from "lucide-svelte"
+	import { Plug, Trash2, Pencil, KeyRound, Globe } from "lucide-svelte"
 	import { goto } from "$app/navigation"
 	import { Dialog } from "bits-ui"
 	import { state } from "../stores/state.ts"
