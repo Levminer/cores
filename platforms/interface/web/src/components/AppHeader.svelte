@@ -24,7 +24,9 @@
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
 	import { User } from "lucide-svelte"
-	import { ConnectionDropdown, PowerDropdown, settings } from "ui"
+	import { settings } from "ui"
+	import PowerDropdown from "./PowerDropdown.svelte"
+	import ConnectionDropdown from "./ConnectionDropdown.svelte"
 
 	const action = (type: string) => {
 		if (type === "disconnect") {

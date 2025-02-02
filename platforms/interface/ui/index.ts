@@ -12,17 +12,14 @@ import Settings from "./pages/Settings.svelte"
 import BuildNumber from "./navigation/BuildNumber.svelte"
 import DesktopNavigation from "./navigation/DesktopNavigation.svelte"
 import Loading from "./navigation/Loading.svelte"
-import Navigation from "./navigation/Navigation.svelte"
 import RouteTransition from "./navigation/RouteTransition.svelte"
 
 import GaugeChart from "./charts/GaugeChart.svelte"
 import LineChart from "./charts/LineChart.svelte"
 import MeterChart from "./charts/MeterChart.svelte"
 
-import ConnectionDropdown from "./components/ConnectionDropdown.svelte"
 import Login from "./components/Login.svelte"
 import ModularDialog from "./components/ModularDialog.svelte"
-import PowerDropdown from "./components/PowerDropdown.svelte"
 import Progress from "./components/Progress.svelte"
 import SaveDataButton from "./components/SaveDataButton.svelte"
 import Select from "./components/Select.svelte"
@@ -36,6 +33,8 @@ import { state, getState, setState } from "./stores/state.ts"
 
 import { generateMinutesData, generateSecondsData } from "./utils/stats.ts"
 import { supabaseClient } from "./utils/supabase.ts"
+import { flyAndScale } from "./utils/transitions.ts"
+import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "./utils/connection.ts"
 
 export {
 	Home,
@@ -51,15 +50,12 @@ export {
 	Settings,
 	BuildNumber,
 	DesktopNavigation,
-	Navigation,
 	RouteTransition,
 	GaugeChart,
 	LineChart,
 	MeterChart,
-	ConnectionDropdown,
 	Login,
 	ModularDialog,
-	PowerDropdown,
 	Progress,
 	SaveDataButton,
 	Select,
@@ -81,4 +77,8 @@ export {
 	generateMinutesData,
 	generateSecondsData,
 	supabaseClient,
+	flyAndScale,
+	addConnectionCode,
+	deleteConnectionCode,
+	editConnectionCode,
 }

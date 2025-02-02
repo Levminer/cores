@@ -9,7 +9,8 @@
 	import { onMount } from "svelte"
 	import { state } from "../../stores/state.ts"
 	import AppHeader from "../../components/AppHeader.svelte"
-	import{ hardwareStatistics, Navigation, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
+	import{ hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
+	import Navigation from "../../components/Navigation.svelte"
 
 	let client: EzRTCClient | undefined
 
