@@ -6,7 +6,7 @@
 				<div class="flex flex-row items-center gap-2">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<img src="https://www.coresmonitor.com/favicon.ico" height="24" width="24" />
+							<img alt="icon" src="https://www.coresmonitor.com/favicon.ico" height="24" width="24" />
 						</div>
 						<h2>Cores</h2>
 					</div>
@@ -600,9 +600,7 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
-	import GaugeChart from "ui/charts/gaugeChart.svelte"
-	import MeterChart from "ui/charts/meterChart.svelte"
+	import { GaugeChart, hardwareInfo, MeterChart, Progress, settings, state } from "ui"
 	import {
 		Gauge,
 		CircuitBoard,
@@ -621,8 +619,4 @@
 		MonitorSmartphone,
 	} from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
-	import Progress from "ui/components/progress.svelte"
-	import { settings } from "ui/stores/settings.ts"
-	import { state } from "ui/stores/state.ts"
-	import { open } from "@tauri-apps/plugin-shell"
 </script>

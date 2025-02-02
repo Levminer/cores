@@ -455,9 +455,9 @@
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
-	import Footer from "../../components/footer.svelte"
-	import Header from "../../components/header.svelte"
-	import GetStarted from "../../components/getStarted.svelte"
+	import Footer from "../../components/Footer.svelte"
+	import Header from "../../components/Header.svelte"
+	import GetStarted from "../../components/GetStarted.svelte"
 
 	// prettier-ignore
 	let selectedDownload = "windows"

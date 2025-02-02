@@ -9,7 +9,7 @@
 </div>
 
 <script lang="ts">
-	import "ui/styles/index.css"
+	import "../../../ui/styles/index.css"
 	import { onNavigate } from "$app/navigation"
 	import posthog from "posthog-js"
 	import { browser } from "$app/environment"

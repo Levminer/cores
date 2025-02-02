@@ -58,9 +58,8 @@
 {/if}
 
 <script lang="ts">
-	import { supabaseClient } from "ui/utils/supabase"
+	import { supabaseClient, Loading } from "ui"
 	import { onMount } from "svelte"
-	import Loading from "ui/navigation/loading.svelte"
 	import { goto } from "$app/navigation"
 	import { LogOut, User } from "lucide-svelte"
 	import { Info, Megaphone, Github } from "lucide-svelte"

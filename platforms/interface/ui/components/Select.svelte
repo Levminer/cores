@@ -29,7 +29,7 @@
 	import { Select } from "bits-ui"
 	import { Check } from "lucide-svelte"
 	import { flyAndScale } from "../utils/transitions.ts"
-	import { settings } from "ui/stores/settings.ts"
+	import { settings } from "ui"
 
 	export let options = [] as { value: number | string; label: string }[]
 	export let setting: string

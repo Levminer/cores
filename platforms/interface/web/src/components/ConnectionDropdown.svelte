@@ -106,11 +106,11 @@
 
 <script lang="ts">
 	import { Dialog, Popover, Separator } from "bits-ui"
-	import { flyAndScale } from "../utils/transitions.ts"
+	import { flyAndScale } from "ui"
 	import { Pencil, Plug, Plus, Trash2 } from "lucide-svelte"
-	import { settings } from "ui/stores/settings.ts"
-	import ModularDialog from "./modularDialog.svelte"
-	import { addConnectionCode, editConnectionCode, deleteConnectionCode } from "ui/utils/connection.ts"
+	import { settings } from "ui"
+	import { ModularDialog } from "ui"
+	import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "ui"
 
 	export let connect = (item: string) => {}
 	export let mode = "header" as "menu" | "header"

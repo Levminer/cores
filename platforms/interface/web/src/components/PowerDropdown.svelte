@@ -70,7 +70,7 @@
 
 <script lang="ts">
 	import { DropdownMenu } from "bits-ui"
-	import { flyAndScale } from "../utils/transitions.ts"
+	import { flyAndScale } from "ui"
 	import { Moon, Power, RotateCcw, ScreenShareOff } from "lucide-svelte"
 
 	export let action = (type: string) => {}

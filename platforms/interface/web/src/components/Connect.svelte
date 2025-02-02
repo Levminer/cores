@@ -42,16 +42,13 @@
 {/if}
 
 <script lang="ts">
-	import { getSettings, setSettings, settings } from "ui/stores/settings.ts"
-	import ModularDialog from "ui/components/modularDialog.svelte"
+	import { getSettings, Loading, ModularDialog, setSettings, settings, supabaseClient } from "ui"
 	import { Plus } from "lucide-svelte"
 	import { Dialog } from "bits-ui"
-	import { addConnectionCode } from "ui/utils/connection.ts"
-	import ConnectItem from "./connectItem.svelte"
+	import ConnectItem from "./ConnectItem.svelte"
 	import { onMount } from "svelte"
-	import { supabaseClient } from "ui/utils/supabase"
 	import type { User } from "@supabase/supabase-js"
-	import Loading from "ui/navigation/loading.svelte"
+	import { addConnectionCode } from "../../../ui/utils/connection"
 
 	$: user = null as User | null
 	$: loading = true

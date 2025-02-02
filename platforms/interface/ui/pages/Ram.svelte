@@ -156,13 +156,9 @@
 </div>
 
 <script lang="ts">
-	import { hardwareStatistics } from "ui/stores/hardwareStatistics.ts"
-	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
-	import ToggleButton from "ui/components/toggleButton.svelte"
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
 	import { Gauge } from "lucide-svelte"
-	import LineChart from "ui/charts/LineChart.svelte"
-	import SaveDataButton from "../components/saveDataButton.svelte"
+	import { hardwareInfo, hardwareStatistics, LineChart, SaveDataButton, ToggleButton } from "ui"
 
 	let minutes = false
 </script>

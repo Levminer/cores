@@ -125,11 +125,9 @@
 </div>
 
 <script lang="ts">
-	import LineChart from "ui/charts/LineChart.svelte"
+	import { hardwareInfo, LineChart, ToggleButton } from "ui"
 	import { hardwareStatistics } from "../stores/hardwareStatistics.ts"
-	import { hardwareInfo } from "ui/stores/hardwareInfo.ts"
 	import { ArrowDownUp, Network, PieChart } from "lucide-svelte"
-	import ToggleButton from "ui/components/toggleButton.svelte"
 
 	let minutes = false
 </script>
