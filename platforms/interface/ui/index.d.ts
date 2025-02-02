@@ -25,6 +25,7 @@ import SaveDataButton from "./components/SaveDataButton.svelte"
 import Select from "./components/Select.svelte"
 import Toggle from "./components/Toggle.svelte"
 import ToggleButton from "./components/ToggleButton.svelte"
+import UpdateAlert from "./components/UpdateAlert.svelte"
 
 import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
@@ -61,6 +62,7 @@ export {
 	Select,
 	Toggle,
 	ToggleButton,
+	UpdateAlert,
 	hardwareInfo,
 	getHardwareInfo,
 	setHardwareInfo,

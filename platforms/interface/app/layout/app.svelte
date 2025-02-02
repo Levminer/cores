@@ -8,6 +8,8 @@
 			<BuildNumber />
 		{/if}
 
+		<UpdateAlert />
+
 		<div class="top" />
 
 		{#if $hardwareInfo.cpu === undefined || loading}
@@ -67,9 +69,6 @@
 	import { Route, router } from "@baileyherbert/tinro"
 	import build from "../../../../build.json"
 	import { invoke } from "@tauri-apps/api/core"
-	import { check } from "@tauri-apps/plugin-updater"
-	import { relaunch } from "@tauri-apps/plugin-process"
-	import { ask } from "@tauri-apps/plugin-dialog"
 	import posthog from "posthog-js"
 	import {
 		DesktopNavigation,
@@ -96,6 +95,7 @@
 		setHardwareInfo,
 		hardwareInfo,
 		supabaseClient,
+		UpdateAlert,
 	} from "ui"
 
 	$: loading = true
@@ -237,32 +237,6 @@
 		router.subscribe(() => {
 			document.querySelector(".top").scrollIntoView()
 		})
-
-		// Check for updates
-		const checkForUpdates = async () => {
-			if (!build.dev) {
-				console.log("Checking for updates")
-
-				const update = await check()
-
-				console.log("Update:", update)
-
-				if (update.available) {
-					const result = await ask("A new version of Cores is available. Do you want to update?", {
-						title: "Cores update available",
-					})
-
-					if (result) {
-						await update.downloadAndInstall((event) => {
-							console.log("Downloading update", event)
-						})
-						await relaunch()
-					}
-				}
-			}
-		}
-
-		checkForUpdates()
 
 		// 60s date comparison
 		const date = new Date()

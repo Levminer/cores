@@ -1,6 +1,6 @@
 {
 	"name": "cores",
-	"version": "0.27.0",
+	"version": "0.26.0",
 	"description": "Modern hardware monitor for Windows.",
 	"author": "Levminer",
 	"license": "GPL-3.0",
@@ -22,7 +22,7 @@
 	},
 	"devDependencies": {
 		"@sentry/cli": "^2.38.2",
-		"@tauri-apps/cli": "^2.0.4",
+		"@tauri-apps/cli": "^2.2.7",
 		"cross-env": "^7.0.3"
 	}
 }
