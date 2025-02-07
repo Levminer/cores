@@ -162,7 +162,7 @@
 </div>
 
 <script lang="ts">
-	import { ModularDialog, settings, Toggle } from "ui"
+	import { hardwareInfo, ModularDialog, settings, Toggle } from "ui"
 	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth } from "lucide-svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
@@ -176,7 +176,7 @@
 		if ($settings.remoteConnections) {
 			const { data, error } = await supabaseClient.from("remote_connection").insert({
 				code: $settings.connectionCode,
-				name: "Cores Desktop",
+				name: $hardwareInfo.system.os.hostname ?? "Cores Desktop",
 				user_id: userData.user.id,
 			})
 		} else {

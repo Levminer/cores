@@ -227,6 +227,10 @@ public class OSInfo {
 	public string Runtime {
 		get; set;
 	}
+
+	public string Hostname {
+		get; set;
+	}
 }
 
 public class StorageInfo {

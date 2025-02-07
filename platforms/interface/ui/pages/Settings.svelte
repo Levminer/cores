@@ -43,6 +43,7 @@
 		</div>
 
 		<!-- account -->
+
 		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
@@ -51,21 +52,36 @@
 					</div>
 					<h2>Account</h2>
 				</div>
-				<h3>{user?.email ?? "Loading..."}</h3>
+				<h3>{user?.email ?? "Not logged in"}</h3>
 			</div>
 
-			<div class="flex flex-col items-start gap-3 sm:my-5">
-				<button
-					on:click={async () => {
-						await supabaseClient.auth.signOut()
-						location.href = "/onboarding"
-					}}
-					class="button"
-				>
-					<LogOut />
-					Log out
-				</button>
-			</div>
+			{#if !loading}
+				<div class="flex flex-col items-start gap-3 sm:my-5">
+					{#if user?.email}
+						<button
+							on:click={async () => {
+								await supabaseClient.auth.signOut()
+								location.href = "/onboarding"
+							}}
+							class="button"
+						>
+							<LogOut />
+							Log out
+						</button>
+					{:else}
+						<button
+							on:click={async () => {
+								await supabaseClient.auth.signOut()
+								location.href = "/onboarding"
+							}}
+							class="button"
+						>
+							<User />
+							Log in
+						</button>
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -190,6 +206,7 @@
 	import { Dialog, Tabs } from "bits-ui"
 
 	$: user = null
+	$: loading = true
 
 	onMount(async () => {
 		const { data, error } = await supabaseClient.auth.getUser()
@@ -197,6 +214,8 @@
 		if (!error && data.user) {
 			user = data.user
 		}
+
+		loading = false
 	})
 
 	const launchOnStartup = () => {

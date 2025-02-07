@@ -719,6 +719,9 @@ public class HardwareInfo {
 
 					// OS info
 					API.System.OS.Name = Commands.GetOSInfo();
+
+					// hostname
+					API.System.OS.Hostname = System.Net.Dns.GetHostName();
 				}
 				catch (Exception) {
 					Log.Error("Failed to get GPU and OS name");

@@ -116,6 +116,7 @@ declare global {
 				app: string
 				webView: string
 				runtime: string
+				hostname?: string
 			}
 
 			storage: {
