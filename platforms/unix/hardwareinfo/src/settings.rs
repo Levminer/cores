@@ -27,10 +27,21 @@ pub fn default_connection_code() -> String {
         .to_string()
         .replace("-", "")
         .chars()
-        .take(10)
+        .take(16)
         .collect();
 
     format!("crs_{}", id)
+}
+
+pub fn default_user_id() -> String {
+    let id: String = Uuid::new_v4()
+        .to_string()
+        .replace("-", "")
+        .chars()
+        .take(10)
+        .collect();
+
+    format!("user_{}", id)
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -60,7 +71,7 @@ pub struct Settings {
     pub license_key: String,
     #[serde(rename = "licenseActivated", default = "default_string")]
     pub license_activated: String,
-    #[serde(rename = "userId", default = "default_connection_code")]
+    #[serde(rename = "userId", default = "default_user_id")]
     pub user_id: String,
     pub version: Option<u8>,
 }

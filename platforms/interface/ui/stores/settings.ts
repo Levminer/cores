@@ -4,7 +4,11 @@ import { invoke } from "@tauri-apps/api/core"
 let initialized = false
 
 const generateConnectionCode = () => {
-	return `crs_${crypto.randomUUID().replaceAll("-", "")}`.slice(0, 14)
+	return `crs_${crypto.randomUUID().replaceAll("-", "")}`.slice(0, 16)
+}
+
+const generateUserId = () => {
+	return `user_${crypto.randomUUID().replaceAll("-", "")}`.slice(0, 10)
 }
 
 const defaultSettings: LibSettings = {
@@ -19,7 +23,7 @@ const defaultSettings: LibSettings = {
 	optionalAnalytics: true,
 	licenseKey: "",
 	licenseActivated: "",
-	userId: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
+	userId: import.meta.env.VITE_CORES_MODE === "host" ? generateUserId() : "",
 }
 
 // Create store

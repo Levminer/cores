@@ -5,11 +5,16 @@ using System.Text.Json;
 namespace lib;
 
 public class DefaultValues {
-	public static string Generate() {
-		// get first 10 characters of guid
-		var id = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
+	public static string GenerateConnectionCode() {
+		var id = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
 
 		return $"crs_{id}";
+	}
+
+	public static string GenerateUserId() {
+		var id = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 10);
+
+		return $"user_{id}";
 	}
 }
 
@@ -26,10 +31,10 @@ public class DefaultSettings {
 	public bool remoteConnections { get; set; } = false;
 	public bool optionalAnalytics { get; set; } = true;
 	public List<ConnectionCode> connectionCodes = new();
-	public string connectionCode { get; set; } = DefaultValues.Generate();
+	public string connectionCode { get; set; } = DefaultValues.GenerateConnectionCode();
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
-	public string userId { get; set; } = DefaultValues.Generate();
+	public string userId { get; set; } = DefaultValues.GenerateUserId();
 	public int version { get; set; } = 2;
 }
 
