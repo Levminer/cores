@@ -150,7 +150,9 @@
 								</h2>
 								<p class="text-base leading-tight">If you already purchased Cores, please activate your license key.</p>
 								{#if $settings.licenseKey && $settings.licenseKey !== "" && $settings.licenseKey !== "free"}
-									<p class="text-base leading-tight select-text">Your previous license key: <span class="font-bold">{$settings.licenseKey}</span></p>
+									<p class="select-text text-base leading-tight">
+										Your previous license key: <span class="font-bold">{$settings.licenseKey}</span>
+									</p>
 								{/if}
 							</div>
 							<div>
@@ -354,7 +356,8 @@
 		const { data, error } = await supabaseClient.auth.getUser()
 
 		if (error) {
-			return alert("Failed to get user data, please log in.")
+			alert("Failed to get user data, please log in.")
+			return location.reload()
 		}
 
 		if (key !== "") {
