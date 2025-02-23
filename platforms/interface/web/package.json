@@ -29,6 +29,6 @@
 	"dependencies": {
 		"ezrtc": "^0.7.0",
 		"lucide-svelte": "^0.474.0",
-		"posthog-js": "^1.181.0"
+		"posthog-js": "^1.223.3"
 	}
 }

@@ -64,6 +64,7 @@
 						<div>
 							<button
 								on:click={() => {
+									posthog.capture("buy")
 									open(`https://link.levminer.com/buy-cores-app?utm_source=app`)
 								}}
 								class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
@@ -118,28 +119,51 @@
 				</div>
 
 				<div class="flex flex-row items-stretch justify-center gap-3">
-					<div class="flex w-1/2 flex-wrap justify-center text-lg">
-						<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
-							<div>
-								<h2
-									class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
-								>
-									Continue for free
-								</h2>
-								<!-- <p class="text-base leading-tight">You can use Cores Pro for 7 days free.</p> -->
-								<p class="text-base leading-tight">
-									You can use the basic features of Cores for free. For remote connections and advanced features please activate
-									Cores.
-								</p>
-							</div>
-							<div>
-								<button on:click={free} class="smallButton mt-3 w-full">
-									<CircleCheck />
-									Continue
-								</button>
+					{#if variant === "free" || variant === undefined}
+						<div class="flex w-1/2 flex-wrap justify-center text-lg">
+							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
+								<div>
+									<h2
+										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
+									>
+										Continue for free
+									</h2>
+									<p class="text-base leading-tight">
+										You can use the basic features of Cores for free. For remote connections and advanced features please activate
+										Cores.
+									</p>
+								</div>
+								<div>
+									<button on:click={free} class="smallButton mt-3 w-full">
+										<CircleCheck />
+										Continue
+									</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					{:else}
+						<div class="flex w-1/2 flex-wrap justify-center text-lg">
+							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
+								<div>
+									<h2
+										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
+									>
+										1 week trial
+									</h2>
+									<p class="text-base leading-tight">
+										You can use the basic features of Cores for 1 week. For remote connections and advanced features please
+										activate Cores.
+									</p>
+								</div>
+								<div>
+									<button on:click={free} class="smallButton mt-3 w-full">
+										<CircleCheck />
+										Continue
+									</button>
+								</div>
+							</div>
+						</div>
+					{/if}
 					<div class="flex w-1/2 flex-wrap justify-center text-lg">
 						<div class="mx-auto flex w-full flex-col justify-between space-y-5 rounded-xl border-2 border-purple-400 p-5 text-left">
 							<div>
@@ -251,36 +275,62 @@
 	import { start, cancel, onUrl } from "@fabianlars/tauri-plugin-oauth"
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { Login, ModularDialog } from "ui"
+	import posthog from "posthog-js"
 
 	$: step = "" as "welcome" | "login" | "pricing" | "tips"
 	$: key = ""
+	$: variant = "free" as "free" | "paid"
 
 	onMount(async () => {
+		const ff = posthog.getFeatureFlag("raider") as "free" | "paid"
+		variant = ff
+
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
 		if (!userError) {
 			stepPricing()
 		} else {
 			step = "welcome"
+
+			posthog.capture("welcome")
 		}
 	})
 
 	const stepLogin = () => {
 		step = "login"
+
+		posthog.capture("login")
 	}
 
 	const stepPricing = () => {
 		step = "pricing"
+
+		posthog.capture("pricing")
 	}
 
 	const stepTips = () => {
 		step = "tips"
 		$state.showMenu = true
+
+		posthog.capture("tips")
 	}
 
 	const free = () => {
+		if ($settings.licenseKey === "free" && variant === "paid") {
+			// check if date is more than a week ago
+			const licenseActivated = new Date($settings.licenseActivated)
+			const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+
+			if (licenseActivated < sevenDaysAgo) {
+				return alert("Your license has expired. Please activate your license key.")
+			}
+		}
+
 		$settings.licenseKey = "free"
 		$settings.licenseActivated = new Date().toISOString()
+
+		posthog.capture("free")
+
 		setTimeout(() => {
 			stepTips()
 		}, 250)

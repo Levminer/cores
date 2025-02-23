@@ -176,16 +176,20 @@
 		connectToWSServer()
 
 		const analytics = async () => {
-			if (sendAnalytics && !build.dev) {
-				posthog.init("phc_2zbUPXXhnelCYP2VLXeWZvKy0hykzQA7edSOsFrYZaa", {
-					api_host: "https://eu.i.posthog.com",
-					capture_pageview: false,
-					capture_pageleave: false,
-					persistence: "localStorage",
-					autocapture: false,
-				})
+			posthog.init("phc_2zbUPXXhnelCYP2VLXeWZvKy0hykzQA7edSOsFrYZaa", {
+				api_host: "https://eu.i.posthog.com",
+				capture_pageview: false,
+				capture_pageleave: false,
+				persistence: "localStorage",
+				autocapture: false,
+			})
 
+			if (sendAnalytics && !build.dev) {
 				const systemInfo: SystemInfo = await invoke("system_info")
+
+				if (systemInfo.osName !== "Windows") {
+					posthog.featureFlags.overrideFeatureFlags({ flags: { raider: "free" } })
+				}
 
 				posthog.capture("hardware_info", {
 					distinct_id: $settings.userId,
