@@ -102,6 +102,14 @@ declare global {
 			load: Sensor[]
 			info: string
 			clock: Sensor[]
+			cards: {
+				name: string
+				temperature: Sensor[]
+				fan: Sensor[]
+				memory: Sensor[]
+				power: Sensor[]
+				clock: Sensor[]
+			}[]
 		}
 
 		ram: {
@@ -174,6 +182,14 @@ declare global {
 			load: number
 			power: number
 			memory: number
+			cards: {
+				temperature: Sensor
+				clock: Sensor
+				fan: number
+				load: number
+				power: number
+				memory: number
+			}[]
 		}
 
 		ram: {

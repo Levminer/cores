@@ -183,6 +183,48 @@ public class CPUInfo {
 	} = new();
 }
 
+public class GPU {
+	public string Name {
+		get; set;
+	}
+
+	public List<Sensor> Load {
+		get; set;
+	} = new();
+
+	public float MaxLoad {
+		get; set;
+	}
+
+	public List<Sensor> Fan {
+		get; set;
+	} = new();
+
+	public List<Sensor> Memory {
+		get; set;
+	} = new();
+
+	public List<Sensor> Power {
+		get; set;
+	} = new();
+
+	public List<Sensor> Clock {
+		get; set;
+	} = new();
+
+	public List<Sensor> Temperature {
+		get; set;
+	} = new();
+
+	public Identifier Id {
+		get; set;
+	}
+
+	public int Priority {
+		get; set;
+	}
+}
+
 public class GPUInfo : CPUInfo {
 	public List<Sensor> Fan {
 		get; set;
@@ -195,6 +237,10 @@ public class GPUInfo : CPUInfo {
 	new public string Info {
 		get; set;
 	}
+
+	public List<GPU> Cards {
+		get; set;
+	} = new();
 }
 
 public class RAMInfo {

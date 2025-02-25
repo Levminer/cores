@@ -234,6 +234,27 @@ public class HardwareInfo {
 					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
 
+					if (firstRun) {
+						var priority = 1;
+
+						if (hardware.HardwareType.ToString().Contains("Nvidia")) {
+							priority = 0;
+						}
+
+						var data = new GPU {
+							Name = computerHardware[i].Name,
+							Id = computerHardware[i].Identifier,
+							Priority = priority,
+						};
+
+						API.GPU.Cards.Add(data);
+
+						// sort by priority
+						API.GPU.Cards = API.GPU.Cards.OrderBy(item => item.Priority).ToList();
+					}
+
+					var cardIndex = API.GPU.Cards.FindIndex(x => x.Id == computerHardware[i].Identifier);
+
 					// GPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
 						var data = new Sensor {
@@ -245,8 +266,10 @@ public class HardwareInfo {
 
 						if (firstRun) {
 							API.GPU.Temperature.Add(data);
+							API.GPU.Cards[cardIndex].Temperature.Add(data);
 						} else {
 							API.GPU.Temperature.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Temperature.TrySetValue(j, data);
 						}
 					}
 
@@ -261,8 +284,10 @@ public class HardwareInfo {
 
 						if (firstRun) {
 							API.GPU.Fan.Add(data);
+							API.GPU.Cards[cardIndex].Fan.Add(data);
 						} else {
 							API.GPU.Fan.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Fan.TrySetValue(j, data);
 						}
 					}
 
@@ -277,8 +302,10 @@ public class HardwareInfo {
 
 						if (firstRun) {
 							API.GPU.Memory.Add(data);
+							API.GPU.Cards[cardIndex].Memory.Add(data);
 						} else {
 							API.GPU.Memory.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Memory.TrySetValue(j, data);
 						}
 					}
 
@@ -293,8 +320,10 @@ public class HardwareInfo {
 
 						if (firstRun) {
 							API.GPU.Power.Add(data);
+							API.GPU.Cards[cardIndex].Power.Add(data);
 						} else {
 							API.GPU.Power.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Power.TrySetValue(j, data);
 						}
 					}
 
@@ -309,8 +338,10 @@ public class HardwareInfo {
 
 						if (firstRun) {
 							API.GPU.Clock.Add(data);
+							API.GPU.Cards[cardIndex].Clock.Add(data);
 						} else {
 							API.GPU.Clock.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Clock.TrySetValue(j, data);
 						}
 					}
 
