@@ -21,6 +21,9 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Rust setup
+              uses: dtolnay/rust-toolchain@stable
+
             - name: Install trusted-signing-cli
               run: |
                   cargo install trusted-signing-cli

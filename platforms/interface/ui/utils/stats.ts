@@ -41,7 +41,7 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 			fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
 			memory: parseFloat((input.gpu.memory[0]?.value ?? 0).toFixed(1)),
 
-			cards: input.gpu.cards.map((card) => {
+			cards: input.gpu.cards?.map((card) => {
 				return {
 					temperature: {
 						value: Math.round(card.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / card.temperature.length),
@@ -200,7 +200,7 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 				).toFixed(1),
 			),
 
-			cards: input.gpu.cards.map((card, cardIndex) => {
+			cards: input.gpu.cards?.map((card, cardIndex) => {
 				return {
 					temperature: {
 						value: Math.round(
