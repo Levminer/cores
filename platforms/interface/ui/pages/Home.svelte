@@ -63,7 +63,7 @@
 				</div>
 				<h2>CPU</h2>
 			</div>
-			<h3>{$hardwareInfo.cpu.name}</h3>
+			<h3 class="max-w-full truncate">{$hardwareInfo.cpu.name}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
 					<GaugeChart load={$hardwareInfo.cpu.maxLoad} />
@@ -90,7 +90,7 @@
 				</div>
 				<h2>RAM</h2>
 			</div>
-			<h3>{$hardwareInfo.ram.info[0]?.manufacturerName ?? "Generic Memory"}</h3>
+			<h3 class="max-w-full truncate">{$hardwareInfo.ram.info[0]?.manufacturerName ?? "Generic Memory"}</h3>
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
 					<GaugeChart load={$hardwareInfo.ram.load[2]?.value ?? 0} />
@@ -114,7 +114,11 @@
 				</div>
 				<h2>GPU</h2>
 			</div>
-			<h3>{$hardwareInfo.gpu.name}</h3>
+			{#if $hardwareInfo.gpu.cards?.length > 0}
+				<h3 class="max-w-full truncate">{$hardwareInfo.gpu.cards.map((card) => card.name).join(", ")}</h3>
+			{:else}
+				<h3 class="max-w-full truncate">{$hardwareInfo.gpu.name}</h3>
+			{/if}
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
 					<GaugeChart load={Math.round($hardwareInfo.gpu.maxLoad)} />

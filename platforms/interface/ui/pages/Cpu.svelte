@@ -24,7 +24,7 @@
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Thermometer />
 						</div>
-						<h2>Average CPU Temperature</h2>
+						<h2>Average Temperature</h2>
 					</div>
 					<div class="flex flex-row">
 						<SaveDataButton
@@ -97,7 +97,7 @@
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Clock />
 						</div>
-						<h2>Average Clock speed</h2>
+						<h2>Average Clock Speed</h2>
 					</div>
 					<div class="flex flex-row">
 						<SaveDataButton
@@ -162,55 +162,6 @@
 		</div>
 
 		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
-			<!-- cpu power usage -->
-			{#if $hardwareInfo.cpu.power.length > 0}
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="flex items-baseline justify-between">
-						<div class="mb-5 flex items-center gap-3">
-							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-								<Plug />
-							</div>
-							<h2>CPU Power Usage</h2>
-						</div>
-						<div class="flex flex-row">
-							<SaveDataButton
-								props={{
-									id: "CPU_Power_Usage",
-									statistics: [
-										{
-											label: "Power Usage",
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.cpu.power)
-												: $hardwareStatistics.seconds.map((value) => value.cpu.power),
-										},
-									],
-								}}
-							/>
-							<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-						</div>
-					</div>
-
-					<div>
-						<LineChart
-							props={{
-								id: "CPU_Power_Usage",
-								statistics: [
-									{
-										label: "Power Usage",
-										color: "yellow",
-										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.cpu.power)
-											: $hardwareStatistics.seconds.map((value) => value.cpu.power),
-									},
-								],
-								time: minutes ? "m" : "s",
-								unit: " W",
-							}}
-						/>
-					</div>
-				</div>
-			{/if}
-
 			<!-- cpu load -->
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="flex items-baseline justify-between">
@@ -218,7 +169,7 @@
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<Gauge />
 						</div>
-						<h2>Average CPU Load</h2>
+						<h2>Average Load</h2>
 					</div>
 					<div class="flex flex-row">
 						<SaveDataButton
@@ -261,6 +212,55 @@
 				</div>
 			</div>
 
+			<!-- cpu power usage -->
+			{#if $hardwareInfo.cpu.power.length > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="flex items-baseline justify-between">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Plug />
+							</div>
+							<h2>Power Usage</h2>
+						</div>
+						<div class="flex flex-row">
+							<SaveDataButton
+								props={{
+									id: "CPU_Power_Usage",
+									statistics: [
+										{
+											label: "Power Usage",
+											data: minutes
+												? $hardwareStatistics.minutes.map((value) => value.cpu.power)
+												: $hardwareStatistics.seconds.map((value) => value.cpu.power),
+										},
+									],
+								}}
+							/>
+							<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+						</div>
+					</div>
+
+					<div>
+						<LineChart
+							props={{
+								id: "CPU_Power_Usage",
+								statistics: [
+									{
+										label: "Power Usage",
+										color: "yellow",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.cpu.power)
+											: $hardwareStatistics.seconds.map((value) => value.cpu.power),
+									},
+								],
+								time: minutes ? "m" : "s",
+								unit: " W",
+							}}
+						/>
+					</div>
+				</div>
+			{/if}
+
 			<!-- cpu voltage -->
 			{#if $hardwareInfo.cpu.voltage.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
@@ -269,7 +269,7 @@
 							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 								<Zap />
 							</div>
-							<h2>CPU Voltage</h2>
+							<h2>Voltage</h2>
 						</div>
 						<div class="flex flex-row">
 							<SaveDataButton
