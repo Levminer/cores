@@ -233,6 +233,7 @@ public class HardwareInfo {
 					var memorySensors = hardware.Sensors.Where(x => x.SensorType == SensorType.SmallData).ToArray();
 					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
+					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && x.Name.StartsWith("D3D")).ToArray();
 
 					if (firstRun) {
 						var priority = 1;
@@ -254,6 +255,10 @@ public class HardwareInfo {
 					}
 
 					var cardIndex = API.GPU.Cards.FindIndex(x => x.Id == computerHardware[i].Identifier);
+
+					if (cardIndex == -1) {
+						cardIndex = 0;
+					}
 
 					// GPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
@@ -345,24 +350,26 @@ public class HardwareInfo {
 						}
 					}
 
-					// Get initial GPU Load
-					if (firstRun) {
-						API.GPU.Load = new List<Sensor> { new() { Name = "3D" }, new() { Name = "Copy" }, new() { Name = "Video Encode" }, new() { Name = "Video Decode" } };
+					// GPU Load
+					for (int j = 0; j < loadSensors.Length; j++) {
+						var data = new Sensor {
+							Name = loadSensors[j].Name,
+							Value = (float)Math.Round(loadSensors[j].Value ?? 0),
+							Min = (float)Math.Round(loadSensors[j].Min ?? 0),
+							Max = (float)Math.Round(loadSensors[j].Max ?? 0),
+						};
+						if (firstRun) {
+							API.GPU.Load.Add(data);
+							API.GPU.Cards[cardIndex].Load.Add(data);
+						} else {
+							API.GPU.Load.TrySetValue(j, data);
+							API.GPU.Cards[cardIndex].Load.TrySetValue(j, data);
+						}
 					}
 
-					// Get GPU Load
-					Task.Run(async () => {
-						try {
-							var GPULoad = new GPULoad();
-							await GPULoad.GetInfo();
-
-							API.GPU.Load = GPULoad.Load;
-							API.GPU.MaxLoad = GPULoad.MaxLoad;
-						}
-						catch (Exception ex) {
-							Log.Error("Error in GPULoad: {@ex}", ex);
-						}
-					});
+					// GPU Max Load
+					API.GPU.MaxLoad = API.GPU.Load.Max(x => x.Value);
+					API.GPU.Cards[cardIndex].MaxLoad = API.GPU.Cards[cardIndex].Load.Max(x => x.Value);
 				}
 
 				// RAM

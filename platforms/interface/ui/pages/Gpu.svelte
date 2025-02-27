@@ -14,7 +14,7 @@
 						<h3>Vendor: {card.name?.split(" ")[0] ?? "N/A"}</h3>
 						<h3>Name: {card.name ?? "N/A"}</h3>
 						<h3>GPU memory: {card.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2]?.value ?? 0) : "N/A"} GB</h3>
-						<h3>Global Driver: {$hardwareInfo.gpu.info}</h3>
+						<h3>Driver: {$hardwareInfo.gpu.info}</h3>
 					{/each}
 				{:else}
 					<div class="select-text">
@@ -316,58 +316,57 @@
 		</div>
 
 		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
-			<!-- gpu load -->
-			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="flex items-baseline justify-between">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Gauge />
-						</div>
-						<h2>Average Load</h2>
-					</div>
-					<div class="flex flex-row">
-						<SaveDataButton
-							props={{
-								id: "GPU_Load",
-								statistics: [
-									{
-										label: "Load",
-										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.gpu.load)
-											: $hardwareStatistics.seconds.map((value) => value.gpu.load),
-									},
-								],
-							}}
-						/>
-						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-					</div>
-				</div>
-
-				<div>
-					<LineChart
-						props={{
-							id: "GPU_Load",
-							statistics: [
-								{
-									label: "Load",
-									color: "min",
-									fill: true,
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.load)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.load),
-								},
-							],
-							time: minutes ? "m" : "s",
-							unit: "%",
-							min: 0,
-							max: 100,
-						}}
-					/>
-				</div>
-			</div>
-
 			{#if $hardwareInfo.gpu.cards?.length > 0}
 				{#each $hardwareInfo.gpu.cards as item, i}
+					<div class="transparent-800 rounded-xl p-8 sm:p-4">
+						<div class="flex items-baseline justify-between">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+									<Gauge />
+								</div>
+								<h2><span class="line-clamp-1">{item.name}</span> Average Load</h2>
+							</div>
+							<div class="flex flex-row">
+								<SaveDataButton
+									props={{
+										id: "GPU_Load",
+										statistics: [
+											{
+												label: "Load",
+												data: minutes
+													? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].load)
+													: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].load),
+											},
+										],
+									}}
+								/>
+								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+							</div>
+						</div>
+
+						<div>
+							<LineChart
+								props={{
+									id: "GPU_Load",
+									statistics: [
+										{
+											label: "Load",
+											color: "min",
+											fill: true,
+											data: minutes
+												? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].load)
+												: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].load),
+										},
+									],
+									time: minutes ? "m" : "s",
+									unit: "%",
+									min: 0,
+									max: 100,
+								}}
+							/>
+						</div>
+					</div>
+
 					<!-- gpu power usage -->
 					<div class="transparent-800 rounded-xl p-8 sm:p-4">
 						<div class="flex items-baseline justify-between">
@@ -509,6 +508,56 @@
 					</div>
 				{/each}
 			{:else}
+				<!-- gpu load -->
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="flex items-baseline justify-between">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Gauge />
+							</div>
+							<h2>Average Load</h2>
+						</div>
+						<div class="flex flex-row">
+							<SaveDataButton
+								props={{
+									id: "GPU_Load",
+									statistics: [
+										{
+											label: "Load",
+											data: minutes
+												? $hardwareStatistics.minutes.map((value) => value.gpu.load)
+												: $hardwareStatistics.seconds.map((value) => value.gpu.load),
+										},
+									],
+								}}
+							/>
+							<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+						</div>
+					</div>
+
+					<div>
+						<LineChart
+							props={{
+								id: "GPU_Load",
+								statistics: [
+									{
+										label: "Load",
+										color: "min",
+										fill: true,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.load)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.load),
+									},
+								],
+								time: minutes ? "m" : "s",
+								unit: "%",
+								min: 0,
+								max: 100,
+							}}
+						/>
+					</div>
+				</div>
+
 				<!-- gpu power usage -->
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="flex items-baseline justify-between">

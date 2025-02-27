@@ -109,6 +109,7 @@ declare global {
 				memory: Sensor[]
 				power: Sensor[]
 				clock: Sensor[]
+				maxLoad: number
 			}[]
 		}
 

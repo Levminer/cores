@@ -55,7 +55,7 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 						max: Math.round(card.clock[0]?.max ?? 0),
 					},
 
-					load: Math.round(input.gpu.maxLoad),
+					load: Math.round(card.maxLoad),
 					power: Math.round(card.power.reduce((a, b) => a + b.value, 0)),
 					fan: Math.round(card.fan.reduce((a, b) => a + b.value, 0)),
 					memory: parseFloat((card.memory[0]?.value ?? 0).toFixed(1)),
