@@ -11,10 +11,12 @@
 				</div>
 				{#if $hardwareInfo.gpu.cards?.length > 0}
 					{#each $hardwareInfo.gpu.cards as card}
-						<h3>Vendor: {card.name?.split(" ")[0] ?? "N/A"}</h3>
-						<h3>Name: {card.name ?? "N/A"}</h3>
-						<h3>GPU memory: {card.memory.length > 2 ? Math.round($hardwareInfo.gpu.memory[2]?.value ?? 0) : "N/A"} GB</h3>
-						<h3>Driver: {$hardwareInfo.gpu.info}</h3>
+						<div class="mt-5 select-text">
+							<h3>Vendor: {card.name?.split(" ")[0] ?? "N/A"}</h3>
+							<h3>Name: {card.name ?? "N/A"}</h3>
+							<h3>GPU memory: {card.memory.length > 2 ? Math.round(card.memory[2]?.value ?? 0) : "N/A"} GB</h3>
+							<h3>Driver: {$hardwareInfo.gpu.info}</h3>
+						</div>
 					{/each}
 				{:else}
 					<div class="select-text">
