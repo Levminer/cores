@@ -10,10 +10,12 @@ use axum::{
 };
 use clap::Parser;
 use ezrtc::host::EzRTCHost;
-use ezrtc::socket::DataChannelHandler;
+use ezrtc::protocol::{SignalMessage, Status, UserId};
+use ezrtc::socket::{DataChannelHandler, WSHost};
+use ezrtc::{RTCDataChannel, RTCDataChannelState, RTCIceServer};
 use futures::{sink::SinkExt, stream::StreamExt};
 use hardwareinfo::settings::{get_settings, Settings};
-use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
+use hardwareinfo::{refresh_hardware_info, CoresSensor, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
@@ -27,9 +29,6 @@ use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
 };
-use webrtc::data_channel::data_channel_state::RTCDataChannelState;
-use webrtc::data_channel::RTCDataChannel;
-use webrtc::ice_transport::ice_server::RTCIceServer;
 use wol::{send_wol, MacAddr};
 
 mod service;
@@ -374,6 +373,44 @@ async fn main() {
                         warn!("Failed to parse message: {:?}", e);
                     }
                 }
+            }
+
+            fn handle_keep_alive(&self, handle: &mut WSHost, user_id: UserId) {
+                let state = self.state.clone();
+
+                let hw_info = {
+                    let last_60s_data = state.last_60s_hardware_info.lock().unwrap();
+                    last_60s_data
+                        .last()
+                        .unwrap_or(&HardwareInfo::default())
+                        .clone()
+                };
+
+                let cpu_usage = hw_info.cpu.max_load;
+                let gpu_usage = hw_info.gpu.max_load;
+                let memory_usage = if let Some(memory) = &hw_info.ram.load.get(2) {
+                    memory.value
+                } else {
+                    0.0
+                };
+
+                let ping_message = SignalMessage::KeepAlive(
+                    user_id,
+                    Status {
+                        session_id: Some(handle.session_id.clone()),
+                        is_host: Some(true),
+                        version: Some("0.6.0".to_string()),
+                        metadata: Some(
+                            serde_json::json!({"cpu": cpu_usage, "gpu": gpu_usage, "ram": memory_usage}),
+                        ),
+                    },
+                );
+                handle
+                    .handle
+                    .text(serde_json::to_string(&ping_message).unwrap())
+                    .unwrap();
+
+                info!("Sending pong to server");
             }
         }
 

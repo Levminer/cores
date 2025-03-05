@@ -40,6 +40,19 @@ public class RTCServer {
 				Commands.HandleRemoteMessage(data);
 			};
 
+			EzRTCHost.keepAliveMessage += (websocketClient, text) => {
+				var keepAlive = SignalMessage.KeepAlive.Decode(text);
+
+				var status = new Status { is_host = true, session_id = EzRTCHost.sessionId, version = "0.6.0", metadata = new Dictionary<string, object>() };
+				status.metadata.Add("cpu", hardwareInfo.API.CPU.MaxLoad);
+				status.metadata.Add("gpu", hardwareInfo.API.GPU.MaxLoad);
+				status.metadata.Add("ram", hardwareInfo.API.RAM.Load[2].Value);
+
+				var message = SignalMessage.KeepAlive.Encode(keepAlive.userId, status);
+
+				websocketClient.Send(message);
+			};
+
 			while (!stop) {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
