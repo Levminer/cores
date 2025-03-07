@@ -15,7 +15,7 @@ use ezrtc::socket::{DataChannelHandler, WSHost};
 use ezrtc::{RTCDataChannel, RTCDataChannelState, RTCIceServer};
 use futures::{sink::SinkExt, stream::StreamExt};
 use hardwareinfo::settings::{get_settings, Settings};
-use hardwareinfo::{refresh_hardware_info, CoresSensor, Data, HardwareInfo, Networks, Nvml, System};
+use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};

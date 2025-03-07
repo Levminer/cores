@@ -70,23 +70,54 @@
 			<KeyRound class="h-5 w-5" color={"#d3cfcf"} />
 			<h5>crs_********{item.code.slice(-2)}</h5>
 		</div>
+		{#if metadata?.cpu}
+			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<Cpu class="h-5 w-5" color={"#d3cfcf"} />
+				<h5>{Math.round(parseInt(metadata.cpu))}%</h5>
+			</div>
+		{/if}
+		{#if metadata?.ram}
+			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<Memory class="h-5 w-5" color={"#d3cfcf"} />
+				<h5>{Math.round(parseInt(metadata.ram))}%</h5>
+			</div>
+		{/if}
+		{#if metadata?.gpu}
+			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<GpuCard class="h-5 w-5" color={"#d3cfcf"} />
+				<h5>{Math.round(parseInt(metadata.gpu))}%</h5>
+			</div>
+		{/if}
 	</div>
 </div>
 
 <script lang="ts">
 	import { ModularDialog, settings } from "ui"
-	import { Plug, Trash2, Pencil, KeyRound, Globe } from "lucide-svelte"
+	import { Plug, Trash2, Pencil, KeyRound, Globe, Cpu } from "lucide-svelte"
 	import { goto } from "$app/navigation"
 	import { Dialog } from "bits-ui"
 	import { state } from "../stores/state.ts"
 	import { onMount } from "svelte"
 	import { editConnectionCode, deleteConnectionCode } from "../../../ui/utils/connection.ts"
+	import { GpuCard, Memory } from "svelte-bootstrap-icons"
 
 	export let item: LibSettings["connectionCodes"][0]
 
 	type Status = "unknown" | "online" | "offline"
 
 	let status = "unknown" as Status
+	let metadata = null as Metadata | null
+
+	interface Metadata {
+		cpu: string
+		ram: string
+		gpu: string
+	}
+
+	interface DeviceStatus {
+		online: boolean
+		metadata?: Metadata
+	}
 
 	onMount(async () => {
 		const res = await fetch(`https://rtc-usw.levminer.com/status/${item.code}`)
@@ -96,5 +127,11 @@
 		if (json.online) {
 			status = "online"
 		}
+
+		if (json.metadata) {
+			metadata = json.metadata
+		}
+
+		console.log(metadata)
 	})
 </script>
