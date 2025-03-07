@@ -121,8 +121,7 @@
 
 	onMount(async () => {
 		const res = await fetch(`https://rtc-usw.levminer.com/status/${item.code}`)
-
-		const json = await res.json()
+		const json = (await res.json()) as DeviceStatus
 
 		if (json.online) {
 			status = "online"
@@ -131,7 +130,5 @@
 		if (json.metadata) {
 			metadata = json.metadata
 		}
-
-		console.log(metadata)
 	})
 </script>
