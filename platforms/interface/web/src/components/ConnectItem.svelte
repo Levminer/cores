@@ -70,23 +70,25 @@
 			<KeyRound class="h-5 w-5" color={"#d3cfcf"} />
 			<h5>crs_********{item.code.slice(-2)}</h5>
 		</div>
-		{#if metadata?.cpu !== undefined && metadata?.cpu !== null}
-			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
-				<Cpu class="h-5 w-5" color={"#d3cfcf"} />
-				<h5>{Math.round(parseInt(metadata.cpu))}%</h5>
-			</div>
-		{/if}
-		{#if metadata?.ram !== undefined && metadata?.ram !== null}
-			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
-				<Memory class="h-5 w-5" color={"#d3cfcf"} />
-				<h5>{Math.round(parseInt(metadata.ram))}%</h5>
-			</div>
-		{/if}
-		{#if metadata?.gpu !== null && metadata?.gpu !== undefined}
-			<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
-				<GpuCard class="h-5 w-5" color={"#d3cfcf"} />
-				<h5>{Math.round(parseInt(metadata.gpu))}%</h5>
-			</div>
+		{#if status === "online"}
+			{#if metadata?.cpu !== undefined && metadata?.cpu !== null}
+				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+					<Cpu class="h-5 w-5" color={"#d3cfcf"} />
+					<h5>{Math.round(parseInt(metadata.cpu))}%</h5>
+				</div>
+			{/if}
+			{#if metadata?.ram !== undefined && metadata?.ram !== null}
+				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+					<Memory class="h-5 w-5" color={"#d3cfcf"} />
+					<h5>{Math.round(parseInt(metadata.ram))}%</h5>
+				</div>
+			{/if}
+			{#if metadata?.gpu !== null && metadata?.gpu !== undefined}
+				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+					<GpuCard class="h-5 w-5" color={"#d3cfcf"} />
+					<h5>{Math.round(parseInt(metadata.gpu))}%</h5>
+				</div>
+			{/if}
 		{/if}
 	</div>
 </div>
