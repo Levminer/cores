@@ -22,6 +22,10 @@ const fn default_connection_codes() -> Vec<ConnectionCode> {
     Vec::new()
 }
 
+fn default_connection_url() -> String {
+    "rtc-usw.coresmonitor.com".to_string()
+}
+
 pub fn default_connection_code() -> String {
     let id: String = Uuid::new_v4()
         .to_string()
@@ -63,6 +67,8 @@ pub struct Settings {
     pub remote_connections: bool,
     #[serde(rename = "connectionCodes", default = "default_connection_codes")]
     pub connection_codes: Vec<ConnectionCode>,
+    #[serde(rename = "connectionURL", default = "default_connection_url")]
+    pub connection_url: String,
     #[serde(rename = "networkDevices", default = "default_connection_codes")]
     pub network_devices: Vec<ConnectionCode>,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
@@ -104,6 +110,7 @@ fn check_if_settings_exits() {
         remote_connections: false,
         connection_code: default_connection_code(),
         connection_codes: default_connection_codes(),
+        connection_url: default_connection_url(),
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),
@@ -137,6 +144,7 @@ pub fn get_settings() -> Settings {
         remote_connections: false,
         connection_code: default_connection_code(),
         connection_codes: default_connection_codes(),
+        connection_url: default_connection_url(),
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
         license_key: "".to_string(),

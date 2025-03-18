@@ -16,6 +16,10 @@ public class DefaultValues {
 
 		return $"user_{id}";
 	}
+
+	public static string DefaultConnectionURL() {
+		return "rtc-usw.coresmonitor.com";
+	}
 }
 
 public class ConnectionCode {
@@ -32,6 +36,7 @@ public class DefaultSettings {
 	public bool optionalAnalytics { get; set; } = true;
 	public List<ConnectionCode> connectionCodes = new();
 	public string connectionCode { get; set; } = DefaultValues.GenerateConnectionCode();
+	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
@@ -87,6 +92,7 @@ public class Settings : DefaultSettings {
 			optionalAnalytics = settings?.optionalAnalytics ?? defaultSettings.optionalAnalytics;
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
 			connectionCodes = settings?.connectionCodes ?? defaultSettings.connectionCodes;
+			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
 			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
 			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			userId = settings?.userId ?? defaultSettings.userId;

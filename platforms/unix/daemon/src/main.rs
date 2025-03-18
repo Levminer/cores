@@ -415,8 +415,9 @@ async fn main() {
         }
 
         // Start the connection
+        let url = format!("wss://{}/one-to-many", settings.connection_url);
         let _host = EzRTCHost::new(
-            "wss://rtc-usw.levminer.com/one-to-many".to_string(),
+            url,
             settings.connection_code,
             ice_servers,
             Arc::new(Box::new(MyDataChannelHandler {

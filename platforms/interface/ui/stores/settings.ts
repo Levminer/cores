@@ -17,6 +17,7 @@ const defaultSettings: LibSettings = {
 	launchOnStartup: false,
 	connectionCode: import.meta.env.VITE_CORES_MODE === "host" ? generateConnectionCode() : "",
 	connectionCodes: [],
+	connectionURL: "rtc-usw.coresmonitor.com",
 	networkDevices: [],
 	version: 1,
 	remoteConnections: false,
@@ -41,6 +42,10 @@ settings.subscribe(async (data) => {
 
 	if (data.networkDevices === undefined) {
 		data.networkDevices = []
+	}
+
+	if (data.connectionURL === undefined) {
+		data.connectionURL = "rtc-usw.coresmonitor.com"
 	}
 
 	if (import.meta.env.VITE_CORES_MODE === "host" && initialized) {

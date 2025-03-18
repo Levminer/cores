@@ -67,7 +67,8 @@
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
-			client = new EzRTCClient("wss://rtc-usw.levminer.com/one-to-many", $settings.connectionCode, iceServers)
+			const url = $settings.connectionURL || "rtc-usw.coresmonitor.com"
+			client = new EzRTCClient(`wss://${url}/one-to-many`, $settings.connectionCode, iceServers)
 		}
 
 		// 60s date comparison

@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 
 namespace service;
 public class RTCServer {
-	internal static EzRTCHost EzRTCHost = new(new Uri("wss://rtc-usw.levminer.com/one-to-many"), Program.Settings.connectionCode, new List<RTCIceServer> { new RTCIceServer { urls = "stun:stun.cloudflare.com:3478" } });
+	internal static EzRTCHost EzRTCHost = new(new Uri($"wss://{Program.Settings.connectionURL ?? "rtc-usw.coresmonitor.com"}/one-to-many"), Program.Settings.connectionCode, new List<RTCIceServer> { new RTCIceServer { urls = "stun:stun.cloudflare.com:3478" } });
 	internal static bool stop = false;
 
 	public void Start(HardwareInfo hardwareInfo) {

@@ -231,6 +231,7 @@ declare global {
 			name: string
 			code: string
 		}[]
+		connectionURL?: string
 		networkDevices: {
 			name: string
 			code: string

@@ -122,7 +122,8 @@
 	}
 
 	onMount(async () => {
-		const res = await fetch(`https://rtc-usw.levminer.com/status/${item.code}`)
+		const url = $settings.connectionURL || "rtc-usw.coresmonitor.com"
+		const res = await fetch(`https://${url}/status/${item.code}`)
 		const json = (await res.json()) as DeviceStatus
 
 		if (json.online) {
