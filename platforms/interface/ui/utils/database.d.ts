@@ -28,6 +28,35 @@ export type Database = {
 	}
 	public: {
 		Tables: {
+			messages: {
+				Row: {
+					created_at: string
+					message: string | null
+					message_id: string
+					user_id: string | null
+				}
+				Insert: {
+					created_at?: string
+					message?: string | null
+					message_id?: string
+					user_id?: string | null
+				}
+				Update: {
+					created_at?: string
+					message?: string | null
+					message_id?: string
+					user_id?: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "messages_user_id_fkey"
+						columns: ["user_id"]
+						isOneToOne: false
+						referencedRelation: "user"
+						referencedColumns: ["user_id"]
+					},
+				]
+			}
 			remote_connection: {
 				Row: {
 					code: string | null
