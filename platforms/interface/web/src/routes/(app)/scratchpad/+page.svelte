@@ -7,22 +7,25 @@
 				<div class="flex flex-col items-start gap-3">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<MessagesSquare />
+							<NotebookPen />
 						</div>
-						<h2>Messages</h2>
+						<h2>Scratchpad</h2>
 					</div>
-					<h3>You can send messages for yourself.</h3>
+					<h3>This is your scratchpad. You can write anything you want, its automatically synced.</h3>
 				</div>
 			</div>
 
-			{#each messages as message}
-				<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
-					<p class="select-text text-lg text-gray-200">{message.message}</p>
-					<p class="text-gray-400">{formatTime(message.created_at)}</p>
-				</div>
-			{/each}
+			<div class="overlayScroll flex max-h-96 flex-col gap-5 overflow-y-auto">
+				<!-- Set a max height and enable scrolling -->
+				{#each messages as message}
+					<div class="transparent-800 flex w-full select-text flex-row flex-wrap items-center justify-between rounded-xl p-4 text-left">
+						<p class="text-lg text-gray-200">{message.message}</p>
+						<p class="text-sm text-gray-400">{formatTime(message.created_at)}</p>
+					</div>
+				{/each}
+			</div>
 
-			<input class="input" type="text" bind:value={message} on:keydown={sendMessage} />
+			<input class="input" placeholder="Write your message here, press Enter to submit" type="text" bind:value={message} on:keydown={sendMessage} />
 		</div>
 	</div>
 {/if}
@@ -33,7 +36,7 @@
 	import { Loading, supabaseClient } from "ui"
 	import type { User as UserType } from "@supabase/supabase-js"
 	import type { Database } from "../../../../../ui/utils/database"
-	import { MessagesSquare } from "lucide-svelte"
+	import { NotebookPen } from "lucide-svelte"
 
 	$: loading = true
 	$: user = null as UserType | null
@@ -47,7 +50,7 @@
 				const message = payload.new as Database["public"]["Tables"]["messages"]["Row"]
 				console.log("Change received!", payload)
 				console.log("New message:", message)
-				messages = [...messages, message]
+				messages = [message, ...messages]
 			})
 			.subscribe()
 	})
@@ -63,7 +66,7 @@
 			const { data: messagesData, error: messagesError } = await supabaseClient
 				.from("messages")
 				.select("*")
-				.order("created_at", { ascending: true })
+				.order("created_at", { ascending: false })
 
 			if (!messagesError && messagesData.length > 0) {
 				messages = messagesData
