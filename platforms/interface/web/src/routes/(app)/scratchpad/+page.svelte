@@ -18,14 +18,29 @@
 			<div class="overlayScroll flex max-h-96 flex-col gap-5 overflow-y-auto">
 				<!-- Set a max height and enable scrolling -->
 				{#each messages as message}
-					<div class="transparent-800 flex w-full select-text flex-row flex-wrap items-center justify-between rounded-xl p-4 text-left">
-						<p class="text-lg text-gray-200">{message.message}</p>
-						<p class="text-sm text-gray-400">{formatTime(message.created_at)}</p>
-					</div>
+					<Message {message} {user} />
 				{/each}
 			</div>
 
-			<input class="input" placeholder="Write your message here, press Enter to submit" type="text" bind:value={message} on:keydown={sendMessage} />
+			<div class="flex w-full flex-row items-center justify-center gap-3">
+				<input type="file" id="file" class="hidden" on:change={uploadFile} />
+				<button
+					on:click={() => {
+						const fileInput = document.getElementById("file")
+						fileInput?.click()
+					}}
+					class="flex h-14 items-center justify-center rounded-xl bg-white p-4"
+				>
+					<Plus color="black" />
+				</button>
+				<input
+					class="input h-14 w-full"
+					placeholder="Write your message here, press Enter to submit"
+					type="text"
+					bind:value={message}
+					on:keydown={sendMessage}
+				/>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -36,7 +51,8 @@
 	import { Loading, supabaseClient } from "ui"
 	import type { User as UserType } from "@supabase/supabase-js"
 	import type { Database } from "../../../../../ui/utils/database"
-	import { NotebookPen } from "lucide-svelte"
+	import { NotebookPen, Plus } from "lucide-svelte"
+	import Message from "../../../components/Message.svelte"
 
 	$: loading = true
 	$: user = null as UserType | null
@@ -83,7 +99,7 @@
 		// check if key is enter
 		if (event.key === "Enter") {
 			if (message !== "") {
-				const { data, error } = await supabaseClient.from("messages").insert([{ message: message, user_id: user?.id }])
+				const { data, error } = await supabaseClient.from("messages").insert([{ message: message, user_id: user?.id, type: "text" }])
 
 				console.log(data, error)
 
@@ -92,16 +108,23 @@
 		}
 	}
 
-	const formatTime = (time: string) => {
-		const date = new Date(time)
-		const options: Intl.DateTimeFormatOptions = {
-			year: "numeric",
-			month: "2-digit",
-			day: "2-digit",
-			hour: "2-digit",
-			minute: "2-digit",
-			second: "2-digit",
+	const uploadFile = async (event: Event) => {
+		const fileInput = event.target as HTMLInputElement
+
+		// upload file
+		if (fileInput.files && fileInput.files.length > 0) {
+			const file = fileInput.files[0]
+			const { data, error } = await supabaseClient.storage.from("messages").upload(`/${user?.id}/${file.name}`, file)
+
+			console.log(data, error)
+
+			if (data && !error) {
+				const { data: fileData, error: fileError } = await supabaseClient
+					.from("messages")
+					.insert([{ message: `${file.name}`, user_id: user?.id, type: "file" }])
+
+				console.log(fileData, fileError)
+			}
 		}
-		return date.toLocaleString("hu-HU", options)
 	}
 </script>

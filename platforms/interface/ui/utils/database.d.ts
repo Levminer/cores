@@ -33,18 +33,21 @@ export type Database = {
 					created_at: string
 					message: string | null
 					message_id: string
+					type: string | null
 					user_id: string | null
 				}
 				Insert: {
 					created_at?: string
 					message?: string | null
 					message_id?: string
+					type?: string | null
 					user_id?: string | null
 				}
 				Update: {
 					created_at?: string
 					message?: string | null
 					message_id?: string
+					type?: string | null
 					user_id?: string | null
 				}
 				Relationships: [
