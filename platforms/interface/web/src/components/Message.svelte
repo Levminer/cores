@@ -1,19 +1,36 @@
 <div class="transparent-800 flex w-full select-text flex-row flex-wrap items-center justify-between rounded-xl p-4 text-left">
 	{#if message.type === "text"}
 		<p class="text-lg text-gray-200">{message.message}</p>
-		<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		<div class="flex flex-row items-center justify-center gap-3">
+			<button
+				class="rounded-lg bg-white p-1"
+				on:click={() => {
+					if (message?.message) {
+						navigator.clipboard.writeText(message.message)
+					}
+				}}
+			>
+				<Clipboard class="h-6 w-6 text-black" />
+			</button>
+			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		</div>
 	{/if}
 
 	{#if message.type === "file"}
-		<button
-			on:click={() => {
-				if (message?.message) {
-					getURL(message.message)
-				}
-			}}
-			class="text-lg italic text-gray-200 underline">{message.message}</button
-		>
-		<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		<p class="text-lg text-gray-200 italic underline">{message.message}</p>
+		<div class="flex flex-row items-center justify-center gap-3">
+			<button
+				on:click={() => {
+					if (message?.message) {
+						getURL(message.message)
+					}
+				}}
+				class="rounded-lg bg-white p-1"
+			>
+				<ExternalLink class="h-6 w-6 text-black" />
+			</button>
+			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		</div>
 	{/if}
 </div>
 
@@ -21,6 +38,7 @@
 	import { supabaseClient } from "ui"
 	import type { Database } from "../../../ui/utils/database"
 	import type { User as UserType } from "@supabase/supabase-js"
+	import { Clipboard, ExternalLink } from "lucide-svelte"
 	export let message: Database["public"]["Tables"]["messages"]["Row"]
 	export let user: UserType | null
 
@@ -44,7 +62,13 @@
 
 		if (data && !error) {
 			// open link in new tab
-			window.open(data.signedUrl, "_blank")
+			const res = window.open(data.signedUrl, "_blank")
+
+			if (res) {
+				res.focus()
+			} else {
+				navigator.clipboard.writeText(data.signedUrl)
+			}
 		}
 	}
 </script>
