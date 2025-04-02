@@ -29,17 +29,19 @@
 		<div class="mb-10 mt-5 flex flex-row items-center justify-center gap-5">
 			<a
 				href="#downloads"
-				class="bg-cores-alternative hover:text-cores-alternative transform rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
-				>Download Cores</a
+				class="bg-cores-alternative hover:text-cores-alternative flex transform flex-row items-center gap-1 rounded-2xl px-5 py-4 text-xl font-semibold duration-200 ease-in-out hover:translate-y-0.5 hover:bg-white hover:from-transparent hover:to-transparent"
 			>
+				<ArrowDownToLine class="hidden md:block" />
+				Download Cores
+			</a>
 			<a class="flex gap-1 text-lg font-semibold duration-200 ease-in-out hover:text-gray-200" href="#features"
 				>Features <ArrowRight class="relative top-1" /></a
 			>
 		</div>
 
 		<div class="flex w-full flex-row flex-wrap items-center justify-center">
-			<img width="850" height="474" src="https://cdn.levminer.com/cores/laptop.webp" alt="Cores on desktop computer" />
-			<img width="250" height="483" src="https://cdn.levminer.com/cores/phone.webp" alt="Cores on on a phone" />
+			<img width="850" height="474" src="https://cdn.levminer.com/cores/laptop2.png" alt="Cores on desktop computer" />
+			<img width="320" height="480" src="https://cdn.levminer.com/cores/phone2.webp" alt="Cores on on a phone" />
 		</div>
 	</div>
 
@@ -131,12 +133,6 @@
 								<h5>You can access the REST or Websocket API to build your own integration.</h5>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3 sm:w-full">
-					<video id="video1" muted loop src="https://cdn.levminer.com/cores/home.webm" />
-					<div class="absolute flex items-center justify-center">
-						<Play id="play1" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 					</div>
 				</div>
 			</div>
@@ -452,6 +448,7 @@
 		Webhook,
 		Terminal,
 		Server,
+		ArrowDownToLine,
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"

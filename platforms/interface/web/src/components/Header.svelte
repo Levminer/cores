@@ -15,8 +15,9 @@
 						goto("/get-started")
 					}
 				}}
-				class="rounded-2xl border-2 border-white bg-white px-4 py-2 text-lg font-medium text-black duration-200 ease-in hover:bg-transparent hover:text-white"
+				class="rounded-2xl border-2 flex items-center gap-1 flex-row border-white bg-white px-4 py-2 text-lg font-medium text-black duration-200 ease-in hover:bg-transparent hover:text-white"
 			>
+				<User class="hidden md:block" />
 				Dashboard
 			</button>
 		</div>
@@ -47,4 +48,5 @@
 
 <script lang="ts">
 	import { goto } from "$app/navigation"
+	import { User } from "lucide-svelte"
 </script>
