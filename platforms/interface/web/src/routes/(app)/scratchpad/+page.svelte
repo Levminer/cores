@@ -11,7 +11,7 @@
 						</div>
 						<h2>Scratchpad</h2>
 					</div>
-					<h3>This is your scratchpad. You can write anything you want, its automatically synced.</h3>
+					<h3>You can write down "temporary" things here or upload files. Everything is kept for 30 days.</h3>
 				</div>
 			</div>
 

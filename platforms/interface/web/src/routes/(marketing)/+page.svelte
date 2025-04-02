@@ -46,92 +46,108 @@
 	</div>
 
 	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
-		<div id="features" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
+		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-[1000px] flex-col sm:w-full">
+				<div class="flex flex-col sm:w-full">
 					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
-							Features
+						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
+							Easy hardware monitoring
 						</h2>
 						<h3 class="text-2xl italic text-gray-100">Monitor any system with ease.</h3>
 					</div>
 
-					<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Feather />
+					<div class="flex flex-col items-center justify-center gap-5 md:flex-row">
+						<div>
+							<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
+								<!-- cards 1 -->
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<Feather />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
+									</div>
+									<div class="select-text">
+										<h5>Cores runs as a background service with minimal resource usage.</h5>
+									</div>
 								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<MonitorSmartphone />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-platform</h4>
+									</div>
+									<div class="select-text">
+										<h5>You can monitor your system on Windows, Linux and MacOS.</h5>
+									</div>
+								</div>
 							</div>
-							<div class="select-text">
-								<h5>Cores runs as a background service with minimal resource usage.</h5>
+							<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
+								<!-- cards 2 -->
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<Radio />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote monitoring</h4>
+									</div>
+									<div class="select-text">
+										<h5>You can monitor your system from any device with a web browser.</h5>
+									</div>
+								</div>
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<Network />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h4>
+									</div>
+									<div class="select-text">
+										<h5>You can connect directly to multiple computers. No cloud, no central server powered by WebRTC.</h5>
+									</div>
+								</div>
+							</div>
+							<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
+								<!-- cards 3 -->
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<Terminal />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Commands</h4>
+									</div>
+									<div class="select-text">
+										<h5>Turn on or off your computer remotely with a single click.</h5>
+									</div>
+								</div>
+								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+									<div class="mb-5 flex items-center gap-3">
+										<div
+											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
+										>
+											<Webhook />
+										</div>
+										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API access</h4>
+									</div>
+									<div class="select-text">
+										<h5>You can access the REST or Websocket API to build your own integration.</h5>
+									</div>
+								</div>
 							</div>
 						</div>
-
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<MonitorSmartphone />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-platform</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can monitor your system on Windows, Linux and MacOS.</h5>
-							</div>
-						</div>
-
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Radio />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote monitoring</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can monitor your system from any device with a web browser.</h5>
-							</div>
-						</div>
-					</div>
-
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
-						<!-- card 2 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Network />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">P2P connection</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can connect directly to multiple computers. No cloud, no central server powered by WebRTC.</h5>
-							</div>
-						</div>
-
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Terminal />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Commands</h4>
-							</div>
-							<div class="select-text">
-								<h5>Turn on or off your computer remotely with a single click.</h5>
-							</div>
-						</div>
-
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Webhook />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API access</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can access the REST or Websocket API to build your own integration.</h5>
-							</div>
+						<div class="rounded-xl bg-black p-3">
+							<img loading="lazy" class="rounded-md" src="https://cdn.levminer.com/cores/dashboard.webp" alt="web dashboard" />
 						</div>
 					</div>
 				</div>
@@ -143,14 +159,14 @@
 				<div class="flex w-full flex-col items-center justify-center">
 					<!-- card 0 -->
 					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">
+						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
 							Easy Remote Access
 						</h2>
 						<h3 class="text-2xl italic text-gray-100">Monitor your devices from anywhere.</h3>
 					</div>
 
 					<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-						<video id="video0" muted loop src="https://cdn.levminer.com/cores/remote.webm" />
+						<video id="video0" preload="metadata" muted loop src="https://cdn.levminer.com/cores/remote2.mp4" />
 						<div class="absolute flex items-center justify-center">
 							<Play id="play0" fill="white" class="h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
 						</div>
@@ -496,19 +512,9 @@
 		document.querySelector("#layout")?.classList.add("scroll-smooth")
 
 		// play videos on hover
-		for (let i = 0; i < 2; i++) {
+		for (let i = 0; i < 1; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
-
-			video.addEventListener("mouseenter", () => {
-				video.play()
-				play.style.display = "none"
-			})
-
-			video.addEventListener("mouseleave", () => {
-				video.pause()
-				play.style.display = "flex"
-			})
 
 			play.addEventListener("click", () => {
 				video.play()
@@ -520,12 +526,10 @@
 	onDestroy(() => {
 		document.querySelector("#layout")?.classList.remove("scroll-smooth")
 
-		for (let i = 0; i < 2; i++) {
+		for (let i = 0; i < 1; i++) {
 			const video = document.getElementById(`video${i}`) as HTMLVideoElement
 			const play = document.getElementById(`play${i}`) as HTMLElement
 
-			video.removeEventListener("mouseenter", () => {})
-			video.removeEventListener("mouseleave", () => {})
 			play.removeEventListener("click", () => {})
 		}
 	})

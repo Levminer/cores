@@ -1,23 +1,39 @@
 <div class="transparent-800 flex w-full select-text flex-row flex-wrap items-center justify-between rounded-xl p-4 text-left">
 	{#if message.type === "text"}
-		<p class="text-lg text-gray-200">{message.message}</p>
+		<div>
+			<p class="text-lg text-gray-200">{message.message}</p>
+			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		</div>
 		<div class="flex flex-row items-center justify-center gap-3">
 			<button
-				class="rounded-lg bg-white p-1"
+				class="rounded-lg bg-white p-2"
 				on:click={() => {
 					if (message?.message) {
 						navigator.clipboard.writeText(message.message)
+						return alert("Link copied to clipboard!")
 					}
 				}}
 			>
-				<Clipboard class="h-6 w-6 text-black" />
+				<Clipboard class="h-5 w-5 text-black" />
 			</button>
-			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+			<button
+				class="bg-popup-red rounded-lg p-2"
+				on:click={() => {
+					if (message?.message) {
+						deleteMessage(message.message_id)
+					}
+				}}
+			>
+				<Trash class="h-5 w-5 text-white" />
+			</button>
 		</div>
 	{/if}
 
 	{#if message.type === "file"}
-		<p class="text-lg text-gray-200 italic underline">{message.message}</p>
+		<div>
+			<p class="text-lg italic text-gray-200 underline">{message.message}</p>
+			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+		</div>
 		<div class="flex flex-row items-center justify-center gap-3">
 			<button
 				on:click={() => {
@@ -25,11 +41,20 @@
 						getURL(message.message)
 					}
 				}}
-				class="rounded-lg bg-white p-1"
+				class="rounded-lg bg-white p-2"
 			>
-				<ExternalLink class="h-6 w-6 text-black" />
+				<ExternalLink class="h-5 w-5 text-black" />
 			</button>
-			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
+			<button
+				class="bg-popup-red rounded-lg p-2"
+				on:click={() => {
+					if (message?.message) {
+						deleteMessage(message.message_id)
+					}
+				}}
+			>
+				<Trash class="h-5 w-5 text-white" />
+			</button>
 		</div>
 	{/if}
 </div>
@@ -38,7 +63,7 @@
 	import { supabaseClient } from "ui"
 	import type { Database } from "../../../ui/utils/database"
 	import type { User as UserType } from "@supabase/supabase-js"
-	import { Clipboard, ExternalLink } from "lucide-svelte"
+	import { Clipboard, ExternalLink, Trash } from "lucide-svelte"
 	export let message: Database["public"]["Tables"]["messages"]["Row"]
 	export let user: UserType | null
 
@@ -55,20 +80,33 @@
 		return date.toLocaleString("hu-HU", options)
 	}
 
+	const deleteMessage = async (messageId: string) => {
+		if (confirm("Are you sure you want to delete this message?")) {
+			const { data, error } = await supabaseClient.from("messages").delete().eq("message_id", messageId)
+
+			location.reload()
+			console.log(data, error)
+		}
+	}
+
 	const getURL = async (fileName: string) => {
-		const { data, error } = await supabaseClient.storage.from("messages").createSignedUrl(`${user?.id}/${fileName}`, 60 * 60)
+		const { data, error } = await supabaseClient.storage.from("messages").createSignedUrl(`${user?.id}/${fileName}`, 60 * 60 * 24)
 
 		console.log(data, error)
 
 		if (data && !error) {
-			// open link in new tab
-			const res = window.open(data.signedUrl, "_blank")
+			// copy link to clipboard
+			navigator.clipboard.writeText(`https://rd.coresmonitor.com?link=${data.signedUrl}`)
 
-			if (res) {
-				res.focus()
-			} else {
-				navigator.clipboard.writeText(data.signedUrl)
-			}
+			setTimeout(() => {
+				const newWindow = window.open(data.signedUrl, "_blank")
+
+				if (!newWindow || newWindow.closed || typeof newWindow.closed == "undefined") {
+					return alert("Link copied to clipboard!")
+				}
+
+				newWindow.focus()
+			}, 10)
 		}
 	}
 </script>
