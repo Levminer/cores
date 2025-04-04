@@ -1,4 +1,4 @@
-import { renameSync } from "fs"
+import { renameSync, existsSync, mkdirSync } from "fs"
 import { platform } from "os"
 import json from "../package.json" with { type: "json" }
 
