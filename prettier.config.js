@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {import("prettier").Config}
+ */
+const config = {
 	trailingComma: "all",
 	tabWidth: 4,
 	printWidth: 150,
@@ -9,3 +12,5 @@ module.exports = {
 	plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 	pluginSearchDirs: false,
 }
+
+export default config
