@@ -60,10 +60,14 @@ jobs:
                   rm -rf target/release/deps
                   rm -rf target/release/bundle/appimage/Cores.AppDir
                   npm run rename
+              shell: bash
+
+            - name: Install webkit2gtk (ubuntu only)
+              if: matrix.NAME == 'linux'
+              run: |
                   cd ./target/release/upload
                   zip -r coresd-${{steps.version.outputs.version}}-linux-x64.zip coresd-${{steps.version.outputs.version}}-linux-x64
                   zip -r coresd-${{steps.version.outputs.version}}-linux-arm64.zip coresd-${{steps.version.outputs.version}}-linux-arm64
-              shell: bash
 
             # Upload the unpackaged app
             - name: Upload service installer
