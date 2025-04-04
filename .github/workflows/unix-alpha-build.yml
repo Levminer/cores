@@ -21,6 +21,12 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
+            - name: Get version
+              id: version
+              uses: beaconbrigade/package-json-version@v0.3.2
+              with:
+                  path: .
+
             - name: Install cross-rs
               run: cargo install cross
 
@@ -48,13 +54,6 @@ jobs:
             - name: Build service installer
               run: npm run build:core
 
-            - name: Get version
-              id: version
-              uses: notiz-dev/github-action-json-property@release
-              with:
-                  path: package.json
-                  prop_path: version
-
             - name: Remove useless folders
               run: |
                   rm -rf target/release/build
@@ -62,6 +61,13 @@ jobs:
                   rm -rf target/release/bundle/appimage/Cores.AppDir
                   npm run rename
               shell: bash
+
+            - name: Install webkit2gtk (ubuntu only)
+              if: matrix.NAME == 'linux'
+              run: |
+                  cd ./target/release/upload
+                  zip -r coresd-${{steps.version.outputs.version}}-linux-x64.zip coresd-${{steps.version.outputs.version}}-linux-x64
+                  zip -r coresd-${{steps.version.outputs.version}}-linux-arm64.zip coresd-${{steps.version.outputs.version}}-linux-arm64
 
             # Upload the unpackaged app
             - name: Upload service installer
@@ -75,5 +81,5 @@ jobs:
               if: matrix.NAME == 'linux'
               uses: actions/upload-artifact@v4
               with:
-                  name: "coresd-${{matrix.NAME}}-arm64"
+                  name: "cores-${{matrix.NAME}}-arm64"
                   path: "target/aarch64-unknown-linux-gnu/release"
