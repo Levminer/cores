@@ -243,6 +243,14 @@ declare global {
 		licenseKey: string
 		licenseActivated: string
 		userId: string
+		colors?: {
+			min: string
+			current: string
+			max: string
+			yellow: string
+			orange: string
+			categoricalPalette: string[]
+		}
 	}
 
 	interface LibState {

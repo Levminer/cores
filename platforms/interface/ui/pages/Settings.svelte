@@ -42,8 +42,51 @@
 			</div>
 		</div>
 
-		<!-- account -->
+		<!-- change colors -->
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Palette />
+					</div>
+					<h2>Colors</h2>
+				</div>
+				<h3>You can customize the colors used by Cores.</h3>
+			</div>
+			<div class="flex flex-col items-start gap-3">
+				<ModularDialog title={"Colors"} description={"You can customize the colors used by Cores."}>
+					<slot slot="openButton">
+						<Dialog.Trigger class="button">
+							<Palette />
+							Customize
+						</Dialog.Trigger>
+					</slot>
+					<div class="w-full space-y-5">
+						<div class="rounded-xl border-2 border-white p-3 flex justify-center items-center gap-1">
+							<input type="color" bind:value={$settings.colors.min} />
+							<input type="color" bind:value={$settings.colors.current} />
+							<input type="color" bind:value={$settings.colors.max} />
+							<input type="color" bind:value={$settings.colors.yellow} />
+							<input type="color" bind:value={$settings.colors.orange} />
+							{#each $settings.colors.categoricalPalette as item}
+								<input type="color" bind:value={item} />
+							{/each}
+						</div>
 
+						<div>
+							<button
+								on:click={() => {
+									location.reload()
+								}}
+								class="smallButton w-full">Confirm</button
+							>
+						</div>
+					</div>
+				</ModularDialog>
+			</div>
+		</div>
+
+		<!-- account -->
 		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
 				<div class="flex items-center gap-3">
@@ -187,7 +230,7 @@
 
 <script lang="ts">
 	import build from "../../../../build.json"
-	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut } from "lucide-svelte"
+	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut, Palette } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
