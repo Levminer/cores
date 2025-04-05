@@ -25,14 +25,36 @@ const defaultSettings: LibSettings = {
 	licenseKey: "",
 	licenseActivated: "",
 	userId: import.meta.env.VITE_CORES_MODE === "host" ? generateUserId() : "",
+	colors: {
+		min: "#35cbfd",
+		current: "#ff5380",
+		max: "#9d0cfd",
+		yellow: "#fee440",
+		orange: "#fe884d",
+		categoricalPalette: ["#dc94ff", "#7d70fe", "#2a9d8f"],
+	},
 }
 
 // Create store
 export const settings = writable<LibSettings>(localStorage.settings ? JSON.parse(localStorage.settings) : defaultSettings)
 
 export const initializeSettings = async () => {
-	const storeSettings = (await invoke("get_settings")) as LibSettings
-	setSettings(storeSettings)
+	const storedSettings = (await invoke("get_settings")) as LibSettings
+
+	if (get(settings).colors !== undefined) {
+		storedSettings.colors = get(settings).colors
+	} else {
+		storedSettings.colors = {
+			min: "#35cbfd",
+			current: "#ff5380",
+			max: "#9d0cfd",
+			yellow: "#fee440",
+			orange: "#fe884d",
+			categoricalPalette: ["#dc94ff", "#7d70fe", "#2a9d8f"],
+		}
+	}
+
+	setSettings(storedSettings)
 	initialized = true
 }
 
