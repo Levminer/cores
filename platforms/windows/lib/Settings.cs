@@ -83,7 +83,8 @@ public class Settings : DefaultSettings {
 
 		// read settings.json
 		try {
-			var settings = JsonSerializer.Deserialize<DefaultSettings>(File.ReadAllText(Path.Join(appData, "Cores", "settings.json")), SerializerOptions);
+			using var stream = new FileStream(Path.Join(appData, "Cores", "settings.json"), FileMode.Open, FileAccess.Read, FileShare.Read);
+			var settings = JsonSerializer.Deserialize<DefaultSettings>(stream, SerializerOptions);
 
 			interval = settings?.interval ?? defaultSettings.interval;
 			minimizeToTray = settings?.minimizeToTray ?? defaultSettings.minimizeToTray;

@@ -368,8 +368,10 @@ public class HardwareInfo {
 					}
 
 					// GPU Max Load
-					API.GPU.MaxLoad = API.GPU.Load.Max(x => x.Value);
-					API.GPU.Cards[cardIndex].MaxLoad = API.GPU.Cards[cardIndex].Load.Max(x => x.Value);
+					if (API.GPU.Load.Count > 0) {
+						API.GPU.MaxLoad = API.GPU.Load.Max(x => x.Value);
+						API.GPU.Cards[cardIndex].MaxLoad = API.GPU.Cards[cardIndex].Load.Max(x => x.Value);
+					}
 				}
 
 				// RAM

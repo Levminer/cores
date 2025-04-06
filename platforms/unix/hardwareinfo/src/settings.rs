@@ -184,6 +184,14 @@ pub fn set_settings(settings: String) {
 
     check_if_settings_exits();
 
-    std::fs::write(program_data.join("Cores").join("settings.json"), settings)
-        .expect("Failed to write settings file");
+    let res = std::fs::write(program_data.join("Cores").join("settings.json"), settings);
+
+    match res {
+        Ok(_) => {
+            info!("Settings saved successfully");
+        }
+        Err(e) => {
+            info!("Failed to save settings: {}", e);
+        }
+    }
 }

@@ -28,12 +28,17 @@ public class Server {
 
 	// Wait for a request
 	static async Task HandleRequests(HardwareInfo hardwareInfo) {
-		while (true) {
-			// Wait for a request to be received asynchronously
-			HttpListenerContext context = await listener.GetContextAsync();
+		while (listener.IsListening) {
+			try {
+				// Wait for a request to be received asynchronously
+				HttpListenerContext context = await listener.GetContextAsync();
 
-			// Process the request asynchronously
-			await ProcessRequestAsync(context, hardwareInfo);
+				// Process the request asynchronously
+				await ProcessRequestAsync(context, hardwareInfo);
+			}
+			catch (Exception) {
+				Log.Information("Failed to listen");
+			}
 		}
 	}
 
@@ -182,10 +187,16 @@ public class Server {
 
 		// Send updated data every 2s
 		Task sendTask = Task.Run(async () => {
-			while (socket.State == WebSocketState.Open) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
-				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-				await Task.Delay(2000);
+			try {
+				while (socket.State == WebSocketState.Open) {
+					byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+					await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+					await Task.Delay(2000);
+				}
+			}
+			catch (Exception ex) {
+				Log.Information("Failed to send data: {@errorSent}", ex);
+				connectedClients.TryRemove(socket, out _);
 			}
 		});
 

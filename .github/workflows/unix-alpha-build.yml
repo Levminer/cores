@@ -62,7 +62,7 @@ jobs:
                   npm run rename
               shell: bash
 
-            - name: Install webkit2gtk (ubuntu only)
+            - name: Zip executables
               if: matrix.NAME == 'linux'
               run: |
                   cd ./target/release/upload
