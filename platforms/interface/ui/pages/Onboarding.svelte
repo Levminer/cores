@@ -141,7 +141,34 @@
 								</div>
 							</div>
 						</div>
-					{:else}
+					{:else if variant == "paywall"}
+						<div class="flex w-1/2 flex-wrap justify-center text-lg">
+							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
+								<div>
+									<h2
+										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
+									>
+										Purchase Cores
+									</h2>
+									<p class="select-text text-base leading-tight">
+										You need to buy Cores to continue. Want a free trial? Reach out to support@coresmonitor.com for more
+										information.
+									</p>
+								</div>
+								<div>
+									<button
+										on:click={() => {
+											posthog.capture("buy")
+											open(`https://link.levminer.com/buy-cores-app?utm_source=app`)
+										}}
+										class="smallButton mt-3 w-full"
+									>
+										<ShoppingCart />
+										Buy
+									</button>
+								</div>
+							</div>
+						</div>{:else}
 						<div class="flex w-1/2 flex-wrap justify-center text-lg">
 							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
 								<div>
@@ -279,7 +306,7 @@
 
 	$: step = "" as "welcome" | "login" | "pricing" | "tips"
 	$: key = ""
-	$: variant = "free" as "free" | "paid"
+	$: variant = "free" as "free" | "paid" | "paywall"
 
 	onMount(async () => {
 		const ff = posthog.getFeatureFlag("raider") as "free" | "paid"
