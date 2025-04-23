@@ -37,7 +37,7 @@ public class Disk {
 		get; set;
 	}
 
-	public Identifier Id {
+	public string Id {
 		get; set;
 	}
 
@@ -83,7 +83,7 @@ public class NetInterface {
 		get; set;
 	}
 
-	public Identifier Id {
+	public string Id {
 		get; set;
 	}
 

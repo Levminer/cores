@@ -17,6 +17,7 @@ public static class ArrayExtensions {
 public class HardwareInfo {
 	private static bool firstRun = true;
 	private static bool errorSent = false;
+	private DateTime lastRun = DateTime.Now;
 	public HardwareUpdater refresher = new();
 	public Commands commands = new();
 	public Computer computer = new() {
@@ -44,13 +45,13 @@ public class HardwareInfo {
 		try {
 			var computerHardware = computer.Hardware;
 
-			if (firstRun) {
+			if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
 				// Network interfaces
 				foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
 					if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
 						var temp = new NetInterface {
 							Name = ni.Name,
-							Id = new Identifier("nic", ni.Id),
+							Id = new Identifier("nic", ni.Id).ToString(),
 							Description = ni.Description,
 							Speed = (ni.Speed / 1000 / 1000).ToString(),
 						};
@@ -93,14 +94,23 @@ public class HardwareInfo {
 						}
 
 						if (!temp.Name.Contains("Local Area Connection*")) {
-							API.System.Network.Interfaces.Add(temp);
+							if (firstRun) {
+								API.System.Network.Interfaces.Add(temp);
+							} else {
+								var nicId = API.System.Network.Interfaces.FindIndex(x => x.Id == temp.Id);
+								if (nicId != -1) {
+									API.System.Network.Interfaces[nicId] = temp;
+								} else {
+									API.System.Network.Interfaces.Add(temp);
+								}
+							}
 						}
 					}
+
+					API.System.Network.Interfaces = API.System.Network.Interfaces.OrderBy(item => item.Priority).ToList();
+
+					Log.Information("HW firstRun");
 				}
-
-				API.System.Network.Interfaces = API.System.Network.Interfaces.OrderBy(item => item.Priority).ToList();
-
-				Log.Information("HW firstRun");
 			}
 
 			for (int i = 0; i < computer.Hardware.Count; i++) {
@@ -399,10 +409,10 @@ public class HardwareInfo {
 				if (hardware.HardwareType == HardwareType.Storage) {
 					var sensor = hardware.Sensors;
 
-					if (firstRun) {
+					if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
 						var data = new Disk {
 							Name = computerHardware[i].Name,
-							Id = computerHardware[i].Identifier,
+							Id = computerHardware[i].Identifier.ToString(),
 						};
 
 						// Get disk size
@@ -456,7 +466,15 @@ public class HardwareInfo {
 						data.FreeSpace = (int)free;
 						data.Primary = primary;
 
-						API.System.Storage.Disks.Add(data);
+						if (firstRun) {
+							API.System.Storage.Disks.Add(data);
+						} else {
+							var diskId = API.System.Storage.Disks.FindIndex(x => x.Id == computerHardware[i].Identifier.ToString());
+
+							if (diskId != 1) {
+								API.System.Storage.Disks[diskId] = data;
+							}
+						}
 
 						API.System.Storage.Disks = API.System.Storage.Disks.OrderByDescending(item => item.Primary).ToList();
 					}
@@ -466,11 +484,11 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Temperature) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
-								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									var min = (float)Math.Round(sensor[j].Min ?? 0);
 
 									// Some drives don't return min temp
-									if (firstRun && min == 0) {
+									if (min == 0 && (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60)) {
 										min = (float)Math.Round(sensor[j].Value ?? 0);
 									}
 
@@ -497,7 +515,7 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Throughput) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
-								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Read")) {
 										if (sensor[j].Value.ToString() == "0" || sensor[j].Value == null) {
 											API.System.Storage.Disks[k].ThroughputRead = 0;
@@ -521,7 +539,7 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Data) {
 							// find disk by ide and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
-								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Read")) {
 										API.System.Storage.Disks[k].DataRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
@@ -534,10 +552,10 @@ public class HardwareInfo {
 						}
 
 						// M.2 SSD Health
-						if (sensor[j].SensorType == SensorType.Level && firstRun) {
+						if (sensor[j].SensorType == SensorType.Level && (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60)) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
-								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Percentage Used")) {
 										API.System.Storage.Disks[k].Health = (100 - sensor[j].Value ?? 0).ToString();
 									}
@@ -656,7 +674,7 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Throughput) {
 							// find interface by id and overwrite value
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
-								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier) {
+								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Download")) {
 										API.System.Network.Interfaces[k].ThroughputDownload = (float)Math.Round(sensor[j].Value ?? 0);
 									}
@@ -784,6 +802,12 @@ public class HardwareInfo {
 					Version = computer.SMBios.Bios.Version,
 					Date = biosDate.ToShortDateString(),
 				};
+			}
+
+			// Refresh network and disk info every 60 seconds
+			if (DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
+				lastRun = DateTime.Now;
+				Log.Information("reset");
 			}
 
 			firstRun = false;
