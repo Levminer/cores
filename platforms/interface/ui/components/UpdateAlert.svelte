@@ -66,7 +66,7 @@
 					await update.downloadAndInstall((event) => {
 						switch (event.event) {
 							case "Started":
-								contentLength = event.data.contentLength
+								contentLength = event.data.contentLength || 0
 								console.log(`started downloading ${event.data.contentLength} bytes`)
 								break
 							case "Progress":

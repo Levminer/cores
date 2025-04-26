@@ -102,7 +102,7 @@ declare global {
 			load: Sensor[]
 			info: string
 			clock: Sensor[]
-			cards?: {
+			cards: {
 				name: string
 				temperature: Sensor[]
 				fan: Sensor[]

@@ -60,11 +60,11 @@
 
 		if (mode === "desktop") {
 			fetch("http://localhost:5390").catch(() => {
-				document.querySelector(".desktopError").classList.remove("hidden")
+				document.querySelector(".desktopError")!.classList.remove("hidden")
 			})
 		} else {
 			interval = setInterval(() => {
-				document.querySelector(".webError").classList.remove("hidden")
+				document.querySelector(".webError")!.classList.remove("hidden")
 			}, 5000)
 		}
 

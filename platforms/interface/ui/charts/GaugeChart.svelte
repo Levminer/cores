@@ -15,6 +15,7 @@
 		circumference: 360,
 		cutout: "85%",
 		hover: {
+			// @ts-ignore
 			mode: null,
 		},
 		plugins: {
@@ -42,7 +43,7 @@
 	let pluginTest = [
 		{
 			id: "text",
-			beforeDraw: function (chart, a, b) {
+			beforeDraw: function (chart: any, a: any, b: any) {
 				var width = chart.width,
 					height = chart.height,
 					ctx = chart.ctx

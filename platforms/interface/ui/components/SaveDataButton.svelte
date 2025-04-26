@@ -95,7 +95,7 @@
 
 		// Create a temporary canvas to add background and rounded corners
 		const tempCanvas = document.createElement("canvas")
-		const tempCtx = tempCanvas.getContext("2d")
+		const tempCtx = tempCanvas.getContext("2d")!
 
 		const margin = 20
 		const targetWidth = canvas.width

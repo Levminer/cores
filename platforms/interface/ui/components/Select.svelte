@@ -2,6 +2,7 @@
 	items={options}
 	selected={options.find((option) => option.value === $settings[setting])}
 	onSelectedChange={(event) => {
+		// @ts-ignore
 		$settings[setting] = event.value
 	}}
 >
@@ -9,7 +10,7 @@
 		<Select.Value class="text-xl" placeholder="Select a theme" />
 	</Select.Trigger>
 
-	<Select.Content class="w-full rounded-xl shadow-xl border-cyan-500 bg-white p-2 text-black outline-none" sideOffset={8} transition={flyAndScale}>
+	<Select.Content class="w-full rounded-xl border-cyan-500 bg-white p-2 text-black shadow-xl outline-none" sideOffset={8} transition={flyAndScale}>
 		{#each options as option}
 			<Select.Item
 				class="rounded-button flex h-10 w-full select-none items-center rounded-lg py-2 pl-3 pr-2 text-base outline-none transition-all duration-150 ease-linear aria-selected:font-bold data-[highlighted]:bg-black data-[highlighted]:text-white"
@@ -32,5 +33,5 @@
 	import { settings } from "ui"
 
 	export let options = [] as { value: number | string; label: string }[]
-	export let setting: string
+	export let setting: keyof LibSettings
 </script>

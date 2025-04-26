@@ -33,17 +33,17 @@
 	// Resize chart to fit all data
 	afterUpdate(() => {
 		if (categories.length > lastCategories.length) {
-			document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 40 + "px"
+			document.querySelector<HTMLDivElement>(`.meterChart${id}`)!.style.height = readings.length * 40 + "px"
 
 			lastCategories = categories
 		} else {
 			// potential bottleneck
 			if (readings.length < 2) {
-				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 55 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`)!.style.height = readings.length * 55 + "px"
 			} else if (readings.length < 3) {
-				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 45 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`)!.style.height = readings.length * 45 + "px"
 			} else {
-				document.querySelector<HTMLDivElement>(`.meterChart${id}`).style.height = readings.length * 40 + "px"
+				document.querySelector<HTMLDivElement>(`.meterChart${id}`)!.style.height = readings.length * 40 + "px"
 			}
 		}
 	})
@@ -96,6 +96,7 @@
 					display: true,
 					crossAlign: "far",
 					color: "#969696",
+					// @ts-ignore
 					callback: function (value: number) {
 						const label = this.getLabelForValue(value)
 
