@@ -111,11 +111,11 @@
 			const systemInfo: SystemInfo = await invoke("system_info")
 
 			if (systemInfo.osName !== "Windows") {
-				document.querySelector("body").style.background = "#0a0a0a"
+				document.querySelector("body")!.style.background = "#0a0a0a"
 			}
 
 			if (systemInfo.osName === "Windows" && systemInfo.osVersion < "10.0.22000") {
-				document.querySelector("body").style.background = "#0a0a0a"
+				document.querySelector("body")!.style.background = "#0a0a0a"
 			}
 		}
 
@@ -217,7 +217,7 @@
 				// User logged in
 				const { data, error } = await supabaseClient.from("user").select("*").single()
 
-				if (data.plan === "personal" || data.plan === "business") {
+				if (data?.plan === "personal" || data?.plan === "business") {
 					// User is on a paid plan
 					$state.showMenu = true
 					$state.plan = data.plan
@@ -239,7 +239,7 @@
 
 		// Scroll to the top of the page on route change
 		router.subscribe(() => {
-			document.querySelector(".top").scrollIntoView()
+			document.querySelector(".top")!.scrollIntoView()
 		})
 
 		// 60s date comparison

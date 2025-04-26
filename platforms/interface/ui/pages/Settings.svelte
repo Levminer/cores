@@ -62,7 +62,7 @@
 						</Dialog.Trigger>
 					</slot>
 					<div class="w-full space-y-5">
-						<div class="rounded-xl border-2 border-white p-3 flex justify-center items-center gap-1">
+						<div class="flex items-center justify-center gap-1 rounded-xl border-2 border-white p-3">
 							<input type="color" bind:value={$settings.colors.min} />
 							<input type="color" bind:value={$settings.colors.current} />
 							<input type="color" bind:value={$settings.colors.max} />
@@ -230,6 +230,7 @@
 
 <script lang="ts">
 	import build from "../../../../build.json"
+	import type { User as SupabaseUser } from "@supabase/supabase-js"
 	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut, Palette } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
@@ -239,7 +240,7 @@
 	import { hardwareInfo, ModularDialog, Select, settings, Toggle } from "ui"
 	import { Dialog, Tabs } from "bits-ui"
 
-	$: user = null
+	$: user = null as SupabaseUser | null
 	$: loading = true
 
 	onMount(async () => {

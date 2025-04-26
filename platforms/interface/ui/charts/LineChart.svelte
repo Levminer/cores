@@ -30,6 +30,7 @@
 
 	Chart.register(...registerables)
 
+	// @ts-ignore
 	$: labels = props.statistics[0].data.map((_, i) => `${props.statistics[0].data.length - 1 - i}${props.time} ago`)
 
 	$: data = {
@@ -38,7 +39,7 @@
 			...props.statistics.map((value, index) => {
 				return {
 					label: value.label,
-					data: value.data,
+					data: value.data ?? [],
 					backgroundColor: value.color ? colors[value.color] : colors.categoricalPalette[index % colors.categoricalPalette.length],
 					borderColor: value.color ? colors[value.color] : colors.categoricalPalette[index % colors.categoricalPalette.length],
 					tension: 0.2,
@@ -71,7 +72,7 @@
 		scales: {
 			y: {
 				max: props.max ? props.max : undefined,
-				min: props.min >= 0 ? props.min : undefined,
+				min: props.min || 0 >= 0 ? props.min : undefined,
 				ticks: {
 					callback: (value) => {
 						return `${value}${props.unit}`

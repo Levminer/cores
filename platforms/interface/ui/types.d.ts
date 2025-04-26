@@ -102,7 +102,7 @@ declare global {
 			load: Sensor[]
 			info: string
 			clock: Sensor[]
-			cards?: {
+			cards: {
 				name: string
 				temperature: Sensor[]
 				fan: Sensor[]
@@ -225,7 +225,6 @@ declare global {
 	interface LibSettings {
 		interval: number
 		minimizeToTray: boolean
-		launchOnStartup: boolean
 		connectionCode: string
 		connectionCodes: {
 			name: string
@@ -237,13 +236,11 @@ declare global {
 			code: string
 			mac: string
 		}[]
-		version: number
 		remoteConnections: boolean
-		optionalAnalytics: boolean
 		licenseKey: string
 		licenseActivated: string
 		userId: string
-		colors?: {
+		colors: {
 			min: string
 			current: string
 			max: string

@@ -293,7 +293,7 @@
 							readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)}
 							categories={$hardwareInfo.cpu.power
 								.filter((power) => power.value !== 0)
-								.map((temp) => `${temp.name.replaceAll("CPU", "")} (${temp.value} W)`)}
+								.map((temp) => `${temp.name?.replaceAll("CPU", "")} (${temp.value} W)`)}
 							type={{ name: "power usage", unit: "W" }}
 						/>
 					</div>
@@ -385,7 +385,7 @@
 					<div>
 						<MeterChart
 							readings={$hardwareInfo.gpu.temperature}
-							categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} °C)`)}
+							categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} °C)`)}
 							type={{ name: "temperature", unit: "°C" }}
 						/>
 					</div>
@@ -446,7 +446,7 @@
 						<MeterChart
 							readings={$hardwareInfo.gpu.clock}
 							categories={$hardwareInfo.gpu.clock.map(
-								(temp) => `${temp.name.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`,
+								(temp) => `${temp.name?.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`,
 							)}
 							type={{ name: "clock speed", unit: "MHz" }}
 						/>
@@ -467,7 +467,7 @@
 					<div>
 						<MeterChart
 							readings={$hardwareInfo.gpu.power}
-							categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name.replaceAll("GPU", "")} (${temp.value} W)`)}
+							categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} W)`)}
 							type={{ name: "power usage", unit: "W" }}
 						/>
 					</div>
@@ -541,19 +541,19 @@
 					</div>
 
 					<div class="mt-5 select-text">
-						<h3>Charge level: {Math.round($hardwareInfo.system.battery.level[1].value)}%</h3>
-						<h3>Health: {Math.round(100 - $hardwareInfo.system.battery.level[0].value)}%</h3>
-						<h3>Cycle count: {$hardwareInfo.system.battery.cycleCount}</h3>
+						<h3>Charge level: {Math.round($hardwareInfo.system.battery?.level[1].value ?? 0)}%</h3>
+						<h3>Health: {Math.round(100 - ($hardwareInfo.system.battery?.level[0].value ?? 0))}%</h3>
+						<h3>Cycle count: {$hardwareInfo.system.battery?.cycleCount}</h3>
 						<h3>
-							Capacity: {Math.round($hardwareInfo.system.battery.capacity[2].value / 1000)}/{Math.round(
-								$hardwareInfo.system.battery.capacity[1].value / 1000,
+							Capacity: {Math.round(($hardwareInfo.system.battery?.capacity[2].value ?? 0) / 1000)}/{Math.round(
+								($hardwareInfo.system.battery?.capacity[1].value ?? 0) / 1000,
 							)} Wh
 						</h3>
 					</div>
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.system.monitor?.monitors.length > 0}
+			{#if $hardwareInfo.system.monitor?.monitors.length ?? 0 > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -562,7 +562,7 @@
 						<h2>Monitors</h2>
 					</div>
 
-					{#each $hardwareInfo.system.monitor.monitors as { name, refreshRate, resolution }}
+					{#each $hardwareInfo.system.monitor?.monitors ?? [] as { name, refreshRate, resolution }}
 						<div class="mt-5 select-text">
 							<h3>Name: {name}</h3>
 							<h3>Resolution: {resolution}</h3>

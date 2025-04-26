@@ -41,26 +41,27 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 			fan: Math.round(input.gpu.fan.reduce((a, b) => a + b.value, 0)),
 			memory: parseFloat((input.gpu.memory[0]?.value ?? 0).toFixed(1)),
 
-			cards: input.gpu.cards?.map((card) => {
-				return {
-					temperature: {
-						value: Math.round(card.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / card.temperature.length),
-						min: Math.round(card.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / card.temperature.length),
-						max: Math.round(card.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / card.temperature.length),
-					},
+			cards:
+				input.gpu.cards?.map((card) => {
+					return {
+						temperature: {
+							value: Math.round(card.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / card.temperature.length),
+							min: Math.round(card.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / card.temperature.length),
+							max: Math.round(card.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / card.temperature.length),
+						},
 
-					clock: {
-						value: Math.round(card.clock[0]?.value ?? 0),
-						min: Math.round(card.clock[0]?.min ?? 0),
-						max: Math.round(card.clock[0]?.max ?? 0),
-					},
+						clock: {
+							value: Math.round(card.clock[0]?.value ?? 0),
+							min: Math.round(card.clock[0]?.min ?? 0),
+							max: Math.round(card.clock[0]?.max ?? 0),
+						},
 
-					load: Math.round(card.maxLoad),
-					power: Math.round(card.power.reduce((a, b) => a + b.value, 0)),
-					fan: Math.round(card.fan.reduce((a, b) => a + b.value, 0)),
-					memory: parseFloat((card.memory[0]?.value ?? 0).toFixed(1)),
-				}
-			}),
+						load: Math.round(card.maxLoad),
+						power: Math.round(card.power.reduce((a, b) => a + b.value, 0)),
+						fan: Math.round(card.fan.reduce((a, b) => a + b.value, 0)),
+						memory: parseFloat((card.memory[0]?.value ?? 0).toFixed(1)),
+					}
+				}) ?? [],
 		},
 
 		network: input.system.network.interfaces.map((int) => {
@@ -200,58 +201,60 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 				).toFixed(1),
 			),
 
-			cards: input.gpu.cards?.map((card, cardIndex) => {
-				return {
-					temperature: {
-						value: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].temperature.value).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-						min: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].temperature.min).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-						max: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].temperature.max).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-					},
+			cards:
+				input.gpu.cards?.map((card, cardIndex) => {
+					return {
+						temperature: {
+							value: Math.round(
+								$hardwareStatistics.seconds
+									.map((sensor) => sensor.gpu.cards[cardIndex].temperature.value)
+									.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length,
+							),
+							min: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].temperature.min).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							max: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].temperature.max).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+						},
 
-					clock: {
-						value: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.value).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-						min: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.min).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-						max: Math.round(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.max).reduce((a, b) => a + b, 0) /
-								$hardwareStatistics.seconds.length,
-						),
-					},
+						clock: {
+							value: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.value).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							min: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.min).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+							max: Math.round(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].clock.max).reduce((a, b) => a + b, 0) /
+									$hardwareStatistics.seconds.length,
+							),
+						},
 
-					load: Math.round(
-						$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].load).reduce((a, b) => a + b, 0) /
-							$hardwareStatistics.seconds.length,
-					),
-					power: Math.round(
-						$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].power).reduce((a, b) => a + b, 0) /
-							$hardwareStatistics.seconds.length,
-					),
-					fan: Math.round(
-						$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].fan).reduce((a, b) => a + b, 0) /
-							$hardwareStatistics.seconds.length,
-					),
-					memory: parseFloat(
-						(
-							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].memory).reduce((a, b) => a + b, 0) /
-							$hardwareStatistics.seconds.length
-						).toFixed(1),
-					),
-				}
-			}),
+						load: Math.round(
+							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].load).reduce((a, b) => a + b, 0) /
+								$hardwareStatistics.seconds.length,
+						),
+						power: Math.round(
+							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].power).reduce((a, b) => a + b, 0) /
+								$hardwareStatistics.seconds.length,
+						),
+						fan: Math.round(
+							$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].fan).reduce((a, b) => a + b, 0) /
+								$hardwareStatistics.seconds.length,
+						),
+						memory: parseFloat(
+							(
+								$hardwareStatistics.seconds.map((sensor) => sensor.gpu.cards[cardIndex].memory).reduce((a, b) => a + b, 0) /
+								$hardwareStatistics.seconds.length
+							).toFixed(1),
+						),
+					}
+				}) ?? [],
 		},
 
 		network: input.system.network.interfaces.map((item, i) => {

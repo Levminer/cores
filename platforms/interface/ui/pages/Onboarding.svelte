@@ -392,9 +392,9 @@
 					)
 				}
 
-				if (userData.plan === "personal" || userData.plan === "business") {
+				if (userData?.plan === "personal" || userData?.plan === "business") {
 					// User is on a paid plan
-					$state.plan = userData.plan
+					$state.plan = userData?.plan
 					$state.showMenu = true
 					router.goto("/home")
 				}
@@ -420,7 +420,7 @@
 
 			if (data) {
 				console.log(data)
-				open(data.url)
+				open(data.url as string)
 			}
 		} catch (error) {
 			alert(

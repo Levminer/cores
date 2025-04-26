@@ -177,7 +177,7 @@
 			const { data, error } = await supabaseClient.from("remote_connection").insert({
 				code: $settings.connectionCode,
 				name: $hardwareInfo.system.os.hostname ?? "Cores Desktop",
-				user_id: userData.user.id,
+				user_id: userData?.user?.id,
 			})
 		} else {
 			const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", $settings.connectionCode)
@@ -188,14 +188,14 @@
 
 	const copyConnectionCode = () => {
 		navigator.clipboard.writeText($settings.connectionCode)
-		document.querySelector(".copy").innerHTML = "Copied"
+		document.querySelector(".copy")!.innerHTML = "Copied"
 
 		setTimeout(() => {
-			document.querySelector(".copy").innerHTML = "Copy"
+			document.querySelector(".copy")!.innerHTML = "Copy"
 		}, 1000)
 	}
 
-	export let WOL = async (item) => {
+	export let WOL = async (item: { name?: string; code?: string; mac: string }) => {
 		await fetch("http://localhost:5390/post", {
 			method: "POST",
 			body: JSON.stringify({

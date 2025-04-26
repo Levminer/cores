@@ -10,7 +10,7 @@
 		"allowJs": true,
 		"checkJs": true,
 		"sourceMap": true,
-		"strict": false,
+		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
