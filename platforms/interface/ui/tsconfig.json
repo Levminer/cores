@@ -8,8 +8,8 @@
 		"moduleDetection": "force",
 		"isolatedModules": true,
 		"allowImportingTsExtensions": true,
-		/* "strict": true,
-		"noUncheckedIndexedAccess": true, */
+		"strict": true,
+		/* "noUncheckedIndexedAccess": true, */
 		"declaration": true,
 		"composite": true,
 		"declarationMap": true,

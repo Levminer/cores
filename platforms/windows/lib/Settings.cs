@@ -29,18 +29,15 @@ public class ConnectionCode {
 }
 
 public class DefaultSettings {
-	public int interval { get; set; } = 2;
+	public int interval { get; set; } = 3;
 	public bool minimizeToTray { get; set; } = true;
-	public bool launchOnStartup { get; set; } = false;
 	public bool remoteConnections { get; set; } = false;
-	public bool optionalAnalytics { get; set; } = true;
 	public List<ConnectionCode> connectionCodes = new();
 	public string connectionCode { get; set; } = DefaultValues.GenerateConnectionCode();
 	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
-	public int version { get; set; } = 2;
 }
 
 public class Settings : DefaultSettings {
@@ -88,16 +85,13 @@ public class Settings : DefaultSettings {
 
 			interval = settings?.interval ?? defaultSettings.interval;
 			minimizeToTray = settings?.minimizeToTray ?? defaultSettings.minimizeToTray;
-			launchOnStartup = settings?.launchOnStartup ?? defaultSettings.launchOnStartup;
 			remoteConnections = settings?.remoteConnections ?? defaultSettings.remoteConnections;
-			optionalAnalytics = settings?.optionalAnalytics ?? defaultSettings.optionalAnalytics;
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
 			connectionCodes = settings?.connectionCodes ?? defaultSettings.connectionCodes;
 			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
 			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
 			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			userId = settings?.userId ?? defaultSettings.userId;
-			version = settings?.version ?? defaultSettings.version;
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);

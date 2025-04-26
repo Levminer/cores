@@ -7,7 +7,7 @@ const fn default_string() -> String {
 }
 
 const fn default_value() -> u32 {
-    2
+    3
 }
 
 const fn default_false() -> bool {
@@ -56,13 +56,37 @@ pub struct ConnectionCode {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Colors {
+    pub min: String,
+    pub current: String,
+    pub max: String,
+    pub yellow: String,
+    pub orange: String,
+    #[serde(rename = "categoricalPalette")]
+    pub categorical_palette: Vec<String>,
+}
+
+fn default_colors() -> Colors {
+    Colors {
+        min: "#35cbfd".to_string(),
+        current: "#ff5380".to_string(),
+        max: "#9d0cfd".to_string(),
+        yellow: "#fee440".to_string(),
+        orange: "#fe884d".to_string(),
+        categorical_palette: vec![
+            "#dc94ff".to_string(),
+            "#7d70fe".to_string(),
+            "#2a9d8f".to_string(),
+        ],
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
     #[serde(rename = "minimizeToTray", default = "default_true")]
     pub minimize_to_tray: bool,
-    #[serde(rename = "launchOnStartup", default = "default_false")]
-    pub launch_on_startup: bool,
     #[serde(rename = "remoteConnections", default = "default_false")]
     pub remote_connections: bool,
     #[serde(rename = "connectionCodes", default = "default_connection_codes")]
@@ -79,7 +103,24 @@ pub struct Settings {
     pub license_activated: String,
     #[serde(rename = "userId", default = "default_user_id")]
     pub user_id: String,
-    pub version: Option<u8>,
+    #[serde(rename = "colors", default = "default_colors")]
+    pub colors: Colors,
+}
+
+fn sample_settings() -> Settings {
+    Settings {
+        interval: 2,
+        minimize_to_tray: true,
+        remote_connections: false,
+        connection_code: default_connection_code(),
+        connection_codes: default_connection_codes(),
+        connection_url: default_connection_url(),
+        network_devices: default_connection_codes(),
+        user_id: default_connection_code(),
+        license_key: "".to_string(),
+        license_activated: "".to_string(),
+        colors: default_colors(),
+    }
 }
 
 #[cfg(target_os = "windows")]
@@ -102,20 +143,7 @@ fn get_settings_path() -> std::path::PathBuf {
 }
 
 fn check_if_settings_exits() {
-    let sample_settings = Settings {
-        version: Some(1),
-        interval: 2,
-        minimize_to_tray: true,
-        launch_on_startup: false,
-        remote_connections: false,
-        connection_code: default_connection_code(),
-        connection_codes: default_connection_codes(),
-        connection_url: default_connection_url(),
-        network_devices: default_connection_codes(),
-        user_id: default_connection_code(),
-        license_key: "".to_string(),
-        license_activated: "".to_string(),
-    };
+    let sample_settings = sample_settings();
 
     let program_data = get_settings_path();
 
@@ -136,20 +164,7 @@ fn check_if_settings_exits() {
 }
 
 pub fn get_settings() -> Settings {
-    let sample_settings = Settings {
-        version: Some(1),
-        interval: 2,
-        minimize_to_tray: true,
-        launch_on_startup: false,
-        remote_connections: false,
-        connection_code: default_connection_code(),
-        connection_codes: default_connection_codes(),
-        connection_url: default_connection_url(),
-        network_devices: default_connection_codes(),
-        user_id: default_connection_code(),
-        license_key: "".to_string(),
-        license_activated: "".to_string(),
-    };
+    let sample_settings = sample_settings();
 
     info!("Getting settings");
 
