@@ -216,7 +216,7 @@ public class GPU {
 		get; set;
 	} = new();
 
-	public Identifier Id {
+	public string Id {
 		get; set;
 	}
 

@@ -86,6 +86,80 @@
 			</div>
 		</div>
 
+		<!-- default devices -->
+		<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			<div class="flex flex-col items-start gap-3">
+				<div class="flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<PcCase />
+					</div>
+					<h2>Default devices</h2>
+				</div>
+				<h3>You can change the default devices that are displayed on the main page.</h3>
+			</div>
+			<div class="flex flex-col items-start gap-3">
+				<ModularDialog title={"Default Devices"} description={"You can change the default devices that are displayed on the main page."}>
+					<slot slot="openButton">
+						<Dialog.Trigger class="button">
+							<PcCase />
+							Change
+						</Dialog.Trigger>
+					</slot>
+					<div class="w-full space-y-5">
+						<div class="flex flex-col gap-1 p-3">
+							<div>
+								<h5 class="mb-1">Default storage device</h5>
+								<select
+									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
+									bind:value={$settings.defaultDevices.storage}
+								>
+									<option disabled selected>Select your option</option>
+									{#each $hardwareInfo.system.storage.disks as item}
+										<option value={item.id}>{item.name}</option>
+									{/each}
+								</select>
+							</div>
+
+							<div>
+								<h5 class="mb-1">Default network interface</h5>
+								<select
+									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
+									bind:value={$settings.defaultDevices.network}
+								>
+									<option disabled selected>Select your option</option>
+									{#each $hardwareInfo.system.network.interfaces as item}
+										<option value={item.id}>{item.name}</option>
+									{/each}
+								</select>
+							</div>
+
+							<div>
+								<h5 class="mb-1">Default GPU</h5>
+								<select
+									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
+									bind:value={$settings.defaultDevices.gpu}
+								>
+									<option disabled selected>Select your option</option>
+									{#each $hardwareInfo.gpu.cards as item}
+										<option value={item.id}>{item.name}</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+
+						<div>
+							<button
+								on:click={() => {
+									location.reload()
+								}}
+								class="smallButton w-full">Confirm</button
+							>
+						</div>
+					</div>
+				</ModularDialog>
+			</div>
+		</div>
+
 		<!-- account -->
 		<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 			<div class="flex flex-col items-start gap-3">
@@ -231,7 +305,7 @@
 <script lang="ts">
 	import build from "../../../../build.json"
 	import type { User as SupabaseUser } from "@supabase/supabase-js"
-	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut, Palette } from "lucide-svelte"
+	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut, Palette, PcCase } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"

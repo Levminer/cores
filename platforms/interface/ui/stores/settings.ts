@@ -43,6 +43,13 @@ const settingsScheme = z.object({
 			categoricalPalette: z.array(z.string()).default(["#dc94ff", "#7d70fe", "#2a9d8f"]),
 		})
 		.default({}),
+	defaultDevices: z
+		.object({
+			gpu: z.string().default(""),
+			network: z.string().default(""),
+			storage: z.string().default(""),
+		})
+		.default({}),
 })
 
 // Create store

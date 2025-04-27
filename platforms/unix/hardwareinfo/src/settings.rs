@@ -82,6 +82,21 @@ fn default_colors() -> Colors {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DefaultDevices {
+    pub gpu: String,
+    pub network: String,
+    pub storage: String,
+}
+
+fn default_default_devices() -> DefaultDevices {
+    DefaultDevices {
+        gpu: "".to_string(),
+        network: "".to_string(),
+        storage: "".to_string(),
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -105,6 +120,8 @@ pub struct Settings {
     pub user_id: String,
     #[serde(rename = "colors", default = "default_colors")]
     pub colors: Colors,
+    #[serde(rename = "defaultDevices", default = "default_default_devices")]
+    pub default_devices: DefaultDevices,
 }
 
 fn sample_settings() -> Settings {
@@ -120,6 +137,7 @@ fn sample_settings() -> Settings {
         license_key: "".to_string(),
         license_activated: "".to_string(),
         colors: default_colors(),
+        default_devices: default_default_devices(),
     }
 }
 

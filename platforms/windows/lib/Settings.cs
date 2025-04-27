@@ -28,6 +28,13 @@ public class ConnectionCode {
 	public string mac;
 }
 
+public class DefaultDevices {
+	public string gpu { get; set; } = "";
+	public string network { get; set; } = "";
+	public string storage { get; set; } = "";
+}
+
+
 public class DefaultSettings {
 	public int interval { get; set; } = 3;
 	public bool minimizeToTray { get; set; } = true;
@@ -38,6 +45,7 @@ public class DefaultSettings {
 	public string licenseKey { get; set; } = "";
 	public string licenseActivated { get; set; } = "";
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
+	public DefaultDevices defaultDevices { get; set; } = new();
 }
 
 public class Settings : DefaultSettings {
@@ -92,6 +100,7 @@ public class Settings : DefaultSettings {
 			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
 			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			userId = settings?.userId ?? defaultSettings.userId;
+			defaultDevices = settings?.defaultDevices ?? defaultSettings.defaultDevices;
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);

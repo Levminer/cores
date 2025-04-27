@@ -45,6 +45,10 @@ public class HardwareInfo {
 		try {
 			var computerHardware = computer.Hardware;
 
+			if (firstRun) {
+				Log.Information("HW firstRun");
+			}
+
 			if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
 				// Network interfaces
 				foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
@@ -108,8 +112,6 @@ public class HardwareInfo {
 					}
 
 					API.System.Network.Interfaces = API.System.Network.Interfaces.OrderBy(item => item.Priority).ToList();
-
-					Log.Information("HW firstRun");
 				}
 			}
 
@@ -254,7 +256,7 @@ public class HardwareInfo {
 
 						var data = new GPU {
 							Name = computerHardware[i].Name,
-							Id = computerHardware[i].Identifier,
+							Id = computerHardware[i].Identifier.ToString(),
 							Priority = priority,
 						};
 
@@ -264,7 +266,7 @@ public class HardwareInfo {
 						API.GPU.Cards = API.GPU.Cards.OrderBy(item => item.Priority).ToList();
 					}
 
-					var cardIndex = API.GPU.Cards.FindIndex(x => x.Id == computerHardware[i].Identifier);
+					var cardIndex = API.GPU.Cards.FindIndex(x => x.Id == computerHardware[i].Identifier.ToString());
 
 					if (cardIndex == -1) {
 						cardIndex = 0;
@@ -807,7 +809,6 @@ public class HardwareInfo {
 			// Refresh network and disk info every 60 seconds
 			if (DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
 				lastRun = DateTime.Now;
-				Log.Information("reset");
 			}
 
 			firstRun = false;

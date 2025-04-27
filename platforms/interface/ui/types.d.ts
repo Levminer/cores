@@ -25,6 +25,7 @@ declare global {
 		dataRead: number
 		dataWritten: number
 		primary: boolean
+		id: string
 	}
 
 	interface Monitor {
@@ -47,6 +48,7 @@ declare global {
 		throughputUpload: number
 		downloadData: number
 		uploadData: number
+		id: string
 	}
 
 	interface RAM {
@@ -110,6 +112,7 @@ declare global {
 				power: Sensor[]
 				clock: Sensor[]
 				maxLoad: number
+				id: string
 			}[]
 		}
 
@@ -247,6 +250,11 @@ declare global {
 			yellow: string
 			orange: string
 			categoricalPalette: string[]
+		}
+		defaultDevices: {
+			gpu: string
+			network: string
+			storage: string
 		}
 	}
 
