@@ -20,6 +20,7 @@ public class HardwareInfo {
 	private DateTime lastRun = DateTime.Now;
 	public HardwareUpdater refresher = new();
 	public Commands commands = new();
+	public Settings settings = new();
 	public Computer computer = new() {
 		IsCpuEnabled = true,
 		IsGpuEnabled = true,
@@ -34,7 +35,8 @@ public class HardwareInfo {
 		get; set;
 	} = new();
 
-	public HardwareInfo() {
+	public HardwareInfo(Settings settings) {
+		this.settings = settings;
 		computer.Open();
 		computer.Accept(refresher);
 
@@ -60,12 +62,17 @@ public class HardwareInfo {
 							Speed = (ni.Speed / 1000 / 1000).ToString(),
 						};
 
+						// Priority
 						if (!temp.Description.Contains("Virtual") && temp.Name.Contains("Ethernet")) {
 							temp.Priority = 0;
 						} else if (!temp.Description.Contains("Virtual") && (temp.Name.Contains("WiFi") || temp.Name.Contains("Wi-Fi"))) {
 							temp.Priority = 1;
 						} else {
 							temp.Priority = 2;
+						}
+
+						if (temp.Id.Contains(settings.defaultDevices.network)) {
+							temp.Priority = -1;
 						}
 
 						// Mac address
@@ -248,17 +255,19 @@ public class HardwareInfo {
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && x.Name.StartsWith("D3D")).ToArray();
 
 					if (firstRun) {
-						var priority = 1;
-
-						if (hardware.HardwareType.ToString().Contains("Nvidia")) {
-							priority = 0;
-						}
-
 						var data = new GPU {
 							Name = computerHardware[i].Name,
 							Id = computerHardware[i].Identifier.ToString(),
-							Priority = priority,
+							Priority = 1,
 						};
+
+						if (hardware.HardwareType.ToString().Contains("Nvidia")) {
+							data.Priority = 0;
+						}
+
+						if (data.Id.Contains(settings.defaultDevices.gpu)) {
+							data.Priority = -1;
+						}
 
 						API.GPU.Cards.Add(data);
 
@@ -415,6 +424,7 @@ public class HardwareInfo {
 						var data = new Disk {
 							Name = computerHardware[i].Name,
 							Id = computerHardware[i].Identifier.ToString(),
+							Priority = 1,
 						};
 
 						// Get disk size
@@ -422,7 +432,6 @@ public class HardwareInfo {
 						long total = 0;
 						long free = 0;
 						string health = "N/A";
-						bool primary = false;
 
 						foreach (var line in report) {
 							if (line.StartsWith("Total Size")) {
@@ -434,7 +443,11 @@ public class HardwareInfo {
 							}
 
 							if (line.StartsWith("Logical Drive Name: C")) {
-								primary = true;
+								data.Priority = 0;
+							}
+
+							if (data.Id.Contains(settings.defaultDevices.storage)) {
+								data.Priority = -1;
 							}
 
 							// Sandforce
@@ -466,7 +479,6 @@ public class HardwareInfo {
 						data.TotalSpace = (int)total;
 						data.Health = health;
 						data.FreeSpace = (int)free;
-						data.Primary = primary;
 
 						if (firstRun) {
 							API.System.Storage.Disks.Add(data);
@@ -478,7 +490,7 @@ public class HardwareInfo {
 							}
 						}
 
-						API.System.Storage.Disks = API.System.Storage.Disks.OrderByDescending(item => item.Primary).ToList();
+						API.System.Storage.Disks = API.System.Storage.Disks.OrderBy(item => item.Priority).ToList();
 					}
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {

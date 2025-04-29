@@ -73,7 +73,7 @@ public class Disk {
 		get; set;
 	}
 
-	public bool Primary {
+	public int Priority {
 		get; set;
 	}
 }

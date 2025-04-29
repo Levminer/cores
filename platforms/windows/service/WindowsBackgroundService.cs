@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
-	internal static HardwareInfo HardwareInfo = new();
+	internal static HardwareInfo HardwareInfo = new(Program.Settings);
 	internal static RTCServer RTCServer = new();
 	internal static Analytics Analytics = new();
 	internal static Server Server = new();

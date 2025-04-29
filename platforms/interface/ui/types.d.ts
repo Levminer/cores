@@ -24,7 +24,7 @@ declare global {
 		throughputWrite: number
 		dataRead: number
 		dataWritten: number
-		primary: boolean
+		priority: number
 		id: string
 	}
 
@@ -49,6 +49,7 @@ declare global {
 		downloadData: number
 		uploadData: number
 		id: string
+		priority: number
 	}
 
 	interface RAM {
@@ -113,6 +114,7 @@ declare global {
 				clock: Sensor[]
 				maxLoad: number
 				id: string
+				priority: number
 			}[]
 		}
 

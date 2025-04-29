@@ -149,7 +149,8 @@
 
 						<div>
 							<button
-								on:click={() => {
+								on:click={async () => {
+									await invoke("restart_service")
 									location.reload()
 								}}
 								class="smallButton w-full">Confirm</button
