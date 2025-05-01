@@ -2,7 +2,7 @@
 	"$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/web-manifest.json",
 	"name": "Cores - Hardware Monitor",
 	"short_name": "Cores",
-	"description": "Modern hardware monitor for Windows.",
+	"description": "Cores is a hardware monitor background service with remote connection support and a modern UI - Monitor CPU/RAM/GPU usage like clock speed, voltage, memory usage and temperature.",
 	"start_url": "/home",
 	"display": "standalone",
 	"background_color": "#000000",

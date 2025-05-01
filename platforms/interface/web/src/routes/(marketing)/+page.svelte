@@ -46,80 +46,69 @@
 	</div>
 
 	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
-		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
-			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex flex-col sm:w-full">
-					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
-							Modern Hardware Monitoring
-						</h2>
-						<h3 class="text-2xl italic text-gray-100">Monitor any system with ease.</h3>
-					</div>
+		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-10 py-20">
+			<div class="flex flex-col sm:w-full">
+				<div class="mb-10 text-center">
+					<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
+						Monitor any system with ease
+					</h2>
+				</div>
 
-					<div class="flex flex-col items-center justify-center gap-5 md:flex-row">
-						<div>
-							<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
-								<!-- cards 1 -->
-								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-									<div class="mb-5 flex items-center gap-3">
-										<div
-											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
-										>
-											<Feather />
-										</div>
-										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
-									</div>
-									<div class="select-text">
-										<h5>Cores runs as a background service with minimal resource usage.</h5>
-									</div>
+				<div class="flex flex-col items-center justify-center gap-5">
+					<div class="flex w-full flex-col gap-5 md:flex-row">
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Radio />
 								</div>
-								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-									<div class="mb-5 flex items-center gap-3">
-										<div
-											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
-										>
-											<MonitorSmartphone />
-										</div>
-										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Cross-Platform</h4>
-									</div>
-									<div class="select-text">
-										<h5>You can monitor your system on Windows, Linux and MacOS.</h5>
-									</div>
-								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
 							</div>
-							<div class="mt-5 flex flex-row justify-between gap-3 sm:flex-col">
-								<!-- cards 2 -->
-								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-									<div class="mb-5 flex items-center gap-3">
-										<div
-											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
-										>
-											<Radio />
-										</div>
-										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
-									</div>
-									<div class="select-text">
-										<h5>You can monitor your system from any browser. No cloud, no central server powered by WebRTC.</h5>
-									</div>
-								</div>
-
-								<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
-									<div class="mb-5 flex items-center gap-3">
-										<div
-											class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2"
-										>
-											<Webhook />
-										</div>
-										<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API Access</h4>
-									</div>
-									<div class="select-text">
-										<h5>You can access the REST or Websocket API to build your own integration.</h5>
-									</div>
-								</div>
+							<div class="select-text">
+								<h5>You can monitor your system from any browser. No cloud, no central server powered by WebRTC.</h5>
+							</div>
+							<div class="rounded-xl bg-black p-3">
+								<img width="500" src="https://cdn.levminer.com/cores/dashboard.webp" alt="web dashboard" />
 							</div>
 						</div>
-						<div class="rounded-xl bg-black p-3">
-							<img class="rounded-md" src="https://cdn.levminer.com/cores/dashboard.webp" alt="web dashboard" />
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<ChartLine />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Statistics</h4>
+							</div>
+							<div class="select-text">
+								<h5>See detailed statistics about every hardware component in your system.</h5>
+							</div>
+							<div class="rounded-xl bg-black p-3">
+								<img width="500" src="https://cdn.levminer.com/cores/statistics.png" alt="web dashboard" />
+							</div>
+						</div>
+					</div>
+					<div class="flex w-full flex-col gap-5 md:flex-row">
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Webhook />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API Access</h4>
+							</div>
+							<div class="select-text">
+								<h5>You can access the REST or Websocket API to build your own integration.</h5>
+							</div>
+						</div>
+
+						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Feather />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
+							</div>
+							<div class="select-text">
+								<h5>Cores runs as a background service with minimal resource usage.</h5>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -134,7 +123,6 @@
 						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
 							Easy Remote Access
 						</h2>
-						<h3 class="text-2xl italic text-gray-100">Monitor your devices from anywhere.</h3>
 					</div>
 
 					<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
@@ -191,7 +179,6 @@
 		<div id="features4" class="flex flex-col items-center justify-center rounded-xl py-20">
 			<div class="mb-10 text-center">
 				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Packed with features</h2>
-				<h3 class="italic text-gray-100">Every feature you need to monitor your computer.</h3>
 			</div>
 			<div class="flex max-w-2xl flex-wrap items-center justify-center gap-1">
 				{#each features as item}
@@ -394,20 +381,34 @@
 			</div>
 		</div>
 
-		<div id="newsletter" class="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-black py-44">
+		<div id="faq" class="select-text flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-black py-44">
 			<div class="mb-10 text-center">
-				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Interested in Cores?</h2>
-				<h3 class="italic text-gray-100">Subscribe to the newsletter and get the latest updates.</h3>
+				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">FAQ</h2>
 			</div>
 
-			<form class="flex w-1/4 flex-col space-y-4 sm:w-[60%]" action="https://cores.lemonsqueezy.com/email-subscribe/external" method="post">
-				<div>
-					<label for="email">Email</label><br />
-					<input class="input w-full" type="email" name="email" id="email" required />
+			<div class="md:w-2/3 w-full px-10 flex flex-col space-y-5">
+				<div class="bg-gray-700 p-5 rounded-xl">
+					<h4>Do you offer any guarantee?</h4>
+					<h3>
+						We offer 7 days money back guarantee. If you are not happy with Cores, you can reach out to us, and get your money back within
+						the first week, no questions asked.
+					</h3>
 				</div>
 
-				<button class="button w-full" type="submit">Subscribe</button>
-			</form>
+				<div class="bg-gray-700 p-5 rounded-xl">
+					<h4>How can I activate my license key?</h4>
+					<h3>
+						First download the app, log in with your Google account and then you can activate your license key on the next screen.
+					</h3>
+				</div>
+
+				<div class="bg-gray-700 p-5 rounded-xl">
+					<h4>Do you have a question or concern?</h4>
+					<h3>
+						Send an email to <a class="underline" href="mailto:support@coresmonitor.com">support@coresmonitor.com</a> for assistance.
+					</h3>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -437,6 +438,7 @@
 		Terminal,
 		Server,
 		ArrowDownToLine,
+		ChartLine,
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
