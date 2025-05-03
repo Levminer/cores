@@ -56,7 +56,9 @@
 
 				<div class="flex flex-col items-center justify-center gap-5">
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+						<div
+							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Radio />
@@ -71,7 +73,9 @@
 							</div>
 						</div>
 
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+						<div
+							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<ChartLine />
@@ -87,19 +91,9 @@
 						</div>
 					</div>
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Webhook />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API Access</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can access the REST or Websocket API to build your own integration.</h5>
-							</div>
-						</div>
-
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:w-full sm:p-4">
+						<div
+							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Feather />
@@ -108,6 +102,20 @@
 							</div>
 							<div class="select-text">
 								<h5>Cores runs as a background service with minimal resource usage.</h5>
+							</div>
+						</div>
+
+						<div
+							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
+						>
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Webhook />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API Access</h4>
+							</div>
+							<div class="select-text">
+								<h5>You can access the REST or Websocket API to build your own integration.</h5>
 							</div>
 						</div>
 					</div>
@@ -191,6 +199,37 @@
 			</div>
 		</div>
 
+		<div id="features5" class="flex flex-col items-center justify-center rounded-xl py-20">
+			<div class="mb-10 text-center">
+				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">Use cases</h2>
+			</div>
+			<div class="flex max-w-6xl flex-col flex-wrap gap-10 text-center md:flex-row md:flex-nowrap">
+				<div class="transparent-900 flex w-full flex-col items-center rounded-xl border border-gray-500 p-10 shadow-xl md:w-1/3">
+					<div class="bg-cores-min flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">
+						<Gamepad2 class="h-16 w-16" />
+					</div>
+					<h2 class="my-5">Gamers and power users</h2>
+					<h3>Keep an eye on your system and monitor everything remotely.</h3>
+				</div>
+
+				<div class="transparent-900 flex w-full flex-col items-center rounded-xl border border-gray-500 p-10 shadow-xl md:w-1/3">
+					<div class="bg-cores-current flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">
+						<Server class="h-16 w-16" />
+					</div>
+					<h2 class="my-5">Homelab</h2>
+					<h3>Monitor your Raspberry Pi or your enterprise-grade server at home.</h3>
+				</div>
+
+				<div class="transparent-900 flex w-full flex-col items-center rounded-xl border border-gray-500 p-10 shadow-xl md:w-1/3">
+					<div class="bg-cores-max flex h-28 w-28 items-center justify-center rounded-full text-6xl font-medium text-white">
+						<MonitorSmartphone class="h-16 w-16" />
+					</div>
+					<h2 class="my-5">Office PCs</h2>
+					<h3>You can monitor the whole department remotely.</h3>
+				</div>
+			</div>
+		</div>
+
 		<div id="downloads" class="flex min-h-screen justify-center rounded-xl py-20">
 			<div class="flex w-[50%] select-text flex-wrap items-center justify-between sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col items-center justify-center">
@@ -237,7 +276,11 @@
 						{#if selectedDownload === "windows"}
 							<h3>Download the installer or get the app from the Microsoft Store.</h3>
 							<div class="flex flex-row flex-wrap items-center justify-center gap-3">
-								<a href="https://link.levminer.com/cores-installer" target="_blank" class="smallButton">
+								<a
+									href="https://link.levminer.com/cores-installer"
+									target="_blank"
+									class="smallButton bg-cores-alternative hover:text-cores-alternative border-cores-alternative gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+								>
 									<Download width="24" height="24" />
 									Download
 								</a>
@@ -252,7 +295,11 @@
 						{:else if selectedDownload === "linux"}
 							<h3>Download the package for your distro or get the daemon.</h3>
 							<div class="flex flex-row items-center justify-center gap-3">
-								<a href="https://github.com/levminer/cores/releases/latest" target="_blank" class="smallButton">
+								<a
+									href="https://github.com/levminer/cores/releases/latest"
+									target="_blank"
+									class="smallButton bg-cores-alternative hover:text-cores-alternative border-cores-alternative gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+								>
 									<Download width="24" height="24" />
 									Download
 								</a>
@@ -263,7 +310,11 @@
 						{:else}
 							<h3>Download and install the app with the installer.</h3>
 							<div class="flex flex-row items-center justify-center gap-3">
-								<a href="https://github.com/levminer/cores/releases/latest" target="_blank" class="smallButton">
+								<a
+									href="https://github.com/levminer/cores/releases/latest"
+									target="_blank"
+									class="smallButton bg-cores-alternative hover:text-cores-alternative border-cores-alternative gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
+								>
 									<Download width="24" height="24" />
 									Download
 								</a>
@@ -381,13 +432,13 @@
 			</div>
 		</div>
 
-		<div id="faq" class="select-text flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-black py-44">
+		<div id="faq" class="flex select-text flex-col items-center justify-center rounded-xl bg-gradient-to-r from-gray-700 to-black py-44">
 			<div class="mb-10 text-center">
 				<h2 class="mb-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-8xl">FAQ</h2>
 			</div>
 
-			<div class="md:w-2/3 w-full px-10 flex flex-col space-y-5">
-				<div class="bg-gray-700 p-5 rounded-xl">
+			<div class="flex w-full flex-col space-y-5 px-10 md:w-2/3">
+				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>Do you offer any guarantee?</h4>
 					<h3>
 						We offer 7 days money back guarantee. If you are not happy with Cores, you can reach out to us, and get your money back within
@@ -395,14 +446,12 @@
 					</h3>
 				</div>
 
-				<div class="bg-gray-700 p-5 rounded-xl">
+				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>How can I activate my license key?</h4>
-					<h3>
-						First download the app, log in with your Google account and then you can activate your license key on the next screen.
-					</h3>
+					<h3>First download the app, log in with your Google account and then you can activate your license key on the next screen.</h3>
 				</div>
 
-				<div class="bg-gray-700 p-5 rounded-xl">
+				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>Do you have a question or concern?</h4>
 					<h3>
 						Send an email to <a class="underline" href="mailto:support@coresmonitor.com">support@coresmonitor.com</a> for assistance.
@@ -439,6 +488,7 @@
 		Server,
 		ArrowDownToLine,
 		ChartLine,
+		Gamepad2,
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"

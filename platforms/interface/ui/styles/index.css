@@ -40,11 +40,11 @@
 	}
 
 	.downloadButton {
-		@apply transparent-900 flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-gray-500 p-8 shadow-xl duration-150 ease-in-out hover:bg-white hover:text-black sm:p-4;
+		@apply transparent-900 flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-gray-500 p-8 shadow-xl duration-150 ease-in-out hover:bg-white hover:text-black sm:p-4 transform hover:scale-95;
 	}
 
 	.selectedDownloadButton {
-		@apply flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-white bg-white p-8 text-black shadow-xl duration-150 ease-in-out sm:p-4;
+		@apply flex w-48 flex-col items-center justify-center space-y-4 rounded-xl border border-white bg-white p-8 text-black shadow-xl duration-150 ease-in-out sm:p-4 transform hover:scale-95;
 	}
 }
 
