@@ -61,15 +61,15 @@
 						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Radio />
+									<House />
 								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Informative home screen</h4>
 							</div>
 							<div class="select-text">
-								<h5>You can monitor your system from any browser. No cloud, no central server powered by WebRTC.</h5>
+								<h5>Keep track of every component in one place.</h5>
 							</div>
 							<div class="rounded-xl bg-black p-3">
-								<img width="500" src="https://cdn.levminer.com/cores/dashboard.webp" alt="web dashboard" />
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/home.png" alt="web dashboard" />
 							</div>
 						</div>
 
@@ -86,7 +86,12 @@
 								<h5>See detailed statistics about every hardware component in your system.</h5>
 							</div>
 							<div class="rounded-xl bg-black p-3">
-								<img width="500" src="https://cdn.levminer.com/cores/statistics.png" alt="web dashboard" />
+								<img
+									class="rounded"
+									width="500"
+									src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/stats.png"
+									alt="web dashboard"
+								/>
 							</div>
 						</div>
 					</div>
@@ -132,31 +137,48 @@
 							Easy Remote Access
 						</h2>
 					</div>
-
-					<div class="relative flex w-[900px] items-center justify-center overflow-hidden rounded-xl bg-black p-3">
-						<video id="video0" preload="metadata" muted loop src="https://cdn.levminer.com/cores/remote2.mp4" />
-						<div class="absolute flex items-center justify-center">
-							<Play id="play0" fill="white" class="m-10 h-20 w-20 rounded-full bg-black/80 p-5 backdrop-blur-sm" />
-						</div>
-					</div>
 				</div>
 
-				<div class="flex w-[1000px] flex-col sm:w-full">
-					<div class="mt-5 flex flex-row justify-between gap-5 sm:flex-col">
-						<!-- card 1 -->
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+				<div class="flex flex-col items-center justify-center gap-5">
+					<div class="flex w-full flex-col gap-5 md:flex-row">
+						<div
+							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
+						>
+							<div class="mb-5 flex items-center gap-3">
+								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+									<Radio />
+								</div>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
+							</div>
+							<div class="select-text">
+								<h5>You can monitor your system from any browser. No subscriptions.</h5>
+							</div>
+							<div class="rounded-xl bg-black p-3">
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/home2.png" alt="web dashboard" />
+							</div>
+						</div>
+
+						<div
+							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Server />
 								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Sync With Your Devices</h4>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">All your devices in one place</h4>
 							</div>
 							<div class="select-text">
-								<h5>You can monitor all your devices easily.</h5>
+								<h5>You can monitor all your devices easily from a central place.</h5>
+							</div>
+							<div class="rounded-xl bg-black p-3">
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/devices.png" alt="web dashboard" />
 							</div>
 						</div>
-
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+					</div>
+					<div class="flex w-full flex-col gap-5 md:flex-row">
+						<div
+							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Moon />
@@ -168,7 +190,9 @@
 							</div>
 						</div>
 
-						<div class="w-full rounded-xl bg-gray-900 p-8 sm:p-4">
+						<div
+							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
+						>
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Power />
@@ -489,6 +513,7 @@
 		ArrowDownToLine,
 		ChartLine,
 		Gamepad2,
+		House,
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
