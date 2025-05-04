@@ -559,33 +559,9 @@
 	onMount(() => {
 		// smooth scroll
 		document.querySelector("#layout")?.classList.add("scroll-smooth")
-
-		// play videos on hover
-		for (let i = 0; i < 1; i++) {
-			const video = document.getElementById(`video${i}`) as HTMLVideoElement
-			const play = document.getElementById(`play${i}`) as HTMLElement
-
-			video.addEventListener("mouseleave", () => {
-				video.pause()
-				play.style.display = "flex"
-			})
-
-			play.addEventListener("click", () => {
-				video.play()
-				play.style.display = "none"
-			})
-		}
 	})
 
 	onDestroy(() => {
 		document.querySelector("#layout")?.classList.remove("scroll-smooth")
-
-		for (let i = 0; i < 1; i++) {
-			const video = document.getElementById(`video${i}`) as HTMLVideoElement
-			const play = document.getElementById(`play${i}`) as HTMLElement
-
-			play.removeEventListener("click", () => {})
-			video.removeEventListener("mouseleave", () => {})
-		}
 	})
 </script>
