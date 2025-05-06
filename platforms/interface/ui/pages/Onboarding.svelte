@@ -18,7 +18,7 @@
 
 	{#if step === "login"}
 		<div class="flex w-full">
-			<Login loginFn={login} withoutLoginFn={stepPricing} />
+			<Login loginFn={login} withoutLoginFn={withoutLogin} />
 		</div>
 	{/if}
 
@@ -141,34 +141,7 @@
 								</div>
 							</div>
 						</div>
-					{:else if variant == "paywall"}
-						<div class="flex w-1/2 flex-wrap justify-center text-lg">
-							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
-								<div>
-									<h2
-										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
-									>
-										Purchase Cores
-									</h2>
-									<p class="select-text text-base leading-tight">
-										You need to buy Cores to continue. Want a free trial? Reach out to support@coresmonitor.com for more
-										information.
-									</p>
-								</div>
-								<div>
-									<button
-										on:click={() => {
-											posthog.capture("buy")
-											open(`https://link.levminer.com/buy-cores-app?utm_source=app`)
-										}}
-										class="smallButton mt-3 w-full"
-									>
-										<ShoppingCart />
-										Buy
-									</button>
-								</div>
-							</div>
-						</div>{:else}
+					{:else}
 						<div class="flex w-1/2 flex-wrap justify-center text-lg">
 							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
 								<div>
@@ -178,8 +151,8 @@
 										1 week trial
 									</h2>
 									<p class="text-base leading-tight">
-										You can use the basic features of Cores for 1 week. For remote connections and advanced features please
-										activate Cores.
+										You can use all features of Cores for 1 week. For remote connections and advanced features please activate
+										Cores.
 									</p>
 								</div>
 								<div>
@@ -200,11 +173,6 @@
 									Activate license
 								</h2>
 								<p class="text-base leading-tight">If you already purchased Cores, please activate your license key.</p>
-								{#if $settings.licenseKey && $settings.licenseKey !== "" && $settings.licenseKey !== "free"}
-									<p class="select-text text-base leading-tight">
-										Your previous license key: <span class="font-bold">{$settings.licenseKey}</span>
-									</p>
-								{/if}
 							</div>
 							<div>
 								<ModularDialog
@@ -297,22 +265,24 @@
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
 	import { MoveRight, Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone } from "lucide-svelte"
-	import { settings } from "../stores/settings.ts"
 	import { onMount } from "svelte"
 	import { start, cancel, onUrl } from "@fabianlars/tauri-plugin-oauth"
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { Login, ModularDialog } from "ui"
 	import posthog from "posthog-js"
+	import { User } from "@supabase/supabase-js"
 
 	$: step = "" as "welcome" | "login" | "pricing" | "tips"
 	$: key = ""
-	$: variant = "free" as "free" | "paid" | "paywall"
+	$: variant = "free" as "free" | "trial"
+	$: user = null as User | null
 
 	onMount(async () => {
-		const ff = posthog.getFeatureFlag("raider") as "free" | "paid"
+		const ff = posthog.getFeatureFlag("raider") as "free" | "trial"
 		variant = ff
 
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+		user = userData.user
 
 		if (!userError) {
 			stepPricing()
@@ -343,24 +313,28 @@
 	}
 
 	const free = () => {
-		if ($settings.licenseKey === "free" && variant === "paid") {
+		if (variant === "trial") {
 			// check if date is more than a week ago
-			const licenseActivated = new Date($settings.licenseActivated)
+			const licenseActivated = user?.created_at ? new Date(user.created_at) : new Date()
 			const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 
+			posthog.capture("trial")
+
 			if (licenseActivated < sevenDaysAgo) {
-				return alert("Your license has expired. Please activate your license key.")
+				return alert("Your free trial expired. Please buy Cores to continue.")
 			}
 		}
-
-		$settings.licenseKey = "free"
-		$settings.licenseActivated = new Date().toISOString()
 
 		posthog.capture("free")
 
 		setTimeout(() => {
 			stepTips()
 		}, 250)
+	}
+
+	const withoutLogin = () => {
+		posthog.capture("withoutLogin")
+		stepPricing()
 	}
 
 	const login = async () => {

@@ -398,7 +398,7 @@
 									</div>
 
 									<a
-										href="https://link.levminer.com/buy-cores-app?utm_source=app"
+										href="https://link.levminer.com/buy-cores-app?utm_source=web"
 										class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 									>
 										<ShoppingCart />

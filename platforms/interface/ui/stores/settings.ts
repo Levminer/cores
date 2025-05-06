@@ -30,8 +30,6 @@ const settingsScheme = z.object({
 	connectionURL: z.string().default("rtc-usw.coresmonitor.com"),
 	networkDevices: networkDevicesScheme.array().default([]),
 	remoteConnections: z.boolean().default(false),
-	licenseKey: z.string().default(""),
-	licenseActivated: z.string().default(""),
 	userId: z.string().default(generateUserId()),
 	colors: z
 		.object({

@@ -242,8 +242,6 @@ declare global {
 			mac: string
 		}[]
 		remoteConnections: boolean
-		licenseKey: string
-		licenseActivated: string
 		userId: string
 		colors: {
 			min: string

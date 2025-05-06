@@ -42,8 +42,6 @@ public class DefaultSettings {
 	public List<ConnectionCode> connectionCodes = new();
 	public string connectionCode { get; set; } = DefaultValues.GenerateConnectionCode();
 	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
-	public string licenseKey { get; set; } = "";
-	public string licenseActivated { get; set; } = "";
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
 	public DefaultDevices defaultDevices { get; set; } = new();
 }
@@ -97,8 +95,6 @@ public class Settings : DefaultSettings {
 			connectionCode = settings?.connectionCode ?? defaultSettings.connectionCode;
 			connectionCodes = settings?.connectionCodes ?? defaultSettings.connectionCodes;
 			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
-			licenseKey = settings?.licenseKey ?? defaultSettings.licenseKey;
-			licenseActivated = settings?.licenseActivated ?? defaultSettings.licenseActivated;
 			userId = settings?.userId ?? defaultSettings.userId;
 			defaultDevices = settings?.defaultDevices ?? defaultSettings.defaultDevices;
 		}

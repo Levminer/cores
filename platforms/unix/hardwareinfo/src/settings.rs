@@ -2,10 +2,6 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-const fn default_string() -> String {
-    String::new()
-}
-
 const fn default_value() -> u32 {
     3
 }
@@ -112,10 +108,6 @@ pub struct Settings {
     pub network_devices: Vec<ConnectionCode>,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
     pub connection_code: String,
-    #[serde(rename = "licenseKey", default = "default_string")]
-    pub license_key: String,
-    #[serde(rename = "licenseActivated", default = "default_string")]
-    pub license_activated: String,
     #[serde(rename = "userId", default = "default_user_id")]
     pub user_id: String,
     #[serde(rename = "colors", default = "default_colors")]
@@ -134,8 +126,6 @@ fn sample_settings() -> Settings {
         connection_url: default_connection_url(),
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
-        license_key: "".to_string(),
-        license_activated: "".to_string(),
         colors: default_colors(),
         default_devices: default_default_devices(),
     }
