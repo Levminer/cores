@@ -1,21 +1,4 @@
 <div class="radialBg flex min-h-screen flex-col items-center justify-center">
-	{#if step === "welcome"}
-		<div class="transparent-900 mx-auto flex w-1/3 flex-col justify-center rounded-2xl p-10 shadow-md backdrop-blur-xl sm:w-[95%]">
-			<div class="mb-10 text-center">
-				<h2>Let's start monitoring!</h2>
-				<h3>Start using Cores with just a few clicks.</h3>
-			</div>
-			<div class="mx-auto flex w-full items-center justify-center">
-				<button
-					on:click={stepLogin}
-					class="transparent-800 flex items-center justify-center gap-3 rounded-xl px-20 py-5 text-xl font-semibold shadow-md"
-				>
-					<MoveRight />
-				</button>
-			</div>
-		</div>
-	{/if}
-
 	{#if step === "login"}
 		<div class="flex w-full">
 			<Login loginFn={login} withoutLoginFn={withoutLogin} />
@@ -58,7 +41,7 @@
 					<div class="flex flex-col items-end">
 						<div>
 							<h2 class="text-center text-3xl font-semibold">
-								$9.99 <p class="text-xs text-gray-200">One time purchase</p>
+								$7.99 <p class="text-xs text-gray-200">One time purchase</p>
 							</h2>
 						</div>
 						<div>
@@ -73,48 +56,6 @@
 								Buy
 							</button>
 						</div>
-					</div>
-				</div>
-
-				<div
-					class="transparent-900 border-cores-alternative flex w-full transform flex-row gap-1 rounded-xl border-2 px-5 py-5 text-xl font-semibold shadow-md duration-100"
-				>
-					<div class="flex w-full flex-col">
-						<div class="mb-3 text-left">
-							<h2 class="bg-gradient-to-r from-rose-600 to-violet-400 bg-clip-text font-extrabold text-transparent">Cores Advanced</h2>
-						</div>
-						<div>
-							<div class="flex flex-row items-center gap-1 text-left">
-								<Check class="h-5 w-5 text-green-500" />
-								<h5>For personal and business use, monthly subscription, cancel anytime</h5>
-							</div>
-							<div class="flex flex-row items-center gap-1 text-left">
-								<Check class="h-5 w-5 text-green-500" />
-								<h5>Choose how many devices you want to monitor</h5>
-							</div>
-							<div class="flex flex-row items-center gap-1 text-left">
-								<Check class="h-5 w-5 text-green-500" />
-								<h5>Access any device remotely</h5>
-							</div>
-							<div class="flex flex-row items-center gap-1 text-left">
-								<Check class="h-5 w-5 text-green-500" />
-								<h5>Export data as .csv and image</h5>
-							</div>
-						</div>
-					</div>
-					<div class="flex flex-col items-end">
-						<div>
-							<h2 class="text-center text-3xl font-semibold">
-								$2.99 <p class="text-xs text-gray-200">/month/device</p>
-							</h2>
-						</div>
-						<a
-							href="mailto:support@coresmonitor.com"
-							class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
-						>
-							<Mail />
-							Get a quote
-						</a>
 					</div>
 				</div>
 
@@ -251,7 +192,7 @@
 					<div class="text-left">
 						<h2>Configure monitoring settings</h2>
 
-						<h3>You can configure the refresh rate and interval of the sensors.</h3>
+						<h3>You can configure how often sensors are refreshed.</h3>
 					</div>
 				</button>
 			</div>
@@ -287,17 +228,11 @@
 		if (!userError) {
 			stepPricing()
 		} else {
-			step = "welcome"
+			step = "login"
 
-			posthog.capture("welcome")
+			posthog.capture("login")
 		}
 	})
-
-	const stepLogin = () => {
-		step = "login"
-
-		posthog.capture("login")
-	}
 
 	const stepPricing = () => {
 		step = "pricing"

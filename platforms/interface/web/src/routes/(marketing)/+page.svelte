@@ -393,7 +393,7 @@
 								<div class="flex flex-col items-end">
 									<div class="flex w-full justify-center md:justify-end">
 										<h2 class="text-center text-3xl font-semibold">
-											$9.99 <p class="text-xs text-gray-200">One time purchase</p>
+											$7.99 <p class="text-xs text-gray-200">One time purchase</p>
 										</h2>
 									</div>
 

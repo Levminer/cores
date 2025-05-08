@@ -7,7 +7,7 @@
 	</div>
 	<button
 		on:click={loginFn}
-		class="flex flex-row items-center justify-between gap-3 rounded-xl border-2 border-gray-200/50 bg-white px-3 py-2 font-medium text-black shadow-xl duration-150 ease-in hover:bg-gray-200"
+		class="flex flex-row items-center justify-between gap-3 rounded-xl border-2 border-white bg-white px-3 py-2 font-medium text-black shadow-xl duration-150 ease-in hover:bg-gray-200"
 	>
 		<svg width="24" height="24"
 			><path
