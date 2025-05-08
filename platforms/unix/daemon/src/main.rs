@@ -82,7 +82,7 @@ async fn main() {
     info!("Connection code: {:?}", settings.connection_code);
 
     // Hardware info channel
-    let (s, r) = async_channel::unbounded();
+    let (channel_sender, channel_receiver) = async_channel::bounded(60);
 
     let mut data = Data {
         first_run: true,
@@ -95,7 +95,7 @@ async fn main() {
     };
 
     let app_state = Arc::new(AppState {
-        hardware_info_receiver: r.clone(),
+        hardware_info_receiver: channel_receiver.clone(),
         last_60s_hardware_info: Mutex::new(Vec::new()),
         last_60m_hardware_info: Mutex::new(Vec::new()),
         settings: settings.clone(),
@@ -125,7 +125,7 @@ async fn main() {
         listener.local_addr().unwrap()
     );
 
-    // Refresh hardware info every 5 seconds
+    // Refresh hardware info every specified interval
     let app_state_clone = app_state.clone();
     let hw_task = tokio::spawn(async move {
         loop {
@@ -135,20 +135,22 @@ async fn main() {
             data.network.refresh();
             refresh_hardware_info(&mut data);
 
-            s.send(data.hw_info.clone()).await.unwrap();
+            // TODO: switch to tokio::sync::broadcast
+            // only one receiver gets the message
+            channel_sender.force_send(data.hw_info.clone()).unwrap();
 
-            if app_state_clone.last_60s_hardware_info.lock().unwrap().len() > 60 {
-                app_state_clone
-                    .last_60s_hardware_info
-                    .lock()
-                    .unwrap()
-                    .remove(0);
+            if app_state_clone.last_60s_hardware_info.lock().unwrap().len() < 60 {
                 app_state_clone
                     .last_60s_hardware_info
                     .lock()
                     .unwrap()
                     .push(data.hw_info.clone());
             } else {
+                app_state_clone
+                    .last_60s_hardware_info
+                    .lock()
+                    .unwrap()
+                    .remove(0);
                 app_state_clone
                     .last_60s_hardware_info
                     .lock()
@@ -162,23 +164,23 @@ async fn main() {
 
     // Save last 60m hardware info
     let app_state_clone = app_state.clone();
-    let rcv = r.clone();
+    let rcv = channel_receiver.clone();
     let last_60m_hardware_info_task = tokio::spawn(async move {
         loop {
             let data = rcv.recv().await.unwrap();
 
-            if app_state_clone.last_60m_hardware_info.lock().unwrap().len() > 60 {
-                app_state_clone
-                    .last_60m_hardware_info
-                    .lock()
-                    .unwrap()
-                    .remove(0);
+            if app_state_clone.last_60m_hardware_info.lock().unwrap().len() < 60 {
                 app_state_clone
                     .last_60m_hardware_info
                     .lock()
                     .unwrap()
                     .push(data);
             } else {
+                app_state_clone
+                    .last_60m_hardware_info
+                    .lock()
+                    .unwrap()
+                    .remove(0);
                 app_state_clone
                     .last_60m_hardware_info
                     .lock()
@@ -223,22 +225,27 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
-                        let last60s_hardware_info =
-                            state.last_60s_hardware_info.lock().unwrap().clone();
-                        let last60m_hardware_info =
-                            state.last_60m_hardware_info.lock().unwrap().clone();
-
-                        // get every third element from the last 60s hardware info
-                        let last60s_hardware_info = last60s_hardware_info
-                            .iter()
-                            .step_by(3)
-                            .cloned()
-                            .collect::<Vec<HardwareInfo>>();
-                        let last60m_hardware_info = last60m_hardware_info
-                            .iter()
-                            .step_by(3)
-                            .cloned()
-                            .collect::<Vec<HardwareInfo>>();
+                        // Get every third element from the last 60s and 60m hardware info
+                        let last60s_hardware_info = {
+                            state
+                                .last_60s_hardware_info
+                                .lock()
+                                .unwrap()
+                                .iter()
+                                .step_by(3)
+                                .cloned()
+                                .collect::<Vec<HardwareInfo>>()
+                        };
+                        let last60m_hardware_info = {
+                            state
+                                .last_60m_hardware_info
+                                .lock()
+                                .unwrap()
+                                .iter()
+                                .step_by(3)
+                                .cloned()
+                                .collect::<Vec<HardwareInfo>>()
+                        };
 
                         // Send initial data
                         let hw_message = receiver.recv().await.unwrap();
@@ -421,7 +428,7 @@ async fn main() {
             settings.connection_code,
             ice_servers,
             Arc::new(Box::new(MyDataChannelHandler {
-                receiver: r.clone(),
+                receiver: channel_receiver.clone(),
                 state: app_state.clone(),
             })),
         )
@@ -482,21 +489,27 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
     // Split socket into sender and receiver
     let (mut sender, mut receiver) = socket.split();
 
-    let state2 = state.clone();
-    let last60s_hardware_info = state2.last_60s_hardware_info.lock().unwrap().clone();
-    let last60m_hardware_info = state2.last_60m_hardware_info.lock().unwrap().clone();
-
     // Get every third element from the last 60s and 60m hardware info
-    let last60s_hardware_info = last60s_hardware_info
-        .iter()
-        .step_by(3)
-        .cloned()
-        .collect::<Vec<HardwareInfo>>();
-    let last60m_hardware_info = last60m_hardware_info
-        .iter()
-        .step_by(3)
-        .cloned()
-        .collect::<Vec<HardwareInfo>>();
+    let last60s_hardware_info = {
+        state
+            .last_60s_hardware_info
+            .lock()
+            .unwrap()
+            .iter()
+            .step_by(3)
+            .cloned()
+            .collect::<Vec<HardwareInfo>>()
+    };
+    let last60m_hardware_info = {
+        state
+            .last_60m_hardware_info
+            .lock()
+            .unwrap()
+            .iter()
+            .step_by(3)
+            .cloned()
+            .collect::<Vec<HardwareInfo>>()
+    };
 
     // Send last 60s hardware info
     for hw_info in last60s_hardware_info {
