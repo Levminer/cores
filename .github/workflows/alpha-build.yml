@@ -85,8 +85,8 @@ jobs:
                   path: "target/release"
 
             - name: Run Upload To Release Action
-              uses: levminer/upload-to-release@dev
+              uses: levminer/upload-to-release@test
               with:
-                  windows-files: "cores-%v-windows-x64.msi, cores-%v-windows-x64.zip"
-                  macos-files: "cores-%v-macos-arm64.dmg"
-                  linux-files: "cores-%v-linux-x64.appimage, cores-%v-linux-x64.deb, cores-%v-linux-x64.rpm, coresd-%v-linux-arm64.zip, coresd-%v-linux-x64.zip"
+                  windows-files: "./target/release/upload/cores-%v-windows-x64.msi, ./target/release/upload/cores-%v-windows-x64.zip"
+                  macos-files: "./target/release/upload/cores-%v-macos-arm64.dmg"
+                  linux-files: "./target/release/upload/cores-%v-linux-x64.appimage, ./target/release/upload/cores-%v-linux-x64.deb, ./target/release/upload/cores-%v-linux-x64.rpm, ./target/release/upload/coresd-%v-linux-arm64.zip, ./target/release/upload/coresd-%v-linux-x64.zip"
