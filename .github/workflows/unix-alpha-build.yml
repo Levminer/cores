@@ -83,3 +83,10 @@ jobs:
               with:
                   name: "cores-${{matrix.NAME}}-arm64"
                   path: "target/aarch64-unknown-linux-gnu/release"
+
+            - name: Run Upload To Release Action
+              uses: levminer/upload-to-release@dev
+              with:
+                  windows-files: "cores-%v-windows-x64.msi, cores-%v-windows-x64.zip"
+                  macos-files: "cores-%v-macos-arm64.dmg"
+                  linux-files: "cores-%v-linux-x64.appimage, cores-%v-linux-x64.deb, cores-%v-linux-x64.rpm, coresd-%v-linux-arm64.zip, coresd-%v-linux-x64.zip"
