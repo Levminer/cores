@@ -87,6 +87,8 @@ jobs:
 
             - name: Run Upload To Release Action
               uses: levminer/upload-to-release@test
+              if: startsWith(github.event.ref, 'refs/tags/')
+              id: upload
               with:
                   windows-files: "./target/release/upload/cores-%v-windows-x64.msi, ./target/release/upload/cores-%v-windows-x64.zip"
                   macos-files: "./target/release/upload/cores-%v-macos-arm64.dmg"
