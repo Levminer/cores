@@ -41,7 +41,7 @@ public class Program {
 
 		Log.Logger = new LoggerConfiguration()
 				.WriteTo.Console()
-				.WriteTo.File(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Cores", "service.log"))
+				.WriteTo.File(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Cores", "service.log"), fileSizeLimitBytes: 1024 * 1024, rollOnFileSizeLimit: true, retainedFileCountLimit: 2)
 				.CreateLogger();
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
