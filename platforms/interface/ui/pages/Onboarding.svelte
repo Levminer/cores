@@ -211,7 +211,7 @@
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { Login, ModularDialog } from "ui"
 	import posthog from "posthog-js"
-	import { User } from "@supabase/supabase-js"
+	import type { User } from "@supabase/supabase-js"
 
 	$: step = "" as "welcome" | "login" | "pricing" | "tips"
 	$: key = ""

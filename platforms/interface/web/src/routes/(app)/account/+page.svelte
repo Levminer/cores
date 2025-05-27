@@ -44,7 +44,7 @@
 				<div class="flex flex-col items-start gap-3 sm:my-5">
 					<button
 						on:click={() => {
-							alert(`Cores ${version} \n\nRelease date: ${date} \nBuild number: ${number} \n\nCreated by Lőrik Levente`)
+							alert(`Cores: ${version} \n\nRelease date: ${date} \nBuild number: ${number}\nServer: ${PUBLIC_CONNECTION_URL} \n\nCreated by: Lőrik Levente`)
 						}}
 						class="button"
 					>
@@ -65,6 +65,7 @@
 	import { Info, Megaphone, Github } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import type { User as UserType } from "@supabase/supabase-js"
+	import { PUBLIC_CONNECTION_URL } from "$env/static/public"
 
 	$: loading = true
 	$: user = null as UserType | null
