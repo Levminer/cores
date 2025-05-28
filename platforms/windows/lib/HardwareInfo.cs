@@ -146,7 +146,7 @@ public class HardwareInfo {
 
 				// CPU
 				if (hardware.HardwareType == HardwareType.Cpu) {
-					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature && x.Name.StartsWith("CPU Core") && !x.Name.Contains("Tj")).ToArray();
+					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature && !x.Name.Contains("Tj")).ToArray();
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load).ToArray();
 					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock && !x.Name.Contains("Bus")).ToArray();
@@ -154,17 +154,19 @@ public class HardwareInfo {
 
 					// CPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
-						var data = new Sensor {
-							Name = temperatureSensors[j].Name,
-							Value = temperatureSensors[j].Value ?? 0,
-							Min = temperatureSensors[j].Min ?? 0,
-							Max = temperatureSensors[j].Max ?? 0,
-						};
+						if (temperatureSensors[j].Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd")) {
+							var data = new Sensor {
+								Name = temperatureSensors[j].Name,
+								Value = temperatureSensors[j].Value ?? 0,
+								Min = temperatureSensors[j].Min ?? 0,
+								Max = temperatureSensors[j].Max ?? 0,
+							};
 
-						if (firstRun) {
-							API.CPU.Temperature.Add(data);
-						} else {
-							API.CPU.Temperature.TrySetValue(j, data);
+							if (firstRun) {
+								API.CPU.Temperature.Add(data);
+							} else {
+								API.CPU.Temperature.TrySetValue(j, data);
+							}
 						}
 					}
 
