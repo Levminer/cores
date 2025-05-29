@@ -251,7 +251,7 @@
 				<div>
 					<MeterChart
 						readings={$hardwareInfo.cpu.temperature}
-						categories={$hardwareInfo.cpu.temperature.map((temp, i) => `Core #${i + 1} (${temp.value} °C)`)}
+						categories={$hardwareInfo.cpu.temperature.map((temp) => `${temp.name?.replaceAll("CPU", "")} (${temp.value} °C)`)}
 						type={{ name: "temperature", unit: "°C" }}
 					/>
 				</div>

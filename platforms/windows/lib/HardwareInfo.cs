@@ -787,10 +787,16 @@ public class HardwareInfo {
 					API.CPU.Info.Add(computer.SMBios.Processors[i]);
 				}
 
+				// GPU info
 				try {
 					// GPU info
 					API.GPU.Info = Commands.GetGPUInfo();
+				}
+				catch (Exception) {
+					Log.Error("Failed to get GPU and OS name");
+				}
 
+				try {
 					// OS info
 					API.System.OS.Name = Commands.GetOSInfo();
 
