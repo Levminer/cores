@@ -117,14 +117,14 @@
 			{#if $hardwareInfo.gpu.cards?.length > 0}
 				<h3 class="max-w-full truncate">{$hardwareInfo.gpu.cards.map((card) => card.name).join(", ")}</h3>
 			{:else}
-				<h3 class="max-w-full truncate">{$hardwareInfo.gpu.name}</h3>
+				<h3 class="max-w-full truncate">{$hardwareInfo.gpu.cards?.[0]?.name ?? "N/A"}</h3>
 			{/if}
 			<div class="flex flex-col items-start justify-start gap-5 pt-5 md:flex-row">
 				<div class="mx-auto flex w-3/5 justify-start md:w-2/5">
-					<GaugeChart load={Math.round($hardwareInfo.gpu.maxLoad)} />
+					<GaugeChart load={Math.round($hardwareInfo.gpu.cards?.[0]?.maxLoad ?? 0)} />
 				</div>
 				<div class="overlayScroll mx-auto w-full flex-col justify-start space-y-2 overflow-y-auto md:max-h-48 md:w-3/5">
-					{#each $hardwareInfo.gpu.load as item, i}
+					{#each $hardwareInfo.gpu.cards?.[0]?.load ?? [] as item, i}
 						<div>
 							<div class="flex w-[95%] flex-row justify-between">
 								<p class="text-sm">{item.name?.replaceAll("D3D", "")}</p>
@@ -369,7 +369,7 @@
 
 		<!-- GPU info -->
 		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
-			{#if $hardwareInfo.gpu.temperature.length > 0}
+			{#if $hardwareInfo.gpu.cards?.[0]?.temperature.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -379,20 +379,22 @@
 					</div>
 					<h3>
 						Avg. temperature: {Math.round(
-							$hardwareInfo.gpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.temperature.length,
+							$hardwareInfo.gpu.cards[0].temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.cards[0].temperature.length,
 						)} °C
 					</h3>
 					<div>
 						<MeterChart
-							readings={$hardwareInfo.gpu.temperature}
-							categories={$hardwareInfo.gpu.temperature.map((temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} °C)`)}
+							readings={$hardwareInfo.gpu.cards[0].temperature}
+							categories={$hardwareInfo.gpu.cards[0].temperature.map(
+								(temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} °C)`,
+							)}
 							type={{ name: "temperature", unit: "°C" }}
 						/>
 					</div>
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.gpu.fan.length > 0}
+			{#if $hardwareInfo.gpu.cards?.[0]?.fan.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -401,13 +403,15 @@
 						<h2>GPU Fan Speed</h2>
 					</div>
 					<h3>
-						Avg. fan speed: {Math.round($hardwareInfo.gpu.fan.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.fan.length)} RPM
+						Avg. fan speed: {Math.round(
+							$hardwareInfo.gpu.cards[0].fan.reduce((a, b) => a + b.value, 0) / $hardwareInfo.gpu.cards[0].fan.length,
+						)} RPM
 					</h3>
-					{#if $hardwareInfo.gpu.fan[0].max > 0}
+					{#if $hardwareInfo.gpu.cards[0].fan[0].max > 0}
 						<div>
 							<MeterChart
-								categories={$hardwareInfo.gpu.fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)}
-								readings={$hardwareInfo.gpu.fan}
+								categories={$hardwareInfo.gpu.cards[0].fan.map((temp, i) => `Fan #${i} (${temp.value} RPM)`)}
+								readings={$hardwareInfo.gpu.cards[0].fan}
 								type={{ name: "fan speed", unit: "RPM" }}
 							/>
 						</div>
@@ -415,7 +419,7 @@
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.gpu.memory.length > 2}
+			{#if $hardwareInfo.gpu.cards?.[0]?.memory.length > 2}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -423,10 +427,10 @@
 						</div>
 						<h2>GPU Memory Usage</h2>
 					</div>
-					<h3>GPU memory: {`${$hardwareInfo.gpu.memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.memory[2].value}`} GB</h3>
+					<h3>GPU memory: {`${$hardwareInfo.gpu.cards[0].memory[0].value.toFixed(1)}/${$hardwareInfo.gpu.cards[0].memory[2].value}`} GB</h3>
 					<div>
 						<MeterChart
-							readings={[$hardwareInfo.gpu.memory[0]]}
+							readings={[$hardwareInfo.gpu.cards[0].memory[0]]}
 							categories={["GPU memory usage"]}
 							type={{ name: "GPU memory usage", unit: "GB" }}
 						/>
@@ -434,7 +438,7 @@
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.gpu.clock.length > 0}
+			{#if $hardwareInfo.gpu.cards?.[0]?.clock.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -444,8 +448,8 @@
 					</div>
 					<div>
 						<MeterChart
-							readings={$hardwareInfo.gpu.clock}
-							categories={$hardwareInfo.gpu.clock.map(
+							readings={$hardwareInfo.gpu.cards[0].clock}
+							categories={$hardwareInfo.gpu.cards[0].clock.map(
 								(temp) => `${temp.name?.replaceAll("GPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`,
 							)}
 							type={{ name: "clock speed", unit: "MHz" }}
@@ -454,7 +458,7 @@
 				</div>
 			{/if}
 
-			{#if $hardwareInfo.gpu.power.length > 0}
+			{#if $hardwareInfo.gpu.cards?.[0]?.power.length > 0}
 				<div class="transparent-800 rounded-xl p-8 sm:p-4">
 					<div class="mb-5 flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -463,11 +467,11 @@
 
 						<h2>GPU Power Usage</h2>
 					</div>
-					<h3>Power usage: {$hardwareInfo.gpu.power.reduce((a, b) => a + b.value, 0)} W</h3>
+					<h3>Power usage: {$hardwareInfo.gpu.cards[0].power.reduce((a, b) => a + b.value, 0)} W</h3>
 					<div>
 						<MeterChart
-							readings={$hardwareInfo.gpu.power}
-							categories={$hardwareInfo.gpu.power.map((temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} W)`)}
+							readings={$hardwareInfo.gpu.cards[0].power}
+							categories={$hardwareInfo.gpu.cards[0].power.map((temp) => `${temp.name?.replaceAll("GPU", "")} (${temp.value} W)`)}
 							type={{ name: "power usage", unit: "W" }}
 						/>
 					</div>
@@ -525,7 +529,7 @@
 				<div class="select-text">
 					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
 					<h3>RAM: {Math.round(($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0))} GB</h3>
-					<h3>GPU: {$hardwareInfo.gpu.name}</h3>
+					<h3>GPU: {$hardwareInfo.gpu.cards?.[0]?.name ?? "N/A"}</h3>
 					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
 					<h3>OS: {$hardwareInfo.system.os.name}</h3>
 				</div>

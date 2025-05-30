@@ -45,8 +45,12 @@ public class RTCServer {
 
 				var status = new Status { is_host = true, session_id = EzRTCHost.sessionId, version = "0.6.0", metadata = new Dictionary<string, object>() };
 				status.metadata.Add("cpu", hardwareInfo.API.CPU.MaxLoad);
-				status.metadata.Add("gpu", hardwareInfo.API.GPU.MaxLoad);
-				status.metadata.Add("ram", hardwareInfo.API.RAM.Load[2].Value);
+				status.metadata.Add("ram", hardwareInfo.API.RAM.Load[2]?.Value ?? 0);
+				if (hardwareInfo.API.GPU.Cards.Count > 0) {
+					status.metadata.Add("gpu", hardwareInfo.API.GPU.Cards[0].MaxLoad);
+				} else {
+					status.metadata.Add("gpu", 0);
+				}
 
 				var message = SignalMessage.KeepAlive.Encode(keepAlive.userId, status);
 

@@ -96,15 +96,7 @@ declare global {
 		}
 
 		gpu: {
-			name: string
-			temperature: Sensor[]
-			maxLoad: number
-			fan: Sensor[]
-			memory: Sensor[]
-			power: Sensor[]
-			load: Sensor[]
 			info: string
-			clock: Sensor[]
 			cards: {
 				name: string
 				temperature: Sensor[]
@@ -112,6 +104,7 @@ declare global {
 				memory: Sensor[]
 				power: Sensor[]
 				clock: Sensor[]
+				load: Sensor[]
 				maxLoad: number
 				id: string
 				priority: number
@@ -182,12 +175,6 @@ declare global {
 		}
 
 		gpu: {
-			temperature: Sensor
-			clock: Sensor
-			fan: number
-			load: number
-			power: number
-			memory: number
 			cards: {
 				temperature: Sensor
 				clock: Sensor

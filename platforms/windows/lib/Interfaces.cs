@@ -225,22 +225,14 @@ public class GPU {
 	}
 }
 
-public class GPUInfo : CPUInfo {
-	public List<Sensor> Fan {
-		get; set;
-	} = new();
-
-	public List<Sensor> Memory {
-		get; set;
-	} = new();
-
-	new public string Info {
-		get; set;
-	}
-
+public class GPUInfo {
 	public List<GPU> Cards {
 		get; set;
 	} = new();
+
+	public string Info {
+		get; set;
+	}
 }
 
 public class RAMInfo {

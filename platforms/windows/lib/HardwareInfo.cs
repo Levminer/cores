@@ -131,10 +131,6 @@ public class HardwareInfo {
 						API.CPU.Name = computerHardware[i].Name;
 					}
 
-					if (computerHardware[i].HardwareType.ToString().Contains("Gpu")) {
-						API.GPU.Name = computerHardware[i].Name;
-					}
-
 					if (computerHardware[i].HardwareType == HardwareType.Motherboard) {
 						API.System.Motherboard.Name = computerHardware[i].Name;
 
@@ -293,10 +289,8 @@ public class HardwareInfo {
 						};
 
 						if (firstRun) {
-							API.GPU.Temperature.Add(data);
 							API.GPU.Cards[cardIndex].Temperature.Add(data);
 						} else {
-							API.GPU.Temperature.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Temperature.TrySetValue(j, data);
 						}
 					}
@@ -311,10 +305,8 @@ public class HardwareInfo {
 						};
 
 						if (firstRun) {
-							API.GPU.Fan.Add(data);
 							API.GPU.Cards[cardIndex].Fan.Add(data);
 						} else {
-							API.GPU.Fan.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Fan.TrySetValue(j, data);
 						}
 					}
@@ -329,10 +321,8 @@ public class HardwareInfo {
 						};
 
 						if (firstRun) {
-							API.GPU.Memory.Add(data);
 							API.GPU.Cards[cardIndex].Memory.Add(data);
 						} else {
-							API.GPU.Memory.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Memory.TrySetValue(j, data);
 						}
 					}
@@ -347,10 +337,8 @@ public class HardwareInfo {
 						};
 
 						if (firstRun) {
-							API.GPU.Power.Add(data);
 							API.GPU.Cards[cardIndex].Power.Add(data);
 						} else {
-							API.GPU.Power.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Power.TrySetValue(j, data);
 						}
 					}
@@ -365,10 +353,8 @@ public class HardwareInfo {
 						};
 
 						if (firstRun) {
-							API.GPU.Clock.Add(data);
 							API.GPU.Cards[cardIndex].Clock.Add(data);
 						} else {
-							API.GPU.Clock.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Clock.TrySetValue(j, data);
 						}
 					}
@@ -382,17 +368,14 @@ public class HardwareInfo {
 							Max = (float)Math.Round(loadSensors[j].Max ?? 0),
 						};
 						if (firstRun) {
-							API.GPU.Load.Add(data);
 							API.GPU.Cards[cardIndex].Load.Add(data);
 						} else {
-							API.GPU.Load.TrySetValue(j, data);
 							API.GPU.Cards[cardIndex].Load.TrySetValue(j, data);
 						}
 					}
 
 					// GPU Max Load
-					if (API.GPU.Load.Count > 0) {
-						API.GPU.MaxLoad = API.GPU.Load.Max(x => x.Value);
+					if (API.GPU.Cards[cardIndex].Load.Count > 0) {
 						API.GPU.Cards[cardIndex].MaxLoad = API.GPU.Cards[cardIndex].Load.Max(x => x.Value);
 					}
 				}
