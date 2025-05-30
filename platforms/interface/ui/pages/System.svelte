@@ -12,7 +12,7 @@
 				<div class="select-text">
 					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
 					<h3>RAM: {Math.round(($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0))} GB</h3>
-					<h3>GPU: {$hardwareInfo.gpu.name}</h3>
+					<h3>GPU: {$hardwareInfo.gpu.cards?.[0]?.name ?? "N/A"}</h3>
 					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
 					<h3>OS: {$hardwareInfo.system.os.name}</h3>
 				</div>
@@ -39,7 +39,7 @@
 
 	<div class="mx-10 flex gap-5 pb-10 sm:mx-3 sm:flex-wrap">
 		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
-			<!-- storage read/write and temperature -->
+			<!-- fan read/write and temperature -->
 			{#each $hardwareInfo.system.superIO.fan.filter((item) => item.value !== 0) as item, i}
 				<div class="flex gap-5 sm:flex-wrap">
 					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
