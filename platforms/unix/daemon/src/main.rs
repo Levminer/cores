@@ -394,8 +394,12 @@ async fn main() {
                 };
 
                 let cpu_usage = hw_info.cpu.max_load;
-                let gpu_usage = hw_info.gpu.max_load;
-                let memory_usage = if let Some(memory) = &hw_info.ram.load.get(2) {
+                let gpu_usage = if let Some(gpu) = hw_info.gpu.cards.get(0) {
+                    gpu.max_load
+                } else {
+                    0.0
+                };
+                let memory_usage = if let Some(memory) = hw_info.ram.load.get(2) {
                     memory.value
                 } else {
                     0.0

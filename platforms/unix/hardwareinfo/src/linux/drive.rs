@@ -2,7 +2,6 @@ use anyhow::{Context, Result};
 use core::str;
 use nix::unistd::getuid;
 use regex::Regex;
-use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
     fmt::Display,

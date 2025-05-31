@@ -80,7 +80,7 @@ pub struct CoresCPU {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct CoresGPU {
+pub struct CoresGPUCard {
     pub name: String,
     pub temperature: Vec<CoresSensor>,
     pub memory: Vec<CoresSensor>,
@@ -88,8 +88,14 @@ pub struct CoresGPU {
     pub load: Vec<CoresSensor>,
     pub clock: Vec<CoresSensor>,
     pub power: Vec<CoresSensor>,
-    pub info: String,
     pub fan: Vec<CoresSensor>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct CoresGPU {
+    pub info: String,
+    pub cards: Vec<CoresGPUCard>
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -282,15 +288,8 @@ impl HardwareInfo {
                 }],
             },
             gpu: CoresGPU {
-                name: "N/A".to_string(),
-                temperature: Vec::new(),
-                memory: Vec::new(),
-                max_load: 0.0,
-                load: Vec::new(),
-                clock: Vec::new(),
-                power: Vec::new(),
                 info: "N/A".to_string(),
-                fan: Vec::new(),
+                cards: Vec::new(),
             },
             system: CoresSystem {
                 storage: CoresStorage { disks: Vec::new() },
@@ -334,6 +333,21 @@ impl CoresSensor {
             value: 0.0,
             min: 0.0,
             max: 0.0,
+        }
+    }
+}
+
+impl CoresGPUCard {
+    pub fn default() -> CoresGPUCard {
+        CoresGPUCard {
+            name: "N/A".to_string(),
+            clock: Vec::new(),
+            temperature: Vec::new(),
+            fan: Vec::new(),
+            load: Vec::new(),
+            memory: Vec::new(),
+            power: Vec::new(),
+            max_load: 0.0
         }
     }
 }
@@ -468,6 +482,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
         match &data.nvml {
             Ok(nvml) => {
                 let device = nvml.device_by_index(0);
+                let device_index = 0;
 
                 match device {
                     Ok(device) => {
@@ -505,19 +520,21 @@ pub fn refresh_hardware_info(data: &mut Data) {
                         );
 
                         if data.first_run {
-                            data.hw_info.gpu.name = device.name().unwrap();
-                            data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+                            data.hw_info.gpu.cards.push(CoresGPUCard::default());
+
+                            data.hw_info.gpu.cards[device_index].name = device.name().expect("failed to get device name");
+                            data.hw_info.gpu.cards[device_index].max_load = gpu_usage.gpu as f64;
                             data.hw_info.gpu.info =
                                 nvml.sys_driver_version().unwrap_or("N/A".to_string());
 
-                            data.hw_info.gpu.power.push(CoresSensor {
+                            data.hw_info.gpu.cards[device_index].power.push(CoresSensor {
                                 name: "Power Usage".to_string(),
                                 value: power as f64,
                                 min: power as f64,
                                 max: power as f64,
                             });
 
-                            data.hw_info.gpu.temperature.push(CoresSensor {
+                            data.hw_info.gpu.cards[device_index].temperature.push(CoresSensor {
                                 name: "Temperature".to_string(),
                                 value: temperature as f64,
                                 min: temperature as f64,
@@ -525,7 +542,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             });
 
                             for (name, value) in gpu_mem_map {
-                                data.hw_info.gpu.memory.push(CoresSensor {
+                                data.hw_info.gpu.cards[device_index].memory.push(CoresSensor {
                                     name,
                                     value,
                                     min: value,
@@ -533,44 +550,44 @@ pub fn refresh_hardware_info(data: &mut Data) {
                                 });
                             }
 
-                            data.hw_info.gpu.clock.push(CoresSensor {
+                            data.hw_info.gpu.cards[device_index].clock.push(CoresSensor {
                                 name: "GPU Core".to_string(),
                                 value: gpu_clock as f64,
                                 min: gpu_clock as f64,
                                 max: gpu_clock as f64,
                             });
 
-                            data.hw_info.gpu.clock.push(CoresSensor {
+                            data.hw_info.gpu.cards[device_index].clock.push(CoresSensor {
                                 name: "GPU Memory".to_string(),
                                 value: mem_clock as f64,
                                 min: mem_clock as f64,
                                 max: mem_clock as f64,
                             });
                         } else {
-                            data.hw_info.gpu.max_load = gpu_usage.gpu as f64;
+                            data.hw_info.gpu.cards[device_index].max_load = gpu_usage.gpu as f64;
 
-                            data.hw_info.gpu.power[0] =
-                                compare_sensor(&data.hw_info.gpu.power[0], power as f64);
+                            data.hw_info.gpu.cards[device_index].power[0] =
+                                compare_sensor(&data.hw_info.gpu.cards[device_index].power[0], power as f64);
 
-                            data.hw_info.gpu.temperature[0] = compare_sensor(
-                                &data.hw_info.gpu.temperature[0],
+                            data.hw_info.gpu.cards[device_index].temperature[0] = compare_sensor(
+                                &data.hw_info.gpu.cards[device_index].temperature[0],
                                 temperature as f64,
                             );
 
                             let mut i = 0;
                             for (_name, value) in gpu_mem_map {
-                                let prev = &data.hw_info.gpu.memory[i];
+                                let prev = &data.hw_info.gpu.cards[device_index].memory[i];
 
-                                data.hw_info.gpu.memory[i] = compare_sensor(prev, value);
+                                data.hw_info.gpu.cards[device_index].memory[i] = compare_sensor(prev, value);
 
                                 i += 1;
                             }
 
-                            data.hw_info.gpu.clock[0] =
-                                compare_sensor(&data.hw_info.gpu.clock[0], gpu_clock as f64);
+                            data.hw_info.gpu.cards[device_index].clock[0] =
+                                compare_sensor(&data.hw_info.gpu.cards[device_index].clock[0], gpu_clock as f64);
 
-                            data.hw_info.gpu.clock[1] =
-                                compare_sensor(&data.hw_info.gpu.clock[1], mem_clock as f64);
+                            data.hw_info.gpu.cards[device_index].clock[1] =
+                                compare_sensor(&data.hw_info.gpu.cards[device_index].clock[1], mem_clock as f64);
                         }
                     }
                     Err(err) => {
