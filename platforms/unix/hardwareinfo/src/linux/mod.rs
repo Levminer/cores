@@ -46,7 +46,7 @@ pub fn linux_hardware_info(data: &mut Data) {
         let logical_cpus = data.sys.cpus().len();
         let cpu_info = cpu::cpu_info().unwrap();
 
-        data.hw_info.cpu.info[0].max_speed = cpu_info.max_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
+        data.hw_info.cpu.info[0].current_speed = cpu_info.current_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
 
         let cpu_data = cpu::CpuData::new(logical_cpus);
         if let Ok(temp) = cpu_data.temperature {
