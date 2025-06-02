@@ -524,9 +524,17 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
                             data.hw_info.gpu.cards[device_index].name =
                                 device.name().expect("failed to get device name");
-                            data.hw_info.gpu.cards[device_index].max_load = gpu_usage.gpu as f64;
                             data.hw_info.gpu.info =
                                 nvml.sys_driver_version().unwrap_or("N/A".to_string());
+
+                            data.hw_info.gpu.cards[device_index].max_load = gpu_usage.gpu as f64;
+
+                            data.hw_info.gpu.cards[device_index].load.push(CoresSensor {
+                                name: "Load".to_string(),
+                                value: gpu_usage.gpu as f64,
+                                min: gpu_usage.gpu as f64,
+                                max: gpu_usage.gpu as f64,
+                            });
 
                             data.hw_info.gpu.cards[device_index]
                                 .power
@@ -576,6 +584,11 @@ pub fn refresh_hardware_info(data: &mut Data) {
                                 });
                         } else {
                             data.hw_info.gpu.cards[device_index].max_load = gpu_usage.gpu as f64;
+
+                            data.hw_info.gpu.cards[device_index].load[0] = compare_sensor(
+                                &data.hw_info.gpu.cards[device_index].load[0],
+                                gpu_usage.gpu as f64,
+                            );
 
                             data.hw_info.gpu.cards[device_index].power[0] = compare_sensor(
                                 &data.hw_info.gpu.cards[device_index].power[0],

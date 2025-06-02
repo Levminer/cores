@@ -46,12 +46,21 @@ pub fn linux_hardware_info(data: &mut Data) {
         let logical_cpus = data.sys.cpus().len();
         let cpu_info = cpu::cpu_info().unwrap();
 
-        data.hw_info.cpu.info[0].current_speed = cpu_info.current_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
+        data.hw_info.cpu.info[0].current_speed =
+            cpu_info.max_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
+
+        data.hw_info.cpu.name.contains("Intel").then(|| {
+            data.hw_info.cpu.info[0].manufacturer_name = "Intel".to_string();
+        });
+
+        data.hw_info.cpu.name.contains("AMD").then(|| {
+            data.hw_info.cpu.info[0].manufacturer_name = "AMD".to_string();
+        });
 
         let cpu_data = cpu::CpuData::new(logical_cpus);
         if let Ok(temp) = cpu_data.temperature {
             data.hw_info.cpu.temperature.push(CoresSensor {
-                name: "CPU".to_string(),
+                name: "Temperature".to_string(),
                 value: temp as f64,
                 min: temp as f64,
                 max: temp as f64,
@@ -66,10 +75,14 @@ pub fn linux_hardware_info(data: &mut Data) {
 
                 let drive_space = drive::get_free_space(path);
                 let drive_info = drive::get_drive_info(path);
+                let drive_size = inner.clone().capacity().unwrap_or(1) / 1000 / 1000 / 1000;
 
                 data.hw_info.system.storage.disks.push(CoresDisk {
-                    name: inner.clone().model.unwrap_or("N/A".to_string()),
-                    total_space: inner.clone().capacity().unwrap_or(1) / 1000 / 1000 / 1000,
+                    name: inner
+                        .clone()
+                        .model
+                        .unwrap_or(format!("{} GB drive", drive_size)),
+                    total_space: drive_size,
                     free_space: drive_space,
                     throughput_read: 0.0,
                     throughput_write: 0.0,
