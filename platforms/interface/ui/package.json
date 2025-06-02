@@ -4,7 +4,6 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"@fabianlars/tauri-plugin-oauth": "^2.0.0",
 		"@supabase/supabase-js": "^2.47.10",
 		"bits-ui": "^0.21.8",
 		"chart.js": "^4.4.1",
