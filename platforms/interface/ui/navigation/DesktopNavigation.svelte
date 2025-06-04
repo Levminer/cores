@@ -1,40 +1,40 @@
-<div class="transparent-900 flex h-full flex-col justify-between overflow-visible rounded-tr-xl p-2 shadow-2xl">
-	<div class="flex flex-col space-y-2">
+<div class="transparent-900 flex h-full flex-col justify-between overflow-visible rounded-tr-xl shadow-2xl">
+	<div class="flex flex-col space-y-2 pt-2">
 		<a href="/home" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Home class="h-5 w-5" />
+			<Home class="h-6 w-6" />
 		</a>
 
 		<a href="/cpu" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Cpu class="h-5 w-5" />
+			<Cpu class="h-6 w-6" />
 		</a>
 
 		<a href="/ram" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Memory height={20} width={20} />
+			<Memory height={24} width={24} />
 		</a>
 
 		<a href="/gpu" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<GpuCard height={20} width={20} />
+			<GpuCard height={24} width={24} />
 		</a>
 
 		<a href="/storage" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<HardDrive class="h-5 w-5" />
+			<HardDrive class="h-6 w-6" />
 		</a>
 
 		<a href="/network" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Network class="h-5 w-5" />
+			<Network class="h-6 w-6" />
 		</a>
 
 		<a href="/system" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<PcDisplay width={20} height={20} />
+			<PcDisplay width={24} height={24} />
 		</a>
 	</div>
 
-	<div class="flex flex-col space-y-2">
+	<div class="flex flex-col space-y-2P pb-2">
 		<a href="/connections" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<MonitorSmartphone class="h-5 w-5" />
+			<MonitorSmartphone class="h-6 w-6" />
 		</a>
 		<a href="/settings" use:active data-active-class="selectedMenuButton" class="menuButton">
-			<Settings class="h-5 w-5" />
+			<Settings class="h-6 w-6" />
 		</a>
 	</div>
 </div>

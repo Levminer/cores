@@ -337,7 +337,7 @@
 			fullVersionList?: { version: string }[]
 		}
 
-		let runtimeVersion = "N/A"
+		let runtimeVersion = navigator.userAgent
 
 		try {
 			// @ts-ignore

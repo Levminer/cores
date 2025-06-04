@@ -32,7 +32,7 @@
 	}
 
 	.menuButton {
-		@apply p-2;
+		@apply transparent-900-hover mx-3 mt-0 flex h-14 w-14 flex-col items-center justify-center rounded-lg text-sm font-semibold outline-none duration-200 ease-linear hover:text-gray-200 focus-visible:ring-4 focus-visible:ring-popup-magenta;
 	}
 
 	.selectedMenuButton {
