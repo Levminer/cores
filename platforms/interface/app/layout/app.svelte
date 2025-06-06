@@ -187,10 +187,6 @@
 			if (sendAnalytics && !build.dev) {
 				const systemInfo: SystemInfo = await invoke("system_info")
 
-				if (systemInfo.osName !== "Windows") {
-					posthog.featureFlags.overrideFeatureFlags({ flags: { raider: "free" } })
-				}
-
 				posthog.capture("hardware_info", {
 					distinct_id: $settings.userId,
 					remote_connections: $settings.remoteConnections,
@@ -212,6 +208,15 @@
 		// Navigate to the home page on load (webview bug)
 		const authenticate = async () => {
 			const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+			const systemInfo: SystemInfo = await invoke("system_info")
+
+			if (systemInfo.osName !== "Windows") {
+				$state.plan = "unix"
+				$state.showMenu = true
+				router.goto("/home")
+				loading = false
+				return
+			}
 
 			if (!userError && userData !== null) {
 				// User logged in

@@ -11,7 +11,7 @@
 						<h2>Cores</h2>
 					</div>
 
-					{#if !$state.plan}
+					{#if $state.plan !== "personal" && $state.plan !== "unix"}
 						<h2 class="text-cores-alternative">Trial</h2>
 
 						<a

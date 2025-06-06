@@ -1,7 +1,7 @@
 <div class="radialBg flex min-h-screen flex-col items-center justify-center">
 	{#if step === "login"}
 		<div class="flex w-full">
-			<Login loginFn={login} withoutLoginFn={withoutLogin} />
+			<Login loginFn={login} />
 		</div>
 	{/if}
 
@@ -92,8 +92,8 @@
 										1 week trial
 									</h2>
 									<p class="text-base leading-tight">
-										You can use all features of Cores for 1 week. For remote connections and advanced features please activate
-										Cores.
+										You can use all features of Cores for 1 week. You can try out remote connections and advanced features during
+										the trial.
 									</p>
 								</div>
 								<div>
@@ -203,9 +203,10 @@
 <script lang="ts">
 	import { open } from "@tauri-apps/plugin-shell"
 	import { state } from "../stores/state.ts"
+	import { settings } from "../stores/settings.ts"
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
-	import { MoveRight, Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone } from "lucide-svelte"
+	import { Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone } from "lucide-svelte"
 	import { onMount } from "svelte"
 	import { start, cancel, onUrl } from "@fabianlars/tauri-plugin-oauth"
 	import { supabaseClient } from "../utils/supabase.ts"
@@ -234,6 +235,20 @@
 		}
 	})
 
+	onMount(() => {
+		const handleKeydown = (event: KeyboardEvent) => {
+			if (event.key === "Escape" && event.metaKey) {
+				$state.showMenu = true
+				router.goto("/home", true)
+			}
+		}
+		document.addEventListener("keydown", handleKeydown)
+
+		return () => {
+			document.removeEventListener("keydown", handleKeydown)
+		}
+	})
+
 	const stepPricing = () => {
 		step = "pricing"
 
@@ -254,8 +269,12 @@
 			const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 
 			posthog.capture("trial")
+			$state.plan = "trial"
 
 			if (licenseActivated < sevenDaysAgo) {
+				if (import.meta.env.PROD) {
+					$settings.remoteConnections = false
+				}
 				return alert("Your free trial expired. Please buy Cores to continue.")
 			}
 		}
@@ -265,11 +284,6 @@
 		setTimeout(() => {
 			stepTips()
 		}, 250)
-	}
-
-	const withoutLogin = () => {
-		posthog.capture("withoutLogin")
-		stepPricing()
 	}
 
 	const login = async () => {

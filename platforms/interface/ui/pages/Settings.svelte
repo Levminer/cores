@@ -190,7 +190,7 @@
 						<button
 							on:click={async () => {
 								await supabaseClient.auth.signOut()
-								location.href = "/onboarding"
+								router.goto("/onboarding")
 							}}
 							class="button"
 						>
@@ -306,14 +306,15 @@
 <script lang="ts">
 	import build from "../../../../build.json"
 	import type { User as SupabaseUser } from "@supabase/supabase-js"
-	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, Cable, Github, FileCog, User, LogOut, Palette, PcCase } from "lucide-svelte"
+	import { Minimize2, RefreshCcw, Bug, Megaphone, Info, FileCog, User, LogOut, Palette, PcCase } from "lucide-svelte"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { message, save } from "@tauri-apps/plugin-dialog"
 	import { invoke } from "@tauri-apps/api/core"
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { onMount } from "svelte"
 	import { hardwareInfo, ModularDialog, Select, settings, Toggle } from "ui"
-	import { Dialog, Tabs } from "bits-ui"
+	import { Dialog } from "bits-ui"
+	import { router } from "@baileyherbert/tinro"
 
 	$: user = null as SupabaseUser | null
 	$: loading = true

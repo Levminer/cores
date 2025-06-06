@@ -26,12 +26,8 @@
 		>
 		Continue with Google
 	</button>
-	{#if import.meta.env.VITE_CORES_MODE === "host"}
-		<button class="text-sm text-gray-200 mt-1" on:click={withoutLoginFn}>Use without login</button>
-	{/if}
 </div>
 
 <script lang="ts">
 	export let loginFn = () => {}
-	export let withoutLoginFn = () => {}
 </script>
