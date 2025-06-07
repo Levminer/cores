@@ -13,7 +13,7 @@
 					<h3 class="text-center mb-5 ">You can change the connection server in the settings.</h3>
 				</div>
 			{/if}
-			{#if $settings.connectionCodes.length === 0}
+			{#if $settings.connectionCodes.length === 0 && import.meta.env.VITE_LOGIN}
 				<a href="/login" class="button">Login</a>
 			{/if}
 			<ModularDialog title={"Add Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>

@@ -4,7 +4,8 @@
 	<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 		<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
 			<!-- account -->
-			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			{#if import.meta.env.VITE_LOGIN}
+				 <div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 				<div class="flex flex-col items-start gap-3">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -41,6 +42,7 @@
 					{/if}
 				</div>
 			</div>
+			{/if}
 
 			<!-- connection server -->
 			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
