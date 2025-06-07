@@ -16,8 +16,8 @@
 				href="/account"
 				class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
 			>
-				<User />
-				<p class="hidden md:block">Account</p>
+				<Settings />
+				<p class="hidden md:block">Settings</p>
 			</a>
 			{#if $state.state === "connected"}
 				<PowerDropdown {action} />
@@ -30,7 +30,7 @@
 <script lang="ts">
 	import { state } from "../stores/state"
 	import { onMount } from "svelte"
-	import { NotebookPen, User } from "lucide-svelte"
+	import { NotebookPen, Settings, User } from "lucide-svelte"
 	import { settings } from "ui"
 	import PowerDropdown from "./PowerDropdown.svelte"
 	import ConnectionDropdown from "./ConnectionDropdown.svelte"

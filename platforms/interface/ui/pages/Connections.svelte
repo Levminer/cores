@@ -1,6 +1,23 @@
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 	{#if import.meta.env.VITE_CORES_MODE === "host"}
 		<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
+			<!-- connection server -->
+			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Server />
+						</div>
+						<h2>Connection server</h2>
+					</div>
+					<h3>You can use the default connection server or host your own.</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3">
+					<ConnectionServer />
+				</div>
+			</div>
+
 			<!-- remote connections -->
 			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
 				<div class="flex flex-col items-start gap-3">
@@ -18,6 +35,7 @@
 				</div>
 			</div>
 
+			<!-- web dashboard -->
 			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
 				<div class="flex flex-col items-start gap-3">
 					<div class="flex items-center gap-3">
@@ -162,8 +180,8 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo, ModularDialog, settings, Toggle } from "ui"
-	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth } from "lucide-svelte"
+	import { ConnectionServer, hardwareInfo, ModularDialog, settings, Toggle } from "ui"
+	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth, Server } from "lucide-svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { Dialog } from "bits-ui"

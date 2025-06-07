@@ -9,7 +9,8 @@
 			{#if $settings.connectionCodes.length === 0}
 				<div class="text-center">
 					<h2>No remote connections</h2>
-					<h3 class="mb-5 text-center">Add a new remote connection or login to sync your connections</h3>
+					<h3 class="text-center">Add a new remote connection or login to sync your connections.</h3>
+					<h3 class="text-center mb-5 ">You can change the connection server in the settings.</h3>
 				</div>
 			{/if}
 			{#if $settings.connectionCodes.length === 0}

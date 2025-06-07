@@ -11,7 +11,6 @@
 	import AppHeader from "../../components/AppHeader.svelte"
 	import { hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 	import Navigation from "../../components/Navigation.svelte"
-	import { PUBLIC_CONNECTION_URL } from "$env/static/public"
 
 	let client: EzRTCClient | undefined
 
@@ -68,7 +67,7 @@
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
-			client = new EzRTCClient(`wss://${PUBLIC_CONNECTION_URL}/one-to-many`, $settings.connectionCode, iceServers)
+			client = new EzRTCClient(`wss://${$settings.connectionURL}/one-to-many`, $settings.connectionCode, iceServers)
 		}
 
 		// 60s date comparison

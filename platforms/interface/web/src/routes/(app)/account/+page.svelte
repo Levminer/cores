@@ -12,20 +12,50 @@
 						</div>
 						<h2>Account</h2>
 					</div>
-					<h3>Email: {user?.email}</h3>
+					<h3>Email: {user?.email ?? "Not logged in"}</h3>
 				</div>
 
 				<div class="flex flex-col items-start gap-3 sm:my-5">
-					<button
-						on:click={async () => {
-							await supabaseClient.auth.signOut()
-							goto("/home")
-						}}
-						class="button"
-					>
-						<LogOut />
-						Log out
-					</button>
+					{#if user?.email}
+						<button
+							on:click={async () => {
+								await supabaseClient.auth.signOut()
+								goto("/home")
+							}}
+							class="button"
+						>
+							<LogOut />
+							Log out
+						</button>
+					{:else}
+						<button
+							on:click={async () => {
+								await supabaseClient.auth.signOut()
+								goto("/login")
+							}}
+							class="button"
+						>
+							<User />
+							Log in
+						</button>
+					{/if}
+				</div>
+			</div>
+
+			<!-- connection server -->
+			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Server />
+						</div>
+						<h2>Connection server</h2>
+					</div>
+					<h3>You can use the default connection server or host your own.</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3">
+					<ConnectionServer />
 				</div>
 			</div>
 
@@ -44,7 +74,9 @@
 				<div class="flex flex-col items-start gap-3 sm:my-5">
 					<button
 						on:click={() => {
-							alert(`Cores: ${version} \n\nRelease date: ${date} \nBuild number: ${number}\nServer: ${PUBLIC_CONNECTION_URL} \n\nCreated by: Lőrik Levente`)
+							alert(
+								`Cores: ${version} \n\nRelease date: ${date} \nBuild number: ${number}\nServer: ${$settings.connectionURL} \n\nCreated by: Lőrik Levente`,
+							)
 						}}
 						class="button"
 					>
@@ -58,14 +90,13 @@
 {/if}
 
 <script lang="ts">
-	import { supabaseClient, Loading } from "ui"
+	import { supabaseClient, Loading, ConnectionServer, settings } from "ui"
 	import { onMount } from "svelte"
 	import { goto } from "$app/navigation"
-	import { LogOut, User } from "lucide-svelte"
+	import { LogOut, Server, User } from "lucide-svelte"
 	import { Info, Megaphone, Github } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import type { User as UserType } from "@supabase/supabase-js"
-	import { PUBLIC_CONNECTION_URL } from "$env/static/public"
 
 	$: loading = true
 	$: user = null as UserType | null
@@ -79,7 +110,7 @@
 			user = userData.user
 			loading = false
 		} else {
-			goto("/login")
+			loading = false
 		}
 	})
 </script>

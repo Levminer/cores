@@ -102,7 +102,6 @@
 	import { onMount } from "svelte"
 	import { editConnectionCode, deleteConnectionCode } from "../../../ui/utils/connection.ts"
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
-	import { PUBLIC_CONNECTION_URL } from "$env/static/public"
 
 	export let item: LibSettings["connectionCodes"][0]
 
@@ -123,7 +122,7 @@
 	}
 
 	onMount(async () => {
-		const res = await fetch(`https://${PUBLIC_CONNECTION_URL}/status/${item.code}`)
+		const res = await fetch(`https://${$settings.connectionURL}/status/${item.code}`)
 		const json = (await res.json()) as DeviceStatus
 
 		if (json.online) {
