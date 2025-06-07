@@ -9,7 +9,6 @@
 {/if}
 
 <script lang="ts">
-	import { PUBLIC_URL } from "$env/static/public"
 	import { onMount } from "svelte"
 	import { goto } from "$app/navigation"
 	import { Loading, Login, supabaseClient } from "ui"
@@ -30,7 +29,7 @@
 		const { data, error } = await supabaseClient.auth.signInWithOAuth({
 			provider: "google",
 			options: {
-				redirectTo: `${PUBLIC_URL}/login`,
+				redirectTo: `${import.meta.env.URL}/login`,
 			},
 		})
 

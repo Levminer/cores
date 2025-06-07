@@ -4,11 +4,8 @@ WORKDIR /app
 COPY package.json ./
 RUN npm i
 COPY . .
-# npm bug
-RUN rm -rf node_modules
-RUN rm package-lock.json
-RUN npm i
-RUN npm run build:web
+RUN npm i 
+RUN npm run build:docker
 
 # --- Production Stage ---
 FROM node:22-alpine

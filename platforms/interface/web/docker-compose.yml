@@ -1,7 +1,11 @@
 services:
-    web:
+    dashboard:
         build:
             context: ../../..
             dockerfile: platforms/interface/web/Dockerfile
         ports:
             - "3000:3000"
+    server:
+        image: ghcr.io/levminer/cores/server:latest
+        ports:
+            - "9001:9001"
