@@ -29,7 +29,7 @@
 		</a>
 	</div>
 
-	<div class="flex flex-col space-y-2P pb-2">
+	<div class="flex flex-col space-y-2 pb-2">
 		<a href="/connections" use:active data-active-class="selectedMenuButton" class="menuButton">
 			<MonitorSmartphone class="h-6 w-6" />
 		</a>

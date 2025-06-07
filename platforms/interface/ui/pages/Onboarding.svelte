@@ -60,51 +60,28 @@
 				</div>
 
 				<div class="flex flex-row items-stretch justify-center gap-3">
-					{#if variant === "free" || variant === undefined}
-						<div class="flex w-1/2 flex-wrap justify-center text-lg">
-							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
-								<div>
-									<h2
-										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
-									>
-										Continue for free
-									</h2>
-									<p class="text-base leading-tight">
-										You can use the basic features of Cores for free. For remote connections and advanced features please activate
-										Cores.
-									</p>
-								</div>
-								<div>
-									<button on:click={free} class="smallButton mt-3 w-full">
-										<CircleCheck />
-										Continue
-									</button>
-								</div>
+					<div class="flex w-1/2 flex-wrap justify-center text-lg">
+						<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
+							<div>
+								<h2
+									class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
+								>
+									1 week trial
+								</h2>
+								<p class="text-base leading-tight">
+									You can use all features of Cores for 1 week. You can try out remote connections and advanced features during the
+									trial.
+								</p>
+							</div>
+							<div>
+								<button on:click={trial} class="smallButton mt-3 w-full">
+									<CircleCheck />
+									Continue
+								</button>
 							</div>
 						</div>
-					{:else}
-						<div class="flex w-1/2 flex-wrap justify-center text-lg">
-							<div class="mx-auto flex w-full flex-col justify-between rounded-xl border-2 border-purple-400 p-5 text-left">
-								<div>
-									<h2
-										class="mb-1 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-left text-3xl font-extrabold text-transparent"
-									>
-										1 week trial
-									</h2>
-									<p class="text-base leading-tight">
-										You can use all features of Cores for 1 week. You can try out remote connections and advanced features during
-										the trial.
-									</p>
-								</div>
-								<div>
-									<button on:click={free} class="smallButton mt-3 w-full">
-										<CircleCheck />
-										Continue
-									</button>
-								</div>
-							</div>
-						</div>
-					{/if}
+					</div>
+
 					<div class="flex w-1/2 flex-wrap justify-center text-lg">
 						<div class="mx-auto flex w-full flex-col justify-between space-y-5 rounded-xl border-2 border-purple-400 p-5 text-left">
 							<div>
@@ -262,24 +239,20 @@
 		posthog.capture("tips")
 	}
 
-	const free = () => {
-		if (variant === "trial") {
-			// check if date is more than a week ago
-			const licenseActivated = user?.created_at ? new Date(user.created_at) : new Date()
-			const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+	const trial = () => {
+		// check if date is more than a week ago
+		const licenseActivated = user?.created_at ? new Date(user.created_at) : new Date()
+		const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 
-			posthog.capture("trial")
-			$state.plan = "trial"
+		posthog.capture("trial")
+		$state.plan = "trial"
 
-			if (licenseActivated < sevenDaysAgo) {
-				if (import.meta.env.PROD) {
-					$settings.remoteConnections = false
-				}
-				return alert("Your free trial expired. Please buy Cores to continue.")
+		if (licenseActivated < sevenDaysAgo) {
+			if (import.meta.env.PROD) {
+				$settings.remoteConnections = false
 			}
+			return alert("Your free trial expired. Please buy Cores to continue.")
 		}
-
-		posthog.capture("free")
 
 		setTimeout(() => {
 			stepTips()
