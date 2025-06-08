@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite dev --port 3001",
 		"build": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite build",
-		"build:docker": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3000 vite build",
+		"build:docker": "VITE_CORES_MODE=client VITE_URL=http://localhost:3000 vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
 	},
