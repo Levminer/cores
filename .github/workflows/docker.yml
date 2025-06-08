@@ -20,9 +20,9 @@ jobs:
             - name: Build and push Docker image
               run: |
                   docker buildx build \
-                    --platform=linux/amd64,linux/arm64 \
-                    -t ghcr.io/levminer/cores/dashboard:latest \
-                    --push \
-                    --sbom=false \
-                    --provenance=false \
-                    platforms/interface/web
+                  --platform=linux/amd64,linux/arm64 \
+                  -t ghcr.io/levminer/cores/dashboard:latest \
+                  --push \
+                  --sbom=false \
+                  --provenance=false \
+                  -f platforms/interface/web/Dockerfile \
