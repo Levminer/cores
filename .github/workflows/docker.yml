@@ -25,4 +25,4 @@ jobs:
                     --push \
                     --sbom=false \
                     --provenance=false \
-                    platforms/interface/web/Dockerfile
+                    platforms/interface/web
