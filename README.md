@@ -29,15 +29,12 @@
 
 ## Project structure and motivation
 
-- Desktop (Tauri)
-- Daemon on Linux and macOS (Rust)
-- Background service on Windows (C#)
-- Web dashboard (Svelte)
-- Remote connection server (Rust)
+- Cores is a background service that runs in the background and monitors your computer's hardware components. On Windows it's built on top of [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor), it provides additional features like GPU usage and drive health monitoring, it's written in C# and runs as a Windows service. On Linux it's written in Rust and runs as a daemon in the background or when you launch the desktop app. The background service/daemon provides an option to connect to your computer remotely with a P2P connection powered by WebRTC for monitoring. It also provides a REST API and a WebSocket server if you want to use the data. The UI is built with Svelte and it's available on the desktop as a Tauri desktop app or you can access the [dashboard](https://www.coresmonitor.com/home) in a web browser and you can remotely connect to your computer if you enabled remote connections.
 
-- Cores is a background service that runs in the background and monitors your computer's hardware components. It's built on top of [Libre Hardware Monitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor). It provides additional features like GPU usage and drive health monitoring. On Windows it's written in C# and runs as a Windows service. It provides an option to connect to your computer remotely with a P2P connection for monitoring. It also provides a REST API and a WebSocket server if you want to use the data.
-
-- The UI is built with Svelte and it's available on the desktop as a Tauri desktop app. You can access it on the [website](https://www.coresmonitor.com/home) and you can remotely connect to your computer if you enabled remote connections and copied your connection code.
+1. Desktop (Tauri)
+1. Daemon on Linux and macOS (Rust), Background service on Windows (C#)
+1. Web dashboard (Svelte)
+1. Remote connection server (Rust)
 
 ## Self-hosting
 
@@ -55,7 +52,10 @@ services:
             - "9001:9001"
 ```
 
-You have to change the connection server URL in the to point to your server URL.
+You have to change the connection server URL to point to your server URL.
+
+1. On desktop: Remote connection > Connection server > Change > Restart Cores
+1. Linux/macOS daemon: `$HOME/.config/Cores/settings.json` > connectionURL > Restart the daemon
 
 ## License
 
