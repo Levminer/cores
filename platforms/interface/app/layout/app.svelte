@@ -207,37 +207,56 @@
 
 		// Navigate to the home page on load (webview bug)
 		const authenticate = async () => {
-			const { data: userData, error: userError } = await supabaseClient.auth.getUser()
-			const systemInfo: SystemInfo = await invoke("system_info")
-
-			if (systemInfo.osName !== "Windows") {
-				$state.plan = "unix"
-				$state.showMenu = true
-				router.goto("/home")
-				loading = false
-				return
-			}
-
-			if (!userError && userData !== null) {
-				// User logged in
-				const { data, error } = await supabaseClient.from("user").select("*").single()
-
-				if (data?.plan === "personal" || data?.plan === "business") {
-					// User is on a paid plan
+			try {
+				// Unix check
+				const systemInfo: SystemInfo = await invoke("system_info")
+				if (systemInfo.osName !== "Windows") {
 					$state.showMenu = true
-					$state.plan = data.plan
+					$state.plan = "unix"
 					router.goto("/home")
+					loading = false
+					return
+				}
+
+				// Check supabase health
+				const res = await fetch(
+					"https://ailnlslhpgedtlbxfkcz.supabase.co/auth/v1/health?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpbG5sc2xocGdlZHRsYnhma2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUzMzQ2NjMsImV4cCI6MjA1MDkxMDY2M30.5P1xGPLsk-60AA-YG1aGHA53PQ_Lo8x_Gr_MzO38liY",
+				)
+
+				if (!res.ok) {
+					throw new Error("Failed to check Supabase health")
+				}
+
+				// Login
+				const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+				if (!userError && userData !== null) {
+					// User logged in
+					const { data, error } = await supabaseClient.from("user").select("*").single()
+
+					if (data?.plan === "personal" || data?.plan === "business") {
+						// User is on a paid plan
+						$state.showMenu = true
+						$state.plan = data.plan
+						router.goto("/home")
+					} else {
+						// User is on a free plan
+						router.goto("/onboarding")
+					}
 				} else {
-					// User is on a free plan
+					// User not logged in
+					$state.showMenu = false
 					router.goto("/onboarding")
 				}
-			} else {
-				// User not logged in
-				$state.showMenu = false
-				router.goto("/onboarding")
-			}
 
-			loading = false
+				loading = false
+			} catch (error) {
+				alert(`Failed to connect to the server, continuing in offline mode. Please check your internet connection and try again.\n${error}`)
+				$state.showMenu = true
+				// $state.plan
+				router.goto("/home")
+				loading = false
+			}
 		}
 
 		authenticate()
