@@ -29,7 +29,7 @@
 		const { data, error } = await supabaseClient.auth.signInWithOAuth({
 			provider: "google",
 			options: {
-				redirectTo: `${import.meta.env.URL}/login`,
+				redirectTo: `${import.meta.env.VITE_URL}/login`,
 			},
 		})
 
