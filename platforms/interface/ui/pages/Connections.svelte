@@ -1,23 +1,6 @@
 <div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 	{#if import.meta.env.VITE_CORES_MODE === "host"}
 		<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
-			<!-- connection server -->
-			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
-				<div class="flex flex-col items-start gap-3">
-					<div class="flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Server />
-						</div>
-						<h2>Connection server</h2>
-					</div>
-					<h3>You can use the default connection server or host your own.</h3>
-				</div>
-
-				<div class="flex flex-col items-start gap-3">
-					<ConnectionServer />
-				</div>
-			</div>
-
 			<!-- remote connections -->
 			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
 				<div class="flex flex-col items-start gap-3">
@@ -86,6 +69,23 @@
 					</div>
 				</div>
 			{/if}
+
+			<!-- connection server -->
+			<div class="transparent-800 flex w-full flex-row items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Server />
+						</div>
+						<h2>Connection server</h2>
+					</div>
+					<h3>You can use the default connection server or host your own.</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3">
+					<ConnectionServer />
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>
@@ -190,18 +190,28 @@
 
 	const remoteConnections = async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+		const { data: connectionData, error: connectionError } = await supabaseClient.from("remote_connection").select("*")
 
-		if ($settings.remoteConnections) {
-			const { data, error } = await supabaseClient.from("remote_connection").insert({
-				code: $settings.connectionCode,
-				name: $hardwareInfo.system.os.hostname ?? "Cores Desktop",
-				user_id: userData?.user?.id,
-			})
-		} else {
-			const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", $settings.connectionCode)
+		if (connectionData && connectionData.length > 5) {
+			$settings.remoteConnections = false
+			return alert(
+				"You can only have a maximum of 5 remote connections. Please remove one before adding a new one. \n\nIf you need more connections please reach out to support@coresmonitor.com for more information.",
+			)
 		}
 
-		invoke("restart_service")
+		if (import.meta.env.PROD) {
+			if ($settings.remoteConnections) {
+				const { data, error } = await supabaseClient.from("remote_connection").insert({
+					code: $settings.connectionCode,
+					name: $hardwareInfo.system.os.hostname ?? "Cores Desktop",
+					user_id: userData?.user?.id,
+				})
+			} else {
+				const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", $settings.connectionCode)
+			}
+
+			invoke("restart_service")
+		}
 	}
 
 	const copyConnectionCode = () => {

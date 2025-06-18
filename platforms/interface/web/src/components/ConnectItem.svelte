@@ -29,13 +29,13 @@
 					</Dialog.Close>
 				</slot>
 				<slot slot="deleteButton">
-					<button
+					<Dialog.Close
 						class="smallButton border-red-600 bg-red-600 text-white hover:text-red-600"
 						on:click={() => deleteConnectionCode(item.code)}
 					>
 						<Trash2 />
 						Delete
-					</button>
+					</Dialog.Close>
 				</slot>
 				<div class="flex flex-col flex-wrap gap-3">
 					<div>

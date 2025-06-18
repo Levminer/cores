@@ -10,7 +10,7 @@
 				<div class="text-center">
 					<h2>No remote connections</h2>
 					<h3 class="text-center">Add a new remote connection or login to sync your connections.</h3>
-					<h3 class="text-center mb-5 ">You can change the connection server in the settings.</h3>
+					<h3 class="mb-5 text-center">You can change the connection server in the settings.</h3>
 				</div>
 			{/if}
 			{#if $settings.connectionCodes.length === 0 && import.meta.env.VITE_LOGIN}
@@ -21,7 +21,7 @@
 					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
 				</slot>
 				<slot slot="confirmButton">
-					<Dialog.Close on:click={() => addConnectionCode()} class="smallButton">
+					<Dialog.Close on:click={() => addCode()} class="smallButton">
 						<Plus class="h-5 w-5" />
 						Add
 					</Dialog.Close>
@@ -54,6 +54,16 @@
 	$: user = null as User | null
 	$: loading = true
 
+	const addCode = () => {
+		if (import.meta.env.VITE_LOGIN && $settings.connectionCodes.length >= 5) {
+			return alert(
+				"You can only have a maximum of 5 remote connections. Please remove one before adding a new one. \n\nIf you need more connections please reach out to support@coresmonitor.com for more information.",
+			)
+		}
+
+		addConnectionCode()
+	}
+
 	onMount(async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 		const settings = getSettings()
@@ -62,7 +72,7 @@
 
 		if (!userError && userData !== null) {
 			user = userData.user
-			const { data, error } = await supabaseClient.from("remote_connection").select("*")
+			const { data, error } = await supabaseClient.from("remote_connection").select("*").order("created_at", { ascending: true })
 
 			// check if connection is already added
 			if (data && data.length > 0) {
