@@ -175,6 +175,23 @@
 			</div>
 		</div>
 	{/if}
+
+	<ModularDialog open={redirectDialog} title={"Login"} description={"Opening browser for login..."}>
+		<slot slot="confirmButton">
+			<Dialog.Close
+				on:click={() => {
+					redirectDialog = false
+				}}
+				class="smallButton"
+			>
+				<CircleX class="h-5 w-5" />
+				Cancel
+			</Dialog.Close>
+		</slot>
+		<div class="flex flex-col flex-wrap gap-3">
+			<p class="text-sm text-gray-200">Browser didn't open? <button class="underline" on:click={() => open(url)}>Open</button></p>
+		</div>
+	</ModularDialog>
 </div>
 
 <script lang="ts">
@@ -183,7 +200,7 @@
 	import { settings } from "../stores/settings.ts"
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
-	import { Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone } from "lucide-svelte"
+	import { Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone, CircleX } from "lucide-svelte"
 	import { onMount } from "svelte"
 	import { start, cancel, onUrl } from "@fabianlars/tauri-plugin-oauth"
 	import { supabaseClient } from "../utils/supabase.ts"
@@ -195,6 +212,8 @@
 	$: key = ""
 	$: variant = "free" as "free" | "trial"
 	$: user = null as User | null
+	$: redirectDialog = false
+	$: url = ""
 
 	onMount(async () => {
 		const ff = posthog.getFeatureFlag("raider") as "free" | "trial"
@@ -295,6 +314,7 @@
 					router.goto("/home")
 				}
 
+				redirectDialog = false
 				cancel(port)
 
 				stepPricing()
@@ -315,13 +335,17 @@
 			}
 
 			if (data) {
-				console.log(data)
+				redirectDialog = true
 				open(data.url as string)
+				url = data.url as string
 			}
 		} catch (error) {
 			alert(
-				`Failed to login, please restart the app and try again or send an email to support@coresmonitor.com if you need help.\nError: ${error}`,
+				`Failed to login. A browser window should open where you can login, please try again or restart the app. Need help? Send an email to support@coresmonitor.com.\nError: ${error}`,
 			)
+
+			cancel(5380)
+			cancel(5385)
 		}
 	}
 

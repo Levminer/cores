@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"@supabase/supabase-js": "^2.47.10",
+		"@supabase/supabase-js": "^2.50.0",
 		"bits-ui": "^0.21.8",
 		"chart.js": "^4.4.1",
 		"chartjs-plugin-stacked100": "^1.5.2",
