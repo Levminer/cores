@@ -189,7 +189,7 @@
 			</Dialog.Close>
 		</slot>
 		<div class="flex flex-col flex-wrap gap-3">
-			<p class="text-sm text-gray-200">Browser didn't open? <button class="underline" on:click={() => open(url)}>Open</button></p>
+			<p class="text-sm text-gray-200">Browser didn't open? <button class="underline" on:click={() => open(url)}>Open</button> or <button class="underline" on:click={() => navigator.clipboard.writeText(url)}>copy link</button></p>
 		</div>
 	</ModularDialog>
 </div>
@@ -283,7 +283,6 @@
 			// Start server
 			const port = await start({
 				response: `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:Arial,sans-serif;background:#1a1a1a;margin:0;position:fixed;top:0;left:0;right:0;bottom:0"><h2 style="color:white;margin:0">Authentication Completed</h2><p style="color:#999">You can now close this page and return to the app.</p></div><style>body{margin:0;padding:0;background:#1a1a1a}</style>`,
-				ports: [5380, 5385],
 			})
 
 			// Listen for OAuth result
@@ -343,9 +342,6 @@
 			alert(
 				`Failed to login. A browser window should open where you can login, please try again or restart the app. Need help? Send an email to support@coresmonitor.com.\nError: ${error}`,
 			)
-
-			cancel(5380)
-			cancel(5385)
 		}
 	}
 
