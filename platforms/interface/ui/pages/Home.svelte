@@ -233,7 +233,7 @@
 	</div>
 
 	<!-- Row 2 -->
-	<div class="mx-10 flex justify-evenly gap-5 pt-5 sm:mx-3 sm:flex-wrap">
+	<div class="mx-10 flex justify-evenly gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
 		<!-- CPU info -->
 		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
@@ -321,6 +321,38 @@
 					</div>
 				</div>
 			{/if}
+
+			<div class="transparent-800 rounded-xl p-8 sm:p-4">
+				<div class="mb-5 flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<HardDrive />
+					</div>
+					<h2>Drives</h2>
+				</div>
+				{#each $hardwareInfo.system.storage.disks as { name, freeSpace, totalSpace, health }}
+					<div class="mt-5 select-text">
+						<h3>Name: {name}</h3>
+						<h3>Health: {health}%</h3>
+						<h3>Available space: {freeSpace}/{totalSpace} GB</h3>
+					</div>
+				{/each}
+			</div>
+
+			<div class="transparent-800 rounded-xl p-8 sm:p-4">
+				<div class="mb-5 flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<Thermometer />
+					</div>
+					<h2>Drive Temperatures</h2>
+				</div>
+				<div>
+					<MeterChart
+						readings={$hardwareInfo.system.storage.disks.map((disk) => disk.temperature)}
+						categories={$hardwareInfo.system.storage.disks.map((temp, i) => `${temp.name} (${temp.temperature.value} °C)`)}
+						type={{ name: "temperature", unit: "°C" }}
+					/>
+				</div>
+			</div>
 		</div>
 
 		<!-- RAM info -->
@@ -365,6 +397,79 @@
 					</div>
 				{/if}
 			</div>
+
+			<div class="transparent-800 rounded-xl p-8 sm:p-4">
+				<div class="mb-5 flex items-center gap-3">
+					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+						<PcDisplay width={24} height={24} />
+					</div>
+					<h2>System</h2>
+				</div>
+				<div class="select-text">
+					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
+					<h3>RAM: {Math.round(($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0))} GB</h3>
+					<h3>GPU: {$hardwareInfo.gpu.cards?.[0]?.name ?? "N/A"}</h3>
+					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
+					<h3>OS: {$hardwareInfo.system.os.name}</h3>
+				</div>
+			</div>
+
+			{#if $hardwareInfo.system.battery?.capacity.length ?? 0 > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Battery />
+						</div>
+						<h2>Battery</h2>
+					</div>
+
+					<div class="mt-5 select-text">
+						<h3>Charge level: {Math.round($hardwareInfo.system.battery?.level[1].value ?? 0)}%</h3>
+						<h3>Health: {Math.round(100 - ($hardwareInfo.system.battery?.level[0].value ?? 0))}%</h3>
+						<h3>Cycle count: {$hardwareInfo.system.battery?.cycleCount}</h3>
+						<h3>
+							Capacity: {Math.round(($hardwareInfo.system.battery?.capacity[2].value ?? 0) / 1000)}/{Math.round(
+								($hardwareInfo.system.battery?.capacity[1].value ?? 0) / 1000,
+							)} Wh
+						</h3>
+					</div>
+				</div>
+			{/if}
+
+			{#if $hardwareInfo.system.monitor?.monitors.length ?? 0 > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Monitor />
+						</div>
+						<h2>Monitors</h2>
+					</div>
+
+					{#each $hardwareInfo.system.monitor?.monitors ?? [] as { name, refreshRate, resolution }}
+						<div class="mt-5 select-text">
+							<h3>Name: {name}</h3>
+							<h3>Resolution: {resolution}</h3>
+							<h3>Refresh rate: {refreshRate} Hz</h3>
+						</div>
+					{/each}
+				</div>
+			{/if}
+
+			{#if $hardwareInfo.system.bios.vendor !== "N/A"}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<CircuitBoard />
+						</div>
+						<h2>BIOS</h2>
+					</div>
+					<div class="mt-5 select-text">
+						<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
+						<h3>Version: {$hardwareInfo.system.bios.version}</h3>
+						<h3>Date: {$hardwareInfo.system.bios.date}</h3>
+					</div>
+				</div>
+			{/if}
 		</div>
 
 		<!-- GPU info -->
@@ -477,124 +582,7 @@
 					</div>
 				</div>
 			{/if}
-		</div>
-	</div>
 
-	<!-- Row 3 -->
-	<div class="mx-10 flex justify-evenly gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
-		<!-- Drives -->
-		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
-			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<HardDrive />
-					</div>
-					<h2>Drives</h2>
-				</div>
-				{#each $hardwareInfo.system.storage.disks as { name, freeSpace, totalSpace, health }}
-					<div class="mt-5 select-text">
-						<h3>Name: {name}</h3>
-						<h3>Health: {health}%</h3>
-						<h3>Available space: {freeSpace}/{totalSpace} GB</h3>
-					</div>
-				{/each}
-			</div>
-
-			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<Thermometer />
-					</div>
-					<h2>Drive Temperatures</h2>
-				</div>
-				<div>
-					<MeterChart
-						readings={$hardwareInfo.system.storage.disks.map((disk) => disk.temperature)}
-						categories={$hardwareInfo.system.storage.disks.map((temp, i) => `${temp.name} (${temp.temperature.value} °C)`)}
-						type={{ name: "temperature", unit: "°C" }}
-					/>
-				</div>
-			</div>
-		</div>
-
-		<!-- System -->
-		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
-			<div class="transparent-800 rounded-xl p-8 sm:p-4">
-				<div class="mb-5 flex items-center gap-3">
-					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-						<PcDisplay width={24} height={24} />
-					</div>
-					<h2>System</h2>
-				</div>
-				<div class="select-text">
-					<h3>CPU: {$hardwareInfo.cpu.name}</h3>
-					<h3>RAM: {Math.round(($hardwareInfo.ram.load[0]?.value ?? 0) + ($hardwareInfo.ram.load[1]?.value ?? 0))} GB</h3>
-					<h3>GPU: {$hardwareInfo.gpu.cards?.[0]?.name ?? "N/A"}</h3>
-					<h3>MB: {$hardwareInfo.system.motherboard.name}</h3>
-					<h3>OS: {$hardwareInfo.system.os.name}</h3>
-				</div>
-			</div>
-
-			{#if $hardwareInfo.system.battery?.capacity.length ?? 0 > 0}
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Battery />
-						</div>
-						<h2>Battery</h2>
-					</div>
-
-					<div class="mt-5 select-text">
-						<h3>Charge level: {Math.round($hardwareInfo.system.battery?.level[1].value ?? 0)}%</h3>
-						<h3>Health: {Math.round(100 - ($hardwareInfo.system.battery?.level[0].value ?? 0))}%</h3>
-						<h3>Cycle count: {$hardwareInfo.system.battery?.cycleCount}</h3>
-						<h3>
-							Capacity: {Math.round(($hardwareInfo.system.battery?.capacity[2].value ?? 0) / 1000)}/{Math.round(
-								($hardwareInfo.system.battery?.capacity[1].value ?? 0) / 1000,
-							)} Wh
-						</h3>
-					</div>
-				</div>
-			{/if}
-
-			{#if $hardwareInfo.system.monitor?.monitors.length ?? 0 > 0}
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Monitor />
-						</div>
-						<h2>Monitors</h2>
-					</div>
-
-					{#each $hardwareInfo.system.monitor?.monitors ?? [] as { name, refreshRate, resolution }}
-						<div class="mt-5 select-text">
-							<h3>Name: {name}</h3>
-							<h3>Resolution: {resolution}</h3>
-							<h3>Refresh rate: {refreshRate} Hz</h3>
-						</div>
-					{/each}
-				</div>
-			{/if}
-
-			{#if $hardwareInfo.system.bios.vendor !== "N/A"}
-				<div class="transparent-800 rounded-xl p-8 sm:p-4">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<CircuitBoard />
-						</div>
-						<h2>BIOS</h2>
-					</div>
-					<div class="mt-5 select-text">
-						<h3>Vendor: {$hardwareInfo.system.bios.vendor}</h3>
-						<h3>Version: {$hardwareInfo.system.bios.version}</h3>
-						<h3>Date: {$hardwareInfo.system.bios.date}</h3>
-					</div>
-				</div>
-			{/if}
-		</div>
-
-		<!-- Network -->
-		<div class="flex w-1/3 flex-col gap-5 text-left sm:w-full">
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">

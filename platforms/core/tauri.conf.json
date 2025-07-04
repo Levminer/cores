@@ -1,4 +1,5 @@
 {
+	"$schema": "https://schema.tauri.app/config/2",
 	"productName": "Cores",
 	"version": "../../package.json",
 	"identifier": "com.levminer.cores",
