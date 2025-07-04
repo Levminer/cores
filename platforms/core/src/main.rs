@@ -4,9 +4,8 @@ use std::sync::Mutex;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder},
     tray::{MouseButton, MouseButtonState, TrayIconEvent},
-    webview_version, Manager,
+    Manager,
 };
-use tauri_plugin_dialog::{DialogExt, MessageDialogButtons, MessageDialogKind};
 use tauri_plugin_shell::{
     process::{CommandChild, CommandEvent},
     ShellExt,
@@ -54,22 +53,6 @@ fn main() {
             utils::system_info
         ])
         .setup(|app| {
-            let webview_version = webview_version();
-
-            if webview_version.is_err() {
-                app.dialog()
-                    .message(
-                        "Please install Microsoft Edge WebView2 Runtime! \
-                        (https://developer.microsoft.com/en-gb/microsoft-edge/webview2)",
-                    )
-                    .title("Failed to get webview version")
-                    .kind(MessageDialogKind::Error)
-                    .buttons(MessageDialogButtons::OkCustom("Exit".to_string()))
-                    .blocking_show();
-
-                app.app_handle().exit(0);
-            }
-
             app.manage(Mutex::new(GlobalState { child: None }));
 
             let toggle_window_item =
