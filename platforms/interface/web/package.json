@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite dev --port 3001",
 		"build": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite build",
-		"build:web":"cross-env VITE_CORES_MODE=client VITE_URL=https://www.coresmonitor.com VITE_LOGIN=true vite build",
+		"build:web": "cross-env VITE_CORES_MODE=client VITE_URL=https://www.coresmonitor.com VITE_LOGIN=true vite build",
 		"build:docker": "VITE_CORES_MODE=client VITE_URL=http://localhost:3000 vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
@@ -13,7 +13,7 @@
 	"type": "module",
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.8",
-		"@sveltejs/kit": "^2.20.2",
+		"@sveltejs/kit": "^2.22.2",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/forms": "^0.5.7",
 		"autoprefixer": "^10.4.16",
@@ -22,7 +22,7 @@
 		"svelte": "^4.2.9",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.4.14",
-		"tslib": "^2.4.1",
+		"tslib": "^2.8.1",
 		"typescript": "^5.6.3",
 		"ui": "*",
 		"vite": "^5.4.10"
