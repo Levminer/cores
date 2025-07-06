@@ -1,13 +1,12 @@
 <div class="meterChart{id}">
-	<Bar {data} {options} />
+	<canvas bind:this={canvasElement}></canvas>
 </div>
 
 <script lang="ts">
 	import { Chart, registerables } from "chart.js"
 	import ChartjsPluginStacked100 from "chartjs-plugin-stacked100"
 	import type { ChartOptions } from "chart.js"
-	import { Bar } from "svelte-chartjs"
-	import { afterUpdate, onMount } from "svelte"
+	import { onMount, afterUpdate } from "svelte"
 	import { colors } from "../utils/colors.ts"
 
 	export let readings: Sensor[]
@@ -15,6 +14,8 @@
 	export let type: { name: string; unit: string }
 	const id = crypto.randomUUID()
 
+	let canvasElement: HTMLCanvasElement
+	let chart: Chart<"bar"> | null = null
 	let lastCategories: string[] = categories
 
 	Chart.register(...registerables, ChartjsPluginStacked100)
@@ -28,6 +29,29 @@
 			{ label: `Current ${type.name}`, data: temps[1].data, backgroundColor: colors.current },
 			{ label: `Max ${type.name}`, data: temps[2].data, backgroundColor: colors.max },
 		],
+	}
+
+	// Initialize chart when component mounts
+	onMount(() => {
+		if (canvasElement) {
+			chart = new Chart(canvasElement, {
+				type: "bar",
+				data: data,
+				options: options,
+			})
+		}
+
+		return () => {
+			if (chart) {
+				chart.destroy()
+			}
+		}
+	})
+
+	// Update chart when data changes
+	$: if (chart && data) {
+		chart.data = data
+		chart.update()
 	}
 
 	// Resize chart to fit all data

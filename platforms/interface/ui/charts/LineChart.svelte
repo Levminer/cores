@@ -1,9 +1,9 @@
-<Line {data} {options} id={props.id} />
+<canvas bind:this={canvas} id={props.id}></canvas>
 
 <script lang="ts">
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
-	import { Line } from "svelte-chartjs"
+	import { onMount } from "svelte"
 	import { colors } from "../utils/colors.ts"
 
 	interface Props {
@@ -28,7 +28,33 @@
 		time: "",
 	}
 
+	let canvas: HTMLCanvasElement
+	let chart: Chart<"line">
+
 	Chart.register(...registerables)
+
+	// Initialize chart when component mounts
+	onMount(() => {
+		if (canvas) {
+			chart = new Chart(canvas, {
+				type: "line",
+				data: data,
+				options: options,
+			})
+		}
+
+		return () => {
+			if (chart) {
+				chart.destroy()
+			}
+		}
+	})
+
+	// Update chart when data changes
+	$: if (chart && data) {
+		chart.data = data
+		chart.update()
+	}
 
 	// @ts-ignore
 	$: labels = props.statistics[0].data.map((_, i) => `${props.statistics[0].data.length - 1 - i}${props.time} ago`)

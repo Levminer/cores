@@ -1,14 +1,41 @@
-<Doughnut {data} {options} plugins={pluginTest} />
+<canvas bind:this={canvasElement}></canvas>
 
 <script lang="ts">
+	import { onMount } from "svelte"
 	import { Chart, registerables } from "chart.js"
 	import type { ChartOptions } from "chart.js"
-	import { Doughnut } from "svelte-chartjs"
 	import { colors } from "../utils/colors.ts"
 
 	export let load
 
+	let canvasElement: HTMLCanvasElement
+	let chart: Chart<"doughnut">
+
 	Chart.register(...registerables)
+
+	// Initialize chart when component mounts
+	onMount(() => {
+		if (canvasElement) {
+			chart = new Chart(canvasElement, {
+				type: "doughnut",
+				data: data,
+				options: options,
+				plugins: pluginTest,
+			})
+		}
+
+		return () => {
+			if (chart) {
+				chart.destroy()
+			}
+		}
+	})
+
+	// Update chart when data changes
+	$: if (chart && data) {
+		chart.data = data
+		chart.update()
+	}
 
 	let options: ChartOptions<"doughnut"> = {
 		rotation: 0,
