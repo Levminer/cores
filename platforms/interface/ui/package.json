@@ -5,13 +5,12 @@
 	"type": "module",
 	"dependencies": {
 		"@supabase/supabase-js": "^2.50.0",
-		"bits-ui": "^0.21.8",
+		"bits-ui": "^0.22.0",
 		"chart.js": "^4.4.1",
-		"chartjs-plugin-stacked100": "^1.5.2",
-		"lucide-svelte": "^0.474.0",
-		"svelte": "^4.2.10",
+		"chartjs-plugin-stacked100": "^1.7.0",
+		"lucide-svelte": "^0.525.0",
+		"svelte": "^5.35.2",
 		"svelte-bootstrap-icons": "^3.1.0",
-		"svelte-chartjs": "^3.1.5",
 		"typescript": "^5.7.3",
 		"zod": "^3.24.3"
 	},

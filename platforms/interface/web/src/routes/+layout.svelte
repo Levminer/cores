@@ -1,6 +1,6 @@
 <div class="flex h-screen flex-col">
 	<div id="layout" class="scroll w-full overflow-hidden overflow-y-scroll">
-		<div id="cores" class="top" />
+		<div id="cores" class="top"></div>
 
 		<div>
 			<slot />

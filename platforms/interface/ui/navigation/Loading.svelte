@@ -1,8 +1,8 @@
 <div class="mx-auto flex h-screen w-full flex-col items-center justify-center">
 	<div class="flex flex-row flex-wrap items-baseline justify-center gap-4">
-		<div class="h-10 w-10 animate-bounce rounded-full bg-[#35cbfd] [animation-delay:-0.3s]" />
-		<div class="h-10 w-10 animate-bounce rounded-full bg-[#ff5380] [animation-delay:-0.15s]" />
-		<div class="h-10 w-10 animate-bounce rounded-full bg-[#9d0cfd]" />
+		<div class="h-10 w-10 animate-bounce rounded-full bg-[#35cbfd] [animation-delay:-0.3s]"></div>
+		<div class="h-10 w-10 animate-bounce rounded-full bg-[#ff5380] [animation-delay:-0.15s]"></div>
+		<div class="h-10 w-10 animate-bounce rounded-full bg-[#9d0cfd]"></div>
 	</div>
 
 	<h1>Loading...</h1>

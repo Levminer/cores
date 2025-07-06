@@ -25,7 +25,8 @@
 		"@sentry/cli": "^2.46.0",
 		"@tauri-apps/cli": "^2.6.2",
 		"cross-env": "^7.0.3",
-		"prettier": "^3.5.3"
+		"prettier": "^3.5.3",
+		"svelte": "^5.35.2"
 	},
 	"dependencies": {
 		"prettier-plugin-svelte": "^3.4.0",

@@ -2,7 +2,7 @@
 	<div
 		class="shadow-mini-inset h-full w-full flex-1 rounded-full transition-all duration-1000 ease-in-out"
 		style={`transform: translateX(-${100 - (100 * (Math.round(value) ?? 0)) / 100}%); background-color: ${$settings.colors?.min ?? "#35cbfd"};`}
-	/>
+	></div>
 </Progress.Root>
 
 <script lang="ts">

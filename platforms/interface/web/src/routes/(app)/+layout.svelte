@@ -2,7 +2,7 @@
 <Navigation />
 
 <slot />
-<div class="mb-32" />
+<div class="mb-32"></div>
 
 <script lang="ts">
 	import { EzRTCClient } from "ezrtc"

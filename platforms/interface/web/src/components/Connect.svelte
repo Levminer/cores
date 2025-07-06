@@ -51,8 +51,8 @@
 	import type { User } from "@supabase/supabase-js"
 	import { addConnectionCode } from "../../../ui/utils/connection"
 
-	$: user = null as User | null
-	$: loading = true
+	let user = $state<User | null>(null)
+	let loading = $state(true)
 
 	const addCode = () => {
 		if (import.meta.env.VITE_LOGIN && $settings.connectionCodes.length >= 5) {
@@ -77,7 +77,8 @@
 			// check if connection is already added
 			if (data && data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
-					const item = $settings.connectionCodes.filter((item) => item.code === data[i].code)
+					const settings = getSettings()
+					const item = settings.connectionCodes.filter((item) => item.code === data[i].code)
 
 					if (item.length === 0) {
 						settings.connectionCodes = [
