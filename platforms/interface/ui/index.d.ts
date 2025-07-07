@@ -27,11 +27,12 @@ import Toggle from "./components/Toggle.svelte"
 import ToggleButton from "./components/ToggleButton.svelte"
 import UpdateAlert from "./components/UpdateAlert.svelte"
 import ConnectionServer from "./components/ConnectionServer.svelte"
+import ErrorBoundary from "./components/ErrorBoundary.svelte"
 
 import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
 import { settings, getSettings, setSettings, initializeSettings } from "./stores/settings.ts"
-import { state, getState, setState } from "./stores/state.ts"
+import { state, appState, getState, setState } from "./stores/state.ts"
 
 import { generateMinutesData, generateSecondsData } from "./utils/stats.ts"
 import { supabaseClient } from "./utils/supabase.ts"
@@ -76,6 +77,7 @@ export {
 	setSettings,
 	initializeSettings,
 	state,
+	appState,
 	getState,
 	setState,
 	generateMinutesData,
@@ -85,4 +87,5 @@ export {
 	addConnectionCode,
 	deleteConnectionCode,
 	editConnectionCode,
+	ErrorBoundary,
 }

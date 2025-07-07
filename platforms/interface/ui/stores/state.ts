@@ -7,6 +7,7 @@ const defaultState: LibState = {
 }
 
 export const state = writable<LibState>(sessionStorage.state ? JSON.parse(sessionStorage.state) : defaultState)
+export const appState = state
 
 state.subscribe((data) => {
 	console.log("State changed: ", data)

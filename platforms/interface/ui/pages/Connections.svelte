@@ -149,7 +149,7 @@
 							</div>
 
 							<div class="flex flex-row flex-wrap gap-3">
-								<div class="mt-6" />
+								<div class="mt-6"></div>
 
 								<button
 									class="button mt-6"

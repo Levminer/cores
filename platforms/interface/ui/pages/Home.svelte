@@ -25,14 +25,15 @@
 						<MonitorSmartphone />
 						{#if $settings.remoteConnections}
 							Remote connections
-							<div id="status" class="relative top-0.5 size-3 rounded-full bg-green-500" />
+							<div id="status" class="relative top-0.5 size-3 rounded-full bg-green-500"></div>
 						{:else}
 							Remote connections
-							<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-500" />
+							<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-500"></div>
 						{/if}
 					</a>
 
 					<button
+						aria-label="Open Cores Discord"
 						on:click={() => {
 							open("https://link.levminer.com/crs-dc")
 						}}
