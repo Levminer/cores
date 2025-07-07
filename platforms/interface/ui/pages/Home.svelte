@@ -34,7 +34,7 @@
 
 					<button
 						aria-label="Open Cores Discord"
-						on:click={() => {
+						onclick={() => {
 							open("https://link.levminer.com/crs-dc")
 						}}
 						class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2"

@@ -1,4 +1,4 @@
-{#if $state.updateAvailable}
+{#if $appState.updateAvailable}
 	<div class="updateAlert bg-popup-blue z-10 w-full">
 		<div class="container mx-auto flex items-center justify-between px-6 py-4">
 			<div class="flex items-center justify-center gap-3">
@@ -13,7 +13,7 @@
 
 				<p class="updateText mx-1 text-lg font-bold">Downloading update... {progress}</p>
 
-				<button type="button" class="smallButton" on:click={showReleaseNotes}>
+				<button type="button" class="smallButton" onclick={showReleaseNotes}>
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path
 							stroke-linecap="round"
@@ -26,7 +26,7 @@
 				</button>
 			</div>
 
-			<button aria-label="Close update alert" class="updateClose transform duration-200 hover:text-black" on:click={hidePopup}>
+			<button aria-label="Close update alert" class="updateClose transform duration-200 hover:text-black" onclick={hidePopup}>
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 				</svg>
@@ -38,13 +38,14 @@
 <script lang="ts">
 	import { onMount } from "svelte"
 	import { check } from "@tauri-apps/plugin-updater"
-	import { state } from "../stores/state"
+	import { appState } from "../stores/state"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { relaunch } from "@tauri-apps/plugin-process"
 	import { ask } from "@tauri-apps/plugin-dialog"
 	import build from "../../../../build.json"
 
-	$: progress = ""
+	let progress = $state("");
+	
 
 	onMount(async () => {
 		if (!build.dev) {
@@ -53,7 +54,7 @@
 			console.log(update)
 
 			if (update?.available) {
-				$state.updateAvailable = true
+				$appState.updateAvailable = true
 
 				const result = await ask("A new version of Cores is available. Do you want to update?", {
 					title: "Cores update available",
