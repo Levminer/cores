@@ -41,7 +41,7 @@
 	</div>
 
 	<div class="mx-10 flex gap-5 pb-10 sm:mx-3 sm:flex-wrap">
-		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
+		<div class="flex w-full flex-col justify-start gap-5 pt-5 sm:flex-wrap">
 			<!-- storage read/write and temperature -->
 			{#each $hardwareInfo.system.storage.disks as item, i}
 				<div class="flex gap-5 sm:flex-wrap">

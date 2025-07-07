@@ -6,7 +6,7 @@
 		<h3>Continue with your Google account to use Cores for free.</h3>
 	</div>
 	<button
-		on:click={loginFn}
+		onclick={loginFn}
 		class="flex flex-row items-center justify-between gap-3 rounded-xl border-2 border-white bg-white px-3 py-2 font-medium text-black shadow-xl duration-150 ease-in hover:bg-gray-200"
 	>
 		<svg width="24" height="24"
@@ -29,5 +29,9 @@
 </div>
 
 <script lang="ts">
-	export let loginFn = () => {}
+	interface Props {
+		loginFn: () => void
+	}
+
+	let { loginFn = () => {} }: Props = $props()
 </script>

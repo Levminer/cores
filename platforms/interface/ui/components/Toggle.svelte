@@ -15,6 +15,10 @@
 <script lang="ts">
 	import { Switch, Label } from "bits-ui"
 
-	export let checked = false
-	export let onChange = () => {}
+	interface Props {
+		checked?: boolean
+		onChange?: () => void
+	}
+
+	let { checked = $bindable(false), onChange = () => {} }: Props = $props()
 </script>

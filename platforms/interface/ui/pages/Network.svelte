@@ -21,7 +21,7 @@
 				{/each}
 			</div>
 
-			<!-- network usage -->
+			<!-- data usage -->
 			<div class="transparent-800 w-3/5 rounded-xl p-8 sm:w-full sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -41,7 +41,7 @@
 	</div>
 
 	<div class="mx-10 flex gap-5 pb-10 sm:mx-3 sm:flex-wrap">
-		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
+		<div class="flex w-full flex-col justify-start gap-5 pt-5 sm:flex-wrap">
 			<!-- network usage -->
 			{#each $hardwareInfo.system.network.interfaces as item, i}
 				<div class="flex gap-5 sm:flex-wrap">

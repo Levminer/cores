@@ -38,7 +38,7 @@
 	</div>
 
 	<div class="mx-10 flex gap-5 pb-10 sm:mx-3 sm:flex-wrap">
-		<div class="flex w-full flex-col justify-start gap-10 pt-10 sm:flex-wrap">
+		<div class="flex w-full flex-col justify-start gap-5 pt-5 sm:flex-wrap">
 			<!-- fan read/write and temperature -->
 			{#each $hardwareInfo.system.superIO.fan.filter((item) => item.value !== 0) as item, i}
 				<div class="flex gap-5 sm:flex-wrap">
