@@ -14,6 +14,8 @@ const defaultState: State = {
 
 // Create store
 export const state = writable<State>(defaultState)
+export const appState = state
+
 
 state.subscribe((state) => {
 	console.log("State changed", state)

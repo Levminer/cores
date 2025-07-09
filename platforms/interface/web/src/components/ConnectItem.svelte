@@ -12,12 +12,12 @@
 		</div>
 		<div>
 			<ModularDialog title={"Edit Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
-				<slot slot="openButton">
+				{#snippet openButton()}
 					<Dialog.Trigger class="rounded-full bg-white p-3 text-black duration-200 ease-in-out hover:bg-gray-300">
 						<Pencil class="h-5 w-5" />
 					</Dialog.Trigger>
-				</slot>
-				<slot slot="confirmButton">
+				{/snippet}
+				{#snippet confirmButton()}
 					<Dialog.Close
 						on:click={() => {
 							editConnectionCode(item.code)
@@ -27,8 +27,8 @@
 						<Pencil />
 						Edit
 					</Dialog.Close>
-				</slot>
-				<slot slot="deleteButton">
+				{/snippet}
+				{#snippet deleteButton()}
 					<Dialog.Close
 						class="smallButton border-red-600 bg-red-600 text-white hover:text-red-600"
 						on:click={() => deleteConnectionCode(item.code)}
@@ -36,7 +36,7 @@
 						<Trash2 />
 						Delete
 					</Dialog.Close>
-				</slot>
+				{/snippet}
 				<div class="flex flex-col flex-wrap gap-3">
 					<div>
 						<h5>Name <span class="text-red-500">*</span></h5>
@@ -51,9 +51,9 @@
 			</ModularDialog>
 			<button
 				class="rounded-full bg-white p-3 text-black duration-200 ease-in-out hover:bg-gray-300"
-				on:click={() => {
+				onclick={() => {
 					$settings.connectionCode = item.code
-					$state.currentCode = item.code
+					$appState.currentCode = item.code
 					goto("/home")
 				}}
 			>
@@ -98,17 +98,21 @@
 	import { Plug, Trash2, Pencil, KeyRound, Globe, Cpu } from "lucide-svelte"
 	import { goto } from "$app/navigation"
 	import { Dialog } from "bits-ui"
-	import { state } from "../stores/state.ts"
+	import { appState } from "../stores/state.ts"
 	import { onMount } from "svelte"
 	import { editConnectionCode, deleteConnectionCode } from "../../../ui/utils/connection.ts"
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
 
-	export let item: LibSettings["connectionCodes"][0]
+	interface Props {
+		item: LibSettings["connectionCodes"][0]
+	}
+
+	let { item }: Props = $props()
 
 	type Status = "unknown" | "online" | "offline"
 
-	let status = "unknown" as Status
-	let metadata = null as Metadata | null
+	let status = $state("unknown" as Status)
+	let metadata = $state(null as Metadata | null)
 
 	interface Metadata {
 		cpu: string

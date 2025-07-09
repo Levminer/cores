@@ -1,5 +1,6 @@
 <Dialog.Root bind:open>
 	<slot name="openButton" />
+	<!-- {@render openButton?.()} -->
 
 	<Dialog.Portal>
 		<Dialog.Overlay transition={fade} transitionConfig={{ duration: 150 }} class="fixed inset-0 z-50 bg-black/70" />
@@ -14,10 +15,13 @@
 			</Dialog.Description>
 			<div class="flex flex-col items-start gap-1 pb-11 pt-7">
 				<slot />
+				<!-- {@render children?.()} -->
 			</div>
 			<div class="flex w-full justify-between">
 				<slot name="deleteButton" />
 				<slot name="confirmButton" />
+				<!-- {@render deleteButton?.()}
+				{@render confirmButton?.()} -->
 			</div>
 
 			<Dialog.Close
@@ -37,8 +41,17 @@
 	import { flyAndScale } from "../utils/transitions.ts"
 	import { X } from "lucide-svelte"
 	import { fade } from "svelte/transition"
+	import type { Snippet } from "svelte"
 
-	export let title = ""
-	export let description = ""
-	export let open = false
+	interface Props {
+		title?: string
+		description?: string
+		open?: boolean
+		openButton?: Snippet
+		children?: Snippet
+		deleteButton?: Snippet
+		confirmButton?: Snippet
+	}
+
+	let { title = "", description = "", open = $bindable(false), openButton, children, deleteButton, confirmButton }: Props = $props()
 </script>

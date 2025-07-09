@@ -55,12 +55,12 @@
 			</div>
 			<div class="flex flex-col items-start gap-3">
 				<ModularDialog title={"Colors"} description={"You can customize the colors used by Cores."}>
-					<slot slot="openButton">
+					{#snippet openButton()}
 						<Dialog.Trigger class="button">
 							<Palette />
 							Customize
 						</Dialog.Trigger>
-					</slot>
+					{/snippet}
 					<div class="w-full space-y-5">
 						<div class="flex items-center justify-center gap-1 rounded-xl border-2 border-white p-3">
 							<input type="color" bind:value={$settings.colors.min} />
@@ -68,14 +68,14 @@
 							<input type="color" bind:value={$settings.colors.max} />
 							<input type="color" bind:value={$settings.colors.yellow} />
 							<input type="color" bind:value={$settings.colors.orange} />
-							{#each $settings.colors.categoricalPalette as item}
-								<input type="color" bind:value={item} />
+							{#each $settings.colors.categoricalPalette as item, i}
+								<input type="color" bind:value={$settings.colors.categoricalPalette[i]} />
 							{/each}
 						</div>
 
 						<div>
 							<button
-								on:click={() => {
+								onclick={() => {
 									location.reload()
 								}}
 								class="smallButton w-full">Confirm</button
@@ -99,12 +99,12 @@
 			</div>
 			<div class="flex flex-col items-start gap-3">
 				<ModularDialog title={"Default Devices"} description={"You can change the default devices that are displayed on the main page."}>
-					<slot slot="openButton">
+					{#snippet openButton()}
 						<Dialog.Trigger class="button">
 							<PcCase />
 							Change
 						</Dialog.Trigger>
-					</slot>
+					{/snippet}
 					<div class="w-full space-y-5">
 						<div class="flex flex-col gap-1 p-3">
 							<div>
@@ -149,7 +149,7 @@
 
 						<div>
 							<button
-								on:click={async () => {
+								onclick={async () => {
 									await invoke("restart_service")
 									location.reload()
 								}}
@@ -177,7 +177,7 @@
 				<div class="flex flex-col items-start gap-3 sm:my-5">
 					{#if user?.email}
 						<button
-							on:click={async () => {
+							onclick={async () => {
 								await supabaseClient.auth.signOut()
 								location.href = "/onboarding"
 							}}
@@ -188,7 +188,7 @@
 						</button>
 					{:else}
 						<button
-							on:click={async () => {
+							onclick={async () => {
 								await supabaseClient.auth.signOut()
 								router.goto("/onboarding")
 							}}
@@ -220,17 +220,17 @@
 
 			<div class="flex flex-col items-start gap-3">
 				<ModularDialog title={"Feedback"} description={"Feedback is always welcome! Report issues or request features."}>
-					<slot slot="openButton">
+					{#snippet openButton()}
 						<Dialog.Trigger class="button">
 							<Megaphone />
 							Feedback
 						</Dialog.Trigger>
-					</slot>
+					{/snippet}
 					<div class="w-full space-y-5">
 						<div class="rounded-xl border-2 border-white p-3">
 							<h5 class="mb-3">Join the community on Discord</h5>
 							<button
-								on:click={() => {
+								onclick={() => {
 									open("https://link.levminer.com/crs-dc")
 								}}
 								class="smallButton w-full">Discord</button
@@ -240,7 +240,7 @@
 						<div class="rounded-xl border-2 border-white p-3">
 							<h5 class="mb-3">Report Issues or Request Features</h5>
 							<button
-								on:click={() => {
+								onclick={() => {
 									open("https://github.com/levminer/cores/issues")
 								}}
 								class="smallButton w-full">Open GitHub</button
@@ -250,7 +250,7 @@
 						<div class="rounded-xl border-2 border-white p-3">
 							<h5 class="mb-3">Send an email to support@coresmonitor.com</h5>
 							<button
-								on:click={() => {
+								onclick={() => {
 									open("mailto:feedback@coresmonitor.com")
 								}}
 								class="smallButton w-full">Send Email</button
@@ -274,7 +274,7 @@
 			</div>
 
 			<div class="flex flex-col items-start gap-3">
-				<button class="button" on:click={debug}>
+				<button class="button" onclick={debug}>
 					<FileCog />
 					Save
 				</button>
@@ -294,7 +294,7 @@
 			</div>
 
 			<div class="flex flex-col items-start gap-3">
-				<button on:click={about} class="button">
+				<button onclick={about} class="button">
 					<Info />
 					About Cores
 				</button>
@@ -316,8 +316,8 @@
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
 
-	$: user = null as SupabaseUser | null
-	$: loading = true
+	let user = $state<SupabaseUser | null>(null)
+	let loading = $state(true)
 
 	onMount(async () => {
 		const { data, error } = await supabaseClient.auth.getUser()

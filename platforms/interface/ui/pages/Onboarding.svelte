@@ -46,7 +46,7 @@
 						</div>
 						<div>
 							<button
-								on:click={() => {
+								onclick={() => {
 									posthog.capture("buy")
 									open(`https://link.levminer.com/buy-cores-app?utm_source=app`)
 								}}
@@ -74,7 +74,7 @@
 								</p>
 							</div>
 							<div>
-								<button on:click={trial} class="smallButton mt-3 w-full">
+								<button onclick={trial} class="smallButton mt-3 w-full">
 									<CircleCheck />
 									Continue
 								</button>
@@ -97,18 +97,20 @@
 									title={"Activate Cores"}
 									description={"Use the license key from your purchase confirmation email to activate Cores. If you don't remember you key, please contact us at support@coresmonitor.com."}
 								>
-									<slot slot="openButton">
+									{#snippet openButton()}
 										<Dialog.Trigger class="smallButton mt-3 w-full">
 											<CircleCheck />
 											Activate license
 										</Dialog.Trigger>
-									</slot>
-									<slot slot="confirmButton">
+									{/snippet}
+
+									{#snippet confirmButton()}
 										<Dialog.Close on:click={() => activate()} class="smallButton">
 											<CircleCheck />
 											Activate license
 										</Dialog.Close>
-									</slot>
+									{/snippet}
+
 									<div>
 										<h5>License key</h5>
 										<input bind:value={key} class="input mt-1" type="text" id="key" />
@@ -129,7 +131,7 @@
 			</div>
 			<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
 				<button
-					on:click={() => {
+					onclick={() => {
 						router.goto("/home", true)
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
@@ -144,7 +146,7 @@
 				</button>
 
 				<button
-					on:click={() => {
+					onclick={() => {
 						router.goto("/connections", true)
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
@@ -159,7 +161,7 @@
 				</button>
 
 				<button
-					on:click={() => {
+					onclick={() => {
 						router.goto("/settings", true)
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
@@ -177,7 +179,7 @@
 	{/if}
 
 	<ModularDialog open={redirectDialog} title={"Login"} description={"Opening browser for login..."}>
-		<slot slot="confirmButton">
+		{#snippet confirmButton()}
 			<Dialog.Close
 				on:click={() => {
 					redirectDialog = false
@@ -187,16 +189,19 @@
 				<CircleX class="h-5 w-5" />
 				Cancel
 			</Dialog.Close>
-		</slot>
+		{/snippet}
 		<div class="flex flex-col flex-wrap gap-3">
-			<p class="text-sm text-gray-200">Browser didn't open? <button class="underline" on:click={() => open(url)}>Open</button> or <button class="underline" on:click={() => navigator.clipboard.writeText(url)}>copy link</button></p>
+			<p class="text-sm text-gray-200">
+				Browser didn't open? <button class="underline" onclick={() => open(url)}>Open</button> or
+				<button class="underline" onclick={() => navigator.clipboard.writeText(url)}>copy link</button>
+			</p>
 		</div>
 	</ModularDialog>
 </div>
 
 <script lang="ts">
 	import { open } from "@tauri-apps/plugin-shell"
-	import { state } from "../stores/state.ts"
+	import { appState } from "../stores/state.ts"
 	import { settings } from "../stores/settings.ts"
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
@@ -208,17 +213,13 @@
 	import posthog from "posthog-js"
 	import type { User } from "@supabase/supabase-js"
 
-	$: step = "" as "welcome" | "login" | "pricing" | "tips"
-	$: key = ""
-	$: variant = "free" as "free" | "trial"
-	$: user = null as User | null
-	$: redirectDialog = false
-	$: url = ""
+	let step = $state("" as "welcome" | "login" | "pricing" | "tips")
+	let key = $state("")
+	let user = $state(null as User | null)
+	let redirectDialog = $state(false)
+	let url = $state("")
 
 	onMount(async () => {
-		const ff = posthog.getFeatureFlag("raider") as "free" | "trial"
-		variant = ff
-
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 		user = userData.user
 
@@ -234,7 +235,7 @@
 	onMount(() => {
 		const handleKeydown = (event: KeyboardEvent) => {
 			if (event.key === "Escape" && event.metaKey) {
-				$state.showMenu = true
+				$appState.showMenu = true
 				router.goto("/home", true)
 			}
 		}
@@ -253,7 +254,7 @@
 
 	const stepTips = () => {
 		step = "tips"
-		$state.showMenu = true
+		$appState.showMenu = true
 
 		posthog.capture("tips")
 	}
@@ -264,7 +265,7 @@
 		const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 
 		posthog.capture("trial")
-		$state.plan = "trial"
+		$appState.plan = "trial"
 
 		if (licenseActivated < sevenDaysAgo) {
 			if (import.meta.env.PROD) {
@@ -308,8 +309,8 @@
 
 				if (userData?.plan === "personal" || userData?.plan === "business") {
 					// User is on a paid plan
-					$state.plan = userData?.plan
-					$state.showMenu = true
+					$appState.plan = userData?.plan
+					$appState.showMenu = true
 					router.goto("/home")
 				}
 
@@ -365,7 +366,7 @@
 
 				if (data.activated && data?.meta.store_id === 62942) {
 					stepTips()
-					$state.plan = "personal"
+					$appState.plan = "personal"
 				} else {
 					alert(`Failed to activate: ${data.error}. Please reach out to support@coresmonitor.com if you need help.`)
 				}

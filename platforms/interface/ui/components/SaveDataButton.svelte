@@ -1,11 +1,12 @@
 <ModularDialog title={"Save data"} description={"You can save your data to a .csv file or save the graph as an image."}>
-	<slot slot="openButton">
+	{#snippet openButton()}
 		<Dialog.Trigger
 			class="transparent-800 group m-1 inline-flex flex-shrink-0 flex-grow flex-col items-center justify-center rounded-lg p-1 px-3 text-gray-200 duration-200 ease-in-out"
 		>
 			<p class="text-xl">Save</p>
 		</Dialog.Trigger>
-	</slot>
+	{/snippet}
+
 	<div class="w-full">
 		<Tabs.Root value="file" class="">
 			<Tabs.List class="grid w-full grid-cols-2 gap-1 rounded-xl border-2 p-1 text-sm font-semibold leading-[0.01em]">
@@ -24,12 +25,12 @@
 			</Tabs.List>
 			<Tabs.Content value="file" class="pt-10">
 				<div>
-					<button on:click={saveFile} class="button w-full">Save file</button>
+					<button onclick={saveFile} class="button w-full">Save file</button>
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="image" class="pt-10">
 				<div>
-					<button on:click={saveImage} class="button w-full">Save image</button>
+					<button onclick={saveImage} class="button w-full">Save image</button>
 				</div>
 			</Tabs.Content>
 		</Tabs.Root>
@@ -43,17 +44,16 @@
 	import { state } from "../stores/state.ts"
 
 	interface Props {
-		id: string
-		statistics: {
-			label: string
-			data: number[]
-		}[]
+		props: {
+			id: string
+			statistics: {
+				label: string
+				data: number[]
+			}[]
+		}
 	}
 
-	export let props: Props = {
-		id: "",
-		statistics: [],
-	}
+	let { props }: Props = $props()
 
 	const saveFile = () => {
 		if (!$state.plan && import.meta.env.VITE_CORES_MODE === "host") {

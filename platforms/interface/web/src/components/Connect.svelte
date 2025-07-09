@@ -17,15 +17,15 @@
 				<a href="/login" class="button">Login</a>
 			{/if}
 			<ModularDialog title={"Add Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
-				<slot slot="openButton">
+				{#snippet openButton()}
 					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
-				</slot>
-				<slot slot="confirmButton">
+				{/snippet}
+				{#snippet confirmButton()}
 					<Dialog.Close on:click={() => addCode()} class="smallButton">
 						<Plus class="h-5 w-5" />
 						Add
 					</Dialog.Close>
-				</slot>
+				{/snippet}
 				<div class="flex flex-col flex-wrap gap-3">
 					<div>
 						<h5>Name <span class="text-red-500">*</span></h5>

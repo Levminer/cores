@@ -5,7 +5,7 @@
 		>
 			<Plug />
 			<p class="hidden md:block">Connection</p>
-			<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-800" />
+			<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-800"></div>
 		</Popover.Trigger>
 	{:else}
 		<Popover.Trigger class="button">

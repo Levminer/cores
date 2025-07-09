@@ -33,7 +33,7 @@
 				<div class="flex flex-col items-start gap-3">
 					<button
 						class="button"
-						on:click={() => {
+						onclick={() => {
 							open("https://www.coresmonitor.com/login")
 						}}
 					>
@@ -61,7 +61,7 @@
 					<div class="flex flex-col items-start gap-3">
 						<div class="flex items-center justify-center space-x-3">
 							<input class="input" readonly value={$settings.connectionCode} />
-							<button class="button" on:click={copyConnectionCode}>
+							<button class="button" onclick={copyConnectionCode}>
 								<Clipboard />
 								<span class="copy">Copy</span>
 							</button>
@@ -107,18 +107,18 @@
 
 				<div class="flex flex-col items-start gap-3 sm:my-5">
 					<ModularDialog title={"Add device"} description={"You can get the Mac address from the Cores desktop app."}>
-						<slot slot="openButton">
+						{#snippet openButton()}
 							<Dialog.Trigger class="button w-full">
 								<Plus />
 								Add device
 							</Dialog.Trigger>
-						</slot>
-						<slot slot="confirmButton">
+						{/snippet}
+						{#snippet confirmButton()}
 							<Dialog.Close on:click={() => addDevice()} class="smallButton">
 								<Plus class="h-5 w-5" />
 								Add device
 							</Dialog.Close>
-						</slot>
+						{/snippet}
 						<div class="flex flex-col flex-wrap gap-3">
 							<div>
 								<h5>Name <span class="text-red-500">*</span></h5>
@@ -153,7 +153,7 @@
 
 								<button
 									class="button mt-6"
-									on:click={() => {
+									onclick={() => {
 										WOL(item)
 									}}
 								>
@@ -163,7 +163,7 @@
 
 								<button
 									class="button mt-6"
-									on:click={() => {
+									onclick={() => {
 										deleteDevice(item.mac)
 									}}
 								>
@@ -223,18 +223,20 @@
 		}, 1000)
 	}
 
-	export let WOL = async (item: { name?: string; code?: string; mac: string }) => {
-		await fetch("http://localhost:5390/post", {
-			method: "POST",
-			body: JSON.stringify({
-				type: "wol",
-				data: {
-					mac: item.mac?.replaceAll(":", ""),
+	let {
+		WOL = async (item: { name?: string; code?: string; mac: string }) => {
+			await fetch("http://localhost:5390/post", {
+				method: "POST",
+				body: JSON.stringify({
+					type: "wol",
+					data: {
+						mac: item.mac?.replaceAll(":", ""),
+					},
+				}),
+				headers: {
+					"Content-Type": "application/json",
 				},
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-	}
+			})
+		},
+	} = $props()
 </script>
