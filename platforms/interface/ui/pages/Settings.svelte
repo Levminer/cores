@@ -178,7 +178,7 @@
 					{#if user?.email}
 						<button
 							onclick={async () => {
-								await supabaseClient.auth.signOut()
+								await supabaseClient.auth.signOut({ scope: "local" })
 								location.href = "/onboarding"
 							}}
 							class="button"
@@ -189,7 +189,7 @@
 					{:else}
 						<button
 							onclick={async () => {
-								await supabaseClient.auth.signOut()
+								await supabaseClient.auth.signOut({ scope: "local" })
 								router.goto("/onboarding")
 							}}
 							class="button"

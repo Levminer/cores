@@ -1,6 +1,6 @@
-{#if $state.state === "connected"}
+{#if $appState.state === "connected"}
 	<Ram />
-{:else if $state.state === "loading"}
+{:else if $appState.state === "loading"}
 	<Loading />
 {:else}
 	<Connect />
@@ -8,6 +8,6 @@
 
 <script>
 	import { Loading, Ram } from "ui"
-	import { state } from "../../../stores/state"
+	import { appState } from "../../../stores/state"
 	import Connect from "../../../components/Connect.svelte"
 </script>

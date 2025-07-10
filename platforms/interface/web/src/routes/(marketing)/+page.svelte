@@ -266,7 +266,7 @@
 					<div class="flex w-full flex-row items-center justify-center gap-5 sm:flex-col">
 						<!-- windows installer -->
 						<button
-							on:click={() => {
+							onclick={() => {
 								changeDownload("windows")
 							}}
 							class={selectedDownload === "windows" ? "selectedDownloadButton" : "downloadButton"}
@@ -276,7 +276,7 @@
 						</button>
 
 						<button
-							on:click={() => {
+							onclick={() => {
 								changeDownload("linux")
 							}}
 							class={selectedDownload === "linux" ? "selectedDownloadButton" : "downloadButton"}
@@ -286,7 +286,7 @@
 						</button>
 
 						<button
-							on:click={() => {
+							onclick={() => {
 								changeDownload("macos")
 							}}
 							class={selectedDownload === "macos" ? "selectedDownloadButton" : "downloadButton"}
@@ -521,8 +521,7 @@
 	import Header from "../../components/Header.svelte"
 	import GetStarted from "../../components/GetStarted.svelte"
 
-	// prettier-ignore
-	let selectedDownload = "windows"
+	let selectedDownload = $state("windows")
 	const features = [
 		"CPU Load",
 		"CPU Temperature",

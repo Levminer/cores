@@ -3,7 +3,7 @@
 		<div id="cores" class="top"></div>
 
 		<div>
-			<slot />
+			{@render children()}
 		</div>
 	</div>
 </div>
@@ -14,6 +14,8 @@
 	import posthog from "posthog-js"
 	import { browser } from "$app/environment"
 	import { beforeNavigate, afterNavigate } from "$app/navigation"
+
+	let { children } = $props()
 
 	if (browser) {
 		beforeNavigate(() => posthog.capture("$pageleave"))

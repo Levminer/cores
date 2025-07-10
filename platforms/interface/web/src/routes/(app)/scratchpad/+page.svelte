@@ -23,9 +23,9 @@
 			</div>
 
 			<div class="flex w-full flex-row items-center justify-center gap-3">
-				<input type="file" id="file" class="hidden" on:change={uploadFile} />
+				<input type="file" id="file" class="hidden" onchange={uploadFile} />
 				<button
-					on:click={() => {
+					onclick={() => {
 						const fileInput = document.getElementById("file")
 						fileInput?.click()
 					}}
@@ -38,7 +38,7 @@
 					placeholder="Write your message here, press Enter to submit"
 					type="text"
 					bind:value={message}
-					on:keydown={sendMessage}
+					onkeydown={sendMessage}
 				/>
 			</div>
 		</div>
@@ -54,10 +54,10 @@
 	import { NotebookPen, Plus } from "lucide-svelte"
 	import Message from "../../../components/Message.svelte"
 
-	$: loading = true
-	$: user = null as UserType | null
-	$: messages = [] as Database["public"]["Tables"]["messages"]["Row"][]
-	$: message = "" as string
+	let loading = $state(true)
+	let user = $state(null as UserType | null)
+	let messages = $state([] as Database["public"]["Tables"]["messages"]["Row"][])
+	let message = $state("" as string)
 
 	onMount(() => {
 		supabaseClient

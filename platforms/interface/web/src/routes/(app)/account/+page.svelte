@@ -5,43 +5,43 @@
 		<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
 			<!-- account -->
 			{#if import.meta.env.VITE_LOGIN}
-				 <div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
-				<div class="flex flex-col items-start gap-3">
-					<div class="flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<User />
+				<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+					<div class="flex flex-col items-start gap-3">
+						<div class="flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<User />
+							</div>
+							<h2>Account</h2>
 						</div>
-						<h2>Account</h2>
+						<h3>Email: {user?.email ?? "Not logged in"}</h3>
 					</div>
-					<h3>Email: {user?.email ?? "Not logged in"}</h3>
-				</div>
 
-				<div class="flex flex-col items-start gap-3 sm:my-5">
-					{#if user?.email}
-						<button
-							on:click={async () => {
-								await supabaseClient.auth.signOut()
-								goto("/home")
-							}}
-							class="button"
-						>
-							<LogOut />
-							Log out
-						</button>
-					{:else}
-						<button
-							on:click={async () => {
-								await supabaseClient.auth.signOut()
-								goto("/login")
-							}}
-							class="button"
-						>
-							<User />
-							Log in
-						</button>
-					{/if}
+					<div class="flex flex-col items-start gap-3 sm:my-5">
+						{#if user?.email}
+							<button
+								onclick={async () => {
+									await supabaseClient.auth.signOut({ scope: "local" })
+									goto("/home")
+								}}
+								class="button"
+							>
+								<LogOut />
+								Log out
+							</button>
+						{:else}
+							<button
+								onclick={async () => {
+									await supabaseClient.auth.signOut({ scope: "local" })
+									goto("/login")
+								}}
+								class="button"
+							>
+								<User />
+								Log in
+							</button>
+						{/if}
+					</div>
 				</div>
-			</div>
 			{/if}
 
 			<!-- connection server -->
@@ -75,7 +75,7 @@
 
 				<div class="flex flex-col items-start gap-3 sm:my-5">
 					<button
-						on:click={() => {
+						onclick={() => {
 							alert(
 								`Cores: ${version} \n\nRelease date: ${date} \nBuild number: ${number}\nServer: ${$settings.connectionURL} \n\nCreated by: Lőrik Levente`,
 							)
@@ -96,12 +96,12 @@
 	import { onMount } from "svelte"
 	import { goto } from "$app/navigation"
 	import { LogOut, Server, User } from "lucide-svelte"
-	import { Info, Megaphone, Github } from "lucide-svelte"
+	import { Info } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import type { User as UserType } from "@supabase/supabase-js"
 
-	$: loading = true
-	$: user = null as UserType | null
+	let loading = $state(true)
+	let user = $state(null as UserType | null)
 
 	onMount(async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()

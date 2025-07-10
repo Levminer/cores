@@ -13,7 +13,7 @@
 	import { goto } from "$app/navigation"
 	import { Loading, Login, supabaseClient } from "ui"
 
-	$: loading = true
+	let loading = $state(true)
 
 	onMount(async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()

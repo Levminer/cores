@@ -1,7 +1,7 @@
 <AppHeader />
 <Navigation />
 
-<slot />
+{@render children()}
 <div class="mb-32"></div>
 
 <script lang="ts">
@@ -11,6 +11,8 @@
 	import AppHeader from "../../components/AppHeader.svelte"
 	import { hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 	import Navigation from "../../components/Navigation.svelte"
+
+	let { children } = $props()
 
 	let client: EzRTCClient | undefined
 
