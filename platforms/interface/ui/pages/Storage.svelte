@@ -139,5 +139,5 @@
 	import { Activity, HardDrive, PieChart, Thermometer } from "lucide-svelte"
 	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "ui"
 
-	let minutes = false
+	let minutes = $state(false)
 </script>

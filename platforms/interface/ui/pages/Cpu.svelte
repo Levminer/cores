@@ -317,5 +317,5 @@
 	import { Clock, Cpu, Gauge, Plug, Thermometer, Zap } from "lucide-svelte"
 	import { hardwareInfo, hardwareStatistics, LineChart, SaveDataButton, ToggleButton } from "ui"
 
-	let minutes = false
+	let minutes = $state(false)
 </script>

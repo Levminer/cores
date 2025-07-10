@@ -73,5 +73,5 @@
 	import { flyAndScale } from "ui"
 	import { Moon, Power, RotateCcw, ScreenShareOff } from "lucide-svelte"
 
-	export let action = (type: string) => {}
+	let { action = (type: string) => {} } = $props();
 </script>

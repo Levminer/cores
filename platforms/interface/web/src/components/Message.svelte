@@ -7,7 +7,7 @@
 		<div class="flex flex-row items-center justify-center gap-3">
 			<button
 				class="rounded-lg bg-white p-2"
-				on:click={() => {
+				onclick={() => {
 					if (message?.message) {
 						navigator.clipboard.writeText(message.message)
 						return alert("Link copied to clipboard!")
@@ -18,7 +18,7 @@
 			</button>
 			<button
 				class="bg-popup-red rounded-lg p-2"
-				on:click={() => {
+				onclick={() => {
 					if (message?.message) {
 						deleteMessage(message.message_id)
 					}
@@ -36,7 +36,7 @@
 		</div>
 		<div class="flex flex-row items-center justify-center gap-3">
 			<button
-				on:click={() => {
+				onclick={() => {
 					if (message?.message) {
 						getURL(message.message)
 					}
@@ -47,7 +47,7 @@
 			</button>
 			<button
 				class="bg-popup-red rounded-lg p-2"
-				on:click={() => {
+				onclick={() => {
 					if (message?.message) {
 						deleteMessage(message.message_id)
 					}
@@ -64,8 +64,12 @@
 	import type { Database } from "../../../ui/utils/database"
 	import type { User as UserType } from "@supabase/supabase-js"
 	import { Clipboard, ExternalLink, Trash } from "lucide-svelte"
-	export let message: Database["public"]["Tables"]["messages"]["Row"]
-	export let user: UserType | null
+	interface Props {
+		message: Database["public"]["Tables"]["messages"]["Row"];
+		user: UserType | null;
+	}
+
+	let { message, user }: Props = $props();
 
 	const formatTime = (time: string) => {
 		const date = new Date(time)

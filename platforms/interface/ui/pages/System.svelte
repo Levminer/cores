@@ -129,5 +129,5 @@
 	import { PcDisplay } from "svelte-bootstrap-icons"
 	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "ui"
 
-	let minutes = false
+	let minutes = $state(false)
 </script>

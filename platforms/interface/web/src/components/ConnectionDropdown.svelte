@@ -1,18 +1,12 @@
 <Popover.Root>
-	{#if mode === "header"}
-		<Popover.Trigger
-			class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
-		>
-			<Plug />
-			<p class="hidden md:block">Connection</p>
-			<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-800"></div>
-		</Popover.Trigger>
-	{:else}
-		<Popover.Trigger class="button">
-			<Plug size="30" />
-			<p>Connections</p>
-		</Popover.Trigger>
-	{/if}
+	<Popover.Trigger
+		class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
+	>
+		<Plug />
+		<p class="hidden md:block">Connection</p>
+		<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-800"></div>
+	</Popover.Trigger>
+
 	<Popover.Content
 		class="bg-background w-full max-w-[300px] overflow-hidden rounded-xl bg-gray-600 shadow-xl"
 		transition={flyAndScale}
@@ -29,12 +23,12 @@
 				</div>
 				<div class="flex items-center gap-1">
 					<ModularDialog title={"Edit Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
-						<slot slot="openButton">
+						{#snippet openButton()}
 							<Dialog.Trigger class="rounded-full bg-white px-3 py-2 text-black duration-200 ease-in-out hover:bg-gray-300">
 								<Pencil class="h-5 w-5" />
 							</Dialog.Trigger>
-						</slot>
-						<slot slot="confirmButton">
+						{/snippet}
+						{#snippet confirmButton()}
 							<Dialog.Close
 								on:click={() => {
 									editConnectionCode(item.code)
@@ -44,16 +38,17 @@
 								<Pencil />
 								Edit
 							</Dialog.Close>
-						</slot>
-						<slot slot="deleteButton">
+						{/snippet}
+						{#snippet deleteButton()}
 							<button
 								class="smallButton border-red-600 bg-red-600 text-white hover:text-red-600"
-								on:click={() => deleteConnectionCode(item.code)}
+								onclick={() => deleteConnectionCode(item.code)}
 							>
 								<Trash2 />
 								Delete
 							</button>
-						</slot>
+						{/snippet}
+
 						<div class="flex flex-col flex-wrap gap-3">
 							<div>
 								<h5>Name <span class="text-red-500">*</span></h5>
@@ -67,7 +62,7 @@
 						</div>
 					</ModularDialog>
 					<button
-						on:click={() => {
+						onclick={() => {
 							connect(item.code)
 						}}
 						class="rounded-full bg-white px-3 py-2 text-black duration-200 ease-in-out hover:bg-gray-300"
@@ -79,15 +74,16 @@
 		{/each}
 		<div class="w-full p-3 px-5">
 			<ModularDialog title={"Add Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
-				<slot slot="openButton">
+				{#snippet openButton()}
 					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
-				</slot>
-				<slot slot="confirmButton">
+				{/snippet}
+				{#snippet confirmButton()}
 					<Dialog.Close on:click={() => addConnectionCode()} class="smallButton">
 						<Plus class="h-5 w-5" />
 						Add
 					</Dialog.Close>
-				</slot>
+				{/snippet}
+
 				<div class="flex flex-col flex-wrap gap-3">
 					<div>
 						<h5>Name <span class="text-red-500">*</span></h5>
@@ -112,6 +108,5 @@
 	import { ModularDialog } from "ui"
 	import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "ui"
 
-	export let connect = (item: string) => {}
-	export let mode = "header" as "menu" | "header"
+	let { connect = (item: string) => {} } = $props()
 </script>

@@ -160,5 +160,5 @@
 	import { Gauge } from "lucide-svelte"
 	import { hardwareInfo, hardwareStatistics, LineChart, SaveDataButton, ToggleButton } from "ui"
 
-	let minutes = false
+	let minutes = $state(false)
 </script>

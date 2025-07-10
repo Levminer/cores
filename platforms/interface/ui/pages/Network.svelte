@@ -129,5 +129,5 @@
 	import { hardwareStatistics } from "../stores/hardwareStatistics.ts"
 	import { ArrowDownUp, Network, PieChart } from "lucide-svelte"
 
-	let minutes = false
+	let minutes = $state(false)
 </script>

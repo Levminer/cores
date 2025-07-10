@@ -6,7 +6,7 @@
 		</a>
 		<div class="flex space-x-2 md:order-2">
 			<button
-				on:click={() => {
+				onclick={() => {
 					const settings = JSON.parse(localStorage.getItem("settings") || "{}")
 
 					if (settings.connectionCode !== undefined && settings.connectionCode !== "") {
@@ -49,5 +49,5 @@
 
 <script lang="ts">
 	import { goto } from "$app/navigation"
-	import { Gauge, User } from "lucide-svelte"
+	import { Gauge } from "lucide-svelte"
 </script>

@@ -621,7 +621,6 @@
 		Zap,
 		Cpu,
 		Battery,
-		Megaphone,
 		Settings,
 		MonitorSmartphone,
 	} from "lucide-svelte"

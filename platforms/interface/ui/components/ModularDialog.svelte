@@ -1,6 +1,5 @@
 <Dialog.Root bind:open>
-	<slot name="openButton" />
-	<!-- {@render openButton?.()} -->
+	{@render openButton?.()}
 
 	<Dialog.Portal>
 		<Dialog.Overlay transition={fade} transitionConfig={{ duration: 150 }} class="fixed inset-0 z-50 bg-black/70" />
@@ -14,14 +13,11 @@
 				{description}
 			</Dialog.Description>
 			<div class="flex flex-col items-start gap-1 pb-11 pt-7">
-				<slot />
-				<!-- {@render children?.()} -->
+				{@render children?.()}
 			</div>
 			<div class="flex w-full justify-between">
-				<slot name="deleteButton" />
-				<slot name="confirmButton" />
-				<!-- {@render deleteButton?.()}
-				{@render confirmButton?.()} -->
+				{@render deleteButton?.()}
+				{@render confirmButton?.()}
 			</div>
 
 			<Dialog.Close
