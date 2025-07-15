@@ -31,11 +31,11 @@
 			<div class="flex flex-col items-start gap-3">
 				<Select
 					options={[
-						{ value: 1, label: "1s" },
-						{ value: 2, label: "2s" },
-						{ value: 3, label: "3s" },
-						{ value: 5, label: "5s" },
-						{ value: 15, label: "15s" },
+						{ value: "1", label: "1s" },
+						{ value: "2", label: "2s" },
+						{ value: "3", label: "3s" },
+						{ value: "5", label: "5s" },
+						{ value: "15", label: "15s" },
 					]}
 					setting={"interval"}
 				/>
