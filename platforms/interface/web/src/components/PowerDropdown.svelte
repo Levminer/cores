@@ -5,66 +5,70 @@
 		<Power />
 		<p class="hidden md:block">Power</p>
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content
-		class="bg-background w-full max-w-[230px] overflow-hidden rounded-xl bg-gray-600 shadow-xl"
-		transition={flyAndScale}
-		sideOffset={8}
-	>
-		<DropdownMenu.Item
-			on:click={() => {
-				action("disconnect")
-			}}
-			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
-		>
-			<div class="flex items-center">
-				<ScreenShareOff />
-			</div>
-			<div class="flex flex-col items-start">
-				<h4>Disconnect</h4>
-			</div>
-		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
-		<DropdownMenu.Item
-			on:click={() => {
-				action("sleep")
-			}}
-			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
-		>
-			<div class="flex items-center">
-				<Moon />
-			</div>
-			<div class="flex flex-col items-start">
-				<h4>Sleep</h4>
-			</div>
-		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
-		<DropdownMenu.Item
-			on:click={() => {
-				action("shutdown")
-			}}
-			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
-		>
-			<div class="flex items-center">
-				<Power />
-			</div>
-			<div class="flex flex-col items-start">
-				<h4>Shut down</h4>
-			</div>
-		</DropdownMenu.Item>
-		<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
-		<DropdownMenu.Item
-			on:click={() => {
-				action("restart")
-			}}
-			class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
-		>
-			<div class="flex items-center">
-				<RotateCcw />
-			</div>
-			<div class="flex flex-col items-start">
-				<h4>Restart</h4>
-			</div>
-		</DropdownMenu.Item>
+	<DropdownMenu.Content class="bg-background w-full max-w-[230px] overflow-hidden rounded-xl bg-gray-600 shadow-xl" forceMount sideOffset={8}>
+		{#snippet child({ wrapperProps, props, open })}
+			{#if open}
+				<div {...wrapperProps}>
+					<div {...props} transition:flyAndScale>
+						<DropdownMenu.Item
+							onclick={() => {
+								action("disconnect")
+							}}
+							class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
+						>
+							<div class="flex items-center">
+								<ScreenShareOff />
+							</div>
+							<div class="flex flex-col items-start">
+								<h4>Disconnect</h4>
+							</div>
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
+						<DropdownMenu.Item
+							onclick={() => {
+								action("sleep")
+							}}
+							class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
+						>
+							<div class="flex items-center">
+								<Moon />
+							</div>
+							<div class="flex flex-col items-start">
+								<h4>Sleep</h4>
+							</div>
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
+						<DropdownMenu.Item
+							onclick={() => {
+								action("shutdown")
+							}}
+							class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
+						>
+							<div class="flex items-center">
+								<Power />
+							</div>
+							<div class="flex flex-col items-start">
+								<h4>Shut down</h4>
+							</div>
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator class="-ml-1 -mr-1 block h-px bg-gray-500" />
+						<DropdownMenu.Item
+							onclick={() => {
+								action("restart")
+							}}
+							class="flex cursor-pointer select-none items-center gap-3 p-3 px-5 duration-200 ease-in-out data-[highlighted]:bg-gray-500"
+						>
+							<div class="flex items-center">
+								<RotateCcw />
+							</div>
+							<div class="flex flex-col items-start">
+								<h4>Restart</h4>
+							</div>
+						</DropdownMenu.Item>
+					</div>
+				</div>
+			{/if}
+		{/snippet}
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
 
@@ -73,5 +77,5 @@
 	import { flyAndScale } from "ui"
 	import { Moon, Power, RotateCcw, ScreenShareOff } from "lucide-svelte"
 
-	let { action = (type: string) => {} } = $props();
+	let { action = (type: string) => {} } = $props()
 </script>

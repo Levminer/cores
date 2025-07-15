@@ -134,7 +134,7 @@
 									{/snippet}
 
 									{#snippet confirmButton()}
-										<Dialog.Close on:click={() => activate()} class="smallButton">
+										<Dialog.Close onclick={() => activate()} class="smallButton">
 											<CircleCheck />
 											Activate license
 										</Dialog.Close>
@@ -283,7 +283,7 @@
 	<ModularDialog open={redirectDialog} title={"Login"} description={"Opening browser for login..."}>
 		{#snippet confirmButton()}
 			<Dialog.Close
-				on:click={() => {
+				onclick={() => {
 					redirectDialog = false
 				}}
 				class="smallButton"
