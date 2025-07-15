@@ -1,29 +1,44 @@
 <Select.Root
+	type="single"
 	items={options}
-	selected={options.find((option) => option.value === $settings[setting])}
-	onSelectedChange={(event) => {
+	bind:value
+	onValueChange={(newValue) => {
 		// @ts-ignore
-		$settings[setting] = event.value
+		$settings[setting] = parseInt(newValue)
 	}}
 >
-	<Select.Trigger class="select w-48" aria-label="Select a theme">
-		<Select.Value class="text-xl" placeholder="Select a theme" />
+	<Select.Trigger class="select w-48" aria-label="Select a value">
+		<p class="text-xl">{selectedLabel}</p>
 	</Select.Trigger>
 
-	<Select.Content class="w-full rounded-xl border-cyan-500 bg-white p-2 text-black shadow-xl outline-none" sideOffset={8} transition={flyAndScale}>
-		{#each options as option}
-			<Select.Item
-				class="rounded-button flex h-10 w-full select-none items-center rounded-lg py-2 pl-3 pr-2 text-base outline-none transition-all duration-150 ease-linear aria-selected:font-bold data-[highlighted]:bg-black data-[highlighted]:text-white"
-				value={option.value}
-				label={option.label}
-			>
-				{option.label}
-				<Select.ItemIndicator class="ml-auto" asChild={false}>
-					<Check />
-				</Select.ItemIndicator>
-			</Select.Item>
-		{/each}
-	</Select.Content>
+	<Select.Portal>
+		<Select.Content forceMount class="w-48 rounded-xl bg-white p-2 text-black shadow-xl outline-none" sideOffset={8}>
+			{#snippet child({ wrapperProps, props, open })}
+				{#if open}
+					<div {...wrapperProps}>
+						<div {...props} transition:flyAndScale>
+							{#each options as option, i}
+								<Select.Item
+									class="flex h-10 w-full select-none items-center rounded-lg py-2 pl-3 pr-2 text-base outline-none transition-all duration-150 ease-linear aria-selected:font-bold data-[highlighted]:bg-black data-[highlighted]:text-white"
+									value={option.value}
+									label={option.label}
+								>
+									{#snippet children({ selected })}
+										{option.label}
+										{#if selected}
+											<div class="ml-auto">
+												<Check aria-label="check" />
+											</div>
+										{/if}
+									{/snippet}
+								</Select.Item>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			{/snippet}
+		</Select.Content>
+	</Select.Portal>
 </Select.Root>
 
 <script lang="ts">
@@ -32,6 +47,15 @@
 	import { flyAndScale } from "../utils/transitions.ts"
 	import { settings } from "ui"
 
-	export let options = [] as { value: number | string; label: string }[]
-	export let setting: keyof LibSettings
+	interface Props {
+		options?: { value: string; label: string }[]
+		setting: keyof LibSettings
+	}
+
+	let { options = [], setting }: Props = $props()
+
+	let value = $state<string>(options.find((option) => parseInt(option.value) === $settings[setting])?.value || "")
+	const selectedLabel = $derived(value ? options.find((option) => option.value === value)?.label : "Select a value")
+	$inspect(value)
+	$inspect(selectedLabel)
 </script>
