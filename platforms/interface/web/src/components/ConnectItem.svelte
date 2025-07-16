@@ -19,7 +19,7 @@
 				{/snippet}
 				{#snippet confirmButton()}
 					<Dialog.Close
-						onclick={() => {
+						on:click={() => {
 							editConnectionCode(item.code)
 						}}
 						class="smallButton"
@@ -31,7 +31,7 @@
 				{#snippet deleteButton()}
 					<Dialog.Close
 						class="smallButton border-red-600 bg-red-600 text-white hover:text-red-600"
-						onclick={() => deleteConnectionCode(item.code)}
+						on:click={() => deleteConnectionCode(item.code)}
 					>
 						<Trash2 />
 						Delete
