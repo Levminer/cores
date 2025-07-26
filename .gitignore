@@ -370,3 +370,5 @@ platforms/windows/service/rtc.dll
 target
 .DS_Store
 *.tsbuildinfo
+*.duckdb
+*.wal

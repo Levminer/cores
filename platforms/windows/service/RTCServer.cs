@@ -19,19 +19,19 @@ public class RTCServer {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
 				if (data.readyState == RTCDataChannelState.open) {
-					var secondsList = Program.HardwareStats.seconds.Where((x, i) => (i + 1) % 3 == 0).ToList();
+					var secondsList = Program.Database.SelectSecondsData().Where((x, i) => (i + 1) % 3 == 0).ToList();
 
 					for (int i = 0; i < secondsList.Count; i++) {
-						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = JsonNode.Parse(secondsList[i]) }, Program.CompressedSerializerOptions));
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
 					}
 
-					var minutesList = Program.HardwareStats.minutes.Where((x, i) => (i + 1) % 3 == 0).ToList();
+					var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 3 == 0).ToList();
 					if (minutesList.Count > 0) {
-						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = JsonNode.Parse(minutesList[0]) }, Program.CompressedSerializerOptions));
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
 					}
 
 					for (int i = 0; i < minutesList.Count; i++) {
-						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = JsonNode.Parse(minutesList[i]) }, Program.CompressedSerializerOptions));
+						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
 					}
 				}
 			};
@@ -60,7 +60,7 @@ public class RTCServer {
 			while (!stop) {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
-				await Task.Delay(2000);
+				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval));
 			}
 		});
 	}
