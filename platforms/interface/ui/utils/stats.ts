@@ -84,6 +84,8 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 					},
 				}
 			}),
+
+			timestamp: input.timestamp
 	}
 }
 
@@ -309,5 +311,7 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 					control,
 				}
 			}),
+
+			timestamp: new Date().toISOString(),
 	}
 }

@@ -368,4 +368,8 @@ public class API {
 	public SystemAPI System {
 		get; set;
 	} = new();
+
+	public DateTime Timestamp {
+		get; set;
+	} = new();
 }

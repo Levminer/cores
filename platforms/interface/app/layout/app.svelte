@@ -138,6 +138,9 @@
 						// RAM load is rarely empty, might be a bug
 						if (WSData.data.ram.load.length > 0) {
 							setHardwareInfo(WSData.data)
+						}
+
+						if (WSData.type == "data") {
 							updateHardwareStats(WSData.data)
 						}
 					}

@@ -163,6 +163,8 @@ declare global {
 				temperature: Sensor[]
 			}
 		}
+
+		timestamp?: string
 	}
 
 	interface Stats {
@@ -207,6 +209,8 @@ declare global {
 			speed: Sensor
 			control: Sensor
 		}[]
+
+		timestamp?: string
 	}
 
 	interface HardwareStatistics {

@@ -815,6 +815,8 @@ public class HardwareInfo {
 			}
 
 			firstRun = false;
+			// utc time
+			API.Timestamp = DateTime.UtcNow;
 		}
 		catch (Exception ex) {
 			if (errorSent == false) {
