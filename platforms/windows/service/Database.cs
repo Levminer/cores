@@ -9,7 +9,7 @@ public class Database {
 	internal static DuckDBConnection connection = null;
 	public void Start() {
 		try {
-			connection = new DuckDBConnection("Data Source=stats.duckdb");
+			connection = new DuckDBConnection("DataSource=stats.duckdb");
 			connection.Open();
 		}
 		catch (Exception) {
@@ -57,10 +57,9 @@ public class Database {
 		var jsonList = new List<JsonNode>();
 
 		while (reader.Read()) {
-			// Read the JSON text from the `data` column and parse it into JsonNode
 			var jsonString = reader.GetString(0);
 			var node = JsonNode.Parse(jsonString);
-			Log.Information("Sending seconds data: {@data}", reader.GetDateTime(1));
+
 			if (node != null) {
 				jsonList.Add(node);
 			}
@@ -78,10 +77,9 @@ public class Database {
 		var jsonList = new List<JsonNode>();
 
 		while (reader.Read()) {
-			// Read the JSON text from the `data` column and parse it into JsonNode
 			var jsonString = reader.GetString(0);
 			var node = JsonNode.Parse(jsonString);
-			Log.Information("Sending minutes data: {@data}", reader.GetDateTime(1));
+
 			if (node != null) {
 				jsonList.Add(node);
 			}
