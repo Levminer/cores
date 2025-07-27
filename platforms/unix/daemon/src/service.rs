@@ -1,3 +1,4 @@
+use hardwareinfo::settings::get_settings_path;
 use log::{error, info};
 
 pub fn setup_service() {
@@ -8,6 +9,18 @@ pub fn setup_service() {
     if let Err(e) = status {
         error!(
             "Failed to copy executable to /bin, please run as root! Error: {}",
+            e
+        );
+        std::process::exit(1);
+    }
+
+    // copy settings file to /root
+    let current_settings = get_settings_path().join("Cores").join("settings.json");
+    let status = std::fs::copy(current_settings, "/root/.config/Cores/settings.json");
+
+    if let Err(e) = status {
+        error!(
+            "Failed to copy settings file to /root, please run as root! Error: {}",
             e
         );
         std::process::exit(1);
@@ -53,6 +66,6 @@ WantedBy=multi-user.target";
         .expect("Failed to start coresd service");
 
     info!("Service created successfully, please run `sudo systemctl status coresd` for more information");
-    info!("NOTE: You need to configure settings as root `/root/Cores/settings.json`");
+    info!("NOTE: Your current settings file was copied to `/root/.config/Cores/settings.json` edit it there to change settings.");
     std::process::exit(0);
 }
