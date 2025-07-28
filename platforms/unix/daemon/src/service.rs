@@ -1,4 +1,4 @@
-use hardwareinfo::settings::get_settings_path;
+use hardwareinfo::settings::{get_settings, set_settings};
 use log::{error, info};
 
 pub fn setup_service() {
@@ -14,17 +14,22 @@ pub fn setup_service() {
         std::process::exit(1);
     }
 
-    // copy settings file to /root
-    let current_settings = get_settings_path().join("Cores").join("settings.json");
-    let status = std::fs::copy(current_settings, "/root/.config/Cores/settings.json");
+    // prompt for connection code
+    let mut current_settings = get_settings();
+    let mut connection_code = current_settings.connection_code.clone();
 
-    if let Err(e) = status {
-        error!(
-            "Failed to copy settings file to /root, please run as root! Error: {}",
-            e
-        );
-        std::process::exit(1);
-    }
+    println!(
+        "Please enter a connection code (press enter to keep the current \"{connection_code}\"): "
+    );
+
+    std::io::stdin()
+        .read_line(&mut connection_code)
+        .expect("Failed to read input");
+
+    current_settings.connection_code = connection_code.trim().to_string();
+    set_settings(
+        serde_json::to_string(&current_settings).expect("Failed to convert settings to JSON"),
+    );
 
     let file_contents = "[Unit]
 Description=coresd

@@ -69,10 +69,6 @@ async fn main() {
     )])
     .unwrap();
 
-    // Get settings
-    let settings = get_settings();
-    info!("Connection code: {:?}", settings.connection_code);
-
     // Check if service setup is requested
     if args.service {
         service::setup_service();
@@ -81,6 +77,10 @@ async fn main() {
             "You are running coresd as an executable, to setup it as a service, run `sudo ./coresd --service`"
         );
     }
+
+    // Get settings
+    let settings = get_settings();
+    info!("Connection code: {:?}", settings.connection_code);
 
     // Hardware info channel
     let (channel_sender, channel_receiver) = async_channel::bounded(60);

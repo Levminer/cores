@@ -77,14 +77,6 @@ jobs:
                   name: "cores-${{matrix.NAME}}-${{runner.arch}}"
                   path: "target/release"
 
-            # Upload the unpackaged app
-            - name: Upload service installer
-              if: matrix.NAME == 'linux'
-              uses: actions/upload-artifact@v4
-              with:
-                  name: "cores-${{matrix.NAME}}-arm64"
-                  path: "target/aarch64-unknown-linux-gnu/release"
-
             - name: Run Upload To Release Action
               uses: levminer/upload-to-release@test
               if: startsWith(github.event.ref, 'refs/tags/')
