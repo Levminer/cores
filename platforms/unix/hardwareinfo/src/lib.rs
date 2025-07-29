@@ -261,6 +261,7 @@ pub struct HardwareInfo {
     pub ram: CoresRAM,
     pub gpu: CoresGPU,
     pub system: CoresSystem,
+    pub timestamp: String,
 }
 
 impl HardwareInfo {
@@ -322,6 +323,7 @@ impl HardwareInfo {
                     capacity: Vec::new(),
                 },
             },
+            timestamp: chrono::Utc::now().to_rfc3339(),
         }
     }
 }
@@ -817,4 +819,5 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
     // END
     data.first_run = false;
+    data.hw_info.timestamp = chrono::Utc::now().to_rfc3339();
 }
