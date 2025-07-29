@@ -9,6 +9,7 @@ use axum::{
     Router,
 };
 use clap::Parser;
+use duckdb::DuckdbConnectionManager;
 use ezrtc::host::EzRTCHost;
 use ezrtc::protocol::{SignalMessage, Status, UserId};
 use ezrtc::socket::{DataChannelHandler, WSHost};
@@ -17,6 +18,7 @@ use futures::{sink::SinkExt, stream::StreamExt};
 use hardwareinfo::settings::{get_settings, Settings};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
+use r2d2;
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
@@ -24,13 +26,14 @@ use std::net::SocketAddr;
 use std::ops::ControlFlow;
 use std::process::Command;
 use std::str::FromStr;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
 };
 use wol::{send_wol, MacAddr};
 
+mod db;
 mod service;
 
 #[derive(Serialize, Deserialize)]
@@ -41,9 +44,8 @@ pub struct GenericMessage<T> {
 
 pub struct AppState {
     hardware_info_receiver: async_channel::Receiver<HardwareInfo>,
-    last_60s_hardware_info: Mutex<Vec<HardwareInfo>>,
-    last_60m_hardware_info: Mutex<Vec<HardwareInfo>>,
     settings: Settings,
+    pool: r2d2::Pool<DuckdbConnectionManager>,
 }
 
 /// Modern hardware monitor with remote monitoring.
@@ -67,8 +69,9 @@ async fn main() {
         TerminalMode::Mixed,
         ColorChoice::Auto,
     )])
-    .unwrap();
+    .expect("Failed to initialize logger");
 
+    // Check if service setup is requested
     if args.service {
         service::setup_service();
     } else {
@@ -80,6 +83,14 @@ async fn main() {
     // Get settings
     let settings = get_settings();
     info!("Connection code: {:?}", settings.connection_code);
+
+    // Init database
+    let manager = DuckdbConnectionManager::memory().expect("Failed to open database");
+    let pool = r2d2::Pool::builder()
+        .max_size(10)
+        .build(manager)
+        .expect("Failed to create connection pool");
+    db::seed(&pool.get().expect("Failed to get connection"));
 
     // Hardware info channel
     let (channel_sender, channel_receiver) = async_channel::bounded(60);
@@ -96,9 +107,8 @@ async fn main() {
 
     let app_state = Arc::new(AppState {
         hardware_info_receiver: channel_receiver.clone(),
-        last_60s_hardware_info: Mutex::new(Vec::new()),
-        last_60m_hardware_info: Mutex::new(Vec::new()),
         settings: settings.clone(),
+        pool,
     });
 
     // Setup HTTP server routes
@@ -139,24 +149,8 @@ async fn main() {
             // only one receiver gets the message
             channel_sender.force_send(data.hw_info.clone()).unwrap();
 
-            if app_state_clone.last_60s_hardware_info.lock().unwrap().len() < 60 {
-                app_state_clone
-                    .last_60s_hardware_info
-                    .lock()
-                    .unwrap()
-                    .push(data.hw_info.clone());
-            } else {
-                app_state_clone
-                    .last_60s_hardware_info
-                    .lock()
-                    .unwrap()
-                    .remove(0);
-                app_state_clone
-                    .last_60s_hardware_info
-                    .lock()
-                    .unwrap()
-                    .push(data.hw_info.clone());
-            }
+            let conn = app_state_clone.pool.get().expect("Failed to get connection");
+            db::insert_seconds_data(&conn, &serde_json::to_string(&data.hw_info).expect("Failed to serialize HardwareInfo"));
 
             tokio::time::sleep(std::time::Duration::from_secs(settings.interval as u64)).await;
         }
@@ -169,24 +163,8 @@ async fn main() {
         loop {
             let data = rcv.recv().await.unwrap();
 
-            if app_state_clone.last_60m_hardware_info.lock().unwrap().len() < 60 {
-                app_state_clone
-                    .last_60m_hardware_info
-                    .lock()
-                    .unwrap()
-                    .push(data);
-            } else {
-                app_state_clone
-                    .last_60m_hardware_info
-                    .lock()
-                    .unwrap()
-                    .remove(0);
-                app_state_clone
-                    .last_60m_hardware_info
-                    .lock()
-                    .unwrap()
-                    .push(data);
-            }
+            let conn = app_state_clone.pool.get().expect("Failed to get connection");
+            db::insert_minutes_data(&conn, &serde_json::to_string(&data).expect("Failed to serialize HardwareInfo"));
 
             tokio::time::sleep(std::time::Duration::from_secs(60)).await;
         }
@@ -227,20 +205,14 @@ async fn main() {
                     if dc.ready_state() == RTCDataChannelState::Open {
                         // Get every third element from the last 60s and 60m hardware info
                         let last60s_hardware_info = {
-                            state
-                                .last_60s_hardware_info
-                                .lock()
-                                .unwrap()
+                            db::select_seconds_data(&state.pool.get().expect("Failed to get connection"))
                                 .iter()
                                 .step_by(3)
                                 .cloned()
                                 .collect::<Vec<HardwareInfo>>()
                         };
                         let last60m_hardware_info = {
-                            state
-                                .last_60m_hardware_info
-                                .lock()
-                                .unwrap()
+                            db::select_minutes_data(&state.pool.get().expect("Failed to get connection"))
                                 .iter()
                                 .step_by(3)
                                 .cloned()
@@ -386,11 +358,8 @@ async fn main() {
                 let state = self.state.clone();
 
                 let hw_info = {
-                    let last_60s_data = state.last_60s_hardware_info.lock().unwrap();
-                    last_60s_data
-                        .last()
-                        .unwrap_or(&HardwareInfo::default())
-                        .clone()
+                    let last_60s_data = db::select_seconds_data(&state.pool.get().expect("Failed to get connection"));
+                    last_60s_data.into_iter().last().unwrap_or(HardwareInfo::default())
                 };
 
                 let cpu_usage = hw_info.cpu.max_load;
@@ -495,20 +464,14 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
 
     // Get every third element from the last 60s and 60m hardware info
     let last60s_hardware_info = {
-        state
-            .last_60s_hardware_info
-            .lock()
-            .unwrap()
+        db::select_seconds_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
             .step_by(3)
             .cloned()
             .collect::<Vec<HardwareInfo>>()
     };
     let last60m_hardware_info = {
-        state
-            .last_60m_hardware_info
-            .lock()
-            .unwrap()
+        db::select_minutes_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
             .step_by(3)
             .cloned()

@@ -118,7 +118,7 @@ pub struct Settings {
 
 fn sample_settings() -> Settings {
     Settings {
-        interval: 2,
+        interval: 3,
         minimize_to_tray: true,
         remote_connections: false,
         connection_code: default_connection_code(),
@@ -132,12 +132,12 @@ fn sample_settings() -> Settings {
 }
 
 #[cfg(target_os = "windows")]
-fn get_settings_path() -> std::path::PathBuf {
+pub fn get_settings_path() -> std::path::PathBuf {
     std::path::PathBuf::from("C:\\ProgramData")
 }
 
 #[cfg(not(target_os = "windows"))]
-fn get_settings_path() -> std::path::PathBuf {
+pub fn get_settings_path() -> std::path::PathBuf {
     use directories::BaseDirs;
 
     match BaseDirs::new() {

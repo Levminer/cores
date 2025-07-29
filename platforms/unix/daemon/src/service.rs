@@ -1,3 +1,4 @@
+use hardwareinfo::settings::{get_settings, set_settings};
 use log::{error, info};
 
 pub fn setup_service() {
@@ -12,6 +13,23 @@ pub fn setup_service() {
         );
         std::process::exit(1);
     }
+
+    // prompt for connection code
+    let mut current_settings = get_settings();
+    let mut connection_code = current_settings.connection_code.clone();
+
+    println!(
+        "Please enter a connection code (press enter to keep the current \"{connection_code}\"): "
+    );
+
+    std::io::stdin()
+        .read_line(&mut connection_code)
+        .expect("Failed to read input");
+
+    current_settings.connection_code = connection_code.trim().to_string();
+    set_settings(
+        serde_json::to_string(&current_settings).expect("Failed to convert settings to JSON"),
+    );
 
     let file_contents = "[Unit]
 Description=coresd
@@ -53,6 +71,6 @@ WantedBy=multi-user.target";
         .expect("Failed to start coresd service");
 
     info!("Service created successfully, please run `sudo systemctl status coresd` for more information");
-    info!("NOTE: You need to configure settings as root `/root/Cores/settings.json`");
+    info!("NOTE: Your current settings file was copied to `/root/.config/Cores/settings.json` edit it there to change settings.");
     std::process::exit(0);
 }

@@ -25,6 +25,7 @@ public class Program {
 	};
 	internal static HardwareStats HardwareStats = new();
 	internal static Settings Settings = new();
+	internal static Database Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 		Log.Error("App crashed with an unhandled exception");
@@ -62,6 +63,10 @@ public class Program {
 			var exe = Path.Join(AppContext.BaseDirectory, "CoresService.exe");
 			var res = Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
 		}
+
+		// Load db
+		Database.Start();
+		Database.Seed();
 
 		// Create the service
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);

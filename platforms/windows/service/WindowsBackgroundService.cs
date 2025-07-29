@@ -1,6 +1,5 @@
 using lib;
 using Serilog;
-using System.Text.Json;
 
 namespace service;
 public sealed class WindowsBackgroundService : BackgroundService {
@@ -30,13 +29,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		// TODO: Should take the avg. of the last 60s
 		_ = Task.Run(async () => {
 			while (!stoppingToken.IsCancellationRequested) {
-				if (Program.HardwareStats.minutes.Count() < 60) {
-					Program.HardwareStats.minutes.Add(JsonSerializer.Serialize(HardwareInfo.API, Program.CompressedSerializerOptions));
-				} else {
-					var api = new API();
-					Program.HardwareStats.minutes.RemoveAt(0);
-					Program.HardwareStats.minutes.Add(JsonSerializer.Serialize(HardwareInfo.API, Program.CompressedSerializerOptions));
-				}
+				Program.Database.InsertMinutesData(HardwareInfo.API);
 
 				await Task.Delay(TimeSpan.FromSeconds(60));
 			}
@@ -46,19 +39,15 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			try {
 				HardwareInfo.Refresh();
 
-				if (Program.HardwareStats.seconds.Count() < 60) {
-					Program.HardwareStats.seconds.Add(JsonSerializer.Serialize(HardwareInfo.API, Program.CompressedSerializerOptions));
-				} else {
-					var api = new API();
-					Program.HardwareStats.seconds.RemoveAt(0);
-					Program.HardwareStats.seconds.Add(JsonSerializer.Serialize(HardwareInfo.API, Program.CompressedSerializerOptions));
-				}
+				Program.Database.InsertSecondsData(HardwareInfo.API);
 
-				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval), stoppingToken);
+				// Wait for configured interval and account for processing time
+				await Task.Delay(TimeSpan.FromMilliseconds((Program.Settings.interval * 1000) - 500), stoppingToken);
 			}
 			catch (OperationCanceledException) {
 				RTCServer.Stop();
 				Server.Stop();
+				Program.Database.Close();
 				HardwareInfo.Stop();
 			}
 			catch (Exception ex) {
