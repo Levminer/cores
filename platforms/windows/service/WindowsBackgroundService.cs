@@ -42,7 +42,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				Program.Database.InsertSecondsData(HardwareInfo.API);
 
 				// Wait for configured interval and account for processing time
-				await Task.Delay(TimeSpan.FromMilliseconds((Program.Settings.interval * 1000) - 500), stoppingToken);
+				await Task.Delay(TimeSpan.FromMilliseconds((Program.Settings.interval * 1000) - 300), stoppingToken);
 			}
 			catch (OperationCanceledException) {
 				RTCServer.Stop();

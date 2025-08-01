@@ -1434,7 +1434,6 @@ dependencies = [
 name = "coresd"
 version = "0.32.0"
 dependencies = [
- "async-channel 2.4.0",
  "axum",
  "axum-extra",
  "clap",
