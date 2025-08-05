@@ -19,6 +19,7 @@
 		min?: number
 		max?: number
 		step?: number
+		timestamp?: string[]
 	}
 
 	export let props: Props = {
@@ -57,7 +58,12 @@
 	}
 
 	// @ts-ignore
-	$: labels = props.statistics[0].data.map((_, i) => `${props.statistics[0].data.length - 1 - i}${props.time} ago`)
+	$: labels = props.timestamp
+		? props.timestamp.map((timestamp) => {
+				const date = new Date(timestamp)
+				return `${date.toLocaleTimeString()}`
+			})
+		:  props.statistics[0].data.map((_, i) => `${props.statistics[0].data.length - 1 - i}${props.time} ago`)
 
 	$: data = {
 		labels: labels,
