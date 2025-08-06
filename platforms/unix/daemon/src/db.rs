@@ -1,5 +1,5 @@
-use duckdb::{params, Connection};
 use hardwareinfo::HardwareInfo;
+use rusqlite::{params, Connection};
 
 #[derive(Debug)]
 struct Row {
@@ -7,8 +7,8 @@ struct Row {
 }
 
 pub fn seed(conn: &Connection) {
-    let sql1 = "CREATE TABLE IF NOT EXISTS seconds_data (id UUID DEFAULT uuid(), timestamp TIMESTAMP DEFAULT now(), data JSON);";
-    let sql2 = "CREATE TABLE IF NOT EXISTS minutes_data (id UUID DEFAULT uuid(), timestamp TIMESTAMP DEFAULT now(), data JSON);";
+    let sql1 = "CREATE TABLE IF NOT EXISTS seconds_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
+    let sql2 = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 
     conn.execute_batch(sql1).expect("Failed to create table");
     conn.execute_batch(sql2).expect("Failed to create table");

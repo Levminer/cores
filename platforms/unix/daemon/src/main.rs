@@ -9,7 +9,6 @@ use axum::{
     Router,
 };
 use clap::Parser;
-use duckdb::DuckdbConnectionManager;
 use ezrtc::host::EzRTCHost;
 use ezrtc::protocol::{SignalMessage, Status, UserId};
 use ezrtc::socket::{DataChannelHandler, WSHost};
@@ -19,6 +18,8 @@ use hardwareinfo::settings::{get_settings, get_settings_path, Settings};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
 use r2d2;
+use r2d2_sqlite::SqliteConnectionManager;
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
@@ -45,7 +46,7 @@ pub struct GenericMessage<T> {
 pub struct AppState {
     hardware_info_receiver: tokio::sync::broadcast::Receiver<HardwareInfo>,
     settings: Settings,
-    pool: r2d2::Pool<DuckdbConnectionManager>,
+    pool: r2d2::Pool<SqliteConnectionManager>,
 }
 
 /// Modern hardware monitor with remote monitoring.
@@ -86,15 +87,20 @@ async fn main() {
 
     // Init database
     let folder = get_settings_path().join("Cores");
-    let manager = if let Ok(manager) = DuckdbConnectionManager::file(folder.join("stats.duckdb")) {
-        manager
-    } else {
-        warn!("Failed to open file database, using memory database");
-        DuckdbConnectionManager::memory().expect("Failed to open memory database")
+    let connection_manager = match Connection::open(folder.join("stats.sqlite")) {
+        Ok(conn) => {
+            conn.close().expect("Failed to close database connection");
+            SqliteConnectionManager::file(folder.join("stats.sqlite"))
+        }
+        Err(_) => {
+            warn!("Failed to open file database, using memory database");
+            SqliteConnectionManager::memory()
+        }
     };
+
     let pool = r2d2::Pool::builder()
         .max_size(10)
-        .build(manager)
+        .build(connection_manager)
         .expect("Failed to create connection pool");
     db::seed(&pool.get().expect("Failed to get connection"));
 
@@ -234,6 +240,19 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
+                        // Send initial data
+                        let hw_message = match receiver.recv().await {
+                            Ok(data) => data,
+                            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
+                                HardwareInfo::default()
+                            }
+                            Err(_) => HardwareInfo::default(),
+                        };
+                        let network_data = GenericMessage::<HardwareInfo> {
+                            r#type: "initialData".to_string(),
+                            data: hw_message.clone(),
+                        };
+
                         // Get every third element from the last 60s and 60m hardware info
                         let last60s_hardware_info = {
                             db::select_seconds_data(
@@ -252,19 +271,6 @@ async fn main() {
                             .step_by(3)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
-                        };
-
-                        // Send initial data
-                        let hw_message = match receiver.recv().await {
-                            Ok(data) => data,
-                            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
-                                HardwareInfo::default()
-                            }
-                            Err(_) => HardwareInfo::default(),
-                        };
-                        let network_data = GenericMessage::<HardwareInfo> {
-                            r#type: "initialData".to_string(),
-                            data: hw_message.clone(),
                         };
 
                         if dc
@@ -308,7 +314,7 @@ async fn main() {
                             };
                         }
 
-                        // Send data every 2 second
+                        // Send data every interval
                         loop {
                             let hw_message = match receiver.recv().await {
                                 Ok(data) => data,
