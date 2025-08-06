@@ -80,6 +80,9 @@
 									unit: " RPM",
 									time: minutes ? "m" : "s",
 									min: 0,
+									timestamp: minutes
+										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 								}}
 							/>
 						</div>
@@ -114,6 +117,9 @@
 									time: minutes ? "m" : "s",
 									min: 0,
 									max: 100,
+									timestamp: minutes
+										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 								}}
 							/>
 						</div>

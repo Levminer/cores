@@ -97,6 +97,9 @@
 							min: 0,
 							max: 100,
 							step: 10,
+							timestamp: minutes
+								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					/>
 				</div>
@@ -147,6 +150,9 @@
 							min: 0,
 							max: 100,
 							step: 10,
+							timestamp: minutes
+								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					/>
 				</div>

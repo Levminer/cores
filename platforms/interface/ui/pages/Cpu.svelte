@@ -158,6 +158,9 @@
 							],
 							time: minutes ? "m" : "s",
 							unit: " Mhz",
+							timestamp: minutes
+								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					/>
 				</div>
@@ -210,6 +213,9 @@
 							unit: "%",
 							min: 0,
 							max: 100,
+							timestamp: minutes
+								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					/>
 				</div>
@@ -258,6 +264,9 @@
 								],
 								time: minutes ? "m" : "s",
 								unit: " W",
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 							}}
 						/>
 					</div>
@@ -307,6 +316,9 @@
 								],
 								time: minutes ? "m" : "s",
 								unit: " V",
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 							}}
 						/>
 					</div>
