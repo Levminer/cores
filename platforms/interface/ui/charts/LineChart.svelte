@@ -7,26 +7,24 @@
 	import { colors } from "../utils/colors.ts"
 
 	interface Props {
-		id?: string
-		statistics: {
-			label?: string
-			data?: number[]
-			fill?: boolean
-			color?: "min" | "max" | "current" | "yellow" | "orange"
-		}[]
-		unit: string
-		time: string
-		min?: number
-		max?: number
-		step?: number
+		props: {
+			id?: string
+			statistics: {
+				label?: string
+				data?: number[]
+				fill?: boolean
+				color?: "min" | "max" | "current" | "yellow" | "orange"
+			}[]
+			unit: string
+			time: string
+			min?: number
+			max?: number
+			step?: number
+			timestamp?: string[]
+		}
 	}
 
-	export let props: Props = {
-		id: "",
-		statistics: [{}],
-		unit: "",
-		time: "",
-	}
+	let { props }: Props = $props()
 
 	let canvas: HTMLCanvasElement
 	let chart: Chart<"line">
@@ -51,15 +49,23 @@
 	})
 
 	// Update chart when data changes
-	$: if (chart && data) {
-		chart.data = data
-		chart.update()
-	}
+	$effect(() => {
+		if (chart && data) {
+			chart.data = data
+			chart.update()
+		}
+	})
 
-	// @ts-ignore
-	$: labels = props.statistics[0].data.map((_, i) => `${props.statistics[0].data.length - 1 - i}${props.time} ago`)
+	const labels = $derived(
+		props.timestamp
+			? props.timestamp.map((timestamp: string) => {
+					const date = new Date(timestamp)
+					return `${date.toLocaleTimeString()}`
+				})
+			: (props.statistics[0].data?.map((_, i) => `${props.statistics[0].data!.length - 1 - i}${props.time} ago`) ?? []),
+	)
 
-	$: data = {
+	const data = $derived({
 		labels: labels,
 		datasets: [
 			...props.statistics.map((value, index) => {
@@ -75,7 +81,7 @@
 				}
 			}),
 		],
-	}
+	})
 
 	let options: ChartOptions<"line"> = {
 		elements: {
@@ -110,13 +116,17 @@
 			},
 			x: {
 				ticks: {
-					callback: function (val, index) {
-						// @ts-ignore ticks if they're divisible by 10
-						return index % 30 === 0 ? this.getLabelForValue(val) : ""
+					callback: function (value, index, ticks) {
+						if (index === 0 || index === ticks.length - 1) {
+							// @ts-ignore show full label for first and last tick
+							return this.getLabelForValue(value)
+						}
+						return ""
 					},
 					maxRotation: 0,
 					minRotation: 0,
 					color: "#969696",
+					autoSkip: false,
 				},
 				// TODO: adjust grid lines
 			},

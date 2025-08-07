@@ -77,6 +77,9 @@
 									unit: " MB/s",
 									time: minutes ? "m" : "s",
 									min: 0,
+									timestamp: minutes
+										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 								}}
 							/>
 						</div>
@@ -124,6 +127,9 @@
 										],
 										unit: " °C",
 										time: minutes ? "m" : "s",
+										timestamp: minutes
+											? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+											: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 									}}
 								/>
 							</div>
