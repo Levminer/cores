@@ -6,30 +6,38 @@
 	import { Chart, registerables } from "chart.js"
 	import ChartjsPluginStacked100 from "chartjs-plugin-stacked100"
 	import type { ChartOptions } from "chart.js"
-	import { onMount, afterUpdate } from "svelte"
 	import { colors } from "../utils/colors.ts"
+	import { onMount } from "svelte"
 
-	export let readings: Sensor[]
-	export let categories: string[]
-	export let type: { name: string; unit: string }
+	interface Props {
+		readings: Sensor[]
+		categories: string[]
+		type: { name: string; unit: string }
+	}
+
+	let { readings, categories, type }: Props = $props()
+
 	const id = crypto.randomUUID()
-
 	let canvasElement: HTMLCanvasElement
 	let chart: Chart<"bar"> | null = null
-	let lastCategories: string[] = categories
+	let lastCategories: string[] = $state(categories)
 
 	Chart.register(...registerables, ChartjsPluginStacked100)
 
-	$: temps = [{ data: readings.map((temp) => temp.min) }, { data: readings.map((temp) => temp.value) }, { data: readings.map((temp) => temp.max) }]
+	const temps = $derived([
+		{ data: readings.map((temp) => temp.min) },
+		{ data: readings.map((temp) => temp.value) },
+		{ data: readings.map((temp) => temp.max) },
+	])
 
-	$: data = {
+	const data = $derived({
 		labels: categories,
 		datasets: [
 			{ label: `Min ${type.name}`, data: temps[0].data, backgroundColor: colors.min },
 			{ label: `Current ${type.name}`, data: temps[1].data, backgroundColor: colors.current },
 			{ label: `Max ${type.name}`, data: temps[2].data, backgroundColor: colors.max },
 		],
-	}
+	})
 
 	// Initialize chart when component mounts
 	onMount(() => {
@@ -49,13 +57,15 @@
 	})
 
 	// Update chart when data changes
-	$: if (chart && data) {
-		chart.data = data
-		chart.update()
-	}
+	$effect(() => {
+		if (chart && data) {
+			chart.data = data
+			chart.update()
+		}
+	})
 
 	// Resize chart to fit all data
-	afterUpdate(() => {
+	$effect(() => {
 		if (categories.length > lastCategories.length) {
 			document.querySelector<HTMLDivElement>(`.meterChart${id}`)!.style.height = readings.length * 40 + "px"
 

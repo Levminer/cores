@@ -60,7 +60,7 @@
 		props.timestamp
 			? props.timestamp.map((timestamp: string) => {
 					const date = new Date(timestamp)
-					return `${date.toLocaleTimeString()}`
+					return `${date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} ${date.toLocaleTimeString()}`
 				})
 			: (props.statistics[0].data?.map((_, i) => `${props.statistics[0].data!.length - 1 - i}${props.time} ago`) ?? []),
 	)
@@ -127,6 +127,7 @@
 					minRotation: 0,
 					color: "#969696",
 					autoSkip: false,
+					align: "inner",
 				},
 				// TODO: adjust grid lines
 			},

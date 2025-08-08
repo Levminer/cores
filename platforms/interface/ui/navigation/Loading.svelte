@@ -9,13 +9,13 @@
 	<div class="webError transparent-900 m-3 my-10 hidden rounded-xl border-2 border-red-700 p-8 text-left">
 		<h2 class="mb-5">App not loading?</h2>
 		<ul class="list-inside list-disc">
-			<li>The connection might be slow, try waiting a few seconds</li>
+			<li>Connecting usually takes less then 10 seconds</li>
 			<li>
-				Try to <button class="underline" on:click={reload}>Refresh</button> this page
+				Try to <button class="underline" onclick={reload}>Refresh</button> this page
 			</li>
 			<li>Restart your Cores app on your computer</li>
 			<li>
-				Make sure the <button class="underline" on:click={connectionCode}>connection code</button> is correct
+				Make sure the <button class="underline" onclick={connectionCode}>connection code</button> is correct
 			</li>
 			<li>
 				Go back to the <a class="underline" href="/">home</a> page
@@ -27,10 +27,10 @@
 		<h2 class="mb-5">Cores service is not running</h2>
 		<ul class="list-inside list-disc">
 			<li>
-				Make sure the Cores Service is running: <button class="underline" on:click={startService}>Launch service</button>
+				Make sure the Cores Service is running: <button class="underline" onclick={startService}>Launch service</button>
 			</li>
 			<li>
-				Restart Cores: <button class="underline" on:click={reload}>Restart</button>
+				Restart Cores: <button class="underline" onclick={reload}>Restart</button>
 			</li>
 		</ul>
 	</div>
@@ -40,7 +40,7 @@
 	import { onMount } from "svelte"
 	import { invoke } from "@tauri-apps/api/core"
 
-	export let mode = "web" as "web" | "desktop"
+	let { mode = "web" as "web" | "desktop" } = $props()
 
 	const reload = () => {
 		sessionStorage.clear()
@@ -65,7 +65,7 @@
 		} else {
 			interval = setInterval(() => {
 				document.querySelector(".webError")!.classList.remove("hidden")
-			}, 5000)
+			}, 8000)
 		}
 
 		return () => {

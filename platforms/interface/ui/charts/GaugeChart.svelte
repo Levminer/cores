@@ -6,9 +6,13 @@
 	import type { ChartOptions } from "chart.js"
 	import { colors } from "../utils/colors.ts"
 
-	export let load
+	interface Props {
+		load: number
+	}
 
-	let canvasElement: HTMLCanvasElement
+	let { load }: Props = $props()
+
+	let canvasElement: HTMLCanvasElement | undefined
 	let chart: Chart<"doughnut">
 
 	Chart.register(...registerables)
@@ -22,22 +26,24 @@
 				options: options,
 				plugins: pluginTest,
 			})
-		}
 
-		return () => {
-			if (chart) {
-				chart.destroy()
+			return () => {
+				if (chart) {
+					chart.destroy()
+				}
 			}
 		}
 	})
 
 	// Update chart when data changes
-	$: if (chart && data) {
-		chart.data = data
-		chart.update()
-	}
+	$effect(() => {
+		if (chart && data) {
+			chart.data = data
+			chart.update()
+		}
+	})
 
-	let options: ChartOptions<"doughnut"> = {
+	const options: ChartOptions<"doughnut"> = {
 		rotation: 0,
 		circumference: 360,
 		cutout: "85%",
@@ -67,7 +73,7 @@
 		},
 	}
 
-	let pluginTest = [
+	const pluginTest = [
 		{
 			id: "text",
 			beforeDraw: function (chart: any, a: any, b: any) {
@@ -91,15 +97,15 @@
 		},
 	]
 
-	$: percentage = parseInt(load)
-	$: total = percentage - 100
+	const percentage = $derived(Math.trunc(load))
+	const total = $derived(percentage - 100)
 
-	$: data = {
+	const data = $derived({
 		datasets: [
 			{
 				data: [percentage, total],
 				backgroundColor: [colors.min, "hsla(0, 0%, 100%, 3.26%)"],
 			},
 		],
-	}
+	})
 </script>
