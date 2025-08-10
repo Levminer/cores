@@ -36,6 +36,7 @@
 		if (canvas) {
 			chart = new Chart(canvas, {
 				type: "line",
+				// @ts-ignore
 				data: data,
 				options: options,
 			})
@@ -60,7 +61,10 @@
 		props.timestamp
 			? props.timestamp.map((timestamp: string) => {
 					const date = new Date(timestamp)
-					return `${date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })} ${date.toLocaleTimeString()}`
+					return [
+						`${date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}`,
+						`${date.toLocaleTimeString()}`,
+					]
 				})
 			: (props.statistics[0].data?.map((_, i) => `${props.statistics[0].data!.length - 1 - i}${props.time} ago`) ?? []),
 	)
@@ -135,6 +139,16 @@
 		plugins: {
 			tooltip: {
 				callbacks: {
+					// Join title elements with space instead of comma
+					title: (tooltipItems) => {
+						const title = tooltipItems[0].label
+
+						if (title.includes(",")) {
+							return title.split(",").join(" - ")
+						} else {
+							return title
+						}
+					},
 					label: (tooltipItem) => {
 						const data = tooltipItem.chart.data
 						const datasetIndex = tooltipItem.datasetIndex
