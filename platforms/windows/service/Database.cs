@@ -1,20 +1,19 @@
-﻿using DuckDB.NET.Data;
-using lib;
-using Serilog;
+﻿using lib;
+using Microsoft.Data.Sqlite;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace service;
 public class Database {
-	internal static DuckDBConnection connection = null;
+	internal static SqliteConnection connection = null;
 	public void Start() {
 		try {
-			connection = new DuckDBConnection("DataSource=stats.duckdb");
+			connection = new SqliteConnection("DataSource=stats.duckdb");
 			connection.Open();
 		}
 		catch (Exception) {
 			// Fall back to in-memory database if the file cannot be opened
-			connection = new DuckDBConnection("DataSource=:memory:");
+			connection = new SqliteConnection("DataSource=:memory:");
 			connection.Open();
 		}
 	}
@@ -25,16 +24,17 @@ public class Database {
 
 	public void Seed() {
 		using var command = connection.CreateCommand();
-		command.CommandText = "CREATE TABLE IF NOT EXISTS seconds_data (id UUID DEFAULT uuid(), timestamp TIMESTAMP DEFAULT now(), data JSON);";
+		command.CommandText = "CREATE TABLE IF NOT EXISTS seconds_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 		command.ExecuteNonQuery();
-		command.CommandText = "CREATE TABLE IF NOT EXISTS minutes_data (id UUID DEFAULT uuid(), timestamp TIMESTAMP DEFAULT now(), data JSON);";
+		command.CommandText = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 		command.ExecuteNonQuery();
 	}
 
 	public void InsertSecondsData(API data) {
 		using var insertCommand = connection.CreateCommand();
-		insertCommand.CommandText = "INSERT INTO seconds_data (data) VALUES (?);";
+		insertCommand.CommandText = "INSERT INTO seconds_data (data) VALUES (@data);";
 		var param = insertCommand.CreateParameter();
+		param.ParameterName = "@data";
 		param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
 		insertCommand.Parameters.Add(param);
 		insertCommand.ExecuteNonQuery();
@@ -42,8 +42,9 @@ public class Database {
 
 	public void InsertMinutesData(API data) {
 		using var insertCommand = connection.CreateCommand();
-		insertCommand.CommandText = "INSERT INTO minutes_data (data) VALUES (?);";
+		insertCommand.CommandText = "INSERT INTO minutes_data (data) VALUES (@data);";
 		var param = insertCommand.CreateParameter();
+		param.ParameterName = "@data";
 		param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
 		insertCommand.Parameters.Add(param);
 		insertCommand.ExecuteNonQuery();
