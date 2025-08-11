@@ -371,4 +371,6 @@ target
 .DS_Store
 *.tsbuildinfo
 *.duckdb
+*.sqlite
+*.sqlite-*
 *.wal

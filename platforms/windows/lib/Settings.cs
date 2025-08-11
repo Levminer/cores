@@ -52,17 +52,21 @@ public class Settings : DefaultSettings {
 		WriteIndented = true,
 	};
 
+	public string GetSettingsFolder() {
+		return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Cores");
+	}
+
 	public void CheckIfSettingsExists() {
 		var defaultSettings = new DefaultSettings();
-		var prorgamData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+		var settingsFolder = GetSettingsFolder();
 
 		// check if Cores folder exists
-		if (!File.Exists(Path.Join(prorgamData, "Cores"))) {
-			Directory.CreateDirectory(Path.Join(prorgamData, "Cores"));
+		if (!Directory.Exists(settingsFolder)) {
+			Directory.CreateDirectory(settingsFolder);
 		}
 
 		// set folder permissions
-		var folderInfo = new DirectoryInfo(Path.Join(prorgamData, "Cores"));
+		var folderInfo = new DirectoryInfo(settingsFolder);
 		var folderSecurity = folderInfo.GetAccessControl();
 		folderSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null),
 		FileSystemRights.FullControl,
@@ -72,21 +76,23 @@ public class Settings : DefaultSettings {
 		folderInfo.SetAccessControl(folderSecurity);
 
 		// check if settings.json exists
-		if (!File.Exists(Path.Join(prorgamData, "Cores", "settings.json"))) {
+		var settingsPath = Path.Join(settingsFolder, "settings.json");
+		if (!File.Exists(settingsPath)) {
 			// create settings.json
-			File.WriteAllText(Path.Join(prorgamData, "Cores", "settings.json"), JsonSerializer.Serialize(defaultSettings));
+			File.WriteAllText(settingsPath, JsonSerializer.Serialize(defaultSettings));
 		}
 	}
 
 	public Settings() {
 		var defaultSettings = new DefaultSettings();
-		var appData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+		var settingsFolder = GetSettingsFolder();
 
 		CheckIfSettingsExists();
 
 		// read settings.json
 		try {
-			using var stream = new FileStream(Path.Join(appData, "Cores", "settings.json"), FileMode.Open, FileAccess.Read, FileShare.Read);
+			var settingsPath = Path.Join(settingsFolder, "settings.json");
+			using var stream = new FileStream(settingsPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 			var settings = JsonSerializer.Deserialize<DefaultSettings>(stream, SerializerOptions);
 
 			interval = settings?.interval ?? defaultSettings.interval;
@@ -104,11 +110,12 @@ public class Settings : DefaultSettings {
 	}
 
 	public void SetSettings() {
-		var programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+		var settingsFolder = GetSettingsFolder();
 
 		CheckIfSettingsExists();
 
 		// write settings.json
-		File.WriteAllText(Path.Join(programData, "Cores", "settings.json"), JsonSerializer.Serialize(this, SerializerOptions));
+		var settingsPath = Path.Join(settingsFolder, "settings.json");
+		File.WriteAllText(settingsPath, JsonSerializer.Serialize(this, SerializerOptions));
 	}
 }

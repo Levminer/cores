@@ -35,6 +35,15 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			}
 		});
 
+		// Cleanup old data
+		_ = Task.Run(async () => {
+			while (!stoppingToken.IsCancellationRequested) {
+				Log.Information("Cleanup completed");
+				Program.Database.Cleanup();
+				await Task.Delay(TimeSpan.FromMinutes(60));
+			}
+		});
+
 		while (!stoppingToken.IsCancellationRequested) {
 			try {
 				HardwareInfo.Refresh();

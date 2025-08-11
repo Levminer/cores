@@ -9,7 +9,6 @@ use axum::{
     Router,
 };
 use clap::Parser;
-use duckdb::DuckdbConnectionManager;
 use ezrtc::host::EzRTCHost;
 use ezrtc::protocol::{SignalMessage, Status, UserId};
 use ezrtc::socket::{DataChannelHandler, WSHost};
@@ -19,6 +18,8 @@ use hardwareinfo::settings::{get_settings, get_settings_path, Settings};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
 use log::{error, info, warn, LevelFilter};
 use r2d2;
+use r2d2_sqlite::SqliteConnectionManager;
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
 use std::borrow::Cow;
@@ -27,6 +28,7 @@ use std::ops::ControlFlow;
 use std::process::Command;
 use std::str::FromStr;
 use std::sync::Arc;
+use std::time::Duration;
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
@@ -45,7 +47,7 @@ pub struct GenericMessage<T> {
 pub struct AppState {
     hardware_info_receiver: tokio::sync::broadcast::Receiver<HardwareInfo>,
     settings: Settings,
-    pool: r2d2::Pool<DuckdbConnectionManager>,
+    pool: r2d2::Pool<SqliteConnectionManager>,
 }
 
 /// Modern hardware monitor with remote monitoring.
@@ -86,17 +88,23 @@ async fn main() {
 
     // Init database
     let folder = get_settings_path().join("Cores");
-    let manager = if let Ok(manager) = DuckdbConnectionManager::file(folder.join("stats.duckdb")) {
-        manager
-    } else {
-        warn!("Failed to open file database, using memory database");
-        DuckdbConnectionManager::memory().expect("Failed to open memory database")
+    let connection_manager = match Connection::open(folder.join("stats.sqlite")) {
+        Ok(conn) => {
+            conn.close().expect("Failed to close database connection");
+            SqliteConnectionManager::file(folder.join("stats.sqlite"))
+        }
+        Err(_) => {
+            warn!("Failed to open file database, using memory database");
+            SqliteConnectionManager::memory()
+        }
     };
+
     let pool = r2d2::Pool::builder()
         .max_size(10)
-        .build(manager)
+        .build(connection_manager)
         .expect("Failed to create connection pool");
     db::seed(&pool.get().expect("Failed to get connection"));
+    db::cleanup(&pool.get().expect("Failed to get connection"));
 
     // Hardware info channel
     let (channel_sender, channel_receiver) = tokio::sync::broadcast::channel(10);
@@ -212,6 +220,7 @@ async fn main() {
     });
 
     // Start RTC server
+    let app_state_clone = app_state.clone();
     let rtc_task = tokio::spawn(async move {
         // Define your STUN and TURN servers here
         let ice_servers = vec![RTCIceServer {
@@ -234,6 +243,19 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
+                        // Send initial data
+                        let hw_message = match receiver.recv().await {
+                            Ok(data) => data,
+                            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
+                                HardwareInfo::default()
+                            }
+                            Err(_) => HardwareInfo::default(),
+                        };
+                        let network_data = GenericMessage::<HardwareInfo> {
+                            r#type: "initialData".to_string(),
+                            data: hw_message.clone(),
+                        };
+
                         // Get every third element from the last 60s and 60m hardware info
                         let last60s_hardware_info = {
                             db::select_seconds_data(
@@ -252,19 +274,6 @@ async fn main() {
                             .step_by(3)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
-                        };
-
-                        // Send initial data
-                        let hw_message = match receiver.recv().await {
-                            Ok(data) => data,
-                            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
-                                HardwareInfo::default()
-                            }
-                            Err(_) => HardwareInfo::default(),
-                        };
-                        let network_data = GenericMessage::<HardwareInfo> {
-                            r#type: "initialData".to_string(),
-                            data: hw_message.clone(),
                         };
 
                         if dc
@@ -308,7 +317,7 @@ async fn main() {
                             };
                         }
 
-                        // Send data every 2 second
+                        // Send data every interval
                         loop {
                             let hw_message = match receiver.recv().await {
                                 Ok(data) => data,
@@ -459,7 +468,7 @@ async fn main() {
             ice_servers,
             Arc::new(Box::new(MyDataChannelHandler {
                 receiver: channel_receiver.resubscribe(),
-                state: app_state.clone(),
+                state: app_state_clone.clone(),
             })),
         )
         .await;
@@ -467,6 +476,20 @@ async fn main() {
         info!("RTC started");
 
         std::future::pending::<()>().await;
+    });
+
+    let app_state_clone = app_state.clone();
+    let cleanup_task = tokio::spawn(async move {
+        loop {
+            let conn = app_state_clone
+                .pool
+                .get()
+                .expect("Failed to get connection");
+            db::cleanup(&conn);
+
+            info!("Cleanup completed");
+            tokio::time::sleep(Duration::from_secs(60 * 60)).await;
+        }
     });
 
     // Start tasks
@@ -482,6 +505,9 @@ async fn main() {
         }
         _ = last_60m_hardware_info_task => {
             info!("Last 60s hardware info stopped");
+        }
+        _ = cleanup_task => {
+            info!("Cleanup task stopped");
         }
     };
 
