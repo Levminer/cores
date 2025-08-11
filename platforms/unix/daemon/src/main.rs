@@ -28,6 +28,7 @@ use std::ops::ControlFlow;
 use std::process::Command;
 use std::str::FromStr;
 use std::sync::Arc;
+use std::time::Duration;
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
@@ -103,6 +104,7 @@ async fn main() {
         .build(connection_manager)
         .expect("Failed to create connection pool");
     db::seed(&pool.get().expect("Failed to get connection"));
+    db::cleanup(&pool.get().expect("Failed to get connection"));
 
     // Hardware info channel
     let (channel_sender, channel_receiver) = tokio::sync::broadcast::channel(10);
@@ -218,6 +220,7 @@ async fn main() {
     });
 
     // Start RTC server
+    let app_state_clone = app_state.clone();
     let rtc_task = tokio::spawn(async move {
         // Define your STUN and TURN servers here
         let ice_servers = vec![RTCIceServer {
@@ -465,7 +468,7 @@ async fn main() {
             ice_servers,
             Arc::new(Box::new(MyDataChannelHandler {
                 receiver: channel_receiver.resubscribe(),
-                state: app_state.clone(),
+                state: app_state_clone.clone(),
             })),
         )
         .await;
@@ -473,6 +476,20 @@ async fn main() {
         info!("RTC started");
 
         std::future::pending::<()>().await;
+    });
+
+    let app_state_clone = app_state.clone();
+    let cleanup_task = tokio::spawn(async move {
+        loop {
+            let conn = app_state_clone
+                .pool
+                .get()
+                .expect("Failed to get connection");
+            db::cleanup(&conn);
+
+            info!("Cleanup completed");
+            tokio::time::sleep(Duration::from_secs(60 * 60)).await;
+        }
     });
 
     // Start tasks
@@ -488,6 +505,9 @@ async fn main() {
         }
         _ = last_60m_hardware_info_task => {
             info!("Last 60s hardware info stopped");
+        }
+        _ = cleanup_task => {
+            info!("Cleanup task stopped");
         }
     };
 

@@ -8,7 +8,9 @@ public class Database {
 	internal static SqliteConnection connection = null;
 	public void Start() {
 		try {
-			connection = new SqliteConnection("DataSource=stats.duckdb");
+			var settingsFolder = Program.Settings.GetSettingsFolder();
+			var dbPath = Path.Combine(settingsFolder, "stats.sqlite");
+			connection = new SqliteConnection($"DataSource={dbPath}");
 			connection.Open();
 		}
 		catch (Exception) {
@@ -27,6 +29,14 @@ public class Database {
 		command.CommandText = "CREATE TABLE IF NOT EXISTS seconds_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 		command.ExecuteNonQuery();
 		command.CommandText = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
+		command.ExecuteNonQuery();
+	}
+
+	public void Cleanup() {
+		using var command = connection.CreateCommand();
+		command.CommandText = "DELETE FROM seconds_data WHERE id NOT IN (SELECT id FROM seconds_data ORDER BY timestamp DESC LIMIT 60);";
+		command.ExecuteNonQuery();
+		command.CommandText = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
 		command.ExecuteNonQuery();
 	}
 

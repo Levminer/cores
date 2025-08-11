@@ -14,6 +14,14 @@ pub fn seed(conn: &Connection) {
     conn.execute_batch(sql2).expect("Failed to create table");
 }
 
+pub fn cleanup(conn: &Connection) {
+    let sql1 = "DELETE FROM seconds_data WHERE id NOT IN (SELECT id FROM seconds_data ORDER BY timestamp DESC LIMIT 60);";
+    let sql2 = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
+
+    conn.execute_batch(sql1).expect("Failed to cleanup table");
+    conn.execute_batch(sql2).expect("Failed to cleanup table");
+}
+
 pub fn insert_seconds_data(conn: &Connection, data: &str) {
     let sql = "INSERT INTO seconds_data (data) VALUES (?);";
 
