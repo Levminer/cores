@@ -262,7 +262,7 @@ async fn main() {
                                 &state.pool.get().expect("Failed to get connection"),
                             )
                             .iter()
-                            .step_by(3)
+                            .step_by(2)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
                         };
@@ -271,7 +271,7 @@ async fn main() {
                                 &state.pool.get().expect("Failed to get connection"),
                             )
                             .iter()
-                            .step_by(3)
+                            .step_by(2)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
                         };
@@ -547,14 +547,14 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
     let last60s_hardware_info = {
         db::select_seconds_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
-            .step_by(3)
+            .step_by(2)
             .cloned()
             .collect::<Vec<HardwareInfo>>()
     };
     let last60m_hardware_info = {
         db::select_minutes_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
-            .step_by(3)
+            .step_by(2)
             .cloned()
             .collect::<Vec<HardwareInfo>>()
     };

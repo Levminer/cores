@@ -40,7 +40,7 @@ public class Commands {
 
 				return output;
 			}
-			catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 2) {
+			catch (Exception) {
 				continue; // File not found, try next PowerShell path
 			}
 		}

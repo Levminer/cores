@@ -128,9 +128,7 @@
 			}
 
 			if (WSData.type == "secondsData") {
-				for (let i = 0; i < 3; i++) {
-					updateHardwareStats(WSData.data)
-				}
+				updateHardwareStats(WSData.data)
 			}
 
 			if (WSData.type == "initialMinutesData") {
@@ -138,9 +136,7 @@
 			}
 
 			if (WSData.type == "minutesData") {
-				for (let i = 0; i < 3; i++) {
-					$hardwareStatistics.minutes.push(generateSecondsData(WSData.data))
-				}
+				$hardwareStatistics.minutes.push(generateSecondsData(WSData.data))
 			}
 		})
 	}

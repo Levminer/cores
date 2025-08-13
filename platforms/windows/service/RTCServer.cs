@@ -19,13 +19,13 @@ public class RTCServer {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
 				if (data.readyState == RTCDataChannelState.open) {
-					var secondsList = Program.Database.SelectSecondsData().Where((x, i) => (i + 1) % 3 == 0).ToList();
+					var secondsList = Program.Database.SelectSecondsData().Where((x, i) => (i + 1) % 2 == 0).ToList();
 
 					for (int i = 0; i < secondsList.Count; i++) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
 					}
 
-					var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 3 == 0).ToList();
+					var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 2 == 0).ToList();
 					if (minutesList.Count > 0) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
 					}
