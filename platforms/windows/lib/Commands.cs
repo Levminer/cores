@@ -8,21 +8,45 @@ using System.Text.Json;
 namespace lib;
 public class Commands {
 	public static string ExecuteCommand(string command) {
-		var scriptArguments = $"-WindowStyle Hidden -Command \"{command}\"";
-		var processStartInfo = new ProcessStartInfo("powershell.exe", scriptArguments) {
-			CreateNoWindow = true,
-			RedirectStandardOutput = true,
-			RedirectStandardError = true
+		string[] powershellPaths = {
+			"powershell.exe",
+			"pwsh.exe",
+			@"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe",
+			@"C:\Program Files\PowerShell\7\pwsh.exe",
 		};
 
-		using var process = new Process();
-		process.StartInfo = processStartInfo;
-		process.Start();
-		string output = process.StandardOutput.ReadToEnd();
-		string error = process.StandardError.ReadToEnd();
+		// Loop over the possible PowerShell executable paths
+		foreach (var psPath in powershellPaths) {
+			try {
+				Log.Information("Executing command: {Command} using PowerShell at {PsPath}", command, psPath);
 
+				var scriptArguments = $"-WindowStyle Hidden -Command \"{command}\"";
+				var processStartInfo = new ProcessStartInfo(psPath, scriptArguments) {
+					CreateNoWindow = true,
+					RedirectStandardOutput = true,
+					RedirectStandardError = true,
+				};
 
-		return output;
+				using var process = new Process();
+				process.StartInfo = processStartInfo;
+				process.Start();
+				string output = process.StandardOutput.ReadToEnd();
+				string error = process.StandardError.ReadToEnd();
+
+				// If we get here without exception, PowerShell was found
+				if (!string.IsNullOrEmpty(error)) {
+					Log.Warning("PowerShell command had errors: {Error}", error);
+				}
+
+				return output;
+			}
+			catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 2) {
+				continue; // File not found, try next PowerShell path
+			}
+		}
+
+		Log.Error("Could not find any PowerShell executable on the system");
+		return "N/A";
 	}
 
 	public class CmdOsInfo {
@@ -56,9 +80,9 @@ public class Commands {
 		// format: 20240411000000.000000-000
 		var driverDate = gpuInfo?.DriverDate ?? "00000000000000.000000-000";
 		var unformattedDate = driverDate.Split(".")[0];
-		var foramttedDate = $"{unformattedDate.Substring(0, 4)}. {unformattedDate.Substring(4, 2)}. {unformattedDate.Substring(6, 2)}.";
+		var formattedDate = $"{unformattedDate.Substring(0, 4)}. {unformattedDate.Substring(4, 2)}. {unformattedDate.Substring(6, 2)}.";
 
-		return foramttedDate;
+		return formattedDate;
 	}
 
 	public class CycleCountInfo {
