@@ -1,8 +1,13 @@
-<AppHeader />
-<Navigation />
+{#if page.url.pathname !== "/embed"}
+	<AppHeader />
+	<Navigation />
+{/if}
 
 {@render children()}
-<div class="mb-32"></div>
+
+{#if page.url.pathname !== "/embed"}
+	<div class="mb-32"></div>
+{/if}
 
 <script lang="ts">
 	import { EzRTCClient } from "ezrtc"
@@ -11,6 +16,7 @@
 	import AppHeader from "../../components/AppHeader.svelte"
 	import { hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 	import Navigation from "../../components/Navigation.svelte"
+	import { page } from "$app/state"
 
 	let { children } = $props()
 
