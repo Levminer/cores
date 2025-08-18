@@ -63,13 +63,13 @@
 					{/snippet}
 					<div class="w-full space-y-5">
 						<div class="flex items-center justify-center gap-1 rounded-xl border-2 border-white p-3">
-							<input type="color" bind:value={$settings.colors.min} />
-							<input type="color" bind:value={$settings.colors.current} />
-							<input type="color" bind:value={$settings.colors.max} />
-							<input type="color" bind:value={$settings.colors.yellow} />
-							<input type="color" bind:value={$settings.colors.orange} />
-							{#each $settings.colors.categoricalPalette as item, i}
-								<input type="color" bind:value={$settings.colors.categoricalPalette[i]} />
+							<input type="color" bind:value={$localSettings.colors.min} />
+							<input type="color" bind:value={$localSettings.colors.current} />
+							<input type="color" bind:value={$localSettings.colors.max} />
+							<input type="color" bind:value={$localSettings.colors.yellow} />
+							<input type="color" bind:value={$localSettings.colors.orange} />
+							{#each $localSettings.colors.categoricalPalette as item, i}
+								<input type="color" bind:value={$localSettings.colors.categoricalPalette[i]} />
 							{/each}
 						</div>
 
@@ -111,7 +111,7 @@
 								<h5 class="mb-1">Default storage device</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$settings.defaultDevices.storage}
+									bind:value={$localSettings.defaultDevices.storage}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.system.storage.disks as item}
@@ -124,7 +124,7 @@
 								<h5 class="mb-1">Default network interface</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$settings.defaultDevices.network}
+									bind:value={$localSettings.defaultDevices.network}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.system.network.interfaces as item}
@@ -137,7 +137,7 @@
 								<h5 class="mb-1">Default GPU</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$settings.defaultDevices.gpu}
+									bind:value={$localSettings.defaultDevices.gpu}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.gpu.cards as item}
@@ -312,7 +312,7 @@
 	import { invoke } from "@tauri-apps/api/core"
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { onMount } from "svelte"
-	import { hardwareInfo, ModularDialog, Select, settings, Toggle } from "ui"
+	import { hardwareInfo, localSettings, ModularDialog, Select, settings, Toggle } from "ui"
 	import { Dialog } from "bits-ui"
 	import { router } from "@baileyherbert/tinro"
 

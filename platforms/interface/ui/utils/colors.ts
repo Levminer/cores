@@ -1,5 +1,6 @@
+import { getLocalSettings } from "../stores/localSettings"
 import { getSettings } from "../stores/settings"
-const settings = getSettings()
+const settings = getLocalSettings()
 
 export const colors = {
 	min: settings.colors?.min ?? "#35cbfd",

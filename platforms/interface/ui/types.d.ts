@@ -234,19 +234,6 @@ declare global {
 		}[]
 		remoteConnections: boolean
 		userId: string
-		colors: {
-			min: string
-			current: string
-			max: string
-			yellow: string
-			orange: string
-			categoricalPalette: string[]
-		}
-		defaultDevices: {
-			gpu: string
-			network: string
-			storage: string
-		}
 	}
 
 	interface LibState {

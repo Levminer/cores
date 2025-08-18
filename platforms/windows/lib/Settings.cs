@@ -43,7 +43,6 @@ public class DefaultSettings {
 	public string connectionCode { get; set; } = DefaultValues.GenerateConnectionCode();
 	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
-	public DefaultDevices defaultDevices { get; set; } = new();
 }
 
 public class Settings : DefaultSettings {
@@ -102,7 +101,6 @@ public class Settings : DefaultSettings {
 			connectionCodes = settings?.connectionCodes ?? defaultSettings.connectionCodes;
 			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
 			userId = settings?.userId ?? defaultSettings.userId;
-			defaultDevices = settings?.defaultDevices ?? defaultSettings.defaultDevices;
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);

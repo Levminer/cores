@@ -52,47 +52,6 @@ pub struct ConnectionCode {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Colors {
-    pub min: String,
-    pub current: String,
-    pub max: String,
-    pub yellow: String,
-    pub orange: String,
-    #[serde(rename = "categoricalPalette")]
-    pub categorical_palette: Vec<String>,
-}
-
-fn default_colors() -> Colors {
-    Colors {
-        min: "#35cbfd".to_string(),
-        current: "#ff5380".to_string(),
-        max: "#9d0cfd".to_string(),
-        yellow: "#fee440".to_string(),
-        orange: "#fe884d".to_string(),
-        categorical_palette: vec![
-            "#dc94ff".to_string(),
-            "#7d70fe".to_string(),
-            "#2a9d8f".to_string(),
-        ],
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DefaultDevices {
-    pub gpu: String,
-    pub network: String,
-    pub storage: String,
-}
-
-fn default_default_devices() -> DefaultDevices {
-    DefaultDevices {
-        gpu: "".to_string(),
-        network: "".to_string(),
-        storage: "".to_string(),
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -110,10 +69,6 @@ pub struct Settings {
     pub connection_code: String,
     #[serde(rename = "userId", default = "default_user_id")]
     pub user_id: String,
-    #[serde(rename = "colors", default = "default_colors")]
-    pub colors: Colors,
-    #[serde(rename = "defaultDevices", default = "default_default_devices")]
-    pub default_devices: DefaultDevices,
 }
 
 fn sample_settings() -> Settings {
@@ -126,8 +81,6 @@ fn sample_settings() -> Settings {
         connection_url: default_connection_url(),
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
-        colors: default_colors(),
-        default_devices: default_default_devices(),
     }
 }
 
