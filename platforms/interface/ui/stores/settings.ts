@@ -31,23 +31,6 @@ const settingsScheme = z.object({
 	networkDevices: networkDevicesScheme.array().default([]),
 	remoteConnections: z.boolean().default(false),
 	userId: z.string().default(generateUserId()),
-	colors: z
-		.object({
-			min: z.string().default("#35cbfd"),
-			current: z.string().default("#ff5380"),
-			max: z.string().default("#9d0cfd"),
-			yellow: z.string().default("#fee440"),
-			orange: z.string().default("#fe884d"),
-			categoricalPalette: z.array(z.string()).default(["#dc94ff", "#7d70fe", "#2a9d8f"]),
-		})
-		.default({}),
-	defaultDevices: z
-		.object({
-			gpu: z.string().default(""),
-			network: z.string().default(""),
-			storage: z.string().default(""),
-		})
-		.default({}),
 })
 
 // Create store

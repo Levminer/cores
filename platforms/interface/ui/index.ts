@@ -33,6 +33,7 @@ import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwar
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
 import { settings, getSettings, setSettings, initializeSettings } from "./stores/settings.ts"
 import { state, appState, getState, setState } from "./stores/state.ts"
+import { localSettings, getLocalSettings, setLocalSettings } from "./stores/localSettings.ts"
 
 import { generateMinutesData, generateSecondsData } from "./utils/stats.ts"
 import { supabaseClient } from "./utils/supabase.ts"
@@ -87,5 +88,8 @@ export {
 	addConnectionCode,
 	deleteConnectionCode,
 	editConnectionCode,
-	ErrorBoundary
+	ErrorBoundary,
+	localSettings,
+	getLocalSettings,
+	setLocalSettings,
 }
