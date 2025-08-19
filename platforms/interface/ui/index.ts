@@ -28,6 +28,7 @@ import ToggleButton from "./components/ToggleButton.svelte"
 import UpdateAlert from "./components/UpdateAlert.svelte"
 import ConnectionServer from "./components/ConnectionServer.svelte"
 import ErrorBoundary from "./components/ErrorBoundary.svelte"
+import NewsAlert from "./components/NewsAlert.svelte"
 
 import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
@@ -92,4 +93,5 @@ export {
 	localSettings,
 	getLocalSettings,
 	setLocalSettings,
+	NewsAlert
 }

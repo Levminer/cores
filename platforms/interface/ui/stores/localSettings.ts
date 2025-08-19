@@ -2,7 +2,7 @@ import { z } from "zod"
 import { writable, get } from "svelte/store"
 
 const localSettingsScheme = z.object({
-	newsDate: z.string().default(""),
+	newsDate: z.string().default("2020-01-01T10:10:10.100Z"),
 	colors: z
 		.object({
 			min: z.string().default("#35cbfd"),
@@ -13,17 +13,12 @@ const localSettingsScheme = z.object({
 			categoricalPalette: z.array(z.string()).default(["#dc94ff", "#7d70fe", "#2a9d8f"]),
 		})
 		.default({}),
-	defaultDevices: z
-		.object({
-			gpu: z.string().default(""),
-			network: z.string().default(""),
-			storage: z.string().default(""),
-		})
-		.default({}),
 })
 
+type LibLocalSettings = z.infer<typeof localSettingsScheme>
+
 // Create store
-export const localSettings = writable<LibSettings>(
+export const localSettings = writable<LibLocalSettings>(
 	localStorage.localSettings ? JSON.parse(localStorage.localSettings) : localSettingsScheme.parse({}),
 )
 
@@ -35,10 +30,10 @@ localSettings.subscribe(async (data) => {
 	localStorage.setItem("localSettings", JSON.stringify(validatedLocalSettings))
 })
 
-export const getLocalSettings = (): LibSettings => {
+export const getLocalSettings = (): LibLocalSettings => {
 	return get(localSettings)
 }
 
-export const setLocalSettings = (newSettings: LibSettings) => {
+export const setLocalSettings = (newSettings: LibLocalSettings) => {
 	localSettings.set(newSettings)
 }

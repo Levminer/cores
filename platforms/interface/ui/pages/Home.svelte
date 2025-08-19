@@ -607,7 +607,7 @@
 </div>
 
 <script lang="ts">
-	import { GaugeChart, hardwareInfo, MeterChart, Progress, settings, state } from "ui"
+	import { GaugeChart, hardwareInfo, MeterChart, NewsAlert, Progress, settings, state } from "ui"
 	import {
 		Gauge,
 		CircuitBoard,

@@ -2,14 +2,14 @@
 	{#if value > 0}
 		<div
 			class="shadow-mini-inset h-full w-full flex-1 rounded-full transition-all duration-1000 ease-in-out"
-			style={`transform: translateX(-${100 - (100 * (Math.round(value) ?? 0)) / 100}%); background-color: ${$settings.colors?.min ?? "#35cbfd"};`}
+			style={`transform: translateX(-${100 - (100 * (Math.round(value) ?? 0)) / 100}%); background-color: ${$localSettings.colors?.min ?? "#35cbfd"};`}
 		></div>
 	{/if}
 </Progress.Root>
 
 <script lang="ts">
 	import { Progress } from "bits-ui"
-	import { settings } from "../stores/settings"
+	import { localSettings } from "../stores/localSettings"
 
 	interface Props {
 		value: number

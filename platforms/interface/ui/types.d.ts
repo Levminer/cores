@@ -234,6 +234,11 @@ declare global {
 		}[]
 		remoteConnections: boolean
 		userId: string
+		defaultDevices: {
+			gpu: string
+			network: string
+			storage: string
+		}
 	}
 
 	interface LibState {

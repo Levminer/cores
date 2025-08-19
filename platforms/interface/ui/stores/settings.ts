@@ -31,6 +31,13 @@ const settingsScheme = z.object({
 	networkDevices: networkDevicesScheme.array().default([]),
 	remoteConnections: z.boolean().default(false),
 	userId: z.string().default(generateUserId()),
+	defaultDevices: z
+		.object({
+			gpu: z.string().default(""),
+			network: z.string().default(""),
+			storage: z.string().default(""),
+		})
+		.default({}),
 })
 
 // Create store

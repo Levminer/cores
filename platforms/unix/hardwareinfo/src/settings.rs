@@ -52,6 +52,21 @@ pub struct ConnectionCode {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DefaultDevices {
+    pub gpu: String,
+    pub network: String,
+    pub storage: String,
+}
+
+fn default_default_devices() -> DefaultDevices {
+    DefaultDevices {
+        gpu: "".to_string(),
+        network: "".to_string(),
+        storage: "".to_string(),
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -69,6 +84,8 @@ pub struct Settings {
     pub connection_code: String,
     #[serde(rename = "userId", default = "default_user_id")]
     pub user_id: String,
+    #[serde(rename = "defaultDevices", default = "default_default_devices")]
+    pub default_devices: DefaultDevices,
 }
 
 fn sample_settings() -> Settings {
@@ -81,6 +98,7 @@ fn sample_settings() -> Settings {
         connection_url: default_connection_url(),
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
+        default_devices: default_default_devices(),
     }
 }
 
