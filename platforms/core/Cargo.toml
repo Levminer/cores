@@ -1,6 +1,6 @@
 [package]
 name = "cores"
-version = "0.32.0"
+version = "0.33.0"
 description = "Cores - Modern hardware monitor for Windows"
 authors = ["Lőrik Levente"]
 edition = "2021"
