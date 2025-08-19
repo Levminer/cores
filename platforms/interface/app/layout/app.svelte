@@ -9,6 +9,7 @@
 		{/if}
 
 		<UpdateAlert />
+		<NewsAlert />
 
 		<div class="top"></div>
 
@@ -94,6 +95,7 @@
 		supabaseClient,
 		UpdateAlert,
 		ErrorBoundary,
+		NewsAlert,
 	} from "ui"
 
 	let loading = $state(true)

@@ -111,7 +111,7 @@
 								<h5 class="mb-1">Default storage device</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$localSettings.defaultDevices.storage}
+									bind:value={$settings.defaultDevices.storage}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.system.storage.disks as item}
@@ -124,7 +124,7 @@
 								<h5 class="mb-1">Default network interface</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$localSettings.defaultDevices.network}
+									bind:value={$settings.defaultDevices.network}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.system.network.interfaces as item}
@@ -137,7 +137,7 @@
 								<h5 class="mb-1">Default GPU</h5>
 								<select
 									class="form-select w-full rounded-xl border-transparent text-black focus:border-transparent focus:ring-0"
-									bind:value={$localSettings.defaultDevices.gpu}
+									bind:value={$settings.defaultDevices.gpu}
 								>
 									<option disabled selected>Select your option</option>
 									{#each $hardwareInfo.gpu.cards as item}
