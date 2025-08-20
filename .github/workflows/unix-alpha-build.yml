@@ -51,16 +51,14 @@ jobs:
 
             - name: Sign the service daemon
               if: matrix.NAME == 'macos'
-              uses: lando/code-sign-action@v2
+              uses: toitlang/action-macos-sign-notarize@v1.2.0
               with:
-                  file: target/release/coresd-aarch64-apple-darwin
-                  certificate-data: ${{ secrets.APPLE_CERTIFICATE }}
+                  app-path: target/release/coresd-aarch64-apple-darwin
+                  certificate: ${{ secrets.APPLE_CERTIFICATE }}
                   certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
-                  apple-notary-user: ${{ secrets.APPLE_ID }}
-                  apple-notary-password: ${{ secrets.APPLE_PASSWORD }}
+                  username: ${{ secrets.APPLE_ID }}
+                  password: ${{ secrets.APPLE_PASSWORD }}
                   apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
-                  apple-product-id: com.levminer.coresd
-                  options: --options runtime
 
             - name: Install node modules
               run: npm ci
