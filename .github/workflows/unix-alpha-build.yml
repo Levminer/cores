@@ -31,16 +31,29 @@ jobs:
             - name: Install cross-rs
               run: cargo install cross
 
-            - name: Build service executable
+            - name: Build service daemon
               if: matrix.NAME == 'linux'
               run: cd platforms/unix/daemon && cargo build --release && cross build --release --target aarch64-unknown-linux-gnu
 
-            - name: Build service executable
+            - name: Build service daemon
               if: matrix.NAME == 'macos'
               run: cd platforms/unix/daemon && cargo build --release
 
-            - name: Rename service executable
+            - name: Rename service daemon
               run: cp target/release/coresd target/release/coresd-$(rustc -Vv | grep host | cut -f2 -d' ')
+
+            - name: Sign the service daemon
+              if: matrix.NAME == 'macos'
+              uses: lando/code-sign-action@v2
+              with:
+                  file: target/release/coresd-aarch64-apple-darwin
+                  certificate-data: ${{ secrets.APPLE_CERTIFICATE }}
+                  certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+                  apple-notary-user: ${{ secrets.APPLE_ID }}
+                  apple-notary-password: ${{ secrets.APPLE_PASSWORD }}
+                  apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+                  apple-product-id: com.levminer.coresd
+                  options: --options runtime
 
             - name: Install node modules
               run: npm ci
