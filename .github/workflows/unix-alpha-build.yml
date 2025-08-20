@@ -18,6 +18,13 @@ jobs:
             TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
             SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
             GH_TOKEN: ${{ github.token }}
+            APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+            APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+            APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+            APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+            APPLE_ID: ${{ secrets.APPLE_ID }}
+            APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -31,16 +38,27 @@ jobs:
             - name: Install cross-rs
               run: cargo install cross
 
-            - name: Build service executable
+            - name: Build service daemon
               if: matrix.NAME == 'linux'
               run: cd platforms/unix/daemon && cargo build --release && cross build --release --target aarch64-unknown-linux-gnu
 
-            - name: Build service executable
+            - name: Build service daemon
               if: matrix.NAME == 'macos'
               run: cd platforms/unix/daemon && cargo build --release
 
-            - name: Rename service executable
+            - name: Rename service daemon
               run: cp target/release/coresd target/release/coresd-$(rustc -Vv | grep host | cut -f2 -d' ')
+
+            - name: Sign the service daemon
+              if: matrix.NAME == 'macos'
+              uses: toitlang/action-macos-sign-notarize@v1.2.0
+              with:
+                  app-path: target/release/coresd-aarch64-apple-darwin
+                  certificate: ${{ secrets.APPLE_CERTIFICATE }}
+                  certificate-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+                  username: ${{ secrets.APPLE_ID }}
+                  password: ${{ secrets.APPLE_PASSWORD }}
+                  apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
 
             - name: Install node modules
               run: npm ci
