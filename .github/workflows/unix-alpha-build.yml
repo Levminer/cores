@@ -18,6 +18,13 @@ jobs:
             TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
             SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
             GH_TOKEN: ${{ github.token }}
+            APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+            APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+            KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+            APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+            APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+            APPLE_ID: ${{ secrets.APPLE_ID }}
+            APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
