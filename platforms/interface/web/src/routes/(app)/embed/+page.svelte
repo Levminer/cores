@@ -1,5 +1,7 @@
 {#if $appState.state === "connected"}
-	{#if hash === "#cpu"}
+	{#if hash === "#home"}
+		<Home />
+	{:else if hash === "#cpu"}
 		<Cpu />
 	{:else if hash === "#ram"}
 		<Ram />
@@ -11,15 +13,17 @@
 		<Network />
 	{:else if hash === "#system"}
 		<System />
+	{:else if hash === "#connections"}
+		<Connections />
 	{:else}
-		<Cpu />
+		<Home />
 	{/if}
 {:else}
 	<Loading />
 {/if}
 
 <script>
-	import { Cpu, Loading, Ram, settings, Gpu, Storage, Network, System } from "ui"
+	import { Cpu, Loading, Ram, settings, Gpu, Storage, Network, System, Home, Connections } from "ui"
 	import { appState } from "../../../stores/state"
 	import { onMount } from "svelte"
 
