@@ -21,7 +21,7 @@ serde_json = "1"
 hardwareinfo = { path = "../hardwareinfo" }
 simplelog = "0.12"
 log = "0.4"
-ezrtc = "0.7.0"
+ezrtc = "0.8.0"
 wol-rs = "1"
 clap = { version = "4.5.23", features = ["derive"] }
 rusqlite = { version = "0.37.0", features = ["bundled"] }
