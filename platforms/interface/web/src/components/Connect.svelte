@@ -66,7 +66,6 @@
 
 	onMount(async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
-		const settings = getSettings()
 
 		loading = false
 

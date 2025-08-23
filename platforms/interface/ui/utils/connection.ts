@@ -93,7 +93,7 @@ export const addConnectionCode = async () => {
 	}
 }
 
-export const addDevice = () => {
+export const addNetworkDevice = async () => {
 	const settings = getSettings()
 
 	const nameInput = document.getElementById("name") as HTMLInputElement
@@ -117,12 +117,38 @@ export const addDevice = () => {
 	]
 
 	setSettings(settings)
+
+	// save network device
+	try {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData.user) {
+			const { data, error } = await supabaseClient.from("network_device").insert({
+				mac: macInput.value,
+				name: nameInput.value,
+				user_id: userData.user.id,
+			})
+		}
+	} catch (error) {
+		console.log(error)
+	}
 }
 
-export const deleteDevice = (mac: string) => {
+export const deleteNetworkDevice = async (mac: string) => {
 	const settings = getSettings()
 
 	settings.networkDevices = settings.networkDevices.filter((item) => item.mac !== mac)
 
 	setSettings(settings)
+
+	// delete network device
+	try {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData.user) {
+			const { data, error } = await supabaseClient.from("network_device").delete().eq("mac", mac)
+		}
+	} catch (error) {
+		console.log(error)
+	}
 }

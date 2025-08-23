@@ -106,7 +106,7 @@
 				</div>
 
 				<div class="flex flex-col items-start gap-3 sm:my-5">
-					<ModularDialog title={"Add device"} description={"You can get the Mac address from the Cores desktop app."}>
+					<ModularDialog title={"Add device"} description={"You can get the MAC address from the Cores desktop app."}>
 						{#snippet openButton()}
 							<Dialog.Trigger class="button w-full">
 								<Plus />
@@ -114,7 +114,7 @@
 							</Dialog.Trigger>
 						{/snippet}
 						{#snippet confirmButton()}
-							<Dialog.Close on:click={() => addDevice()} class="smallButton">
+							<Dialog.Close on:click={() => addNetworkDevice()} class="smallButton">
 								<Plus class="h-5 w-5" />
 								Add device
 							</Dialog.Close>
@@ -134,7 +134,7 @@
 				</div>
 
 				<div class="mt-5 flex w-full flex-col gap-5">
-					{#each $settings.networkDevices.filter((item) => item.mac !== undefined && item.mac !== "" && item.code == $settings.connectionCode) as item, i}
+					{#each $settings.networkDevices.filter((item) => item.mac !== undefined && item.mac !== "") as item, i}
 						<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
 							<div class="flex flex-row flex-wrap gap-3">
 								<div>
@@ -143,7 +143,7 @@
 								</div>
 
 								<div>
-									<h5>Mac address</h5>
+									<h5>MAC address</h5>
 									<input class="input mt-1" type="text" value={item.mac} readonly />
 								</div>
 							</div>
@@ -158,13 +158,13 @@
 									}}
 								>
 									<Power />
-									Send WOL packet
+									Wake up
 								</button>
 
 								<button
 									class="button mt-6"
 									onclick={() => {
-										deleteDevice(item.mac)
+										deleteNetworkDevice(item.mac)
 									}}
 								>
 									<Trash2 />
@@ -180,13 +180,43 @@
 </div>
 
 <script lang="ts">
-	import { ConnectionServer, hardwareInfo, ModularDialog, settings, Toggle } from "ui"
+	import { ConnectionServer, getSettings, hardwareInfo, ModularDialog, setSettings, settings, Toggle } from "ui"
 	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth, Server } from "lucide-svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { Dialog } from "bits-ui"
 	import { supabaseClient } from "../utils/supabase.ts"
-	import { addDevice, deleteDevice } from "../utils/connection.ts"
+	import { addNetworkDevice, deleteNetworkDevice } from "../utils/connection.ts"
+	import { onMount } from "svelte"
+
+	onMount(async () => {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData !== null) {
+			const { data, error } = await supabaseClient.from("network_device").select("*").order("created_at", { ascending: true })
+
+			// check if connection is already added
+			if (data && data.length > 0) {
+				for (let i = 0; i < data.length; i++) {
+					const settings = getSettings()
+					const item = settings.networkDevices.filter((item) => item.mac === data[i].mac)
+
+					if (item.length === 0) {
+						settings.networkDevices = [
+							...settings.networkDevices,
+							{
+								name: data[i].name!,
+								code: "",
+								mac: data[i].mac!,
+							},
+						]
+
+						setSettings(settings)
+					}
+				}
+			}
+		}
+	})
 
 	const remoteConnections = async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
