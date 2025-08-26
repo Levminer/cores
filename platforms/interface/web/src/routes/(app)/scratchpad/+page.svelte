@@ -3,17 +3,19 @@
 {:else}
 	<div class="transparent-900 m-10 mx-auto w-11/12 rounded-xl sm:w-full">
 		<div class="mx-10 flex flex-col gap-5 pb-10 pt-10 sm:mx-3 sm:flex-wrap">
-			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
-				<div class="flex flex-col items-start gap-3">
-					<div class="flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<NotebookPen />
+			{#if messages.length === 0}
+				<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+					<div class="flex flex-col items-start gap-3">
+						<div class="flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<NotebookPen />
+							</div>
+							<h2>Notepad</h2>
 						</div>
-						<h2>Scratchpad</h2>
+						<h3>You can write down "temporary" things here or upload files. Everything is kept for 30 days.</h3>
 					</div>
-					<h3>You can write down "temporary" things here or upload files. Everything is kept for 30 days.</h3>
 				</div>
-			</div>
+			{/if}
 
 			<div class="overlayScroll flex max-h-96 flex-col gap-5 overflow-y-auto">
 				<!-- Set a max height and enable scrolling -->

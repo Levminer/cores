@@ -1,15 +1,15 @@
-<div class="transparent-800 flex w-full select-text flex-row flex-wrap items-center justify-between rounded-xl p-4 text-left">
+<div class="transparent-800 flex w-full select-text flex-col md:flex-row items-start md:items-center justify-between rounded-xl p-4 text-left">
 	{#if message.type === "text"}
 		<div>
-			<p class="text-lg text-gray-200">{message.message}</p>
+			<p class="break-all text-lg text-justify text-gray-200">{message.message}</p>
 			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
 		</div>
-		<div class="flex flex-row items-center justify-center gap-3">
+		<div class="flex flex-row items-center justify-center gap-3 m-3">
 			<button
 				class="rounded-lg bg-white p-2"
-				onclick={() => {
+				onclick={async () => {
 					if (message?.message) {
-						navigator.clipboard.writeText(message.message)
+						await navigator.clipboard.writeText(message.message)
 						return alert("Link copied to clipboard!")
 					}
 				}}
@@ -31,10 +31,10 @@
 
 	{#if message.type === "file"}
 		<div>
-			<p class="text-lg italic text-gray-200 underline">{message.message}</p>
+			<p class="break-all text-lg italic text-gray-200 underline">{message.message}</p>
 			<p class="text-xs text-gray-400">{formatTime(message.created_at)}</p>
 		</div>
-		<div class="flex flex-row items-center justify-center gap-3">
+		<div class="flex flex-row items-center justify-center gap-3 m-3">
 			<button
 				onclick={() => {
 					if (message?.message) {
@@ -43,7 +43,7 @@
 				}}
 				class="rounded-lg bg-white p-2"
 			>
-				<ExternalLink class="h-5 w-5 text-black" />
+				<Clipboard class="h-5 w-5 text-black" />
 			</button>
 			<button
 				class="bg-popup-red rounded-lg p-2"
@@ -65,11 +65,11 @@
 	import type { User as UserType } from "@supabase/supabase-js"
 	import { Clipboard, ExternalLink, Trash } from "lucide-svelte"
 	interface Props {
-		message: Database["public"]["Tables"]["messages"]["Row"];
-		user: UserType | null;
+		message: Database["public"]["Tables"]["messages"]["Row"]
+		user: UserType | null
 	}
 
-	let { message, user }: Props = $props();
+	let { message, user }: Props = $props()
 
 	const formatTime = (time: string) => {
 		const date = new Date(time)
@@ -100,17 +100,8 @@
 
 		if (data && !error) {
 			// copy link to clipboard
-			navigator.clipboard.writeText(`https://rd.coresmonitor.com?link=${data.signedUrl}`)
-
-			setTimeout(() => {
-				const newWindow = window.open(data.signedUrl, "_blank")
-
-				if (!newWindow || newWindow.closed || typeof newWindow.closed == "undefined") {
-					return alert("Link copied to clipboard!")
-				}
-
-				newWindow.focus()
-			}, 10)
+			await navigator.clipboard.writeText(`https://rd.coresmonitor.com?link=${data.signedUrl}`)
+			return alert("Link copied to clipboard!")
 		}
 	}
 </script>

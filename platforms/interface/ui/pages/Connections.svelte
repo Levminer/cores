@@ -149,10 +149,8 @@
 							</div>
 
 							<div class="flex flex-row flex-wrap gap-3">
-								<div class="mt-6"></div>
-
 								<button
-									class="button mt-6"
+									class="button"
 									onclick={() => {
 										WOL(item)
 									}}
@@ -162,7 +160,7 @@
 								</button>
 
 								<button
-									class="button mt-6"
+									class="button"
 									onclick={() => {
 										deleteNetworkDevice(item.mac)
 									}}

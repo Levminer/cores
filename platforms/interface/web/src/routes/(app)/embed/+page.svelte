@@ -22,19 +22,30 @@
 	<Loading />
 {/if}
 
-<script>
-	import { Cpu, Loading, Ram, settings, Gpu, Storage, Network, System, Home, Connections } from "ui"
+<script lang="ts">
+	import { Cpu, Loading, Ram, settings, Gpu, Storage, Network, System, Home, Connections, supabaseClient } from "ui"
 	import { appState } from "../../../stores/state"
 	import { onMount } from "svelte"
 
 	let hash = $state(location.hash)
 
+	const signIn = async (access: string, refresh: string) => {
+		console.log("login")
+		const { data, error } = await supabaseClient.auth.setSession({
+			access_token: access,
+			refresh_token: refresh,
+		})
+		console.log("login2")
+
+		console.log(data, error)
+	}
+
 	onMount(() => {
 		// get code query parameter
 		const urlParams = new URLSearchParams(window.location.search)
 		const code = urlParams.get("code")
-
-		console.log(code)
+		const access = urlParams.get("access")
+		const refresh = urlParams.get("refresh")
 
 		if (code) {
 			$settings.connectionCode = code
@@ -48,10 +59,11 @@
 		// watch hash change
 		window.addEventListener("hashchange", () => {
 			hash = location.hash
-
-			console.log(hash)
 		})
 
-		console.log(hash)
+		if (access && refresh) {
+			console.log("login")
+			signIn(access, refresh)
+		}
 	})
 </script>
