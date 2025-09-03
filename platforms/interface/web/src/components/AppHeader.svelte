@@ -5,15 +5,6 @@
 			<span class="self-center whitespace-nowrap text-xl font-semibold text-white">Cores</span>
 		</a>
 		<div class="flex space-x-2 md:order-2">
-			{#if import.meta.env.VITE_LOGIN}
-				<a
-					href="/scratchpad"
-					class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
-				>
-					<NotebookPen />
-					<p class="hidden md:block">Scratchpad</p>
-				</a>
-			{/if}
 			<a
 				href="/account"
 				class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gray-700 px-3 py-2 text-lg font-medium duration-200 ease-in hover:bg-white hover:text-black"
@@ -21,7 +12,7 @@
 				<Settings />
 				<p class="hidden md:block">Settings</p>
 			</a>
-			{#if $state.state === "connected"}
+			{#if $appState.state === "connected"}
 				<PowerDropdown {action} />
 			{/if}
 			<ConnectionDropdown {connect} />
@@ -30,7 +21,7 @@
 </nav>
 
 <script lang="ts">
-	import { state } from "../stores/state"
+	import { appState } from "../stores/state"
 	import { onMount } from "svelte"
 	import { NotebookPen, Settings, User } from "lucide-svelte"
 	import { settings } from "ui"
@@ -39,10 +30,10 @@
 
 	const action = (type: string) => {
 		if (type === "disconnect") {
-			return ($state.state = "disconnected")
+			return ($appState.state = "disconnected")
 		}
 
-		$state.message = JSON.stringify({
+		$appState.message = JSON.stringify({
 			type,
 			data: type,
 		})
@@ -50,12 +41,12 @@
 
 	const connect = (code: string) => {
 		$settings.connectionCode = code
-		$state.currentCode = code
-		$state.state = "swapping"
+		$appState.currentCode = code
+		$appState.state = "swapping"
 	}
 
 	onMount(() => {
-		state.subscribe((data) => {
+		appState.subscribe((data) => {
 			const status = document.querySelector("#status") as HTMLDivElement
 
 			if (data.state === "waiting") {
