@@ -177,11 +177,11 @@ public class Server {
 			if (minutesList.Count > 0) {
 				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-			}
 
-			for (int i = 0; i < minutesList.Count; i++) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
-				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+				for (int i = 0; i < minutesList.Count; i++) {
+					byte[] minutesBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
+					await socket.SendAsync(new ArraySegment<byte>(minutesBuffer, 0, minutesBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+				}
 			}
 		});
 

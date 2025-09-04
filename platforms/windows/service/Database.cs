@@ -1,5 +1,6 @@
 ﻿using lib;
 using Microsoft.Data.Sqlite;
+using Serilog;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -41,23 +42,35 @@ public class Database {
 	}
 
 	public void InsertSecondsData(API data) {
-		using var insertCommand = connection.CreateCommand();
-		insertCommand.CommandText = "INSERT INTO seconds_data (data) VALUES (@data);";
-		var param = insertCommand.CreateParameter();
-		param.ParameterName = "@data";
-		param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
-		insertCommand.Parameters.Add(param);
-		insertCommand.ExecuteNonQuery();
+		try {
+			using var insertCommand = connection.CreateCommand();
+			insertCommand.CommandText = "INSERT INTO seconds_data (data) VALUES (@data);";
+			var param = insertCommand.CreateParameter();
+			param.ParameterName = "@data";
+			param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
+			insertCommand.Parameters.Add(param);
+			insertCommand.ExecuteNonQuery();
+		}
+		catch (Exception ex) {
+			// Log error but don't crash the service
+			Log.Error($"Error inserting seconds data: {ex.Message}");
+		}
 	}
 
 	public void InsertMinutesData(API data) {
-		using var insertCommand = connection.CreateCommand();
-		insertCommand.CommandText = "INSERT INTO minutes_data (data) VALUES (@data);";
-		var param = insertCommand.CreateParameter();
-		param.ParameterName = "@data";
-		param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
-		insertCommand.Parameters.Add(param);
-		insertCommand.ExecuteNonQuery();
+		try {
+			using var insertCommand = connection.CreateCommand();
+			insertCommand.CommandText = "INSERT INTO minutes_data (data) VALUES (@data);";
+			var param = insertCommand.CreateParameter();
+			param.ParameterName = "@data";
+			param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
+			insertCommand.Parameters.Add(param);
+			insertCommand.ExecuteNonQuery();
+		}
+		catch (Exception ex) {
+			// Log error but don't crash the service
+			Log.Error($"Error inserting minutes data: {ex.Message}");
+		}
 	}
 
 	public List<JsonNode> SelectSecondsData() {

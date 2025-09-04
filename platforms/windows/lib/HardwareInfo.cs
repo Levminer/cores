@@ -275,8 +275,9 @@ public class HardwareInfo {
 
 					var cardIndex = API.GPU.Cards.FindIndex(x => x.Id == computerHardware[i].Identifier.ToString());
 
-					if (cardIndex == -1) {
-						cardIndex = 0;
+					if (cardIndex == -1 || cardIndex >= API.GPU.Cards.Count) {
+						// Skip this GPU if no matching card found or invalid index
+						continue;
 					}
 
 					// GPU Temperature
@@ -420,11 +421,17 @@ public class HardwareInfo {
 
 						foreach (var line in report) {
 							if (line.StartsWith("Total Size")) {
-								total = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+								var parts = line.Split(":");
+								if (parts.Length > 1) {
+									total = Convert.ToInt64(parts[1].Trim()) / 1024 / 1024 / 1024;
+								}
 							}
 
 							if (line.StartsWith("Total Free Space")) {
-								free = Convert.ToInt64(line.Split(":")[1].Trim()) / 1024 / 1024 / 1024;
+								var parts = line.Split(":");
+								if (parts.Length > 1) {
+									free = Convert.ToInt64(parts[1].Trim()) / 1024 / 1024 / 1024;
+								}
 							}
 
 							if (line.StartsWith("Logical Drive Name: C")) {

@@ -28,10 +28,10 @@ public class RTCServer {
 					var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 2 == 0).ToList();
 					if (minutesList.Count > 0) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
-					}
 
-					for (int i = 0; i < minutesList.Count; i++) {
-						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
+						for (int i = 0; i < minutesList.Count; i++) {
+							data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
+						}
 					}
 				}
 			};
@@ -45,7 +45,7 @@ public class RTCServer {
 
 				var status = new Status { is_host = true, session_id = EzRTCHost.sessionId, version = "0.6.0", metadata = new Dictionary<string, object>() };
 				status.metadata.Add("cpu", hardwareInfo.API.CPU.MaxLoad);
-				status.metadata.Add("ram", hardwareInfo.API.RAM.Load[2]?.Value ?? 0);
+				status.metadata.Add("ram", hardwareInfo.API.RAM.Load.Count > 2 ? hardwareInfo.API.RAM.Load[2]?.Value ?? 0 : 0);
 				if (hardwareInfo.API.GPU.Cards.Count > 0) {
 					status.metadata.Add("gpu", hardwareInfo.API.GPU.Cards[0].MaxLoad);
 				} else {
