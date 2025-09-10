@@ -1,7 +1,14 @@
 <div class="radialBg flex min-h-screen flex-col items-center justify-center">
 	{#if step === "login"}
 		<div class="flex w-full">
-			<Login loginFn={login} />
+			<Login
+				googleLoginFn={() => {
+					login("google")
+				}}
+				appleLoginFn={() => {
+					login("apple")
+				}}
+			/>
 		</div>
 	{/if}
 
@@ -211,7 +218,7 @@
 	import { supabaseClient } from "../utils/supabase.ts"
 	import { Login, ModularDialog } from "ui"
 	import posthog from "posthog-js"
-	import type { User } from "@supabase/supabase-js"
+	import type { Provider, User } from "@supabase/supabase-js"
 
 	let step = $state("" as "welcome" | "login" | "pricing" | "tips")
 	let key = $state("")
@@ -279,7 +286,7 @@
 		}, 250)
 	}
 
-	const login = async () => {
+	const login = async (provider: Provider) => {
 		try {
 			// Start server
 			const port = await start({
@@ -321,7 +328,7 @@
 			})
 
 			const { data, error } = await supabaseClient.auth.signInWithOAuth({
-				provider: "google",
+				provider: provider,
 				options: {
 					redirectTo: `http://localhost:${port}`,
 					skipBrowserRedirect: true,

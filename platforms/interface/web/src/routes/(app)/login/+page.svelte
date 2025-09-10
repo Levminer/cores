@@ -3,7 +3,7 @@
 {:else}
 	<div class="flex min-h-screen flex-col items-center justify-center">
 		<div class="flex w-full">
-			<Login loginFn={login} />
+			<Login googleLoginFn={() => login("google")} appleLoginFn={() => login("apple")} />
 		</div>
 	</div>
 {/if}
@@ -12,6 +12,7 @@
 	import { onMount } from "svelte"
 	import { goto } from "$app/navigation"
 	import { Loading, Login, supabaseClient } from "ui"
+	import type { Provider } from "@supabase/supabase-js"
 
 	let loading = $state(true)
 
@@ -25,9 +26,9 @@
 		}
 	})
 
-	const login = async () => {
+	const login = async (provider: Provider) => {
 		const { data, error } = await supabaseClient.auth.signInWithOAuth({
-			provider: "google",
+			provider: provider,
 			options: {
 				redirectTo: `${import.meta.env.VITE_URL}/login`,
 			},
