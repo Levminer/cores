@@ -53,109 +53,71 @@
 	<div class="mx-10 flex gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
 		<div class="flex w-full flex-row justify-start gap-5 sm:flex-wrap">
 			<!-- ram usage -->
-			<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="flex items-baseline justify-between">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Gauge />
-						</div>
-						<h2>RAM Usage</h2>
-					</div>
-					<div class="flex flex-row">
-						<SaveDataButton
-							props={{
-								id: "RAM_Usage",
-								statistics: [
-									{
-										label: "Usage",
-										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
-											: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage),
-									},
-								],
-							}}
-						/>
-						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-					</div>
-				</div>
-				<div>
-					<LineChart
-						props={{
-							id: "RAM_Usage",
-							statistics: [
-								{
-									label: "Usage",
-									fill: true,
-									color: "min",
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
-										: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage),
-								},
-							],
-							unit: " %",
-							time: minutes ? "m" : "s",
-							min: 0,
-							max: 100,
-							step: 10,
-							timestamp: minutes
-								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-						}}
-					/>
-				</div>
+			<div class="w-1/2 sm:w-full">
+				<ChartTile
+					title="RAM Usage"
+					item=""
+					bind:minutes
+					props={{
+						id: "RAM_Usage",
+						statistics: [
+							{
+								label: "Usage",
+								fill: true,
+								color: "min",
+								data: minutes
+									? $hardwareStatistics.minutes.map((value) => value.ram.physicalUsage)
+									: $hardwareStatistics.seconds.map((value) => value.ram.physicalUsage),
+							},
+						],
+						unit: " %",
+						time: minutes ? "m" : "s",
+						min: 0,
+						max: 100,
+						step: 10,
+						timestamp: minutes
+							? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+							: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+					}}
+				>
+					{#snippet icon()}
+						<Gauge />
+					{/snippet}
+				</ChartTile>
 			</div>
 
 			<!-- virtual ram usage -->
-			<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-				<div class="flex items-baseline justify-between">
-					<div class="mb-5 flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Gauge />
-						</div>
-						<h2>Virtual RAM Usage</h2>
-					</div>
-					<div class="flex flex-row">
-						<SaveDataButton
-							props={{
-								id: "Virtual_RAM_Usage",
-								statistics: [
-									{
-										label: "Usage",
-										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
-											: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage),
-									},
-								],
-							}}
-						/>
-						<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-					</div>
-				</div>
-				<div>
-					<LineChart
-						props={{
-							id: "Virtual_RAM_Usage",
-							statistics: [
-								{
-									label: "Usage",
-									fill: true,
-									color: "min",
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
-										: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage),
-								},
-							],
-							unit: " %",
-							time: minutes ? "m" : "s",
-							min: 0,
-							max: 100,
-							step: 10,
-							timestamp: minutes
-								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-						}}
-					/>
-				</div>
+			<div class="w-1/2 sm:w-full">
+				<ChartTile
+					title="Virtual RAM Usage"
+					item=""
+					bind:minutes
+					props={{
+						id: "Virtual_RAM_Usage",
+						statistics: [
+							{
+								label: "Usage",
+								fill: true,
+								color: "min",
+								data: minutes
+									? $hardwareStatistics.minutes.map((value) => value.ram.virtualUsage)
+									: $hardwareStatistics.seconds.map((value) => value.ram.virtualUsage),
+							},
+						],
+						unit: " %",
+						time: minutes ? "m" : "s",
+						min: 0,
+						max: 100,
+						step: 10,
+						timestamp: minutes
+							? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+							: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+					}}
+				>
+					{#snippet icon()}
+						<Gauge />
+					{/snippet}
+				</ChartTile>
 			</div>
 		</div>
 	</div>
@@ -164,7 +126,8 @@
 <script lang="ts">
 	import { Memory, Motherboard } from "svelte-bootstrap-icons"
 	import { Gauge } from "lucide-svelte"
-	import { hardwareInfo, hardwareStatistics, LineChart, SaveDataButton, ToggleButton } from "ui"
+	import { hardwareInfo, hardwareStatistics } from "ui"
+	import ChartTile from "../components/ChartTile.svelte"
 
 	let minutes = $state(false)
 </script>

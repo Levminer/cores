@@ -45,84 +45,74 @@
 			<!-- network usage -->
 			{#each $hardwareInfo.system.network.interfaces as item, i}
 				<div class="flex gap-5 sm:flex-wrap">
-					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-						<div class="flex items-baseline justify-between">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<ArrowDownUp />
-								</div>
-								<h2><span class="line-clamp-1">{item.name}</span> Download/Upload Speed</h2>
-							</div>
-							<div>
-								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-							</div>
-						</div>
-						<div>
-							<LineChart
-								props={{
-									statistics: [
-										{
-											label: `Download Speed`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload),
-										},
-										{
-											label: `Upload Speed`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload),
-										},
-									],
-									unit: " MB/s",
-									time: minutes ? "m" : "s",
-									min: 0,
-									timestamp: minutes
-										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-								}}
-							/>
-						</div>
+					<div class="w-1/2 sm:w-full">
+						<ChartTile
+							title="Download/Upload Speed"
+							item={item.name}
+							bind:minutes
+							props={{
+								id: `Network_Download_Upload_Speed_${i}`,
+								statistics: [
+									{
+										label: `Download Speed`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
+											: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload),
+									},
+									{
+										label: `Upload Speed`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
+											: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload),
+									},
+								],
+								unit: " MB/s",
+								time: minutes ? "m" : "s",
+								min: 0,
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+							}}
+						>
+							{#snippet icon()}
+								<ArrowDownUp />
+							{/snippet}
+						</ChartTile>
 					</div>
 
-					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-						<div class="flex items-baseline justify-between">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<PieChart />
-								</div>
-								<h2><span class="line-clamp-1">{item.name}</span> Data Usage</h2>
-							</div>
-							<div>
-								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-							</div>
-						</div>
-						<div>
-							<LineChart
-								props={{
-									statistics: [
-										{
-											label: `Downloaded data`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].downloadedData)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].downloadedData),
-										},
-										{
-											label: `Uploaded data`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.network[i].uploadedData)
-												: $hardwareStatistics.seconds.map((value) => value.network[i].uploadedData),
-										},
-									],
-									unit: " GB",
-									time: minutes ? "m" : "s",
-									min: 0,
-									timestamp: minutes
-										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-								}}
-							/>
-						</div>
+					<div class="w-1/2 sm:w-full">
+						<ChartTile
+							title="Data Usage"
+							item={item.name}
+							bind:minutes
+							props={{
+								id: `Network_Data_Usage_${i}`,
+								statistics: [
+									{
+										label: `Downloaded data`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.network[i].downloadedData)
+											: $hardwareStatistics.seconds.map((value) => value.network[i].downloadedData),
+									},
+									{
+										label: `Uploaded data`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.network[i].uploadedData)
+											: $hardwareStatistics.seconds.map((value) => value.network[i].uploadedData),
+									},
+								],
+								unit: " GB",
+								time: minutes ? "m" : "s",
+								min: 0,
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+							}}
+						>
+							{#snippet icon()}
+								<PieChart />
+							{/snippet}
+						</ChartTile>
 					</div>
 				</div>
 			{/each}
@@ -131,9 +121,10 @@
 </div>
 
 <script lang="ts">
-	import { hardwareInfo, LineChart, ToggleButton } from "ui"
+	import { hardwareInfo } from "ui"
 	import { hardwareStatistics } from "../stores/hardwareStatistics.ts"
 	import { ArrowDownUp, Network, PieChart } from "lucide-svelte"
+	import ChartTile from "../components/ChartTile.svelte"
 
 	let minutes = $state(false)
 </script>

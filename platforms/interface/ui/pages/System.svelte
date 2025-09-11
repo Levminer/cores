@@ -42,87 +42,77 @@
 			<!-- fan read/write and temperature -->
 			{#each $hardwareInfo.system.superIO.fan.filter((item) => item.value !== 0) as item, i}
 				<div class="flex gap-5 sm:flex-wrap">
-					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-						<div class="flex items-baseline justify-between">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<Fan />
-								</div>
-								<h2>{item.name} Speed</h2>
-							</div>
-							<div>
-								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-							</div>
-						</div>
-						<div>
-							<LineChart
-								props={{
-									statistics: [
-										{
-											label: `Max Speed`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.max)
-												: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.max),
-										},
-										{
-											label: `Current Speed`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.value)
-												: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.value),
-										},
-										{
-											label: `Min Speed`,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.min)
-												: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.min),
-										},
-									],
-									unit: " RPM",
-									time: minutes ? "m" : "s",
-									min: 0,
-									timestamp: minutes
-										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-								}}
-							/>
-						</div>
+					<div class="w-1/2 sm:w-full">
+						<ChartTile
+							title="Speed"
+							item={item?.name || "Fan"}
+							bind:minutes
+							props={{
+								id: `Fan_Speed_${i}`,
+								statistics: [
+									{
+										label: `Max Speed`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.max)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.max),
+									},
+									{
+										label: `Current Speed`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.value)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.value),
+									},
+									{
+										label: `Min Speed`,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.min)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.min),
+									},
+								],
+								unit: " RPM",
+								time: minutes ? "m" : "s",
+								min: 0,
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+							}}
+						>
+							{#snippet icon()}
+								<Fan />
+							{/snippet}
+						</ChartTile>
 					</div>
 
-					<div class="transparent-800 w-1/2 rounded-xl p-8 sm:w-full sm:p-4">
-						<div class="flex items-baseline justify-between">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-									<Gauge />
-								</div>
-								<h2>{item.name} Usage</h2>
-							</div>
-							<div>
-								<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
-							</div>
-						</div>
-						<div>
-							<LineChart
-								props={{
-									statistics: [
-										{
-											label: `Fan Usage`,
-											color: "min",
-											fill: true,
-											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.fan[i].control.value)
-												: $hardwareStatistics.seconds.map((value) => value.fan[i].control.value),
-										},
-									],
-									unit: "%",
-									time: minutes ? "m" : "s",
-									min: 0,
-									max: 100,
-									timestamp: minutes
-										? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-										: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-								}}
-							/>
-						</div>
+					<div class="w-1/2 sm:w-full">
+						<ChartTile
+							title="Usage"
+							item={item?.name || "Fan"}
+							bind:minutes
+							props={{
+								id: `Fan_Usage_${i}`,
+								statistics: [
+									{
+										label: `Fan Usage`,
+										color: "min",
+										fill: true,
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.fan[i].control.value)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i].control.value),
+									},
+								],
+								unit: "%",
+								time: minutes ? "m" : "s",
+								min: 0,
+								max: 100,
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+							}}
+						>
+							{#snippet icon()}
+								<Gauge />
+							{/snippet}
+						</ChartTile>
 					</div>
 				</div>
 			{/each}
@@ -133,7 +123,8 @@
 <script lang="ts">
 	import { Fan, Gauge, CircuitBoard } from "lucide-svelte"
 	import { PcDisplay } from "svelte-bootstrap-icons"
-	import { hardwareInfo, hardwareStatistics, LineChart, ToggleButton } from "ui"
+	import { hardwareInfo, hardwareStatistics } from "ui"
+	import ChartTile from "../components/ChartTile.svelte"
 
 	let minutes = $state(false)
 </script>
