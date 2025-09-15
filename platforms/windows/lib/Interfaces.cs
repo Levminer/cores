@@ -247,6 +247,10 @@ public class RAMInfo {
 	public List<MemoryDevice> Layout {
 		get; set;
 	} = new();
+
+	public List<Sensor> Temperature {
+		get; set;
+	} = new();
 }
 
 public class OSInfo {

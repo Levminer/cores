@@ -122,6 +122,58 @@ public class HardwareInfo {
 				}
 			}
 
+			// RAM
+			var ramSensors = computer.Hardware.Where(h => h.Identifier.ToString().Contains("/ram")).SelectMany(h => h.Sensors);
+			var virtualRamSensors = computer.Hardware.Where(h => h.Identifier.ToString().Contains("/vram")).SelectMany(h => h.Sensors);
+			var allMemorySensors = ramSensors.Concat(virtualRamSensors).ToArray();
+
+			// RAM load
+			for (int j = 0; j < allMemorySensors.Length; j++) {
+				var sensor = allMemorySensors;
+
+				if (sensor[j].SensorType == SensorType.Load || sensor[j].SensorType == SensorType.Data) {
+					var data = new Sensor {
+						Name = sensor[j].Name,
+						Value = (float)Math.Round(sensor[j].Value ?? 0, 1),
+						Min = (float)Math.Round(sensor[j].Min ?? 0, 1),
+						Max = (float)Math.Round(sensor[j].Max ?? 0, 1),
+					};
+
+					// RAM load
+					if (firstRun) {
+						API.RAM.Load.Add(data);
+					} else {
+						API.RAM.Load.TrySetValue(j, data);
+					}
+				}
+			}
+
+			// RAM temperature 
+			if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
+				var ramTemperatureSensors = computer.Hardware.Where(h => h.Identifier.ToString().StartsWith("/memory")).SelectMany(h => h.Sensors).ToArray();
+
+				for (int j = 0; j < ramTemperatureSensors.Length; j++) {
+					var sensor = ramTemperatureSensors;
+
+					if (sensor[j].SensorType == SensorType.Temperature && sensor[j].Name.StartsWith("DIMM")) {
+						var data = new Sensor {
+							Name = sensor[j].Name,
+							Value = (float)Math.Round(sensor[j].Value ?? 0),
+							Min = (float)Math.Round(sensor[j].Min ?? 0),
+							Max = (float)Math.Round(sensor[j].Max ?? 0),
+						};
+
+						// RAM temperature
+						if (firstRun) {
+							API.RAM.Temperature.Add(data);
+						} else {
+							API.RAM.Temperature.TrySetValue(j, data);
+						}
+					}
+				}
+			}
+
+			// Loop through remaining hardware
 			for (int i = 0; i < computer.Hardware.Count; i++) {
 				var hardware = computer.Hardware[i];
 
@@ -153,9 +205,9 @@ public class HardwareInfo {
 						if (temperatureSensors[j].Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd")) {
 							var data = new Sensor {
 								Name = temperatureSensors[j].Name,
-								Value = temperatureSensors[j].Value ?? 0,
-								Min = temperatureSensors[j].Min ?? 0,
-								Max = temperatureSensors[j].Max ?? 0,
+								Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
+								Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
+								Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
 							};
 
 							if (firstRun) {
@@ -378,27 +430,6 @@ public class HardwareInfo {
 					// GPU Max Load
 					if (API.GPU.Cards[cardIndex].Load.Count > 0) {
 						API.GPU.Cards[cardIndex].MaxLoad = API.GPU.Cards[cardIndex].Load.Max(x => x.Value);
-					}
-				}
-
-				// RAM
-				if (hardware.HardwareType == HardwareType.Memory) {
-					var sensor = hardware.Sensors;
-
-					for (int j = 0; j < hardware.Sensors.Length; j++) {
-						var data = new Sensor {
-							Name = sensor[j].Name,
-							Value = (float)Math.Round(sensor[j].Value ?? 0, 1),
-							Min = (float)Math.Round(sensor[j].Min ?? 0, 1),
-							Max = (float)Math.Round(sensor[j].Max ?? 0, 1),
-						};
-
-						// RAM load
-						if (firstRun) {
-							API.RAM.Load.Add(data);
-						} else {
-							API.RAM.Load.TrySetValue(j, data);
-						}
 					}
 				}
 
