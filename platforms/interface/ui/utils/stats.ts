@@ -21,6 +21,20 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 		ram: {
 			physicalUsage: Math.round(input.ram.load[2]?.value ?? 0),
 			virtualUsage: Math.round(input.ram.load[5]?.value ?? 0),
+			temperature:
+				input.ram.temperature && input.ram.temperature.length > 0
+					? {
+							value: Math.round(
+								input.ram.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
+							),
+							min: Math.round(
+								input.ram.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
+							),
+							max: Math.round(
+								input.ram.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
+							),
+						}
+					: undefined,
 		},
 
 		gpu: {
@@ -85,7 +99,7 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 				}
 			}),
 
-			timestamp: input.timestamp
+		timestamp: input.timestamp,
 	}
 }
 
@@ -140,6 +154,28 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 			virtualUsage: Math.round(
 				$hardwareStatistics.seconds.map((sensor) => sensor.ram.virtualUsage).reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.length,
 			),
+			temperature: $hardwareStatistics.seconds.some((sensor) => sensor.ram.temperature)
+				? {
+						value: Math.round(
+							$hardwareStatistics.seconds
+								.filter((sensor) => sensor.ram.temperature)
+								.map((sensor) => sensor.ram.temperature!.value)
+								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
+						),
+						min: Math.round(
+							$hardwareStatistics.seconds
+								.filter((sensor) => sensor.ram.temperature)
+								.map((sensor) => sensor.ram.temperature!.min)
+								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
+						),
+						max: Math.round(
+							$hardwareStatistics.seconds
+								.filter((sensor) => sensor.ram.temperature)
+								.map((sensor) => sensor.ram.temperature!.max)
+								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
+						),
+					}
+				: undefined,
 		},
 
 		gpu: {
@@ -312,6 +348,6 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 				}
 			}),
 
-			timestamp: new Date().toISOString(),
+		timestamp: new Date().toISOString(),
 	}
 }

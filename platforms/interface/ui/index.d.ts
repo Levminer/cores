@@ -17,6 +17,7 @@ import RouteTransition from "./navigation/RouteTransition.svelte"
 import GaugeChart from "./charts/GaugeChart.svelte"
 import LineChart from "./charts/LineChart.svelte"
 import MeterChart from "./charts/MeterChart.svelte"
+import ChartTile from "./components/ChartTile.svelte"
 
 import Login from "./components/Login.svelte"
 import ModularDialog from "./components/ModularDialog.svelte"
@@ -93,5 +94,6 @@ export {
 	localSettings,
 	getLocalSettings,
 	setLocalSettings,
-	NewsAlert
+	NewsAlert,
+	ChartTile,
 }

@@ -115,6 +115,7 @@ declare global {
 			load: Sensor[]
 			info: RAM[]
 			layout: RAM[]
+			temperature?: Sensor[]
 		}
 
 		system: {
@@ -190,6 +191,7 @@ declare global {
 		ram: {
 			physicalUsage: number
 			virtualUsage: number
+			temperature?: Sensor
 		}
 
 		network: {

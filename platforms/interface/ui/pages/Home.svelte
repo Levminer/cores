@@ -399,6 +399,31 @@
 				{/if}
 			</div>
 
+			{#if $hardwareInfo.ram.temperature?.length ?? 0 > 0}
+				<div class="transparent-800 rounded-xl p-8 sm:p-4">
+					<div class="mb-5 flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Thermometer />
+						</div>
+						<h2>RAM Temperature</h2>
+					</div>
+					<h3>
+						Avg. temperature: {Math.round(
+							$hardwareInfo.ram.temperature!.reduce((a, b) => a + b.value, 0) / $hardwareInfo.ram.temperature!.length,
+						)} °C
+					</h3>
+					{#if $hardwareInfo.ram.load[3]?.value ?? 0 > 0}
+						<div>
+							<MeterChart
+								readings={$hardwareInfo.ram?.temperature!}
+								categories={$hardwareInfo.ram.temperature!.map((temp, i) => `Module #${i + 1} (${temp.value} °C)`)}
+								type={{ name: "temperature", unit: "°C" }}
+							/>
+						</div>
+					{/if}
+				</div>
+			{/if}
+
 			<div class="transparent-800 rounded-xl p-8 sm:p-4">
 				<div class="mb-5 flex items-center gap-3">
 					<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">

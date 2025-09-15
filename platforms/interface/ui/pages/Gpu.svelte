@@ -67,42 +67,32 @@
 						{/snippet}
 					</ChartTile>
 
-					<!-- gpu clock speed -->
+					<!-- gpu memory usage -->
 					<ChartTile
-						title="Core Clock Speed"
+						title="Memory Usage"
 						item={item.name}
 						bind:minutes
 						props={{
-							id: `GPU_Clock_Speed_${i}`,
+							id: `GPU_Memory_Usage_${i}`,
 							statistics: [
 								{
-									label: "Max Clock Speed",
+									label: "Memory Usage",
+									color: "min",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.max)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.max),
-								},
-								{
-									label: "Current Clock Speed",
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.value)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.value),
-								},
-								{
-									label: "Min Clock Speed",
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.min)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.min),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].memory)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].memory),
 								},
 							],
 							time: minutes ? "m" : "s",
-							unit: " Mhz",
+							unit: " GB",
+							min: 0,
 							timestamp: minutes
 								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
 								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					>
 						{#snippet icon()}
-							<Clock />
+							<Memory height={24} width={24} />
 						{/snippet}
 					</ChartTile>
 				{/each}
@@ -112,6 +102,7 @@
 		<div class="flex w-2/5 flex-col justify-start gap-5 sm:w-full">
 			{#if $hardwareInfo.gpu.cards?.length > 0}
 				{#each $hardwareInfo.gpu.cards as item, i}
+					<!-- gpu load -->
 					<ChartTile
 						title="Average Load"
 						item={item.name}
@@ -199,32 +190,42 @@
 						{/snippet}
 					</ChartTile>
 
-					<!-- gpu memory usage -->
+					<!-- gpu clock speed -->
 					<ChartTile
-						title="Memory Usage"
+						title="Core Clock Speed"
 						item={item.name}
 						bind:minutes
 						props={{
-							id: `GPU_Memory_Usage_${i}`,
+							id: `GPU_Clock_Speed_${i}`,
 							statistics: [
 								{
-									label: "Memory Usage",
-									color: "min",
+									label: "Max Clock Speed",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].memory)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].memory),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.max)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.max),
+								},
+								{
+									label: "Current Clock Speed",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.value)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.value),
+								},
+								{
+									label: "Min Clock Speed",
+									data: minutes
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.min)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.min),
 								},
 							],
 							time: minutes ? "m" : "s",
-							unit: " GB",
-							min: 0,
+							unit: " Mhz",
 							timestamp: minutes
 								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
 								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
 						}}
 					>
 						{#snippet icon()}
-							<Memory height={24} width={24} />
+							<Clock />
 						{/snippet}
 					</ChartTile>
 				{/each}
