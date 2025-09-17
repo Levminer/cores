@@ -522,26 +522,28 @@ public class HardwareInfo {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
-									var min = (float)Math.Round(sensor[j].Min ?? 0);
-
-									// Some drives don't return min temp
-									if (min == 0 && (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60)) {
-										min = (float)Math.Round(sensor[j].Value ?? 0);
-									}
-
-									// Replace min temp if current temp is lower
-									if (min == 0) {
-										if ((float)Math.Round(sensor[j].Value ?? 0) < API.System.Storage.Disks[k].Temperature.Min) {
-											min = (float)Math.Round(sensor[j].Value ?? 0);
+									var currentTemp = (float)Math.Round(sensor[j].Value ?? 0);
+									var sensorMin = (float)Math.Round(sensor[j].Min ?? 0);
+									var storedMin = API.System.Storage.Disks[k].Temperature?.Min ?? float.MaxValue;
+									
+									float finalMin;
+									
+									// Initialize min temp on first run or when we have no stored value
+									if (firstRun || storedMin == float.MaxValue) {
+										finalMin = sensorMin > 0 ? sensorMin : currentTemp;
+									} else {
+										// Always preserve the lowest temperature observed
+										if (sensorMin > 0) {
+											finalMin = Math.Min(sensorMin, storedMin);
 										} else {
-											min = API.System.Storage.Disks[k].Temperature.Min;
+											finalMin = Math.Min(currentTemp, storedMin);
 										}
 									}
 
 									API.System.Storage.Disks[k].Temperature = new Sensor {
 										Name = sensor[j].Name,
-										Value = (float)Math.Round(sensor[j].Value ?? 0),
-										Min = min,
+										Value = currentTemp,
+										Min = finalMin,
 										Max = (float)Math.Round(sensor[j].Max ?? 0),
 									};
 								}
