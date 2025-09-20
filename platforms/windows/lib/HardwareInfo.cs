@@ -508,8 +508,11 @@ public class HardwareInfo {
 						} else {
 							var diskId = API.System.Storage.Disks.FindIndex(x => x.Id == computerHardware[i].Identifier.ToString());
 
-							if (diskId != 1) {
+							if (diskId != -1) {
+								// Preserve existing temperature data when updating disk info
+								var existingTemperature = API.System.Storage.Disks[diskId].Temperature;
 								API.System.Storage.Disks[diskId] = data;
+								API.System.Storage.Disks[diskId].Temperature = existingTemperature;
 							}
 						}
 
@@ -522,28 +525,23 @@ public class HardwareInfo {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
-									var currentTemp = (float)Math.Round(sensor[j].Value ?? 0);
-									var sensorMin = (float)Math.Round(sensor[j].Min ?? 0);
-									var storedMin = API.System.Storage.Disks[k].Temperature?.Min ?? float.MaxValue;
-									
-									float finalMin;
-									
-									// Initialize min temp on first run or when we have no stored value
-									if (firstRun || storedMin == float.MaxValue) {
-										finalMin = sensorMin > 0 ? sensorMin : currentTemp;
-									} else {
-										// Always preserve the lowest temperature observed
-										if (sensorMin > 0) {
-											finalMin = Math.Min(sensorMin, storedMin);
+									var sensorValue = sensor[j].Value ?? 0;
+									var sensorMin = sensor[j].Min ?? 0;
+
+									if (firstRun && sensorMin == 0) {
+										sensorMin = sensorValue;
+									} else if (sensorMin == 0) {
+										if (sensorValue < API.System.Storage.Disks[k].Temperature.Min) {
+											sensorMin = sensorValue;
 										} else {
-											finalMin = Math.Min(currentTemp, storedMin);
+											sensorMin = API.System.Storage.Disks[k].Temperature.Min;
 										}
 									}
 
 									API.System.Storage.Disks[k].Temperature = new Sensor {
 										Name = sensor[j].Name,
-										Value = currentTemp,
-										Min = finalMin,
+										Value = sensorValue,
+										Min = sensorMin,
 										Max = (float)Math.Round(sensor[j].Max ?? 0),
 									};
 								}

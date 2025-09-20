@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Fragment>
+		<DirectoryRef Id="INSTALLDIR">
+			<Component Id="PawnioInstaller" Guid="a7c3945e-2f66-4b12-9e87-3d4f8a1b5c29">
+				<File Id="PawnioExe" Source="$(sys.SOURCEFILEDIR)../../windows/service/Assets/pawnio.exe" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+		
+		<!-- Custom action to run pawnio.exe installer -->
+		<CustomAction Id="RunPawnioInstall" FileKey="PawnioExe" ExeCommand="-install -silent" Execute="deferred" Impersonate="no" Return="ignore" />
+		
+		<!-- Custom action to run pawnio.exe uninstaller -->
+		<CustomAction Id="RunPawnioUninstall" FileKey="PawnioExe" ExeCommand="-uninstall -silent" Execute="deferred" Impersonate="no" Return="ignore" />
+		
+		<!-- Install sequence -->
+		<InstallExecuteSequence>
+			<Custom Action="RunPawnioInstall" After="InstallFiles">NOT Installed</Custom>
+			<Custom Action="RunPawnioUninstall" Before="RemoveFiles">Installed AND NOT REINSTALL</Custom>
+		</InstallExecuteSequence>
+	</Fragment>
+</Wix>
