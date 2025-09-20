@@ -159,19 +159,22 @@ export const generateMinutesData = (input: HardwareInfo, $hardwareStatistics: Ha
 						value: Math.round(
 							$hardwareStatistics.seconds
 								.filter((sensor) => sensor.ram.temperature)
-								.map((sensor) => sensor.ram.temperature!.value)
+								.map((sensor) => sensor.ram.temperature?.value)
+								.filter((value): value is number => value !== undefined)
 								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
 						),
 						min: Math.round(
 							$hardwareStatistics.seconds
 								.filter((sensor) => sensor.ram.temperature)
-								.map((sensor) => sensor.ram.temperature!.min)
+								.map((sensor) => sensor.ram.temperature?.min)
+								.filter((value): value is number => value !== undefined)
 								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
 						),
 						max: Math.round(
 							$hardwareStatistics.seconds
 								.filter((sensor) => sensor.ram.temperature)
-								.map((sensor) => sensor.ram.temperature!.max)
+								.map((sensor) => sensor.ram.temperature?.max)
+								.filter((value): value is number => value !== undefined)
 								.reduce((a, b) => a + b, 0) / $hardwareStatistics.seconds.filter((sensor) => sensor.ram.temperature).length,
 						),
 					}
