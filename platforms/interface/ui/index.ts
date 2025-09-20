@@ -30,6 +30,7 @@ import UpdateAlert from "./components/UpdateAlert.svelte"
 import ConnectionServer from "./components/ConnectionServer.svelte"
 import ErrorBoundary from "./components/ErrorBoundary.svelte"
 import NewsAlert from "./components/NewsAlert.svelte"
+import PowerButton from "./components/PowerButton.svelte"
 
 import { hardwareInfo, getHardwareInfo, setHardwareInfo } from "./stores/hardwareInfo.ts"
 import { hardwareStatistics, getHardwareStatistics, setHardwareStatistics } from "./stores/hardwareStatistics.ts"
@@ -96,4 +97,5 @@ export {
 	setLocalSettings,
 	NewsAlert,
 	ChartTile,
+	PowerButton,
 }

@@ -14,7 +14,7 @@
 	{:else if hash === "#system"}
 		<System />
 	{:else if hash === "#connections"}
-		<Connections />
+		<Connections {WOL} {action} />
 	{:else}
 		<Home />
 	{/if}
@@ -66,4 +66,22 @@
 			signIn(access, refresh)
 		}
 	})
+
+	const WOL = async (item: { mac: string }) => {
+		$appState.message = JSON.stringify({
+			type: "wol",
+			data: item.mac?.replaceAll(":", ""),
+		})
+	}
+
+	const action = (type: string) => {
+		if (type === "disconnect") {
+			return ($appState.state = "disconnected")
+		}
+
+		$appState.message = JSON.stringify({
+			type,
+			data: type,
+		})
+	}
 </script>
