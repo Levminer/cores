@@ -23,11 +23,11 @@
 	},
 	"dependencies": {
 		"@fabianlars/tauri-plugin-oauth": "^2.0.0",
-		"@tauri-apps/api": "^2.6.0",
-		"@tauri-apps/plugin-dialog": "^2.3.0",
+		"@tauri-apps/api": "^2.8.0",
+		"@tauri-apps/plugin-dialog": "^2.4.0",
 		"@tauri-apps/plugin-process": "^2.3.0",
-		"@tauri-apps/plugin-shell": "^2.3.0",
+		"@tauri-apps/plugin-shell": "^2.3.1",
 		"@tauri-apps/plugin-updater": "^2.9.0",
-		"posthog-js": "^1.256.2"
+		"posthog-js": "^1.269.1"
 	}
 }
