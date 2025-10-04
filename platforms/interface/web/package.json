@@ -29,7 +29,7 @@
 	},
 	"dependencies": {
 		"bits-ui": "^0.22.0",
-		"ezrtc": "^0.7.0",
+		"ezrtc": "^0.8.0",
 		"lucide-svelte": "^0.525.0",
 		"posthog-js": "^1.223.3"
 	}
