@@ -1905,9 +1905,9 @@ dependencies = [
 
 [[package]]
 name = "ezrtc"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc166bf1eb717bf361bddcd5dd7fa81e3bf6b817e35adf3dcd8a3070fc244e9e"
+checksum = "5136df3c9807bbe732b705a2abb0e9080a35472c85f9d8da24077b371c0f4542"
 dependencies = [
  "async-trait",
  "ezsockets",

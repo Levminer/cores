@@ -43,7 +43,9 @@ public class RTCServer {
 			EzRTCHost.keepAliveMessage += (websocketClient, text) => {
 				var keepAlive = SignalMessage.KeepAlive.Decode(text);
 
-				var status = new Status { is_host = true, session_id = EzRTCHost.sessionId, version = "0.6.0", metadata = new Dictionary<string, object>() };
+				var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+				var versionString = version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "N/A";
+				var status = new Status { is_host = true, session_id = EzRTCHost.sessionId, version = versionString, metadata = new Dictionary<string, object>() };
 				status.metadata.Add("cpu", hardwareInfo.API.CPU.MaxLoad);
 				status.metadata.Add("ram", hardwareInfo.API.RAM.Load.Count > 2 ? hardwareInfo.API.RAM.Load[2]?.Value ?? 0 : 0);
 				if (hardwareInfo.API.GPU.Cards.Count > 0) {

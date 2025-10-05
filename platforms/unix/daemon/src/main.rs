@@ -445,7 +445,7 @@ async fn main() {
                     Status {
                         session_id: Some(handle.session_id.clone()),
                         is_host: Some(true),
-                        version: Some("0.6.0".to_string()),
+                        version: Some(env!("CARGO_PKG_VERSION").to_string()),
                         metadata: Some(
                             serde_json::json!({"cpu": cpu_usage, "gpu": gpu_usage, "ram": memory_usage}),
                         ),
