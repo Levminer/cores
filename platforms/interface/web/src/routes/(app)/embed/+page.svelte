@@ -72,6 +72,8 @@
 			type: "wol",
 			data: item.mac?.replaceAll(":", ""),
 		})
+
+		alert(`Wake On LAN packet sent to ${item.mac} address.`)
 	}
 
 	const action = (type: string) => {
@@ -83,5 +85,7 @@
 			type,
 			data: type,
 		})
+
+		alert("Command sent to the connected device. Shutdown/Restart has a 1m delay.")
 	}
 </script>

@@ -124,7 +124,7 @@ public class Commands {
 
 			switch (netMessage?.Type) {
 				case "shutdown":
-					ExecuteCommand(@"shutdown /s /t 30");
+					ExecuteCommand(@"shutdown /s /t 60");
 					break;
 
 				case "sleep":
@@ -132,7 +132,7 @@ public class Commands {
 					break;
 
 				case "restart":
-					ExecuteCommand("shutdown /r /t 30");
+					ExecuteCommand("shutdown /r /t 60");
 					break;
 
 				case "wol":

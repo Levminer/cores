@@ -37,6 +37,8 @@
 			type,
 			data: type,
 		})
+
+		alert("Command sent to the connected device. Shutdown/Restart has a 1m delay.")
 	}
 
 	const connect = (code: string) => {

@@ -107,7 +107,7 @@
 					</div>
 
 					<div class="flex flex-col items-start gap-3 sm:my-5">
-						<PowerButton action={action} />
+						<PowerButton {action} />
 					</div>
 				</div>
 			{/if}
@@ -272,7 +272,7 @@
 
 	let {
 		WOL = async (item: { name?: string; code?: string; mac: string }) => {
-			await fetch("http://localhost:5390/post", {
+			const res = await fetch("http://localhost:5390/post", {
 				method: "POST",
 				body: JSON.stringify({
 					type: "wol",
@@ -284,6 +284,12 @@
 					"Content-Type": "application/json",
 				},
 			})
+
+			if (res.status !== 200) {
+				alert("Failed to send Wake On LAN packet. Please make sure the Cores service is running.")
+			} else {
+				alert(`Wake On LAN packet sent to ${item.mac} address.`)
+			}
 		},
 		action = (type: string) => {},
 	} = $props()

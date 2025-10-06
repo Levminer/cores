@@ -12,6 +12,8 @@
 			type: "wol",
 			data: item.mac?.replaceAll(":", ""),
 		})
+
+		alert(`Wake On LAN packet sent to ${item.mac} address.`)
 	}
 
 	const action = (type: string) => {
