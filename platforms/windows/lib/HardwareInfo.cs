@@ -802,18 +802,6 @@ public class HardwareInfo {
 						}
 					}
 
-					// Remaining time
-					//for (int j = 0; j < timeSpanSensors.Length; j++) {
-					//	var data = new Sensor {
-					//		Name = timeSpanSensors[j].Name,
-					//		Value = timeSpanSensors[j].Value ?? 0,
-					//		Min = timeSpanSensors[j].Min ?? 0,
-					//		Max = timeSpanSensors[j].Max ?? 0,
-					//	};
-
-					//	API.System.Battery.RemainingTime = data;
-					//}
-
 					// Cycle count
 					if (firstRun) {
 						var cycles = Commands.GetCycleCount();

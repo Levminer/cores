@@ -335,7 +335,6 @@ public class BatteryInfo {
 	public List<Sensor> Level {
 		get; set;
 	} = new();
-	public Sensor RemainingTime { get; set; }
 	public string CycleCount { get; set; }
 }
 

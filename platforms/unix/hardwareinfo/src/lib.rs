@@ -223,7 +223,6 @@ pub struct CoresMotherboard {
 pub struct CoresBattery {
     pub cycle_count: String,
     pub level: Vec<CoresSensor>,
-    pub remaining_time: CoresSensor,
     pub capacity: Vec<CoresSensor>,
 }
 
@@ -319,7 +318,6 @@ impl HardwareInfo {
                 battery: CoresBattery {
                     cycle_count: "N/A".to_string(),
                     level: Vec::new(),
-                    remaining_time: CoresSensor::default(),
                     capacity: Vec::new(),
                 },
             },
@@ -767,7 +765,6 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             data.hw_info.system.battery = CoresBattery {
                                 cycle_count: cycle_count.to_string(),
                                 level: Vec::new(),
-                                remaining_time: CoresSensor::default(),
                                 capacity: Vec::new(),
                             };
 

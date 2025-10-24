@@ -141,7 +141,6 @@ declare global {
 			battery?: {
 				capacity: Sensor[]
 				level: Sensor[]
-				remainingTime?: Sensor
 				cycleCount: string
 			}
 
