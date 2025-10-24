@@ -40,9 +40,12 @@ declare global {
 		description: string
 		macAddress: string
 		ipAddress: string
+		ipAddressV6: string
 		mask: string
 		gateway: string
+		gatewayV6: string
 		dns: string
+		dnsV6: string
 		speed: string
 		throughputDownload: number
 		throughputUpload: number

@@ -83,24 +83,46 @@ public class HardwareInfo {
 													.ToArray());
 
 						// DNS
+						temp.DNS = "N/A";
+						temp.DNSV6 = "N/A";
+
 						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
-							temp.DNS = ni.GetIPProperties().DnsAddresses[0].ToString();
-						} else {
-							temp.DNS = "N/A";
+							for (int i = 0; i < ni.GetIPProperties().DnsAddresses.Count; i++) {
+								if (temp.DNS == "N/A" && ni.GetIPProperties().DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+									temp.DNS = ni.GetIPProperties().DnsAddresses[i].ToString();
+								} else if (temp.DNSV6 == "N/A" && ni.GetIPProperties().DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
+									temp.DNSV6 = ni.GetIPProperties().DnsAddresses[i].ToString();
+								}
+							}
 						}
 
 						// Gateway
-						if (ni.GetIPProperties().GatewayAddresses.Count != 0) {
-							temp.Gateway = ni.GetIPProperties().GatewayAddresses[0].Address.ToString();
-						} else {
-							temp.Gateway = "N/A";
+						temp.Gateway = "N/A";
+						temp.GatewayV6 = "N/A";
+
+						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
+							for (int i = 0; i < ni.GetIPProperties().GatewayAddresses.Count; i++) {
+								if (temp.Gateway == "N/A" && ni.GetIPProperties().GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+									temp.Gateway = ni.GetIPProperties().GatewayAddresses[i].Address.ToString();
+								} else if (temp.GatewayV6 == "N/A" && ni.GetIPProperties().GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
+									temp.GatewayV6 = ni.GetIPProperties().GatewayAddresses[i].Address.ToString();
+								}
+							}
 						}
 
 						// Current IP
+						temp.IPAddress = "N/A";
+						temp.IPAddressV6 = "N/A";
+						temp.Mask = "N/A";
+
 						foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
 							if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
 								temp.IPAddress = ip.Address.ToString();
 								temp.Mask = ip.IPv4Mask.ToString();
+							}
+
+							if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
+								temp.IPAddressV6 = ip.Address.ToString();
 							}
 						}
 

@@ -99,6 +99,10 @@ public class NetInterface {
 		get; set;
 	}
 
+	public string IPAddressV6 {
+		get; set;
+	}
+
 	public string Mask {
 		get; set;
 	}
@@ -107,9 +111,18 @@ public class NetInterface {
 		get; set;
 	}
 
+	public string GatewayV6 {
+		get; set;
+	}
+
 	public string DNS {
 		get; set;
 	}
+
+	public string DNSV6 {
+		get; set;
+	}
+
 	public string Speed {
 		get; set;
 	}

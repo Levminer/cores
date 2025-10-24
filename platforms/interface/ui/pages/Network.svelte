@@ -9,13 +9,17 @@
 					</div>
 					<h2>Interfaces</h2>
 				</div>
-				{#each $hardwareInfo.system.network.interfaces as { name, description, ipAddress, mask, gateway, dns, speed, macAddress }}
+				{#each $hardwareInfo.system.network.interfaces as { name, description, ipAddress, mask, gateway, dns, speed, macAddress, gatewayV6, dnsV6, ipAddressV6 }}
 					<div class="mt-5 select-text">
 						<h3>Name: {name}</h3>
 						<h3>Description: {description}</h3>
-						<h3>Address: {ipAddress} ({mask})</h3>
+						<h3>Local Address: {ipAddress} ({mask})</h3>
+						<h3>Link-local Address: {ipAddressV6}</h3>
 						<h3>MAC address: {macAddress}</h3>
 						<h3>Gateway: {gateway} ({dns})</h3>
+						{#if gatewayV6 && dnsV6}
+							<h3>Gateway (IPv6): {gatewayV6} ({dnsV6})</h3>
+						{/if}
 						<h3>Speed: {speed} Mbit/s</h3>
 					</div>
 				{/each}
