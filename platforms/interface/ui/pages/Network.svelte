@@ -14,7 +14,9 @@
 						<h3>Name: {name}</h3>
 						<h3>Description: {description}</h3>
 						<h3>Local Address: {ipAddress} ({mask})</h3>
-						<h3>Link-local Address: {ipAddressV6}</h3>
+						{#if ipAddressV6}
+							<h3>Link-local Address: {ipAddressV6}</h3>
+						{/if}
 						<h3>MAC address: {macAddress}</h3>
 						<h3>Gateway: {gateway} ({dns})</h3>
 						{#if gatewayV6 && dnsV6}

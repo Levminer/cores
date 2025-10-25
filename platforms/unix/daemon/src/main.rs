@@ -243,19 +243,6 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
-                        // Send initial data
-                        let hw_message = match receiver.recv().await {
-                            Ok(data) => data,
-                            Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
-                                HardwareInfo::default()
-                            }
-                            Err(_) => HardwareInfo::default(),
-                        };
-                        let network_data = GenericMessage::<HardwareInfo> {
-                            r#type: "initialData".to_string(),
-                            data: hw_message.clone(),
-                        };
-
                         // Get every third element from the last 60s and 60m hardware info
                         let last60s_hardware_info = {
                             db::select_seconds_data(
@@ -274,6 +261,15 @@ async fn main() {
                             .step_by(2)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
+                        };
+
+                        // Send initial data
+                        let network_data = GenericMessage::<HardwareInfo> {
+                            r#type: "initialData".to_string(),
+                            data: last60s_hardware_info
+                                .last()
+                                .cloned()
+                                .unwrap_or(HardwareInfo::default()),
                         };
 
                         if dc
@@ -297,6 +293,7 @@ async fn main() {
                                 .is_err()
                             {
                                 info!("Failed to send secondsData to client");
+                                break;
                             };
                         }
 
