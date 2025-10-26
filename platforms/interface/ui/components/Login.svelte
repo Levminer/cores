@@ -1,5 +1,5 @@
 <div
-	class="transparent-900 mx-auto flex w-[40%] flex-col items-center justify-center rounded-2xl p-10 text-center shadow-md backdrop-blur-xl sm:w-[95%]"
+	class="bg-black/30 mx-auto flex w-[40%] flex-col items-center justify-center rounded-2xl p-10 text-center shadow-md backdrop-blur-xl sm:w-[95%]"
 >
 	<div class="mb-10">
 		<h2>Login or create an account</h2>
