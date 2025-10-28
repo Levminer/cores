@@ -45,7 +45,8 @@
 			{/if}
 
 			<!-- connection server -->
-			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+			{#if !import.meta.env.VITE_LOGIN}
+				 <div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
 				<div class="flex flex-col items-start gap-3">
 					<div class="flex items-center gap-3">
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
@@ -60,6 +61,7 @@
 					<ConnectionServer />
 				</div>
 			</div>
+			{/if}
 
 			<!-- about -->
 			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">

@@ -72,31 +72,6 @@
 				</div>
 			</div>
 		{/each}
-		<div class="w-full p-3 px-5">
-			<ModularDialog title={"Add Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
-				{#snippet openButton()}
-					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
-				{/snippet}
-				{#snippet confirmButton()}
-					<Dialog.Close on:click={() => addConnectionCode()} class="smallButton">
-						<Plus class="h-5 w-5" />
-						Add
-					</Dialog.Close>
-				{/snippet}
-
-				<div class="flex flex-col flex-wrap gap-3">
-					<div>
-						<h5>Name <span class="text-red-500">*</span></h5>
-						<input placeholder="My Home PC" class="input mt-1" type="text" id="name" />
-					</div>
-
-					<div>
-						<h5>Connection code <span class="text-red-500">*</span></h5>
-						<input placeholder="crs_abcde12345" class="input mt-1" type="text" id="code" />
-					</div>
-				</div>
-			</ModularDialog>
-		</div>
 	</Popover.Content>
 </Popover.Root>
 

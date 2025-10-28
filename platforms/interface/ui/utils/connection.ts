@@ -2,29 +2,29 @@ import { getSettings, setSettings } from "../stores/settings.ts"
 import { supabaseClient } from "./supabase.ts"
 
 export const deleteConnectionCode = async (code: string) => {
+	const res = confirm("Are you sure?")
+
+	if (!res) return
+
 	const settings = getSettings()
 
 	settings.connectionCodes = settings.connectionCodes.filter((item) => item.code !== code)
 
 	setSettings(settings)
 
-	// delete connection
+	// delete connection from cloud
 	try {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
 		if (!userError && userData.user) {
-			const res = confirm("Do you want to delete the connection from the cloud?")
-
-			if (res) {
-				const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", code)
-			}
+			const { data, error } = await supabaseClient.from("remote_connection").delete().eq("code", code)
 		}
 	} catch (error) {
 		console.log(error)
 	}
 }
 
-export const editConnectionCode = (code: string) => {
+export const editConnectionCode = async (code: string) => {
 	const settings = getSettings()
 
 	const nameInput = document.getElementById("name") as HTMLInputElement
@@ -45,6 +45,23 @@ export const editConnectionCode = (code: string) => {
 	}
 
 	setSettings(settings)
+
+	// edit connection from cloud
+	try {
+		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
+
+		if (!userError && userData.user) {
+			const { data, error } = await supabaseClient
+				.from("remote_connection")
+				.update({
+					name: nameInput.value,
+					code: codeInput.value,
+				})
+				.eq("code", code)
+		}
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 export const addConnectionCode = async () => {
@@ -77,7 +94,7 @@ export const addConnectionCode = async () => {
 
 	setSettings(settings)
 
-	// save connection
+	// save connection to cloud
 	try {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
@@ -118,7 +135,7 @@ export const addNetworkDevice = async () => {
 
 	setSettings(settings)
 
-	// save network device
+	// save network device to cloud
 	try {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
@@ -141,7 +158,7 @@ export const deleteNetworkDevice = async (mac: string) => {
 
 	setSettings(settings)
 
-	// delete network device
+	// delete network device from cloud
 	try {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()
 
