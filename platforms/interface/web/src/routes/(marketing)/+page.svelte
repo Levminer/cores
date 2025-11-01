@@ -41,13 +41,13 @@
 
 		<div class="flex w-full flex-row flex-wrap items-center justify-center">
 			<img width="850" height="474" src="https://cdn.levminer.com/cores/laptop2.png" alt="Cores on desktop computer" />
-			<img width="320" height="480" src="https://cdn.levminer.com/cores/phone2.webp" alt="Cores on on a phone" />
+			<img width="280" height="440" src="https://cdn.levminer.com/cores/phone2.webp" alt="Cores on on a phone" />
 		</div>
 	</div>
 
 	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
-		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 px-10 py-20">
-			<div class="flex flex-col sm:w-full">
+		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
+			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="mb-10 text-center">
 					<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
 						Monitor any system with ease
@@ -128,7 +128,7 @@
 			</div>
 		</div>
 
-		<div id="features2" class="flex min-h-screen justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
+		<div id="features2" class="flex justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
 			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="flex w-full flex-col items-center justify-center">
 					<!-- card 0 -->
@@ -473,11 +473,11 @@
 										</h2>
 									</div>
 									<a
-										href="mailto:support@coresmonitor.com"
+										href="https://link.levminer.com/buy-cores-app?utm_source=web"
 										class="button bg-cores-alternative hover:text-cores-alternative border-cores-alternative mt-5 w-full gap-2 font-bold text-white hover:translate-y-0.5 hover:animate-pulse"
 									>
-										<Mail />
-										Get a quote
+										<ShoppingCart />
+										Buy
 									</a>
 								</div>
 							</div>
