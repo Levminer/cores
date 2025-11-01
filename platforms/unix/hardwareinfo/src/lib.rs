@@ -435,11 +435,11 @@ pub fn refresh_hardware_info(data: &mut Data) {
     }
 
     // CPU Info
-    let cpu_info = data.sys.global_cpu_info();
-    data.hw_info.cpu.max_load = cpu_info.cpu_usage() as f64;
+    data.hw_info.cpu.max_load = data.sys.global_cpu_usage() as f64;
 
     if data.first_run {
-        data.hw_info.cpu.info[0].core_count = data.sys.physical_core_count().unwrap() as u32;
+        data.hw_info.cpu.info[0].core_count =
+            sysinfo::System::physical_core_count().unwrap_or(0) as u32;
         data.hw_info.cpu.info[0].thread_count = data.sys.cpus().len() as u32;
     }
 
@@ -720,7 +720,11 @@ pub fn refresh_hardware_info(data: &mut Data) {
 
             if data.first_run {
                 for component in &components {
-                    let temp = (component.temperature() as f64).fmt_num();
+                    let temp = if let Some(t) = component.temperature() {
+                        (t as f64).fmt_num()
+                    } else {
+                        0.0
+                    };
 
                     data.hw_info.cpu.temperature.push(CoresSensor {
                         name: component.label().to_string(),
@@ -735,8 +739,13 @@ pub fn refresh_hardware_info(data: &mut Data) {
                 for component in &components {
                     let prev = &data.hw_info.cpu.temperature[i];
 
-                    data.hw_info.cpu.temperature[i] =
-                        compare_sensor(prev, (component.temperature() as f64).fmt_num());
+                    let temp = if let Some(t) = component.temperature() {
+                        (t as f64).fmt_num()
+                    } else {
+                        0.0
+                    };
+
+                    data.hw_info.cpu.temperature[i] = compare_sensor(prev, temp);
 
                     i += 1;
                 }

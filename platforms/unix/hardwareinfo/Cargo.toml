@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 netdev = "0.29.0"
-sysinfo = "0.30.12"
+sysinfo = "0.37.2"
 starship-battery = "0.10.0"
 indexmap = "2.2.6"
 nvml-wrapper = "0.10.0"

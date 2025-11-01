@@ -17,7 +17,7 @@ fn main() {
         data.sys.refresh_all();
         std::thread::sleep(sysinfo::MINIMUM_CPU_UPDATE_INTERVAL);
         data.sys.refresh_all();
-        data.network.refresh();
+        data.network.refresh(true);
 
         refresh_hardware_info(&mut data);
         println!("{:#?}", data.hw_info);

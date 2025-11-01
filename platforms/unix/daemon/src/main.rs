@@ -156,7 +156,7 @@ async fn main() {
             data.sys.refresh_all();
             std::thread::sleep(hardwareinfo::MINIMUM_CPU_UPDATE_INTERVAL);
             data.sys.refresh_all();
-            data.network.refresh();
+            data.network.refresh(true);
             refresh_hardware_info(&mut data);
 
             // Send hardware info, ignore if queue is lagged (receivers can't keep up)
