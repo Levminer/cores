@@ -54,8 +54,8 @@ services:
 
 You have to change the connection server URL to point to your server URL.
 
-1. On desktop: Remote connection > Connection server > Change > Restart Cores
-1. Linux/macOS daemon: `$HOME/.config/Cores/settings.json` > connectionURL > Restart the daemon
+1. Windows: `%PROGRAMDATA%\Cores\settings.json` > connectionURL > Restart the service
+1. Linux: `$HOME/.config/Cores/settings.json` > connectionURL > Restart the daemon
 
 ## License
 
