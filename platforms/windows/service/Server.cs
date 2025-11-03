@@ -113,7 +113,8 @@ public class Server {
 				}
 
 				if (message.Type == "debug_report") {
-					var contents = $"{message.Data.SystemInfo}\n{hardwareInfo.computer.GetReport()}";
+					var hwInfo = JsonSerializer.Serialize(hardwareInfo.API, Program.CompressedSerializerOptions);
+					var contents = $"{message.Data.SystemInfo}\n{hardwareInfo.computer.GetReport()}\n{hwInfo}";
 
 					File.WriteAllText(message.Data.FilePath, contents);
 				}
