@@ -129,7 +129,7 @@
 							</Dialog.Trigger>
 						{/snippet}
 						{#snippet confirmButton()}
-							<Dialog.Close on:click={() => addNetworkDevice()} class="smallButton">
+							<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
 								<Plus class="h-5 w-5" />
 								Add device
 							</Dialog.Close>

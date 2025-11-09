@@ -28,7 +28,7 @@
 		"vite": "^5.4.10"
 	},
 	"dependencies": {
-		"bits-ui": "^2.8.11",
+		"bits-ui": "^2.14.2",
 		"ezrtc": "^0.8.0",
 		"lucide-svelte": "^0.525.0",
 		"posthog-js": "^1.223.3"
