@@ -17,7 +17,7 @@
 		"build:app": "node scripts/buildNumber.cjs release false && npm run build -w app",
 		"build:web": "node scripts/buildNumber.cjs release false && npm run build -w web",
 		"build:docker": "node scripts/buildNumber.cjs release false && npm run build:docker -w web",
-		"check": "npm run check -w app",
+		"check": "npm run check -w app && npm run check -w web",
 		"rename": "node scripts/rename.js",
 		"tauri": "tauri"
 	},
