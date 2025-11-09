@@ -1,7 +1,7 @@
 <ModularDialog title={data?.title} description={data?.message} open={openDialog}>
 	{#snippet confirmButton()}
 		<Dialog.Close
-			on:click={() => {
+			onclick={() => {
 				showMore()
 			}}
 			class="smallButton"
