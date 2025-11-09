@@ -56,6 +56,4 @@
 
 	let value = $state<string>(options.find((option) => parseInt(option.value) === $settings[setting])?.value || "")
 	const selectedLabel = $derived(value ? options.find((option) => option.value === value)?.label : "Select a value")
-	$inspect(value)
-	$inspect(selectedLabel)
 </script>
