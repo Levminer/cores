@@ -1,6 +1,6 @@
 <ErrorBoundary>
 	{#if !$appState.plan}
-		<Onboarding />
+		<Onboarding goto={goto} />
 	{:else}
 		<Connections />
 	{/if}
@@ -8,4 +8,5 @@
 
 <script lang="ts">
 	import { appState, Connections, ErrorBoundary, Onboarding } from "ui"
+	import { goto } from "$app/navigation"
 </script>

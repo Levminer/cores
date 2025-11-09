@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env VITE_CORES_MODE=host vite --port 3000",
+		"dev": "cross-env VITE_CORES_MODE=host vite dev --port 3000",
 		"build": "cross-env VITE_CORES_MODE=host vite build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
 	},
