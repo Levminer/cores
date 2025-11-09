@@ -1,6 +1,6 @@
 <div class="flex h-screen">
 	{#if $appState.showMenu}
-		<DesktopNavigation />
+		<DesktopNavigation pathname={$page.url.pathname} />
 	{/if}
 
 	<div class="scroll w-full overflow-hidden overflow-y-scroll">
@@ -16,87 +16,38 @@
 		{#if $hardwareInfo.cpu === undefined || loading}
 			<Loading mode="desktop" />
 		{:else}
-			<RouteTransition>
-				<Route path="/onboarding"><Onboarding /></Route>
-
-				<ErrorBoundary>
-					<Route path="/home"><Home /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/cpu"><Cpu /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/ram"><Ram /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/gpu"><Gpu /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/network"><Network /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/storage"><Storage /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/system"><System /></Route>
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					{#if !$appState.plan}
-						<Route path="/connections"><Onboarding /></Route>
-					{:else}
-						<Route path="/connections"><Connections /></Route>
-					{/if}
-				</ErrorBoundary>
-
-				<ErrorBoundary>
-					<Route path="/settings"><Settings /></Route>
-				</ErrorBoundary>
-			</RouteTransition>
+			{@render children()}
 		{/if}
 	</div>
 </div>
 
 <script lang="ts">
-	import { Route, router } from "@baileyherbert/tinro"
-	import build from "../../../../build.json"
+	import build from "../../../../../build.json"
+	import "../../../ui/styles/index.css"
+	import "../app.css"
+	import { onNavigate, goto } from "$app/navigation"
+	import { page } from "$app/stores"
+	import {
+		appState,
+		BuildNumber,
+		DesktopNavigation,
+		UpdateAlert,
+		NewsAlert,
+		hardwareInfo,
+		Loading,
+		initializeSettings,
+		setHardwareInfo,
+		generateSecondsData,
+		hardwareStatistics,
+		settings,
+		supabaseClient,
+		generateMinutesData,
+		setHardwareStatistics,
+	} from "ui"
 	import { invoke } from "@tauri-apps/api/core"
 	import posthog from "posthog-js"
-	import {
-		DesktopNavigation,
-		BuildNumber,
-		Loading,
-		RouteTransition,
-		Onboarding,
-		Settings,
-		Home,
-		Cpu,
-		Gpu,
-		Ram,
-		System,
-		Network,
-		Connections,
-		Storage,
-		hardwareStatistics,
-		setHardwareStatistics,
-		initializeSettings,
-		settings,
-		appState,
-		generateMinutesData,
-		generateSecondsData,
-		setHardwareInfo,
-		hardwareInfo,
-		supabaseClient,
-		UpdateAlert,
-		ErrorBoundary,
-		NewsAlert,
-	} from "ui"
+
+	let { children } = $props()
 
 	let loading = $state(true)
 
@@ -215,7 +166,7 @@
 					if (systemInfo.osName !== "Windows") {
 						$appState.showMenu = true
 						$appState.plan = "unix"
-						router.goto("/home")
+						goto("/home")
 						loading = false
 						return
 					}
@@ -240,15 +191,15 @@
 							// User is on a paid plan
 							$appState.showMenu = true
 							$appState.plan = data.plan
-							router.goto("/home")
+							goto("/home")
 						} else {
 							// User is on a free plan
-							router.goto("/onboarding")
+							goto("/onboarding")
 						}
 					} else {
 						// User not logged in
 						$appState.showMenu = false
-						router.goto("/onboarding")
+						goto("/onboarding")
 					}
 
 					loading = false
@@ -258,7 +209,7 @@
 					)
 					$appState.showMenu = true
 					// $appState.plan
-					router.goto("/home")
+					goto("/home")
 					loading = false
 				}
 			}
@@ -266,9 +217,9 @@
 			authenticate()
 
 			// Scroll to the top of the page on route change
-			router.subscribe(() => {
+			/* router.subscribe(() => {
 				document.querySelector(".top")!.scrollIntoView()
-			})
+			}) */
 
 			// 60s date comparison
 			const date = new Date()
@@ -315,5 +266,17 @@
 				ws.close()
 			}
 		}
+	})
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve()
+				await navigation.complete
+				document.querySelector(".top")!.scrollIntoView()
+			})
+		})
 	})
 </script>

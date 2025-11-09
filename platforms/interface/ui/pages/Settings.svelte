@@ -190,7 +190,7 @@
 						<button
 							onclick={async () => {
 								await supabaseClient.auth.signOut({ scope: "local" })
-								router.goto("/onboarding")
+								goto("/onboarding")
 							}}
 							class="button"
 						>
@@ -314,7 +314,12 @@
 	import { onMount } from "svelte"
 	import { hardwareInfo, localSettings, ModularDialog, Select, settings, Toggle } from "ui"
 	import { Dialog } from "bits-ui"
-	import { router } from "@baileyherbert/tinro"
+
+	interface Props {
+		goto: (path: string) => void
+	}
+
+	let { goto }: Props = $props()
 
 	let user = $state<SupabaseUser | null>(null)
 	let loading = $state(true)

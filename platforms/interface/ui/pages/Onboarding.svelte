@@ -162,7 +162,7 @@
 			<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
 				<button
 					onclick={() => {
-						router.goto("/connections", true)
+						goto("/connections", { replaceState: true })
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 				>
@@ -234,7 +234,7 @@
 			<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
 				<button
 					onclick={() => {
-						router.goto("/home", true)
+						goto("/home", { replaceState: true })
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 				>
@@ -249,7 +249,7 @@
 
 				<button
 					onclick={() => {
-						router.goto("/connections", true)
+						goto("/connections", { replaceState: true })
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 				>
@@ -264,7 +264,7 @@
 
 				<button
 					onclick={() => {
-						router.goto("/settings", true)
+						goto("/settings", { replaceState: true })
 					}}
 					class="transparent-900 flex w-full transform flex-row items-center gap-3 rounded-xl px-5 py-5 text-xl font-semibold shadow-md duration-100 hover:translate-y-1"
 				>
@@ -306,7 +306,6 @@
 	import { appState } from "../stores/state.ts"
 	import { settings } from "../stores/settings.ts"
 	import { Dialog } from "bits-ui"
-	import { router } from "@baileyherbert/tinro"
 	import { Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone, CircleX, Globe } from "lucide-svelte"
 	import { onMount } from "svelte"
 	import { start, cancel, onUrl } from "@fabianlars/tauri-plugin-oauth"
@@ -314,6 +313,12 @@
 	import { Login, ModularDialog } from "ui"
 	import posthog from "posthog-js"
 	import type { Provider, User } from "@supabase/supabase-js"
+
+	interface Props {
+		goto: (path: string, opts?: { replaceState?: true }) => void
+	}
+
+	let { goto }: Props = $props()
 
 	type Steps = "welcome" | "login" | "pricing" | "tips" | "connections"
 	let step = $state("" as Steps)
@@ -337,7 +342,7 @@
 		const handleKeydown = (event: KeyboardEvent) => {
 			if (event.key === "Escape" && event.metaKey) {
 				$appState.showMenu = true
-				router.goto("/home", true)
+				goto("/home")
 			}
 		}
 		document.addEventListener("keydown", handleKeydown)
@@ -408,7 +413,7 @@
 					// User is on a paid plan
 					$appState.plan = userData?.plan
 					$appState.showMenu = true
-					router.goto("/home")
+					goto("/home")
 				}
 
 				redirectDialog = false
