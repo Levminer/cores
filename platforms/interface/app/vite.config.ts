@@ -1,23 +1,11 @@
+import { sveltekit } from "@sveltejs/kit/vite"
 import { defineConfig } from "vite"
-import { svelte } from "@sveltejs/vite-plugin-svelte"
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte"
 
 export default defineConfig({
-	plugins: [
-		svelte({
-			preprocess: vitePreprocess(),
-		}),
-	],
-	base: "",
-	build: {
-		rollupOptions: {
-			output: {
-				entryFileNames: `[name].js`,
-				chunkFileNames: `[name].js`,
-				assetFileNames: `[name].[ext]`,
-			},
+	plugins: [sveltekit()],
+	server: {
+		fs: {
+			allow: ["../.."],
 		},
-		emptyOutDir: true,
-		outDir: "../../../dist",
 	},
 })

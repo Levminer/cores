@@ -12,7 +12,6 @@ import Settings from "./pages/Settings.svelte"
 import BuildNumber from "./navigation/BuildNumber.svelte"
 import DesktopNavigation from "./navigation/DesktopNavigation.svelte"
 import Loading from "./navigation/Loading.svelte"
-import RouteTransition from "./navigation/RouteTransition.svelte"
 
 import GaugeChart from "./charts/GaugeChart.svelte"
 import LineChart from "./charts/LineChart.svelte"
@@ -57,7 +56,6 @@ export {
 	Settings,
 	BuildNumber,
 	DesktopNavigation,
-	RouteTransition,
 	GaugeChart,
 	LineChart,
 	MeterChart,
