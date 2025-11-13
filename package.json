@@ -22,11 +22,11 @@
 		"tauri": "tauri"
 	},
 	"devDependencies": {
-		"@sentry/cli": "^2.56.0",
-		"@tauri-apps/cli": "^2.8.4",
+		"@sentry/cli": "^2.58.2",
+		"@tauri-apps/cli": "^2.9.4",
 		"cross-env": "^10.1.0",
 		"prettier": "^3.6.2",
-		"svelte": "^5.43.5"
+		"svelte": "^5.43.6"
 	},
 	"dependencies": {
 		"prettier-plugin-svelte": "^3.4.0",
