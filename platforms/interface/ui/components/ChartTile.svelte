@@ -15,7 +15,7 @@
 					}}
 				/>
 			{/if}
-			<ToggleButton selected={minutes} on:click={() => (minutes = !minutes)} />
+			<ToggleButton selected={minutes} onclick={() => (minutes = !minutes)} />
 		</div>
 	</div>
 

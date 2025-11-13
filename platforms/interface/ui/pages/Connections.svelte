@@ -34,7 +34,7 @@
 					<button
 						class="button"
 						onclick={() => {
-							open("https://www.coresmonitor.com/login")
+							open("https://www.coresmonitor.com/login?utm_source=app_connections")
 						}}
 					>
 						<ExternalLink />
@@ -44,7 +44,7 @@
 					<button
 						class="button"
 						onclick={() => {
-							open("https://link.levminer.com/cores-ios")
+							open("https://link.levminer.com/cores-ios?utm_source=app_connections")
 						}}
 					>
 						<svg class="h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +129,7 @@
 							</Dialog.Trigger>
 						{/snippet}
 						{#snippet confirmButton()}
-							<Dialog.Close on:click={() => addNetworkDevice()} class="smallButton">
+							<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
 								<Plus class="h-5 w-5" />
 								Add device
 							</Dialog.Close>

@@ -21,7 +21,7 @@
 					<Dialog.Trigger class="smallButton w-full">Add connection</Dialog.Trigger>
 				{/snippet}
 				{#snippet confirmButton()}
-					<Dialog.Close on:click={() => addCode()} class="smallButton">
+					<Dialog.Close onclick={() => addCode()} class="smallButton">
 						<Plus class="h-5 w-5" />
 						Add
 					</Dialog.Close>
