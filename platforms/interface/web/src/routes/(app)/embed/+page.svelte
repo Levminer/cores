@@ -1,3 +1,5 @@
+<div class="top"></div>
+
 {#if $appState.state === "connected"}
 	{#if hash === "#home"}
 		<Home />
@@ -59,6 +61,8 @@
 		// watch hash change
 		window.addEventListener("hashchange", () => {
 			hash = location.hash
+			console.log("change")
+			document.querySelector(".top")?.scrollIntoView({ behavior: "instant", block: "start" })
 		})
 
 		if (access && refresh) {
