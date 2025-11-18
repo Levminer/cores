@@ -551,6 +551,7 @@
 	import Footer from "../../components/Footer.svelte"
 	import Header from "../../components/Header.svelte"
 	import GetStarted from "../../components/GetStarted.svelte"
+	import { browser } from "$app/environment"
 
 	let selectedDownload = $state("windows")
 	const features = [
@@ -592,6 +593,8 @@
 	})
 
 	onDestroy(() => {
-		document.querySelector("#layout")?.classList.remove("scroll-smooth")
+		if (browser) {
+			document.querySelector("#layout")?.classList.remove("scroll-smooth")
+		}
 	})
 </script>
