@@ -38,18 +38,25 @@
 
 ## Self-hosting
 
-You can use this simple docker compose file, you can host both the dashboard and the server on your own machine. Make sure you have Docker installed and running.
+You can use this simple docker compose file, you can host both the dashboard and the server on your own machine. Make sure you have Docker installed and running. Point a domain to your server and dashboard with valid TLS certificates.
 
 ```yml
 services:
-    dashboard:
-        image: ghcr.io/levminer/cores/dashboard:latest
-        ports:
-            - "3000:3000"
+    # Connection server, requires a domain with a valid TLS certificate,
+    # example: cores-server.mydomain.com
     server:
         image: ghcr.io/levminer/cores/server:latest
         ports:
             - "9001:9001"
+
+    # Dashboard web app, requires a domain with a valid TLS certificate,
+    # example: cores-dashboard.mydomain.com
+    dashboard:
+        image: ghcr.io/levminer/cores/dashboard:latest
+        ports:
+            - "3000:3000"
+        environment:
+            - PUBLIC_CONNECTION_SERVER_URL=cores-server.mydomain.com
 ```
 
 You have to change the connection server URL to point to your server URL.

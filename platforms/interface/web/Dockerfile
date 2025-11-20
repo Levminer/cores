@@ -10,4 +10,4 @@ FROM node:22-alpine
 WORKDIR /app
 COPY --from=builder app/platforms/interface/web/build ./build
 EXPOSE 3000
-CMD ["npx", "serve", "build"]
+CMD ["node", "build"]

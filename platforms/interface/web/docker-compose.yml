@@ -1,11 +1,14 @@
 services:
+    server:
+        image: ghcr.io/levminer/cores/server:latest
+        ports:
+            - "9001:9001"
+
     dashboard:
         build:
             context: ../../..
             dockerfile: platforms/interface/web/Dockerfile
         ports:
             - "3000:3000"
-    server:
-        image: ghcr.io/levminer/cores/server:latest
-        ports:
-            - "9001:9001"
+        environment:
+            - PUBLIC_CONNECTION_SERVER_URL=localhost:9001

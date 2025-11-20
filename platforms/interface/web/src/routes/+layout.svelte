@@ -14,12 +14,15 @@
 	import posthog from "posthog-js"
 	import { browser } from "$app/environment"
 	import { beforeNavigate, afterNavigate } from "$app/navigation"
+	import { PUBLIC_POSTHOG_KEY } from "$env/static/public"
 
 	let { children } = $props()
 
 	if (browser) {
-		beforeNavigate(() => posthog.capture("$pageleave"))
-		afterNavigate(() => posthog.capture("$pageview"))
+		if (PUBLIC_POSTHOG_KEY) {
+			beforeNavigate(() => posthog.capture("$pageleave"))
+			afterNavigate(() => posthog.capture("$pageview"))
+		}
 	}
 
 	onNavigate((navigation) => {
