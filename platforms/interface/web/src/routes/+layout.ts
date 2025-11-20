@@ -19,8 +19,8 @@ export const load = async ({ url }) => {
 			setSettings(settings)
 		}
 
-		if (env.PUBLIC_POSTHOG_KEY) {
-			posthog.init(env.PUBLIC_POSTHOG_KEY, {
+		if (import.meta.env.VITE_POSTHOG_KEY) {
+			posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 				api_host: "https://eu.i.posthog.com",
 				capture_pageview: false,
 				capture_pageleave: false,
