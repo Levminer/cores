@@ -464,13 +464,13 @@ public class HardwareInfo {
 							Name = computerHardware[i].Name,
 							Id = computerHardware[i].Identifier.ToString(),
 							Priority = 1,
+							Health = "N/A",
 						};
 
 						// Get disk size
 						var report = computerHardware[i].GetReport().Split("\n");
 						long total = 0;
 						long free = 0;
-						string health = "N/A";
 
 						foreach (var line in report) {
 							if (line.StartsWith("Total Size")) {
@@ -480,7 +480,7 @@ public class HardwareInfo {
 								}
 							}
 
-							if (line.StartsWith("Total Free Space")) {
+							if (line.StartsWith("Total Free Size")) {
 								var parts = line.Split(":");
 								if (parts.Length > 1) {
 									free = Convert.ToInt64(parts[1].Trim()) / 1024 / 1024 / 1024;
@@ -494,35 +494,9 @@ public class HardwareInfo {
 							if (data.Id.Contains(settings.defaultDevices.storage)) {
 								data.Priority = -1;
 							}
-
-							// Sandforce
-							if (line.Trim().StartsWith("E7")) {
-								health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
-							}
-
-							// Intel
-							if (line.Trim().StartsWith("E8")) {
-								health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
-							}
-
-							// Samsung
-							if (line.Trim().StartsWith("B4")) {
-								health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
-							}
-
-							// Indilinx
-							if (line.Trim().StartsWith("D1")) {
-								health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
-							}
-
-							// Micron
-							if (line.Trim().StartsWith("CA")) {
-								health = line.Split(Array.Empty<char>(), StringSplitOptions.RemoveEmptyEntries).Last();
-							}
 						}
 
 						data.TotalSpace = (int)total;
-						data.Health = health;
 						data.FreeSpace = (int)free;
 
 						if (firstRun) {
@@ -599,24 +573,24 @@ public class HardwareInfo {
 							// find disk by ide and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
-									if (sensor[j].Name.Contains("Read")) {
+									if (sensor[j].Name.Contains("read")) {
 										API.System.Storage.Disks[k].DataRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 
-									if (sensor[j].Name.Contains("Written")) {
+									if (sensor[j].Name.Contains("written")) {
 										API.System.Storage.Disks[k].DataWritten = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 								}
 							}
 						}
 
-						// M.2 SSD Health
+						// SSD Health
 						if (sensor[j].SensorType == SensorType.Level && (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60)) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
-									if (sensor[j].Name.Contains("Percentage Used")) {
-										API.System.Storage.Disks[k].Health = (100 - sensor[j].Value ?? 0).ToString();
+									if (sensor[j].Name.Contains("Life")) {
+										API.System.Storage.Disks[k].Health = (sensor[j].Value ?? 0).ToString();
 									}
 								}
 							}
