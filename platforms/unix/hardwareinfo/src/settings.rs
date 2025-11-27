@@ -14,6 +14,17 @@ const fn default_true() -> bool {
     true
 }
 
+fn default_window_state() -> WindowState {
+    WindowState {
+        x: 100,
+        y: 100,
+        width: 1900,
+        height: 1000,
+        maximized: true,
+        monitor_index: 0,
+    }
+}
+
 const fn default_connection_codes() -> Vec<ConnectionCode> {
     Vec::new()
 }
@@ -67,6 +78,17 @@ fn default_default_devices() -> DefaultDevices {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct WindowState {
+    pub x: i32,
+    pub y: i32,
+    pub width: u32,
+    pub height: u32,
+    pub maximized: bool,
+    #[serde(rename = "monitorIndex", default = "default_value")]
+    pub monitor_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -86,6 +108,8 @@ pub struct Settings {
     pub user_id: String,
     #[serde(rename = "defaultDevices", default = "default_default_devices")]
     pub default_devices: DefaultDevices,
+    #[serde(rename = "windowState", default = "default_window_state")]
+    pub window_state: WindowState,
 }
 
 fn sample_settings() -> Settings {
@@ -99,6 +123,7 @@ fn sample_settings() -> Settings {
         network_devices: default_connection_codes(),
         user_id: default_connection_code(),
         default_devices: default_default_devices(),
+        window_state: default_window_state(),
     }
 }
 

@@ -34,6 +34,14 @@ public class DefaultDevices {
 	public string storage { get; set; } = "";
 }
 
+public class WindowState {
+	public int x { get; set; } = 100;
+	public int y { get; set; } = 100;
+	public uint width { get; set; } = 1900;
+	public uint height { get; set; } = 1000;
+	public bool maximized { get; set; } = true;
+	public uint monitorIndex { get; set; } = 0;
+}
 
 public class DefaultSettings {
 	public int interval { get; set; } = 3;
@@ -44,6 +52,7 @@ public class DefaultSettings {
 	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
 	public DefaultDevices defaultDevices { get; set; } = new();
+	public WindowState windowState { get; set; } = new();
 }
 
 public class Settings : DefaultSettings {
@@ -103,6 +112,7 @@ public class Settings : DefaultSettings {
 			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
 			userId = settings?.userId ?? defaultSettings.userId;
 			defaultDevices = settings?.defaultDevices ?? defaultSettings.defaultDevices;
+			windowState = settings?.windowState ?? defaultSettings.windowState;
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);

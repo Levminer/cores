@@ -38,6 +38,16 @@ const settingsScheme = z.object({
 			storage: z.string().default(""),
 		})
 		.default({}),
+	windowState: z
+		.object({
+			x: z.number().default(100),
+			y: z.number().default(100),
+			width: z.number().default(1900),
+			height: z.number().default(1000),
+			maximized: z.boolean().default(true),
+			monitorIndex: z.number().default(0),
+		})
+		.default({}),
 })
 
 // Create store
