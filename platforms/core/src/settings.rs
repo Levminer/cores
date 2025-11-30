@@ -1,4 +1,4 @@
-use hardwareinfo::settings::{Settings, WindowState};
+use hardwareinfo::settings::Settings;
 
 #[tauri::command]
 pub fn get_settings() -> Settings {
@@ -8,13 +8,4 @@ pub fn get_settings() -> Settings {
 #[tauri::command]
 pub fn set_settings(settings: String) {
     return hardwareinfo::settings::set_settings(settings)
-}
-
-#[tauri::command]
-pub fn save_window_state(window_state: WindowState) {
-    let mut settings = hardwareinfo::settings::get_settings();
-    settings.window_state = window_state;
-    hardwareinfo::settings::set_settings(
-        serde_json::to_string(&settings).expect("Failed to convert settings to JSON"),
-    );
 }

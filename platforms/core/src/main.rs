@@ -15,8 +15,6 @@ pub mod service;
 pub mod settings;
 pub mod utils;
 
-use hardwareinfo::settings::WindowState;
-
 struct GlobalState {
     child: Option<CommandChild>,
 }
@@ -38,6 +36,7 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_oauth::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let window = app
                 .get_webview_window("main")
@@ -49,7 +48,6 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             settings::get_settings,
             settings::set_settings,
-            settings::save_window_state,
             service::start_service,
             service::stop_service,
             service::restart_service,
@@ -57,39 +55,6 @@ fn main() {
         ])
         .setup(|app| {
             app.manage(Mutex::new(GlobalState { child: None }));
-
-            // Restore window state
-            let settings = settings::get_settings();
-            let window = app
-                .get_webview_window("main")
-                .expect("Failed to get main window");
-
-            // Try to find the monitor where the window was previously located
-            if let Ok(available_monitors) = window.available_monitors() {
-                let monitor_index = settings.window_state.monitor_index as usize;
-                let target_monitor = available_monitors.get(monitor_index)
-                    .or_else(|| available_monitors.first());
-
-                if let Some(monitor) = target_monitor {
-                    // Calculate position relative to the monitor
-                    let monitor_x = monitor.position().x;
-                    let monitor_y = monitor.position().y;
-                    
-                    // Set position on the correct monitor
-                    let _ = window.set_position(tauri::PhysicalPosition::new(
-                        monitor_x + settings.window_state.x,
-                        monitor_y + settings.window_state.y,
-                    ));
-                    let _ = window.set_size(tauri::PhysicalSize::new(
-                        settings.window_state.width,
-                        settings.window_state.height,
-                    ));
-                    
-                    if settings.window_state.maximized {
-                        let _ = window.maximize();
-                    }
-                }
-            }
 
             let toggle_window_item =
                 MenuItemBuilder::with_id("toggle_windows", "Show/Hide Cores").build(app)?;
@@ -180,74 +145,6 @@ fn main() {
                     window.hide().expect("Failed to hide window");
                 } else {
                     window.app_handle().exit(0)
-                }
-            }
-            tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_) => {
-                // Save window state on move or resize
-                if let Ok(position) = window.outer_position() {
-                    if let Ok(size) = window.outer_size() {
-                        if let Ok(is_maximized) = window.is_maximized() {
-                            // Find which monitor the window is currently on
-                            let mut monitor_index = 0u32;
-                            if let Ok(monitors) = window.available_monitors() {
-                                for (idx, monitor) in monitors.iter().enumerate() {
-                                    let monitor_pos = monitor.position();
-                                    let monitor_size = monitor.size();
-                                    
-                                    // Check if window center is on this monitor
-                                    let window_center_x = position.x + (size.width as i32) / 2;
-                                    let window_center_y = position.y + (size.height as i32) / 2;
-                                    
-                                    if window_center_x >= monitor_pos.x 
-                                        && window_center_x < (monitor_pos.x + monitor_size.width as i32)
-                                        && window_center_y >= monitor_pos.y
-                                        && window_center_y < (monitor_pos.y + monitor_size.height as i32) {
-                                        monitor_index = idx as u32;
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            // Store relative coordinates within the monitor
-                            let monitor_offset_x = if monitor_index > 0 {
-                                if let Ok(monitors) = window.available_monitors() {
-                                    if let Some(monitor) = monitors.get(monitor_index as usize) {
-                                        monitor.position().x
-                                    } else {
-                                        0
-                                    }
-                                } else {
-                                    0
-                                }
-                            } else {
-                                0
-                            };
-                            
-                            let monitor_offset_y = if monitor_index > 0 {
-                                if let Ok(monitors) = window.available_monitors() {
-                                    if let Some(monitor) = monitors.get(monitor_index as usize) {
-                                        monitor.position().y
-                                    } else {
-                                        0
-                                    }
-                                } else {
-                                    0
-                                }
-                            } else {
-                                0
-                            };
-                            
-                            let window_state = WindowState {
-                                x: position.x - monitor_offset_x,
-                                y: position.y - monitor_offset_y,
-                                width: size.width,
-                                height: size.height,
-                                maximized: is_maximized,
-                                monitor_index,
-                            };
-                            settings::save_window_state(window_state);
-                        }
-                    }
                 }
             }
             _ => {}
