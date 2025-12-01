@@ -34,7 +34,6 @@ public class DefaultDevices {
 	public string storage { get; set; } = "";
 }
 
-
 public class DefaultSettings {
 	public int interval { get; set; } = 3;
 	public bool minimizeToTray { get; set; } = true;
