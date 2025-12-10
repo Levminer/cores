@@ -116,7 +116,8 @@ fn main() {
                 let sidecar_command = app
                     .shell()
                     .sidecar("coresd")
-                    .expect("Failed to get sidecar");
+                    .expect("Failed to get sidecar")
+                    .arg("--logs");
                 let (mut rx, child) = sidecar_command.spawn().expect("Failed to spawn sidecar");
 
                 let state = app.state::<Mutex<GlobalState>>();
@@ -125,9 +126,14 @@ fn main() {
                 tauri::async_runtime::spawn(async move {
                     // read events such as stdout
                     while let Some(event) = rx.recv().await {
-                        if let CommandEvent::Stdout(line_bytes) = event {
+                        if let CommandEvent::Stdout(line_bytes) = &event {
                             let line = String::from_utf8_lossy(&line_bytes);
                             println!("sidecar stdout: {}", line);
+                        }
+
+                        if let CommandEvent::Stderr(line_bytes) = &event {
+                            let line = String::from_utf8_lossy(&line_bytes);
+                            eprintln!("sidecar stderr: {}", line);
                         }
                     }
                 });

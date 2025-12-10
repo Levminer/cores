@@ -21,8 +21,9 @@ use r2d2;
 use r2d2_sqlite::SqliteConnectionManager;
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
-use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode};
+use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
 use std::borrow::Cow;
+use std::fs::OpenOptions;
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
 use std::process::Command;
@@ -57,6 +58,9 @@ struct Args {
     /// Setup coresd to run as a service
     #[arg(required = false, long, short = 's')]
     service: bool,
+    /// Enable file logging to the settings folder
+    #[arg(required = false, long, short = 'l')]
+    logs: bool,
 }
 
 #[tokio::main]
@@ -65,13 +69,36 @@ async fn main() {
     let args = Args::parse();
 
     // Logger
-    CombinedLogger::init(vec![TermLogger::new(
+    let mut loggers: Vec<Box<dyn simplelog::SharedLogger>> = vec![TermLogger::new(
         LevelFilter::Info,
         Config::default(),
         TerminalMode::Mixed,
         ColorChoice::Auto,
-    )])
-    .expect("Failed to initialize logger");
+    )];
+
+    // Add file logger if --logs flag is set
+    if args.logs {
+        let log_folder = get_settings_path().join("Cores");
+        std::fs::create_dir_all(&log_folder).expect("Failed to create settings folder");
+        let log_file = log_folder.join("coresd.log");
+
+        // delete old log file
+        if log_file.exists() {
+            std::fs::remove_file(&log_file).expect("Failed to delete old log file");
+        }
+
+        match OpenOptions::new().create(true).append(true).open(&log_file) {
+            Ok(file) => {
+                loggers.push(WriteLogger::new(LevelFilter::Info, Config::default(), file));
+                info!("File logging enabled: {:?}", log_file);
+            }
+            Err(e) => {
+                error!("Failed to open log file: {}", e);
+            }
+        }
+    }
+
+    CombinedLogger::init(loggers).expect("Failed to initialize logger");
 
     // Check if service setup is requested
     if args.service {
