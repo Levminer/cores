@@ -1,11 +1,13 @@
 use indexmap::IndexMap;
-use log::error;
+use log::{error, info};
+use netdev::ip::Ipv6Net;
 use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
 use serde::{Deserialize, Serialize};
 use starship_battery::units::energy::milliwatt_hour;
 use starship_battery::units::ratio::percent;
+use std::net::Ipv6Addr;
 use std::time::SystemTime;
 use std::{
     env,
@@ -184,9 +186,18 @@ pub struct CoresNetInterface {
     pub description: String,
     pub mac_address: String,
     pub ip_address: String,
+    #[serde(
+        rename(deserialize = "ipAddressV6", serialize = "ipAddressV6"),
+        default
+    )]
+    pub ip_address_v6: String,
     pub mask: String,
     pub gateway: String,
+    #[serde(rename(deserialize = "gatewayV6", serialize = "gatewayV6"), default)]
+    pub gateway_v6: String,
     pub dns: String,
+    #[serde(rename(deserialize = "dnsV6", serialize = "dnsV6"), default)]
+    pub dns_v6: String,
     pub speed: String,
     pub upload_data: f64,
     pub download_data: f64,
@@ -651,6 +662,12 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
                             .addr
                             .to_string(),
+                        ip_address_v6: int
+                            .ipv6
+                            .get(0)
+                            .unwrap_or(&Ipv6Net::new(Ipv6Addr::UNSPECIFIED, 64))
+                            .addr
+                            .to_string(),
                         mask: int
                             .ipv4
                             .get(0)
@@ -659,15 +676,31 @@ pub fn refresh_hardware_info(data: &mut Data) {
                             .to_string(),
                         gateway: int
                             .gateway
-                            .unwrap_or(NetworkDevice::new())
+                            .as_ref()
+                            .unwrap_or(&NetworkDevice::new())
                             .ipv4
                             .get(0)
                             .unwrap_or(&Ipv4Addr::new(0, 0, 0, 0))
                             .to_string(),
+                        gateway_v6: int
+                            .gateway
+                            .as_ref()
+                            .unwrap_or(&NetworkDevice::new())
+                            .ipv6
+                            .get(0)
+                            .unwrap_or(&Ipv6Addr::UNSPECIFIED)
+                            .to_string(),
                         dns: int
                             .dns_servers
-                            .get(0)
+                            .iter()
+                            .find(|ip| ip.is_ipv4())
                             .unwrap_or(&IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)))
+                            .to_string(),
+                        dns_v6: int
+                            .dns_servers
+                            .iter()
+                            .find(|ip| ip.is_ipv6())
+                            .unwrap_or(&IpAddr::V6(Ipv6Addr::UNSPECIFIED))
                             .to_string(),
                         speed: "N/A".to_string(),
                         upload_data: 0.0,
@@ -824,6 +857,15 @@ pub fn refresh_hardware_info(data: &mut Data) {
     }
 
     // END
+
+    if data.first_run {
+        info!("Hardware info initialized");
+        info!(
+            "hw info: {}",
+            serde_json::to_string(&data.hw_info).unwrap_or_default()
+        );
+    }
+
     data.first_run = false;
     data.hw_info.timestamp = chrono::Utc::now().to_rfc3339();
 }
