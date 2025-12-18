@@ -1,14 +1,14 @@
 <div class="transparent-900 flex w-full flex-col space-y-1 rounded-xl p-5">
 	<div class="flex flex-row items-center justify-between">
 		<div class="flex flex-row items-center gap-2">
-			<div class="transparent-800 flex items-center justify-center rounded-full p-3">
-				{#if status === "online"}
-					<img src="/favicon.ico" alt="Cores logo" class="h-5 w-5" />
-				{:else}
-					<img src="/grayscale.png" alt="Cores logo" class="h-5 w-5" />
-				{/if}
+			<div class="flex flex-col items-start justify-center gap-3 md:flex-row md:items-center">
+				<div>
+					<h4 class="max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap">{item.name}</h4>
+				</div>
+				<div>
+					<h5>crs_********{item.code.slice(-2)}</h5>
+				</div>
 			</div>
-			<h4>{item.name}</h4>
 		</div>
 		<div>
 			<ModularDialog title={"Edit Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
@@ -61,32 +61,39 @@
 			</button>
 		</div>
 	</div>
-	<div class="flex flex-row flex-wrap items-center justify-start gap-1 pt-1">
-		<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+	<div class="flex flex-row flex-wrap items-center justify-start gap-1.5 pt-1">
+		<div class="transparent-900 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 			<Globe class="h-5 w-5" color={"#d3cfcf"} />
 			<h5>{status === "online" ? "Online" : "Unknown"}</h5>
 		</div>
-		<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
-			<KeyRound class="h-5 w-5" color={"#d3cfcf"} />
-			<h5>crs_********{item.code.slice(-2)}</h5>
-		</div>
 		{#if status === "online"}
 			{#if metadata?.cpu !== undefined && metadata?.cpu !== null}
-				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<div class="transparent-900 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 					<Cpu class="h-5 w-5" color={"#d3cfcf"} />
 					<h5>{Math.round(parseInt(metadata.cpu))}%</h5>
 				</div>
 			{/if}
 			{#if metadata?.ram !== undefined && metadata?.ram !== null}
-				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<div class="transparent-900 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 					<Memory class="h-5 w-5" color={"#d3cfcf"} />
 					<h5>{Math.round(parseInt(metadata.ram))}%</h5>
 				</div>
 			{/if}
 			{#if metadata?.gpu !== null && metadata?.gpu !== undefined}
-				<div class="transparent-800 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+				<div class="transparent-900 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
 					<GpuCard class="h-5 w-5" color={"#d3cfcf"} />
 					<h5>{Math.round(parseInt(metadata.gpu))}%</h5>
+				</div>
+			{/if}
+
+			{#if deviceVersion !== null}
+				<div class="transparent-900 flex flex-row items-center gap-1 rounded-xl p-1 px-3">
+					<Info class="h-5 w-5" color={"#d3cfcf"} />
+					{#if deviceVersion < version}
+						<h5>{deviceVersion} (Outdated)</h5>
+					{:else}
+						<h5>{deviceVersion} (Up to date)</h5>
+					{/if}
 				</div>
 			{/if}
 		{/if}
@@ -95,13 +102,14 @@
 
 <script lang="ts">
 	import { ModularDialog, settings } from "ui"
-	import { Plug, Trash2, Pencil, KeyRound, Globe, Cpu } from "lucide-svelte"
+	import { Plug, Trash2, Pencil, KeyRound, Globe, Cpu, Info } from "lucide-svelte"
 	import { goto } from "$app/navigation"
 	import { Dialog } from "bits-ui"
 	import { appState } from "../stores/state.ts"
 	import { onMount } from "svelte"
 	import { editConnectionCode, deleteConnectionCode } from "../../../ui/utils/connection.ts"
 	import { GpuCard, Memory } from "svelte-bootstrap-icons"
+	import { version } from "../../../../../package.json"
 
 	interface Props {
 		item: LibSettings["connectionCodes"][0]
@@ -113,6 +121,9 @@
 
 	let status = $state("unknown" as Status)
 	let metadata = $state(null as Metadata | null)
+	let deviceVersion = $state(null as string | null)
+
+	$inspect(deviceVersion, version)
 
 	interface Metadata {
 		cpu: string
@@ -122,6 +133,7 @@
 
 	interface DeviceStatus {
 		online: boolean
+		version: string
 		metadata?: Metadata
 	}
 
@@ -135,6 +147,10 @@
 
 		if (json.metadata) {
 			metadata = json.metadata
+		}
+
+		if (json.version) {
+			deviceVersion = json.version
 		}
 	})
 </script>
