@@ -10,7 +10,7 @@ COPY platforms/interface ./platforms/interface
 COPY scripts ./scripts
 
 RUN npm i
-RUN npm run build:docker
+RUN npm run build:web
 
 # --- Production Stage ---
 FROM node:22-alpine

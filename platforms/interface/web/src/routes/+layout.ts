@@ -13,12 +13,6 @@ export const load = async ({ url }) => {
 			goto("/home")
 		}
 
-		if (!import.meta.env.VITE_LOGIN) {
-			const settings = getSettings()
-			settings.connectionURL = env.PUBLIC_CONNECTION_SERVER_URL
-			setSettings(settings)
-		}
-
 		if (import.meta.env.VITE_POSTHOG_KEY) {
 			posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 				api_host: "https://eu.i.posthog.com",
