@@ -82,7 +82,7 @@
 	import { Info } from "lucide-svelte"
 	import { version, number, date } from "../../../../../../../build.json"
 	import type { User as UserType } from "@supabase/supabase-js"
-	import { env } from "$env/dynamic/private"
+	import { env } from "$env/dynamic/public"
 
 	let loading = $state(true)
 	let user = $state(null as UserType | null)
