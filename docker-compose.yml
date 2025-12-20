@@ -6,7 +6,7 @@ services:
 
     dashboard:
         build:
-            context: ../../..
+            context: .
             dockerfile: platforms/interface/web/Dockerfile
         ports:
             - "3000:3000"
