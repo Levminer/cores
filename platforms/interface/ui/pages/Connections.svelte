@@ -193,7 +193,7 @@
 </div>
 
 <script lang="ts">
-	import { ConnectionServer, getSettings, hardwareInfo, ModularDialog, setSettings, settings, Toggle, PowerButton } from "ui"
+	import { getSettings, hardwareInfo, ModularDialog, setSettings, settings, Toggle, PowerButton } from "ui"
 	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth, Server } from "lucide-svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"

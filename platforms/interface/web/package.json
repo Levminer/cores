@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite dev --port 3001",
+		"dev": "cross-env VITE_CORES_MODE=client vite dev --port 3001",
 		"build": "cross-env VITE_CORES_MODE=client vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"

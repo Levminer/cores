@@ -17,6 +17,7 @@
 	import { hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 	import Navigation from "../../components/Navigation.svelte"
 	import { page } from "$app/state"
+	import { env } from "$env/dynamic/public"
 
 	let { children } = $props()
 
@@ -61,9 +62,9 @@
 	const connect = async () => {
 		let iceServers: RTCIceServer[] = [{ urls: "stun:stun.cloudflare.com:3478" }]
 
-		if (import.meta.env.VITE_TURN_SERVER_URL) {
+		if (env.PUBLIC_TURN_SERVER_URL) {
 			try {
-				const res = await fetch(import.meta.env.VITE_TURN_SERVER_URL)
+				const res = await fetch(env.PUBLIC_TURN_SERVER_URL)
 				const data = await res.json()
 
 				iceServers = iceServers.concat(data)

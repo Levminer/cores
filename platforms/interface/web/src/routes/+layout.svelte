@@ -18,7 +18,7 @@
 	let { children } = $props()
 
 	if (browser) {
-		if (import.meta.env.VITE_POSTHOG_KEY) {
+		if (import.meta.env.PUBLIC_POSTHOG_KEY) {
 			beforeNavigate(() => posthog.capture("$pageleave"))
 			afterNavigate(() => posthog.capture("$pageview"))
 		}

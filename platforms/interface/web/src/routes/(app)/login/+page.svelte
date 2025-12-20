@@ -13,6 +13,7 @@
 	import { goto } from "$app/navigation"
 	import { Loading, Login, supabaseClient } from "ui"
 	import type { Provider } from "@supabase/supabase-js"
+	import { env } from "$env/dynamic/public"
 
 	let loading = $state(true)
 
@@ -30,7 +31,7 @@
 		const { data, error } = await supabaseClient.auth.signInWithOAuth({
 			provider: provider,
 			options: {
-				redirectTo: `${import.meta.env.VITE_URL}/login`,
+				redirectTo: `${env.PUBLIC_URL}/login`,
 			},
 		})
 

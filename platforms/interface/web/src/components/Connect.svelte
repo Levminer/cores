@@ -13,7 +13,7 @@
 					<h3 class="mb-5 text-center">You can change the connection server in the settings.</h3>
 				</div>
 			{/if}
-			{#if $settings.connectionCodes.length === 0 && import.meta.env.VITE_LOGIN}
+			{#if $settings.connectionCodes.length === 0 && env.PUBLIC_LOGIN}
 				<a href="/login" class="button">Login</a>
 			{/if}
 			<ModularDialog title={"Add Remote Connection"} description={"You can get your connection code from the Cores desktop app."}>
@@ -50,12 +50,13 @@
 	import { onMount } from "svelte"
 	import type { User } from "@supabase/supabase-js"
 	import { addConnectionCode } from "../../../ui/utils/connection"
+	import { env } from "$env/dynamic/public"
 
 	let user = $state<User | null>(null)
 	let loading = $state(true)
 
 	const addCode = () => {
-		if (import.meta.env.VITE_LOGIN && $settings.connectionCodes.length >= 5) {
+		if (env.PUBLIC_LOGIN && $settings.connectionCodes.length >= 5) {
 			return alert(
 				"You can only have a maximum of 5 remote connections. Please remove one before adding a new one. \n\nIf you need more connections please reach out to support@coresmonitor.com for more information.",
 			)
