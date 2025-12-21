@@ -11,4 +11,4 @@ services:
         ports:
             - "3000:3000"
         environment:
-            - PUBLIC_CONNECTION_SERVER_URL=localhost:9001
+            - PUBLIC_CONNECTION_SERVER_URL=http://localhost:9001

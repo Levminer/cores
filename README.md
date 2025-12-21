@@ -43,26 +43,27 @@ You can use this simple docker compose file, you can host both the dashboard and
 ```yml
 services:
     # Connection server, requires a domain with a valid TLS certificate,
-    # example: cores-server.mydomain.com
+    # default is http://localhost:9001, point your domain to this server
     server:
         image: ghcr.io/levminer/cores/server:latest
         ports:
             - "9001:9001"
 
     # Dashboard web app, requires a domain with a valid TLS certificate,
-    # example: cores-dashboard.mydomain.com
+    # default is http://localhost:3000, point your domain to the dashboard and configure the server URL
     dashboard:
         image: ghcr.io/levminer/cores/dashboard:latest
         ports:
             - "3000:3000"
         environment:
-            - PUBLIC_CONNECTION_SERVER_URL=cores-server.mydomain.com
+            - PUBLIC_CONNECTION_SERVER_URL=http://localhost:9001
 ```
 
 You have to change the connection server URL to point to your server URL.
 
 1. Windows: `%PROGRAMDATA%\Cores\settings.json` > connectionURL > Restart the service
 1. Linux: `$HOME/.config/Cores/settings.json` > connectionURL > Restart the daemon
+1. macOS: `$HOME/Library/Application\ Support/Cores/settings.json` > connectionURL > Restart the app
 
 ## License
 

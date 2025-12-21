@@ -31,7 +31,7 @@
 		const { data, error } = await supabaseClient.auth.signInWithOAuth({
 			provider: provider,
 			options: {
-				redirectTo: `${env.PUBLIC_URL}/login`,
+				redirectTo: `${env.PUBLIC_REDIRECT_URL}/login`,
 			},
 		})
 

@@ -77,7 +77,13 @@
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
-			client = new EzRTCClient(`wss://${$settings.connectionURL}/one-to-many`, $settings.connectionCode, iceServers)
+			const url = new URL($settings.connectionURL!)
+
+			if (url.protocol == "https:") {
+				client = new EzRTCClient(`wss://${url.host}/one-to-many`, $settings.connectionCode, iceServers)
+			} else {
+				client = new EzRTCClient(`ws://${url.host}/one-to-many`, $settings.connectionCode, iceServers)
+			}
 		}
 
 		// 60s date comparison
