@@ -138,7 +138,8 @@
 	}
 
 	onMount(async () => {
-		const res = await fetch(`https://${$settings.connectionURL}/status/${item.code}`)
+		const url = new URL($settings.connectionURL!)
+		const res = await fetch(`${url.origin}/status/${item.code}`)
 		const json = (await res.json()) as DeviceStatus
 
 		if (json.online) {

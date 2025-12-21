@@ -17,6 +17,7 @@
 	import { hardwareStatistics, hardwareInfo, settings, setHardwareStatistics, generateMinutesData, generateSecondsData, setHardwareInfo } from "ui"
 	import Navigation from "../../components/Navigation.svelte"
 	import { page } from "$app/state"
+	import { env } from "$env/dynamic/public"
 
 	let { children } = $props()
 
@@ -61,21 +62,28 @@
 	const connect = async () => {
 		let iceServers: RTCIceServer[] = [{ urls: "stun:stun.cloudflare.com:3478" }]
 
-		try {
-			const res = await fetch("https://crs-turn-cred.deno.dev/")
-			const data = await res.json()
+		if (env.PUBLIC_TURN_SERVER_URL) {
+			try {
+				const res = await fetch(env.PUBLIC_TURN_SERVER_URL)
+				const data = await res.json()
 
-			iceServers = iceServers.concat(data)
-		} catch (error) {
-			console.log("Failed to fetch TURN credentials", error)
+				iceServers = iceServers.concat(data)
+				console.log("Fetched TURN credentials")
+			} catch (error) {
+				console.log("Failed to fetch TURN credentials", error)
+			}
 		}
-
-		console.log({ iceServers })
 
 		if ($settings.connectionCode!.startsWith("crs_")) {
 			$state.state = "loading"
 
-			client = new EzRTCClient(`wss://${$settings.connectionURL}/one-to-many`, $settings.connectionCode, iceServers)
+			const url = new URL($settings.connectionURL!)
+
+			if (url.protocol == "https:") {
+				client = new EzRTCClient(`wss://${url.host}/one-to-many`, $settings.connectionCode, iceServers)
+			} else {
+				client = new EzRTCClient(`ws://${url.host}/one-to-many`, $settings.connectionCode, iceServers)
+			}
 		}
 
 		// 60s date comparison

@@ -3,15 +3,14 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite dev --port 3001",
-		"build": "cross-env VITE_CORES_MODE=client VITE_URL=http://localhost:3001 VITE_LOGIN=true vite build",
-		"build:web": "cross-env VITE_CORES_MODE=client VITE_URL=https://www.coresmonitor.com VITE_LOGIN=true vite build",
-		"build:docker": "VITE_CORES_MODE=client VITE_URL=http://localhost:3000 vite build",
+		"dev": "cross-env VITE_CORES_MODE=client vite dev --port 3001",
+		"build": "cross-env VITE_CORES_MODE=client vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
 	},
 	"type": "module",
 	"devDependencies": {
+		"@sveltejs/adapter-node": "^5.4.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.48.4",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
