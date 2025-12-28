@@ -169,3 +169,13 @@ h5 {
 		radial-gradient(at 52.209051724137936% 17.083333333333332%, #be3144 0px, transparent 50%),
 		radial-gradient(at 49.838362068965516% 55.00000000000001%, #f05941 0px, transparent 50%), #2f1b41;
 }
+
+/* drag and drop */
+.tile-wrapper:empty {
+	display: none;
+}
+
+.dropzone {
+	border: 1px dashed red;
+	border-radius: 12px;
+}

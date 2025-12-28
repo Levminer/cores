@@ -123,8 +123,6 @@
 	let metadata = $state(null as Metadata | null)
 	let deviceVersion = $state(null as string | null)
 
-	$inspect(deviceVersion, version)
-
 	interface Metadata {
 		cpu: string
 		ram: string
