@@ -301,7 +301,7 @@
 			{/snippet}
 			<MeterChart readings={[$hardwareInfo.ram.load[0]]} categories={["RAM usage"]} type={{ name: "memory usage", unit: "GB" }} />
 		</InfoTile>
-	{:else if tile.type === "virtual-ram-usage"}
+	{:else if tile.type === "virtual-ram-usage" && ($hardwareInfo.ram.load[3]?.value ?? 0) > 0}
 		<InfoTile title="Virtual RAM Usage">
 			{#snippet icon()}
 				<Gauge />
@@ -311,13 +311,12 @@
 					($hardwareInfo.ram.load[3]?.value ?? 0) + ($hardwareInfo.ram.load[4]?.value ?? 0)
 				).toFixed(1)} GB`}
 			{/snippet}
-			{#if $hardwareInfo.ram.load[3]?.value ?? 0 > 0}
-				<MeterChart
-					readings={[$hardwareInfo.ram.load[3]]}
-					categories={["Virtual RAM usage"]}
-					type={{ name: "virtual memory usage", unit: "GB" }}
-				/>
-			{/if}
+
+			<MeterChart
+				readings={[$hardwareInfo.ram.load[3]]}
+				categories={["Virtual RAM usage"]}
+				type={{ name: "virtual memory usage", unit: "GB" }}
+			/>
 		</InfoTile>
 	{:else if tile.type === "ram-temperature" && ($hardwareInfo.ram.temperature?.length ?? 0) > 0}
 		<InfoTile title="RAM Temperature">
@@ -329,7 +328,7 @@
 					$hardwareInfo.ram.temperature!.reduce((a, b) => a + b.value, 0) / $hardwareInfo.ram.temperature!.length,
 				)} °C
 			{/snippet}
-			{#if $hardwareInfo.ram.load[3]?.value ?? 0 > 0}
+			{#if $hardwareInfo.ram.temperature?.length ?? 0 > 0}
 				<MeterChart
 					readings={$hardwareInfo.ram?.temperature!}
 					categories={$hardwareInfo.ram.temperature!.map((temp, i) => `Module #${i + 1} (${temp.value} °C)`)}
@@ -792,14 +791,19 @@
 		const defaultTiles = tilesSchema.parse(undefined)
 
 		if (savedTiles) {
-			const parsed = tilesSchema.safeParse(JSON.parse(savedTiles))
+			try {
+				const parsed = tilesSchema.safeParse(JSON.parse(savedTiles))
 
-			if (parsed.success) {
-				// Merge saved tiles with defaults to handle new tiles
-				const savedIds = new Set(parsed.data.map((t) => t.id))
-				const newTiles = defaultTiles.filter((t) => !savedIds.has(t.id))
-				tiles = [...parsed.data, ...newTiles]
-			} else {
+				if (parsed.success) {
+					// Merge saved tiles with defaults to handle new tiles
+					const savedIds = new Set(parsed.data.map((t) => t.id))
+					const newTiles = defaultTiles.filter((t) => !savedIds.has(t.id))
+					tiles = [...parsed.data, ...newTiles]
+				} else {
+					tiles = defaultTiles
+				}
+			} catch (error) {
+				console.log("Failed to parse tiles", error)
 				tiles = defaultTiles
 			}
 		} else {
