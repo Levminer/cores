@@ -8,7 +8,7 @@
 						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
 							<img alt="icon" src="https://www.coresmonitor.com/favicon.ico" height="24" width="24" />
 						</div>
-						<h2>Cores</h2>
+						<h2 class="sm:hidden">Cores</h2>
 					</div>
 
 					{#if $appState.plan !== "personal" && $appState.plan !== "unix"}
@@ -23,14 +23,31 @@
 				<div class="flex flex-row gap-3">
 					<a href="/connections" class="transparent-900 flex items-center justify-center gap-2 rounded-lg p-3 font-semibold sm:p-2">
 						<MonitorSmartphone />
+
 						{#if $settings.remoteConnections}
-							Remote connections
+							<div class="sm:hidden">Remote connections</div>
 							<div id="status" class="relative top-0.5 size-3 rounded-full bg-green-500"></div>
 						{:else}
-							Remote connections
+							<div class="sm:hidden">Remote connections</div>
 							<div id="status" class="relative top-0.5 size-3 rounded-full bg-red-500"></div>
 						{/if}
 					</a>
+
+					<button
+						aria-label="Edit layout"
+						onclick={() => {
+							editMode = !editMode
+						}}
+						class="transparent-900 flex items-center justify-center gap-2 rounded-lg p-3 font-semibold sm:p-2"
+					>
+						<Columns3Cog color={editMode ? "white" : "oklch(72.3% 0.219 149.579)"} />
+
+						{#if !editMode}
+							<div class="sm:hidden">Drag tiles to rearrange</div>
+						{:else}
+							<div class="sm:hidden">Edit layout</div>
+						{/if}
+					</button>
 
 					<button
 						aria-label="Open App Store"
@@ -70,12 +87,19 @@
 		</div>
 	{/if}
 
-	<!-- Row 2 -->
+	<!-- Rows -->
 	<div class="mx-10 flex justify-evenly gap-5 pb-10 pt-5 sm:mx-3 sm:flex-wrap">
 		<!-- Column 1 -->
 		<div
 			class="flex w-1/3 flex-col gap-5 text-left sm:w-full"
-			use:dndzone={{ items: column1Tiles, flipDurationMs, dropFromOthersDisabled: false, dropTargetClasses: ["dropzone"], dropTargetStyle: {} }}
+			use:dndzone={{
+				items: column1Tiles,
+				flipDurationMs,
+				dropFromOthersDisabled: false,
+				dropTargetClasses: ["dropzone"],
+				dropTargetStyle: {},
+				dragDisabled: editMode,
+			}}
 			onconsider={handleColumnSort(1)}
 			onfinalize={handleColumnFinalize(1)}
 		>
@@ -89,7 +113,14 @@
 		<!-- Column 2 -->
 		<div
 			class="flex w-1/3 flex-col gap-5 text-left sm:w-full"
-			use:dndzone={{ items: column2Tiles, flipDurationMs, dropFromOthersDisabled: false, dropTargetClasses: ["dropzone"], dropTargetStyle: {} }}
+			use:dndzone={{
+				items: column2Tiles,
+				flipDurationMs,
+				dropFromOthersDisabled: false,
+				dropTargetClasses: ["dropzone"],
+				dropTargetStyle: {},
+				dragDisabled: editMode,
+			}}
 			onconsider={handleColumnSort(2)}
 			onfinalize={handleColumnFinalize(2)}
 		>
@@ -103,7 +134,14 @@
 		<!-- Column 3 -->
 		<div
 			class="flex w-1/3 flex-col gap-5 text-left sm:w-full"
-			use:dndzone={{ items: column3Tiles, flipDurationMs, dropFromOthersDisabled: false, dropTargetClasses: ["dropzone"], dropTargetStyle: {} }}
+			use:dndzone={{
+				items: column3Tiles,
+				flipDurationMs,
+				dropFromOthersDisabled: false,
+				dropTargetClasses: ["dropzone"],
+				dropTargetStyle: {},
+				dragDisabled: editMode,
+			}}
 			onconsider={handleColumnSort(3)}
 			onfinalize={handleColumnFinalize(3)}
 		>
@@ -564,6 +602,7 @@
 		Battery,
 		Settings,
 		MonitorSmartphone,
+		Columns3Cog,
 	} from "lucide-svelte"
 	import { GpuCard, Memory, PcDisplay } from "svelte-bootstrap-icons"
 	import { open } from "@tauri-apps/plugin-shell"
@@ -738,6 +777,7 @@
 	type TileConfig = z.infer<typeof tilesSchema>[number]
 
 	let tiles = $state(tilesSchema.parse(undefined))
+	let editMode = $state(true)
 
 	// Computed arrays for each column
 	let column1Tiles = $derived(tiles.filter((tile) => tile.column === 1))
