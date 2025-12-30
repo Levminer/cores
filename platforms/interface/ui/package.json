@@ -11,6 +11,7 @@
 		"lucide-svelte": "^0.553.0",
 		"svelte": "^5.43.6",
 		"svelte-bootstrap-icons": "^3.3.0",
+		"svelte-dnd-action": "^0.9.68",
 		"typescript": "^5.9.3",
 		"zod": "^3.24.3"
 	},
