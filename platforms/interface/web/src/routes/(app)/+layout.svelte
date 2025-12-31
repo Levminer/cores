@@ -62,16 +62,18 @@
 	const connect = async () => {
 		let iceServers: RTCIceServer[] = [{ urls: "stun:stun.cloudflare.com:3478" }]
 
-		if (env.PUBLIC_TURN_SERVER_URL) {
-			try {
-				const res = await fetch(env.PUBLIC_TURN_SERVER_URL)
-				const data = await res.json()
+		try {
+			const res = await fetch("/api/turn")
+			const data = await res.json()
 
+			if (res.ok) {
 				iceServers = iceServers.concat(data)
 				console.log("Fetched TURN credentials")
-			} catch (error) {
-				console.log("Failed to fetch TURN credentials", error)
+			} else {
+				console.log("Failed to fetch TURN credentials")
 			}
+		} catch (error) {
+			console.log("Failed to fetch TURN credentials", error)
 		}
 
 		if ($settings.connectionCode!.startsWith("crs_")) {
