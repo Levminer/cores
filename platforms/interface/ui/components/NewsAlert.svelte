@@ -36,7 +36,7 @@
 
 	const fetchNews = async () => {
 		try {
-			const res = await fetch("https://crs-message.deno.dev")
+			const res = await fetch("https://www.coresmonitor.com/api/message")
 			data = (await res.json()) as NewsData
 
 			if (new Date($localSettings.newsDate) < new Date(data.date)) {

@@ -8,7 +8,7 @@
 			<img width="160" height="160" alt="qrcode" src="https://cdn.levminer.com/cores/ios.png" class="m-1 rounded-2xl" />
 			<button
 				onclick={() => {
-					openUrl("https://link.levminer.com/cores-ios")
+					openUrl("https://link.levminer.com/cores-ios?utm_source=app_dialog")
 				}}
 				class="smallButton mt-3 w-full">App Store</button
 			>
@@ -18,7 +18,7 @@
 			<img width="160" height="160" alt="qrcode" src="https://cdn.levminer.com/cores/android.png" class="m-1 rounded-2xl" />
 			<button
 				onclick={() => {
-					openUrl("https://link.levminer.com/crs-android")
+					openUrl("https://link.levminer.com/crs-android?utm_source=app_dialog")
 				}}
 				class="smallButton mt-3 w-full">Play Store</button
 			>
