@@ -17,7 +17,6 @@ export const GET: RequestHandler = async ({ request }) => {
 	}
 
 	const data = await response.json()
-	console.log(data)
 
 	const turnServers = []
 
