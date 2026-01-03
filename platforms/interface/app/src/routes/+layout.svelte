@@ -173,7 +173,7 @@
 
 					// Check supabase health
 					const res = await fetch(
-						"https://ailnlslhpgedtlbxfkcz.supabase.co/auth/v1/health?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpbG5sc2xocGdlZHRsYnhma2N6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUzMzQ2NjMsImV4cCI6MjA1MDkxMDY2M30.5P1xGPLsk-60AA-YG1aGHA53PQ_Lo8x_Gr_MzO38liY",
+						"https://ailnlslhpgedtlbxfkcz.supabase.co/auth/v1/health?apikey=sb_publishable_Zi57ivjBxc5SSqaEESn0Gg_qfhNTYIT",
 					)
 
 					if (!res.ok) {
