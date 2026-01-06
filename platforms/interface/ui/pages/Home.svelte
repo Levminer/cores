@@ -200,7 +200,7 @@
 			{/snippet}
 			<MeterChart
 				readings={$hardwareInfo.cpu.clock}
-				categories={$hardwareInfo.cpu.clock.map((temp, i) => `Core #${i + 1} (${(temp.value / 1000).toFixed(1)} GHz)`)}
+				categories={$hardwareInfo.cpu.clock.map((temp, i) => `${temp.name?.replaceAll("CPU", "")} (${(temp.value / 1000).toFixed(1)} GHz)`)}
 				type={{ name: "clock speed", unit: "MHz" }}
 			/>
 		</InfoTile>
@@ -231,7 +231,7 @@
 			{/snippet}
 			<MeterChart
 				readings={$hardwareInfo.cpu.voltage}
-				categories={$hardwareInfo.cpu.voltage.map((temp, i) => `Core #${i + 1} (${temp.value} V)`)}
+				categories={$hardwareInfo.cpu.voltage.map((temp, i) => `${temp.name?.replaceAll("CPU", "")} (${temp.value} V)`)}
 				type={{ name: "voltage", unit: "V" }}
 			/>
 		</InfoTile>

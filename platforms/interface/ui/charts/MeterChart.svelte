@@ -134,8 +134,8 @@
 					callback: function (value: number) {
 						const label = this.getLabelForValue(value)
 
-						if (label.length > 18) {
-							return label.slice(0, 18) + "..."
+						if (label.length > 20) {
+							return label.slice(0, 17) + "..."
 						} else {
 							return label
 						}

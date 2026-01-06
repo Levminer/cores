@@ -224,18 +224,20 @@ public class HardwareInfo {
 
 					// CPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
-						if (temperatureSensors[j].Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd")) {
-							var data = new Sensor {
-								Name = temperatureSensors[j].Name,
-								Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
-								Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
-								Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
-							};
+						if (!temperatureSensors[j].Name.Contains("TjMax")) {
+							if (temperatureSensors[j].Name.StartsWith("P-Core") || temperatureSensors[j].Name.StartsWith("E-Core") || hardware.Identifier.ToString().Contains("amd")) {
+								var data = new Sensor {
+									Name = temperatureSensors[j].Name,
+									Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
+									Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
+									Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
+								};
 
-							if (firstRun) {
-								API.CPU.Temperature.Add(data);
-							} else {
-								API.CPU.Temperature.TrySetValue(j, data);
+								if (firstRun) {
+									API.CPU.Temperature.Add(data);
+								} else {
+									API.CPU.Temperature.TrySetValue(j, data);
+								}
 							}
 						}
 					}
