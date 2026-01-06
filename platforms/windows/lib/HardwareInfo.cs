@@ -800,7 +800,7 @@ public class HardwareInfo {
 					API.GPU.Info = Commands.GetGPUInfo();
 				}
 				catch (Exception) {
-					Log.Error("Failed to get GPU and OS name");
+					Log.Error("Failed to get GPU info");
 				}
 
 				try {
@@ -811,7 +811,7 @@ public class HardwareInfo {
 					API.System.OS.Hostname = System.Net.Dns.GetHostName();
 				}
 				catch (Exception) {
-					Log.Error("Failed to get GPU and OS name");
+					Log.Error("Failed to get OS and hostname");
 				}
 
 				// RAM modules

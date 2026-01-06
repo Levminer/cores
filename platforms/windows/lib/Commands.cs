@@ -75,10 +75,23 @@ public class Commands {
 
 	public static string GetGPUInfo() {
 		var command = ExecuteCommand("Get-WmiObject -class Win32_VideoController | Select-Object DriverDate | ConvertTo-Json");
-		var gpuInfo = JsonSerializer.Deserialize<CmdGpuInfo>(command);
+		
+		// Handle both single object and array responses
+		string driverDate = "00000000000000.000000-000";
+		try {
+			var gpuInfoList = JsonSerializer.Deserialize<List<CmdGpuInfo>>(command);
+			if (gpuInfoList?.Count > 0 && !string.IsNullOrEmpty(gpuInfoList[0]?.DriverDate)) {
+				driverDate = gpuInfoList[0].DriverDate;
+			}
+		}
+		catch {
+			var gpuInfo = JsonSerializer.Deserialize<CmdGpuInfo>(command);
+			if (!string.IsNullOrEmpty(gpuInfo?.DriverDate)) {
+				driverDate = gpuInfo.DriverDate;
+			}
+		}
 
 		// format: 20240411000000.000000-000
-		var driverDate = gpuInfo?.DriverDate ?? "00000000000000.000000-000";
 		var unformattedDate = driverDate.Split(".")[0];
 		var formattedDate = $"{unformattedDate.Substring(0, 4)}. {unformattedDate.Substring(4, 2)}. {unformattedDate.Substring(6, 2)}.";
 
