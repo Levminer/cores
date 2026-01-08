@@ -2,16 +2,8 @@ import { redirect, json } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 
 export const GET: RequestHandler = async ({ url, request }) => {
-	const origin = request.headers.get("origin")
-	const allowedOrigins = ["http://localhost:3000", "https://tauri.localhost", "http://tauri.localhost"]
-
-	const headers: Record<string, string> = {}
-
-	if (origin && allowedOrigins.includes(origin)) {
-		headers["Access-Control-Allow-Origin"] = origin
-		headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-		headers["Access-Control-Allow-Headers"] = "Content-Type"
-	}
+	const headers = new Headers()
+	headers.set("Access-Control-Allow-Origin", "*")
 
 	return Response.json(
 		{
