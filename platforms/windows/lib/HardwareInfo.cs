@@ -225,7 +225,7 @@ public class HardwareInfo {
 					// CPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
 						if (!temperatureSensors[j].Name.Contains("TjMax")) {
-							if (temperatureSensors[j].Name.StartsWith("P-Core") || temperatureSensors[j].Name.StartsWith("E-Core") || hardware.Identifier.ToString().Contains("amd")) {
+							if (temperatureSensors[j].Name.StartsWith("P-Core") || temperatureSensors[j].Name.StartsWith("E-Core") || temperatureSensors[j].Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd")) {
 								var data = new Sensor {
 									Name = temperatureSensors[j].Name,
 									Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
