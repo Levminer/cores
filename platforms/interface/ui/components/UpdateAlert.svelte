@@ -11,7 +11,11 @@
 					/>
 				</svg>
 
-				<p class="updateText mx-1 text-lg font-bold">Downloading update... {progress}</p>
+				{#if started}
+					<p class="updateText mx-1 text-lg font-bold">Downloading update... {progress}</p>
+				{:else}
+					<p class="updateText mx-1 text-lg font-bold">A new version of Cores is available!</p>
+				{/if}
 
 				<button type="button" class="smallButton" onclick={showReleaseNotes}>
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,8 +48,8 @@
 	import { ask } from "@tauri-apps/plugin-dialog"
 	import build from "../../../../build.json"
 
-	let progress = $state("");
-	
+	let progress = $state("")
+	let started = $state(false)
 
 	onMount(async () => {
 		if (!build.dev) {
@@ -64,6 +68,8 @@
 				let contentLength = 0
 
 				if (result) {
+					started = true
+
 					await update.downloadAndInstall((event) => {
 						switch (event.event) {
 							case "Started":
