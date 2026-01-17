@@ -9,7 +9,7 @@
 		"chart.js": "^4.4.9",
 		"chartjs-plugin-stacked100": "^1.7.0",
 		"lucide-svelte": "^0.553.0",
-		"svelte": "^5.43.6",
+		"svelte": "^5.46.4",
 		"svelte-bootstrap-icons": "^3.3.0",
 		"svelte-dnd-action": "^0.9.68",
 		"typescript": "^5.9.3",

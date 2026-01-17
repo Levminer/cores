@@ -25,7 +25,7 @@
 		"@tauri-apps/cli": "^2.9.4",
 		"cross-env": "^10.1.0",
 		"prettier": "^3.6.2",
-		"svelte": "^5.43.6"
+		"svelte": "^5.46.4"
 	},
 	"dependencies": {
 		"prettier-plugin-svelte": "^3.4.0",
