@@ -328,6 +328,39 @@ public class HardwareInfo {
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && x.Name.StartsWith("D3D")).ToArray();
 
+					// ARC GPUs use different load sensors
+					if (hardware.Identifier.ToString().Contains("gpu-intel")) {
+						loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && !x.Name.Contains("Memory")).ToArray();
+					}
+
+					// Non Nvidia GPUs use different memory layout
+					if (!hardware.HardwareType.ToString().Contains("Nvidia")) {
+						// Intel doesn't have D3D
+						if (hardware.Identifier.ToString().Contains("gpu-intel")) {
+							var memoryUsedSensor = hardware.Sensors.FirstOrDefault(x => x.Name.StartsWith("GPU Memory Used"));
+
+							if (memoryUsedSensor != null) {
+								var memList = memorySensors.ToList();
+								memList.Insert(0, memoryUsedSensor);
+								memList.Insert(0, memoryUsedSensor);
+								memorySensors = memList.ToArray();
+							}
+						}
+
+						// TODO: fix intel integrated D3D Shared
+
+						memorySensors = memorySensors
+						.OrderBy(s => {
+							if (s.Name.Contains("D3D Dedicated Memory Used")) return 0;
+							if (s.Name.Contains("D3D Shared Memory Used")) return 1;
+							if (s.Name.Contains("GPU Memory Total")) return 2;
+							if (s.Name.Contains("GPU Memory Free")) return 3;
+							if (s.Name.Contains("GPU Memory Used")) return 4;
+							return 5;
+						})
+						.ToArray();
+					}
+
 					if (firstRun) {
 						var data = new GPU {
 							Name = computerHardware[i].Name,
