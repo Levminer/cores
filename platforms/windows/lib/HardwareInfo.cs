@@ -328,37 +328,9 @@ public class HardwareInfo {
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && x.Name.StartsWith("D3D")).ToArray();
 
-					// ARC GPUs use different load sensors
+					// Intel ARC GPUs use different load sensors
 					if (hardware.Identifier.ToString().Contains("gpu-intel")) {
 						loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && !x.Name.Contains("Memory")).ToArray();
-					}
-
-					// Non Nvidia GPUs use different memory layout
-					if (!hardware.HardwareType.ToString().Contains("Nvidia")) {
-						// Intel doesn't have D3D
-						if (hardware.Identifier.ToString().Contains("gpu-intel")) {
-							var memoryUsedSensor = hardware.Sensors.FirstOrDefault(x => x.Name.StartsWith("GPU Memory Used"));
-
-							if (memoryUsedSensor != null) {
-								var memList = memorySensors.ToList();
-								memList.Insert(0, memoryUsedSensor);
-								memList.Insert(0, memoryUsedSensor);
-								memorySensors = memList.ToArray();
-							}
-						}
-
-						// TODO: fix intel integrated D3D Shared
-
-						memorySensors = memorySensors
-						.OrderBy(s => {
-							if (s.Name.Contains("D3D Dedicated Memory Used")) return 0;
-							if (s.Name.Contains("D3D Shared Memory Used")) return 1;
-							if (s.Name.Contains("GPU Memory Total")) return 2;
-							if (s.Name.Contains("GPU Memory Free")) return 3;
-							if (s.Name.Contains("GPU Memory Used")) return 4;
-							return 5;
-						})
-						.ToArray();
 					}
 
 					if (firstRun) {
@@ -375,6 +347,16 @@ public class HardwareInfo {
 						if (data.Id.Contains(settings.defaultDevices.gpu)) {
 							data.Priority = -1;
 						}
+
+						// init memory sensors
+						data.Memory = new List<Sensor>
+						{
+							new Sensor { Name = "D3D Dedicated Memory Used", Value = 0, Min = 0, Max = 0 },
+							new Sensor { Name = "D3D Shared Memory Used", Value = 0, Min = 0, Max = 0 },
+							new Sensor { Name = "GPU Memory Total", Value = 0, Min = 0, Max = 0 },
+							new Sensor { Name = "GPU Memory Free", Value = 0, Min = 0, Max = 0 },
+							new Sensor { Name = "GPU Memory Used", Value = 0, Min = 0, Max = 0 }
+						};
 
 						API.GPU.Cards.Add(data);
 
@@ -423,17 +405,27 @@ public class HardwareInfo {
 
 					// GPU Memory
 					for (int j = 0; j < memorySensors.Length; j++) {
-						var data = new Sensor {
-							Name = memorySensors[j].Name,
-							Value = (float)Math.Round(memorySensors[j].Value / 1024 ?? 0, 1),
-							Min = (float)Math.Round(memorySensors[j].Min / 1024 ?? 0, 1),
-							Max = (float)Math.Round(memorySensors[j].Max / 1024 ?? 0, 1),
-						};
+						for (int k = 0; k < API.GPU.Cards[cardIndex].Memory.Count; k++) {
+							if (memorySensors[j].Name == API.GPU.Cards[cardIndex].Memory[k].Name) {
+								var data = new Sensor {
+									Name = memorySensors[j].Name,
+									Value = (float)Math.Round(memorySensors[j].Value / 1024 ?? 0, 1),
+									Min = (float)Math.Round(memorySensors[j].Min / 1024 ?? 0, 1),
+									Max = (float)Math.Round(memorySensors[j].Max / 1024 ?? 0, 1),
+								};
 
-						if (firstRun) {
-							API.GPU.Cards[cardIndex].Memory.Add(data);
-						} else {
-							API.GPU.Cards[cardIndex].Memory.TrySetValue(j, data);
+								API.GPU.Cards[cardIndex].Memory.TrySetValue(j, data);
+							}
+						}
+					}
+
+					// Intel ARC
+					if (hardware.Identifier.ToString().Contains("gpu-intel")) {
+						try {
+							API.GPU.Cards[cardIndex].Memory[0] = API.GPU.Cards[cardIndex].Memory[4];
+						}
+						catch (Exception) {
+							Log.Error("Failed to set GPU memory on Intel ARC");
 						}
 					}
 
