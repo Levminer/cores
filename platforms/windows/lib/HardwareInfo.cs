@@ -414,7 +414,7 @@ public class HardwareInfo {
 									Max = (float)Math.Round(memorySensors[j].Max / 1024 ?? 0, 1),
 								};
 
-								API.GPU.Cards[cardIndex].Memory.TrySetValue(j, data);
+								API.GPU.Cards[cardIndex].Memory.TrySetValue(k, data);
 							}
 						}
 					}
