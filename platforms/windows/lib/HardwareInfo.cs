@@ -172,25 +172,25 @@ public class HardwareInfo {
 
 			// RAM temperature 
 			if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
-				var ramTemperatureSensors = computer.Hardware.Where(h => h.Identifier.ToString().StartsWith("/memory")).SelectMany(h => h.Sensors).ToArray();
+				var ramTemperatureSensors = computer.Hardware
+					.Where(h => h.Identifier.ToString().StartsWith("/memory"))
+					.SelectMany(h => h.Sensors)
+					.Where(x => x.SensorType == SensorType.Temperature && x.Name.StartsWith("DIMM"))
+					.ToArray();
 
 				for (int j = 0; j < ramTemperatureSensors.Length; j++) {
-					var sensor = ramTemperatureSensors;
+					var data = new Sensor {
+						Name = ramTemperatureSensors[j].Name,
+						Value = (float)Math.Round(ramTemperatureSensors[j].Value ?? 0),
+						Min = (float)Math.Round(ramTemperatureSensors[j].Min ?? 0),
+						Max = (float)Math.Round(ramTemperatureSensors[j].Max ?? 0),
+					};
 
-					if (sensor[j].SensorType == SensorType.Temperature && sensor[j].Name.StartsWith("DIMM")) {
-						var data = new Sensor {
-							Name = sensor[j].Name,
-							Value = (float)Math.Round(sensor[j].Value ?? 0),
-							Min = (float)Math.Round(sensor[j].Min ?? 0),
-							Max = (float)Math.Round(sensor[j].Max ?? 0),
-						};
-
-						// RAM temperature
-						if (firstRun) {
-							API.RAM.Temperature.Add(data);
-						} else {
-							API.RAM.Temperature.TrySetValue(j, data);
-						}
+					// RAM temperature
+					if (firstRun) {
+						API.RAM.Temperature.Add(data);
+					} else {
+						API.RAM.Temperature.TrySetValue(j, data);
 					}
 				}
 			}
@@ -216,7 +216,7 @@ public class HardwareInfo {
 
 				// CPU
 				if (hardware.HardwareType == HardwareType.Cpu) {
-					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature && !x.Name.Contains("Tj")).ToArray();
+					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature && !x.Name.Contains("Tj") && (x.Name.StartsWith("P-Core") || x.Name.StartsWith("E-Core") || x.Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd"))).ToArray();
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load).ToArray();
 					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock && !x.Name.Contains("Bus")).ToArray();
@@ -224,21 +224,17 @@ public class HardwareInfo {
 
 					// CPU Temperature
 					for (int j = 0; j < temperatureSensors.Length; j++) {
-						if (!temperatureSensors[j].Name.Contains("TjMax")) {
-							if (temperatureSensors[j].Name.StartsWith("P-Core") || temperatureSensors[j].Name.StartsWith("E-Core") || temperatureSensors[j].Name.StartsWith("CPU Core") || hardware.Identifier.ToString().Contains("amd")) {
-								var data = new Sensor {
-									Name = temperatureSensors[j].Name,
-									Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
-									Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
-									Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
-								};
+						var data = new Sensor {
+							Name = temperatureSensors[j].Name,
+							Value = (float)Math.Round(temperatureSensors[j].Value ?? 0),
+							Min = (float)Math.Round(temperatureSensors[j].Min ?? 0),
+							Max = (float)Math.Round(temperatureSensors[j].Max ?? 0),
+						};
 
-								if (firstRun) {
-									API.CPU.Temperature.Add(data);
-								} else {
-									API.CPU.Temperature.TrySetValue(j, data);
-								}
-							}
+						if (firstRun) {
+							API.CPU.Temperature.Add(data);
+						} else {
+							API.CPU.Temperature.TrySetValue(j, data);
 						}
 					}
 
@@ -751,7 +747,7 @@ public class HardwareInfo {
 						if (sensor[j].SensorType == SensorType.Data) {
 							// find interface by id and overwrite value
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
-								if (API.System.Network.Interfaces[k].Name == computerHardware[i].Name) {
+								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Download")) {
 										API.System.Network.Interfaces[k].DownloadData = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
