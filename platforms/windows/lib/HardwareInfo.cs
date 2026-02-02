@@ -499,14 +499,22 @@ public class HardwareInfo {
 							if (line.StartsWith("Total Size")) {
 								var parts = line.Split(":");
 								if (parts.Length > 1) {
-									total = Convert.ToInt64(parts[1].Trim()) / 1024 / 1024 / 1024;
+									if (Int64.TryParse(parts[1].Trim(), out long totalBytes)) {
+										total = totalBytes / 1024 / 1024 / 1024;
+									} else {
+										Log.Warning($"Failed to parse Total Size: {parts[1].Trim()}");
+									}
 								}
 							}
 
 							if (line.StartsWith("Total Free Size")) {
 								var parts = line.Split(":");
 								if (parts.Length > 1) {
-									free = Convert.ToInt64(parts[1].Trim()) / 1024 / 1024 / 1024;
+									if (Int64.TryParse(parts[1].Trim(), out long freeBytes)) {
+										free = freeBytes / 1024 / 1024 / 1024;
+									} else {
+										Log.Warning($"Failed to parse Total Free Size: {parts[1].Trim()}");
+									}
 								}
 							}
 
