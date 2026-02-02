@@ -548,7 +548,7 @@ public class HardwareInfo {
 
 					for (int j = 0; j < hardware.Sensors.Length; j++) {
 						// Drive temperature
-						if (sensor[j].SensorType == SensorType.Temperature && !sensor[j].Name.Contains("warning") && !sensor[j].Name.Contains("critical")) {
+						if (sensor[j].SensorType == SensorType.Temperature && !sensor[j].Name.ToLower().Contains("warning") && !sensor[j].Name.ToLower().Contains("critical")) {
 							// find disk by id and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
