@@ -604,11 +604,11 @@ public class HardwareInfo {
 							// find disk by ide and overwrite value
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
-									if (sensor[j].Name.Contains("read")) {
+									if (sensor[j].Name.Contains("Read")) {
 										API.System.Storage.Disks[k].DataRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 
-									if (sensor[j].Name.Contains("written")) {
+									if (sensor[j].Name.Contains("Written")) {
 										API.System.Storage.Disks[k].DataWritten = (float)Math.Round(sensor[j].Value ?? 0, 1);
 									}
 								}
