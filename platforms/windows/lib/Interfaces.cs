@@ -73,6 +73,14 @@ public class Disk {
 		get; set;
 	}
 
+	public float PowerOnHours {
+		get; set;
+	}
+
+	public float PowerOnCount {
+		get; set;
+	}
+
 	public int Priority {
 		get; set;
 	}

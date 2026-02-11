@@ -538,8 +538,12 @@ public class HardwareInfo {
 							if (diskId != -1) {
 								// Preserve existing temperature data when updating disk info
 								var existingTemperature = API.System.Storage.Disks[diskId].Temperature;
+								var existingPowerOnCount = API.System.Storage.Disks[diskId].PowerOnCount;
+								var existingPowerOnHours = API.System.Storage.Disks[diskId].PowerOnHours;
 								API.System.Storage.Disks[diskId] = data;
 								API.System.Storage.Disks[diskId].Temperature = existingTemperature;
+								API.System.Storage.Disks[diskId].PowerOnCount = existingPowerOnCount;
+								API.System.Storage.Disks[diskId].PowerOnHours = existingPowerOnHours;
 							}
 						}
 
@@ -622,6 +626,20 @@ public class HardwareInfo {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Life")) {
 										API.System.Storage.Disks[k].Health = (sensor[j].Value ?? 0).ToString();
+									}
+								}
+							}
+						}
+
+						if (sensor[j].SensorType == SensorType.Factor && firstRun) {
+							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
+								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
+									if (sensor[j].Name.Contains("Count")) {
+										API.System.Storage.Disks[k].PowerOnCount = (sensor[j].Value ?? 0);
+									}
+
+									if (sensor[j].Name.Contains("Hours")) {
+										API.System.Storage.Disks[k].PowerOnHours = (sensor[j].Value ?? 0);
 									}
 								}
 							}

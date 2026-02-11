@@ -22,6 +22,8 @@ declare global {
 		health: string
 		throughputRead: number
 		throughputWrite: number
+		powerOnHours?: number
+		powerOnCount?: number
 		dataRead: number
 		dataWritten: number
 		priority: number

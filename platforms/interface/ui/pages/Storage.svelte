@@ -27,12 +27,16 @@
 					</div>
 					<h2>Drive usage</h2>
 				</div>
-				{#each $hardwareInfo.system.storage.disks as { name, dataRead, dataWritten }}
+				{#each $hardwareInfo.system.storage.disks as { name, dataRead, dataWritten, powerOnCount, powerOnHours }}
 					{#if dataRead != 0 || dataWritten != 0}
 						<div class="mt-5 select-text">
 							<h3>Name: {name}</h3>
 							<h3>Data read: {dataRead} GB</h3>
 							<h3>Data written: {dataWritten} GB</h3>
+						{#if powerOnCount || powerOnHours}
+								<h3>Power On Count: {powerOnCount}</h3>
+								<h3>Power On Hours: {powerOnHours}</h3>
+							{/if}
 						</div>
 					{/if}
 				{/each}
