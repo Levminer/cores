@@ -1,9 +1,9 @@
 <ModularDialog title={"Save data"} description={"You can save your data to a .csv file or save the graph as an image."}>
 	{#snippet openButton()}
 		<Dialog.Trigger
-			class="transparent-800 group m-1 inline-flex flex-shrink-0 flex-grow flex-col items-center justify-center rounded-lg p-1 px-3 text-gray-200 duration-200 ease-in-out"
+			class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2"
 		>
-			<p class="text-xl">Save</p>
+			<FileChartLine />
 		</Dialog.Trigger>
 	{/snippet}
 
@@ -42,6 +42,7 @@
 	import { ModularDialog } from "ui"
 	import { settings } from "../stores/settings.ts"
 	import { state } from "../stores/state.ts"
+	import { FileChartLine } from "lucide-svelte"
 
 	interface Props {
 		props: {

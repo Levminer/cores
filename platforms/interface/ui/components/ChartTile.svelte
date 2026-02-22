@@ -6,7 +6,7 @@
 			</div>
 			<h2><span class="line-clamp-1">{item}</span> {title}</h2>
 		</div>
-		<div class="flex flex-row">
+		<div class="flex flex-row gap-3">
 			{#if import.meta.env.VITE_CORES_MODE === "host"}
 				<SaveDataButton
 					props={{
