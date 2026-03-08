@@ -145,6 +145,28 @@
 			{/each}
 		</div>
 	</div>
+
+	{#if import.meta.env.VITE_CORES_MODE !== "host"}
+		<div class="mx-10 flex justify-evenly gap-5 pb-10 sm:mx-3 sm:flex-wrap">
+			<div class="transparent-800 flex w-full flex-row items-center justify-center rounded-xl px-8 py-4 sm:p-4">
+				<button
+					aria-label="Edit layout"
+					onclick={() => {
+						editMode = !editMode
+					}}
+					class="transparent-900 flex items-center justify-center gap-2 rounded-lg p-3 font-semibold sm:p-2"
+				>
+					<Columns3Cog color={editMode ? "white" : "oklch(72.3% 0.219 149.579)"} />
+
+					{#if !editMode}
+						<div class="sm:hidden">Drag tiles to rearrange</div>
+					{:else}
+						<div class="sm:hidden">Edit layout</div>
+					{/if}
+				</button>
+			</div>
+		</div>
+	{/if}
 </div>
 
 {#snippet tileRenderer(tile: TileConfig)}
