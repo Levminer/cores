@@ -159,9 +159,9 @@
 					<Columns3Cog color={editMode ? "white" : "oklch(72.3% 0.219 149.579)"} />
 
 					{#if !editMode}
-						<div class="sm:hidden">Drag tiles to rearrange</div>
+						<div class="">Drag tiles to rearrange</div>
 					{:else}
-						<div class="sm:hidden">Edit layout</div>
+						<div class="">Edit layout</div>
 					{/if}
 				</button>
 			</div>
