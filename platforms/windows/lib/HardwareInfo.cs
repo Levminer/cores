@@ -196,8 +196,8 @@ public class HardwareInfo {
 			}
 
 			// Loop through remaining hardware
-			for (int i = 0; i < computer.Hardware.Count; i++) {
-				var hardware = computer.Hardware[i];
+			for (int i = 0; i < computerHardware.Count; i++) {
+				var hardware = computerHardware[i];
 
 				// Get component names
 				if (firstRun) {
