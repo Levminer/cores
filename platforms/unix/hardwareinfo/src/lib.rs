@@ -49,11 +49,22 @@ pub struct Data {
     pub interval: f64,
 }
 
+fn deserialize_f64_or_zero<'de, D>(deserializer: D) -> Result<f64, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let opt = Option::<f64>::deserialize(deserializer)?;
+    Ok(opt.unwrap_or(0.0))
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoresSensor {
     pub name: String,
+    #[serde(deserialize_with = "deserialize_f64_or_zero")]
     pub value: f64,
+    #[serde(deserialize_with = "deserialize_f64_or_zero")]
     pub min: f64,
+    #[serde(deserialize_with = "deserialize_f64_or_zero")]
     pub max: f64,
 }
 
@@ -803,6 +814,11 @@ pub fn refresh_hardware_info(data: &mut Data) {
                                 battery.energy_full().get::<milliwatt_hour>();
                             let remaining_capacity = battery.energy().get::<milliwatt_hour>();
                             let health = battery.state_of_health().get::<percent>();
+
+                            // Skip batteries that return NaN values (desktop Macs without a real battery)
+                            if charge_level.is_nan() || health.is_nan() {
+                                continue;
+                            }
 
                             data.hw_info.system.battery = CoresBattery {
                                 cycle_count: cycle_count.to_string(),
