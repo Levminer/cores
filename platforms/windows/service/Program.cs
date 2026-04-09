@@ -32,6 +32,13 @@ public class Program {
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
 	}
 
+	private static void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) {
+		var flattened = e.Exception.Flatten();
+		Log.Error("Failed task: {@flattened}", flattened);
+		SentrySdk.CaptureException(flattened);
+		e.SetObserved();
+	}
+
 	public static void Main(string[] args) {
 		SentrySdk.Init(settings => {
 			settings.Dsn = "https://4e746421f320352c8db806951ee076e1@o4506670275428352.ingest.us.sentry.io/4507197428596736";
@@ -46,6 +53,7 @@ public class Program {
 				.CreateLogger();
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+		TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
 		// Turn on Windows Efficiency mode for process
 		try {

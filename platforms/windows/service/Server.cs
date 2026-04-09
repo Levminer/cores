@@ -36,8 +36,8 @@ public class Server {
 				// Process the request asynchronously
 				await ProcessRequestAsync(context, hardwareInfo);
 			}
-			catch (Exception) {
-				Log.Information("Failed to listen");
+			catch (Exception ex) {
+				Log.Error($"Failed to listen: {ex.Message}");
 			}
 		}
 	}
