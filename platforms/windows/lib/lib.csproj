@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.7-pre645" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.7-pre663" />
 	<PackageReference Include="Sentry" Version="5.8.0" />
 	<PackageReference Include="Serilog" Version="4.3.0" />
   </ItemGroup>
