@@ -29,19 +29,22 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		HardwareInfo.GetInfo();
 		Server.Start(HardwareInfo);
 
+		using var backgroundTaskCts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+		var backgroundTaskToken = backgroundTaskCts.Token;
+
 		var backgroundTasks = new List<Task>();
 
 		// Send analytics
 		backgroundTasks.Add(StartSupervisedTask("Analytics.SendEvent", async _ => {
 			await Analytics.SendEvent(Program.Settings);
-		}, stoppingToken));
+		}, backgroundTaskToken));
 
 		// Start remote connection
 		if (Program.Settings.remoteConnections) {
 			backgroundTasks.Add(StartSupervisedTask("RTCServer.Start", _ => {
 				RTCServer.Start(HardwareInfo);
 				return Task.CompletedTask;
-			}, stoppingToken));
+			}, backgroundTaskToken));
 		}
 
 		// Store last 60 minutes statistics
@@ -52,7 +55,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 
 				await Task.Delay(TimeSpan.FromSeconds(60), token);
 			}
-		}, stoppingToken));
+		}, backgroundTaskToken));
 
 		// Cleanup old data
 		backgroundTasks.Add(StartSupervisedTask("Database.Cleanup", async token => {
@@ -61,7 +64,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				Log.Information("Cleanup completed");
 				await Task.Delay(TimeSpan.FromMinutes(60), token);
 			}
-		}, stoppingToken));
+		}, backgroundTaskToken));
 
 		try {
 			while (!stoppingToken.IsCancellationRequested) {
@@ -87,17 +90,27 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			throw;
 		}
 		finally {
-			try {
-				await Task.WhenAll(backgroundTasks);
-			}
-			catch (Exception ex) {
-				Log.Error(ex, "One or more supervised background tasks failed during shutdown");
-			}
+			// Ensure background loops are cancelled even when main loop exits due to failure.
+			backgroundTaskCts.Cancel();
 
 			RTCServer.Stop();
 			Server.Stop();
 			Program.Database.Close();
 			HardwareInfo.Stop();
+
+			try {
+				var allBackgroundTasks = Task.WhenAll(backgroundTasks);
+				var completed = await Task.WhenAny(allBackgroundTasks, Task.Delay(TimeSpan.FromSeconds(3)));
+
+				if (completed == allBackgroundTasks) {
+					await allBackgroundTasks;
+				} else {
+					Log.Warning("Timed out while waiting for supervised background tasks to stop");
+				}
+			}
+			catch (Exception ex) {
+				Log.Error(ex, "One or more supervised background tasks failed during shutdown");
+			}
 		}
 	}
 }
