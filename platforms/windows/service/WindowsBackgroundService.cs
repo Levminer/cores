@@ -15,13 +15,11 @@ public sealed class WindowsBackgroundService : BackgroundService {
 				await taskFactory(stoppingToken);
 			}
 			catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) {
-				Log.Information("Background task '{TaskName}' cancelled", taskName);
+				Log.Information($"Background task '{taskName}' cancelled");
 			}
 			catch (Exception ex) {
-				var wrapped = new InvalidOperationException($"Background task '{taskName}' crashed: ", ex);
-				Log.Error(wrapped, "{TaskName} failed", taskName);
-				SentrySdk.CaptureException(wrapped);
-				throw wrapped;
+				Log.Error(ex, $"{taskName} failed");
+				SentrySdk.CaptureException(ex);
 			}
 		}, stoppingToken);
 	}

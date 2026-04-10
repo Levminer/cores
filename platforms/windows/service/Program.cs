@@ -28,7 +28,7 @@ public class Program {
 	internal static Database Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-		Log.Error((Exception)e.ExceptionObject, "App crashed with an unhandled exception");
+		Log.Error(e.ExceptionObject as Exception, "App crashed with an unhandled exception");
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
 	}
 
