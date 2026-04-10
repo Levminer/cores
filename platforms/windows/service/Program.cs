@@ -28,8 +28,15 @@ public class Program {
 	internal static Database Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-		Log.Error("App crashed with an unhandled exception: {@error}", e);
+		Log.Error(e.ExceptionObject as Exception, "App crashed with an unhandled exception");
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
+	}
+
+	private static void TaskScheduler_UnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) {
+		var flattened = e.Exception.Flatten();
+		Log.Error("Failed task: {@flattened}", flattened);
+		SentrySdk.CaptureException(flattened);
+		e.SetObserved();
 	}
 
 	public static void Main(string[] args) {
@@ -46,14 +53,15 @@ public class Program {
 				.CreateLogger();
 
 		AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+		TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
 		// Turn on Windows Efficiency mode for process
 		try {
 			EfficiencyModeUtilities.SetEfficiencyMode(true);
 		}
-		catch (Exception e) {
-			Log.Error("Failed to turn on efficiency mode");
-			SentrySdk.CaptureException(e);
+		catch (Exception ex) {
+			Log.Error(ex, "Failed to turn on efficiency mode");
+			SentrySdk.CaptureException(ex);
 		}
 
 		// Check if the firewall rule exists

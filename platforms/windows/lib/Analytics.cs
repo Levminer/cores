@@ -30,7 +30,7 @@ namespace lib {
 				var responseContent = await response.Content.ReadAsStringAsync();
 			}
 			catch (Exception ex) {
-				Log.Error("Failed to send analytics");
+				Log.Error(ex, "Failed to send analytics");
 			}
 		}
 	}

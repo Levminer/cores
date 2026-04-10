@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace service;
+
 public class Server {
 	static HttpListener listener;
 	static ConcurrentDictionary<WebSocket, Task> connectedClients = new ConcurrentDictionary<WebSocket, Task>();
@@ -36,8 +37,8 @@ public class Server {
 				// Process the request asynchronously
 				await ProcessRequestAsync(context, hardwareInfo);
 			}
-			catch (Exception) {
-				Log.Information("Failed to listen");
+			catch (Exception ex) {
+				Log.Error(ex, "Failed to listen");
 			}
 		}
 	}
