@@ -52,8 +52,7 @@ public class Database {
 			insertCommand.ExecuteNonQuery();
 		}
 		catch (Exception ex) {
-			// Log error but don't crash the service
-			Log.Error($"Error inserting seconds data: {ex.Message}");
+			Log.Error(ex, "Error inserting seconds data");
 		}
 	}
 
@@ -68,8 +67,7 @@ public class Database {
 			insertCommand.ExecuteNonQuery();
 		}
 		catch (Exception ex) {
-			// Log error but don't crash the service
-			Log.Error($"Error inserting minutes data: {ex.Message}");
+			Log.Error(ex, "Error inserting minutes data");
 		}
 	}
 

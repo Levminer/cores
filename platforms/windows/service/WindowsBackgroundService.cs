@@ -59,8 +59,8 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		// Cleanup old data
 		backgroundTasks.Add(StartSupervisedTask("Database.Cleanup", async token => {
 			while (!token.IsCancellationRequested) {
-				Log.Information("Cleanup completed");
 				Program.Database.Cleanup();
+				Log.Information("Cleanup completed");
 				await Task.Delay(TimeSpan.FromMinutes(60), token);
 			}
 		}, stoppingToken));

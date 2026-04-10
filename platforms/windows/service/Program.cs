@@ -28,7 +28,7 @@ public class Program {
 	internal static Database Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
-		Log.Error("App crashed with an unhandled exception: {@error}", e);
+		Log.Error((Exception)e.ExceptionObject, "App crashed with an unhandled exception");
 		SentrySdk.CaptureException((Exception)e.ExceptionObject);
 	}
 
@@ -59,9 +59,9 @@ public class Program {
 		try {
 			EfficiencyModeUtilities.SetEfficiencyMode(true);
 		}
-		catch (Exception e) {
-			Log.Error("Failed to turn on efficiency mode");
-			SentrySdk.CaptureException(e);
+		catch (Exception ex) {
+			Log.Error(ex, "Failed to turn on efficiency mode");
+			SentrySdk.CaptureException(ex);
 		}
 
 		// Check if the firewall rule exists
