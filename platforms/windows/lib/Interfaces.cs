@@ -26,7 +26,6 @@ public class GenericMessage<T> {
 }
 
 public class ProtocolData {
-	public string FilePath { get; set; }
 	public string SystemInfo { get; set; }
 	public string Settings { get; set; }
 	public string Mac { get; set; }

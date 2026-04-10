@@ -375,31 +375,17 @@
 	}
 
 	const debug = async () => {
-		const filePath = await save({
-			filters: [
-				{
-					name: "Text file",
-					extensions: ["txt"],
+		await fetch("http://localhost:5390/post", {
+			method: "POST",
+			body: JSON.stringify({
+				type: "debug_report",
+				data: {
+					systemInfo: `Cores: ${build.version}`,
 				},
-			],
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
 		})
-
-		if (filePath) {
-			await fetch("http://localhost:5390/post", {
-				method: "POST",
-				body: JSON.stringify({
-					type: "debug_report",
-					data: {
-						filePath: filePath,
-						systemInfo: `Cores: ${build.version}`,
-					},
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-
-			// let name = `cores-debug-${new Date().toISOString().replace("T", "-").replaceAll(":", "-").substring(0, 19)}.txt`
-		}
 	}
 </script>

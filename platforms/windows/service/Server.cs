@@ -1,6 +1,7 @@
 ﻿using lib;
 using Serilog;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
@@ -117,7 +118,12 @@ public class Server {
 					var hwInfo = JsonSerializer.Serialize(hardwareInfo.API, Program.CompressedSerializerOptions);
 					var contents = $"{message.Data.SystemInfo}\n{hardwareInfo.computer.GetReport()}\n{hwInfo}";
 
-					File.WriteAllText(message.Data.FilePath, contents);
+					var filePath = Path.Join(Program.Settings.GetSettingsFolder(), "debug_file.txt");
+					Log.Information("Writing debug report to {FilePath}", filePath);
+					File.WriteAllText(filePath, contents);
+
+					// open folder location
+					Process.Start("explorer.exe", Program.Settings.GetSettingsFolder());
 				}
 
 				if (message.Type == "wol") {
