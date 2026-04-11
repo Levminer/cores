@@ -89,7 +89,7 @@
 								<img
 									class="rounded"
 									width="500"
-									src="https://pub-59a3ca658f4c4ece9990b6c50534538e.r2.dev/cores/stats.png"
+									src="https://cdn.levminer.com/cores/stats.png"
 									alt="web dashboard"
 								/>
 							</div>
