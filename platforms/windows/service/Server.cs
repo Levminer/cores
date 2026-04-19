@@ -119,7 +119,6 @@ public class Server {
 					var contents = $"{message.Data.SystemInfo}\n{hardwareInfo.computer.GetReport()}\n{hwInfo}";
 
 					var filePath = Path.Join(Program.Settings.GetSettingsFolder(), "debug_file.txt");
-					Log.Information("Writing debug report to {FilePath}", filePath);
 					File.WriteAllText(filePath, contents);
 
 					// open folder location

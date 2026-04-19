@@ -380,7 +380,7 @@
 			body: JSON.stringify({
 				type: "debug_report",
 				data: {
-					systemInfo: `Cores: ${build.version}`,
+					systemInfo: `Cores: ${build.version} (${build.number})`,
 				},
 			}),
 			headers: {
