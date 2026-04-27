@@ -97,7 +97,7 @@
 			onfinalize={handleColumnFinalize(1)}
 		>
 			{#each column1Tiles as tile (tile.id)}
-				<div class="tile-wrapper" animate:flip={{ duration: flipDurationMs }}>
+				<div class="tile-wrapper relative" animate:flip={{ duration: flipDurationMs }}>
 					{@render tileRenderer(tile)}
 				</div>
 			{/each}
@@ -118,7 +118,7 @@
 			onfinalize={handleColumnFinalize(2)}
 		>
 			{#each column2Tiles as tile (tile.id)}
-				<div class="tile-wrapper" animate:flip={{ duration: flipDurationMs }}>
+				<div class="tile-wrapper relative" animate:flip={{ duration: flipDurationMs }}>
 					{@render tileRenderer(tile)}
 				</div>
 			{/each}
@@ -139,7 +139,7 @@
 			onfinalize={handleColumnFinalize(3)}
 		>
 			{#each column3Tiles as tile (tile.id)}
-				<div class="tile-wrapper" animate:flip={{ duration: flipDurationMs }}>
+				<div class="tile-wrapper relative" animate:flip={{ duration: flipDurationMs }}>
 					{@render tileRenderer(tile)}
 				</div>
 			{/each}
@@ -170,6 +170,15 @@
 </div>
 
 {#snippet tileRenderer(tile: TileConfig)}
+	{#if !editMode}
+		<TileVisibilityToggle
+			hidden={tile.hidden}
+			onclick={() => {
+				toggleTileVisibility(tile.id)
+			}}
+		/>
+	{/if}
+
 	{#if tile.type === "cpu-overview"}
 		<InfoTile title="CPU" class="min-h-[375px]">
 			{#snippet icon()}
@@ -596,6 +605,8 @@
 				</div>
 			</div>
 		</InfoTile>
+	{:else}
+		<div class="empty-tile hidden"></div>
 	{/if}
 {/snippet}
 
@@ -628,6 +639,7 @@
 	import { z } from "zod"
 	import { Dialog } from "bits-ui"
 	import MobileDialog from "../components/MobileDialog.svelte"
+	import TileVisibilityToggle from "../components/TileVisibilityToggle.svelte"
 
 	// Define Zod schema for all tiles
 	const columnSchema = z.union([z.literal(1), z.literal(2), z.literal(3)])
@@ -639,126 +651,151 @@
 					id: z.literal("cpu-overview"),
 					type: z.literal("cpu-overview"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("cpu-temp"),
 					type: z.literal("cpu-temperature"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("cpu-clock"),
 					type: z.literal("cpu-clock-speed"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("cpu-power"),
 					type: z.literal("cpu-power-usage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("cpu-voltage"),
 					type: z.literal("cpu-voltage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("drives"),
 					type: z.literal("drives-info"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("drive-temps"),
 					type: z.literal("drive-temperatures"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("ram-overview"),
 					type: z.literal("ram-overview"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("ram-usage"),
 					type: z.literal("ram-usage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("virtual-ram"),
 					type: z.literal("virtual-ram-usage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("ram-temp"),
 					type: z.literal("ram-temperature"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("system"),
 					type: z.literal("system-info"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("battery"),
 					type: z.literal("battery-info"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("monitors"),
 					type: z.literal("monitors-info"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("bios"),
 					type: z.literal("bios-info"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-overview"),
 					type: z.literal("gpu-overview"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-temp"),
 					type: z.literal("gpu-temperature"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-fan"),
 					type: z.literal("gpu-fan-speed"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-memory"),
 					type: z.literal("gpu-memory-usage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-clock"),
 					type: z.literal("gpu-clock-speed"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("gpu-power"),
 					type: z.literal("gpu-power-usage"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("interfaces"),
 					type: z.literal("network-interfaces"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("drive-speeds"),
 					type: z.literal("drive-speeds"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("fan-speeds"),
 					type: z.literal("fan-speeds"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 				z.object({
 					id: z.literal("network-speeds"),
 					type: z.literal("network-speeds"),
 					column: columnSchema,
+					hidden: z.boolean().default(false),
 				}),
 			]),
 		)
@@ -797,15 +834,25 @@
 	let editMode = $state(true)
 
 	// Computed arrays for each column
-	let column1Tiles = $derived(tiles.filter((tile) => tile.column === 1))
-	let column2Tiles = $derived(tiles.filter((tile) => tile.column === 2))
-	let column3Tiles = $derived(tiles.filter((tile) => tile.column === 3))
+	let column1Tiles = $derived(tiles.filter((tile) => tile.column === 1 && (!editMode || !tile.hidden)))
+	let column2Tiles = $derived(tiles.filter((tile) => tile.column === 2 && (!editMode || !tile.hidden)))
+	let column3Tiles = $derived(tiles.filter((tile) => tile.column === 3 && (!editMode || !tile.hidden)))
 
 	const flipDurationMs = 200
+	const TILE_ORDER_STORAGE_KEY = "cores-tiles-order"
+
+	function persistTiles() {
+		localStorage.setItem(TILE_ORDER_STORAGE_KEY, JSON.stringify(tiles))
+	}
+
+	function toggleTileVisibility(id: TileConfig["id"]) {
+		tiles = tiles.map((tile) => (tile.id === id ? { ...tile, hidden: !tile.hidden } : tile))
+		persistTiles()
+	}
 
 	// Load saved order from localStorage on mount
 	onMount(() => {
-		const savedTiles = localStorage.getItem("cores-tiles-order")
+		const savedTiles = localStorage.getItem(TILE_ORDER_STORAGE_KEY)
 		const defaultTiles = tilesSchema.parse(undefined)
 
 		if (savedTiles) {
@@ -845,7 +892,7 @@
 
 			// Remove items that are now in this column from other columns, then add them with the new column value
 			tiles = [...tiles.filter((tile) => !itemIds.has(tile.id)), ...updatedItems.map((item) => ({ ...item, column }))]
-			localStorage.setItem("cores-tiles-order", JSON.stringify(tiles))
+			persistTiles()
 		}
 	}
 </script>
