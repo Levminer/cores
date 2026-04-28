@@ -175,6 +175,10 @@ h5 {
 	display: none;
 }
 
+.tile-wrapper:has(.empty-tile) {
+	display: none;
+}
+
 .dropzone {
 	border: 1px dashed red;
 	border-radius: 12px;
