@@ -22,7 +22,7 @@
 	},
 	"devDependencies": {
 		"@sentry/cli": "^2.58.2",
-		"@tauri-apps/cli": "^2.9.4",
+		"@tauri-apps/cli": "^2.11.1",
 		"cross-env": "^10.1.0",
 		"prettier": "^3.6.2",
 		"svelte": "^5.46.4"
