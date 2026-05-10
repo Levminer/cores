@@ -1,0 +1,79 @@
+import { redirect, json } from "@sveltejs/kit"
+import type { RequestHandler } from "./$types"
+import { Expo, type ExpoPushMessage } from "expo-server-sdk"
+import supabase from "@supabase/supabase-js"
+import { env } from "$env/dynamic/public"
+import { env as privateEnv } from "$env/dynamic/private"
+
+export const POST: RequestHandler = async ({ url, request }) => {
+	const headers = new Headers()
+	headers.set("Access-Control-Allow-Origin", "*")
+
+	// get jwt and api key from headers
+	const jwt = request.headers.get("x-jwt")
+	const apiKey = request.headers.get("x-api-key")
+
+	// get title and body from request body
+	const { title, body } = await request.json()
+
+	if (!title || !body) {
+		return Response.json({ message: "Title and body are required" }, { status: 400, headers })
+	}
+
+	let supabaseClient
+
+	if (!jwt) {
+		if (apiKey == privateEnv.API_KEY) {
+			supabaseClient = supabase.createClient(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
+		} else {
+			return Response.json({ message: "Unauthorized" }, { status: 401, headers })
+		}
+	} else {
+		supabaseClient = supabase.createClient(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
+			accessToken: async () => {
+				return jwt
+			},
+		})
+	}
+
+	const { data, error } = await supabaseClient.from("push_token").select()
+	const expo = new Expo()
+	const messages: ExpoPushMessage[] = []
+
+	if (error) {
+		return Response.json({ error: error.message }, { status: 500, headers })
+	}
+
+	if (data && data.length > 0) {
+		console.log("message count ", data.length)
+
+		for (let i = 0; i < data.length; i++) {
+			if (!Expo.isExpoPushToken(data[i].token)) {
+				console.error(`Push token ${data[i].token} is not a valid Expo push token`)
+				continue
+			}
+
+			messages.push({
+				to: data[i].token,
+				title: title,
+				body: body,
+			} as ExpoPushMessage)
+		}
+
+		const chunks = expo.chunkPushNotifications(messages)
+
+		await Promise.all(
+			chunks.map(async (chunk) => {
+				const receipt = await expo.sendPushNotificationsAsync(chunk)
+				console.log(receipt)
+			}),
+		)
+	}
+
+	return Response.json(
+		{
+			message: "ok",
+		},
+		{ status: 200, headers },
+	)
+}

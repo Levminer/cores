@@ -28,6 +28,7 @@
 	},
 	"dependencies": {
 		"bits-ui": "^2.14.3",
+		"expo-server-sdk": "^6.1.0",
 		"ezrtc": "^0.8.0",
 		"lucide-svelte": "^0.553.0",
 		"posthog-js": "^1.292.0"

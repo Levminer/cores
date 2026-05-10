@@ -4,7 +4,7 @@ export type Database = {
 	// Allows to automatically instantiate createClient with right options
 	// instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
 	__InternalSupabase: {
-		PostgrestVersion: "12.2.3 (519615d)"
+		PostgrestVersion: "14.1"
 	}
 	graphql_public: {
 		Tables: {
@@ -33,31 +33,31 @@ export type Database = {
 	}
 	public: {
 		Tables: {
-			messages: {
+			network_device: {
 				Row: {
 					created_at: string
-					message: string
-					message_id: string
-					type: string
+					mac: string | null
+					name: string | null
+					network_device_id: string
 					user_id: string | null
 				}
 				Insert: {
 					created_at?: string
-					message: string
-					message_id?: string
-					type: string
+					mac?: string | null
+					name?: string | null
+					network_device_id?: string
 					user_id?: string | null
 				}
 				Update: {
 					created_at?: string
-					message?: string
-					message_id?: string
-					type?: string
+					mac?: string | null
+					name?: string | null
+					network_device_id?: string
 					user_id?: string | null
 				}
 				Relationships: [
 					{
-						foreignKeyName: "messages_user_id_fkey"
+						foreignKeyName: "network_device_user_id_fkey"
 						columns: ["user_id"]
 						isOneToOne: false
 						referencedRelation: "user"
@@ -65,26 +65,72 @@ export type Database = {
 					},
 				]
 			}
-			network_device: {
+			notification: {
+				Row: {
+					body: string | null
+					created_at: string
+					data: Json | null
+					notification_id: string
+					read_at: string | null
+					title: string | null
+					user_id: string
+				}
+				Insert: {
+					body?: string | null
+					created_at?: string
+					data?: Json | null
+					notification_id?: string
+					read_at?: string | null
+					title?: string | null
+					user_id: string
+				}
+				Update: {
+					body?: string | null
+					created_at?: string
+					data?: Json | null
+					notification_id?: string
+					read_at?: string | null
+					title?: string | null
+					user_id?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "notification_user_id_fkey"
+						columns: ["user_id"]
+						isOneToOne: false
+						referencedRelation: "user"
+						referencedColumns: ["user_id"]
+					},
+				]
+			}
+			push_token: {
 				Row: {
 					created_at: string
-					mac: string | null
-					name: string | null
-					network_device_id: string
+					push_token_id: string
+					token: string | null
+					user_id: string | null
 				}
 				Insert: {
 					created_at?: string
-					mac?: string | null
-					name?: string | null
-					network_device_id?: string
+					push_token_id?: string
+					token?: string | null
+					user_id?: string | null
 				}
 				Update: {
 					created_at?: string
-					mac?: string | null
-					name?: string | null
-					network_device_id?: string
+					push_token_id?: string
+					token?: string | null
+					user_id?: string | null
 				}
-				Relationships: []
+				Relationships: [
+					{
+						foreignKeyName: "push_token_user_id_fkey"
+						columns: ["user_id"]
+						isOneToOne: false
+						referencedRelation: "user"
+						referencedColumns: ["user_id"]
+					},
+				]
 			}
 			remote_connection: {
 				Row: {
