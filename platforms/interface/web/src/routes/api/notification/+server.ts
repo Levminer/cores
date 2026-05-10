@@ -1,7 +1,7 @@
 import { redirect, json } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 import { Expo, type ExpoPushMessage } from "expo-server-sdk"
-import supabase from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js"
 import { env } from "$env/dynamic/public"
 import { env as privateEnv } from "$env/dynamic/private"
 
@@ -24,12 +24,12 @@ export const POST: RequestHandler = async ({ url, request }) => {
 
 	if (!jwt) {
 		if (apiKey == privateEnv.API_KEY) {
-			supabaseClient = supabase.createClient(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
+			supabaseClient = createClient(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
 		} else {
 			return Response.json({ message: "Unauthorized" }, { status: 401, headers })
 		}
 	} else {
-		supabaseClient = supabase.createClient(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
+		supabaseClient = createClient(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
 			accessToken: async () => {
 				return jwt
 			},
