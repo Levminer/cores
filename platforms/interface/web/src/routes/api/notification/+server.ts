@@ -1,17 +1,15 @@
-import { redirect, json } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 import { Expo, type ExpoPushMessage } from "expo-server-sdk"
 import { createClient } from "@supabase/supabase-js"
 import { env } from "$env/dynamic/public"
-import { env as privateEnv } from "$env/dynamic/private"
+import type { Database } from "ui"
 
 export const POST: RequestHandler = async ({ url, request }) => {
 	const headers = new Headers()
 	headers.set("Access-Control-Allow-Origin", "*")
 
-	// get jwt and api key from headers
-	const jwt = request.headers.get("x-jwt")
-	const apiKey = request.headers.get("x-api-key")
+	// get Authorization header
+	const jwt = request.headers.get("Authorization")?.replace("Bearer ", "")
 
 	// get title and body from request body
 	const { title, body } = await request.json()
@@ -22,21 +20,17 @@ export const POST: RequestHandler = async ({ url, request }) => {
 
 	let supabaseClient
 
-	if (!jwt) {
-		if (apiKey == privateEnv.API_KEY) {
-			supabaseClient = createClient(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
-		} else {
-			return Response.json({ message: "Unauthorized" }, { status: 401, headers })
-		}
-	} else {
-		supabaseClient = createClient(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
+	if (jwt) {
+		supabaseClient = createClient<Database>(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
 			accessToken: async () => {
 				return jwt
 			},
 		})
+	} else {
+		return Response.json({ message: "Unauthorized" }, { status: 401, headers })
 	}
 
-	const { data, error } = await supabaseClient.from("push_token").select()
+	const { data, error } = await supabaseClient.from("push_token").select().single()
 	const expo = new Expo()
 	const messages: ExpoPushMessage[] = []
 
@@ -44,30 +38,31 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		return Response.json({ error: error.message }, { status: 500, headers })
 	}
 
-	if (data && data.length > 0) {
-		console.log("message count ", data.length)
-
-		for (let i = 0; i < data.length; i++) {
-			if (!Expo.isExpoPushToken(data[i].token)) {
-				console.error(`Push token ${data[i].token} is not a valid Expo push token`)
-				continue
-			}
-
-			messages.push({
-				to: data[i].token,
-				title: title,
-				body: body,
-			} as ExpoPushMessage)
+	if (data) {
+		if (!data.user_id) {
+			return Response.json({ error: "Missing user id for push token" }, { status: 500, headers })
 		}
 
-		const chunks = expo.chunkPushNotifications(messages)
+		if (!data.token || !Expo.isExpoPushToken(data.token)) {
+			return Response.json({ error: "Invalid push token" }, { status: 500, headers })
+		}
 
-		await Promise.all(
-			chunks.map(async (chunk) => {
-				const receipt = await expo.sendPushNotificationsAsync(chunk)
-				console.log(receipt)
-			}),
-		)
+		messages.push({
+			to: data.token,
+			title: title,
+			body: body,
+		} as ExpoPushMessage)
+
+		const { data: sendData, error: sendError } = await supabaseClient.from("notification").insert({
+			body,
+			title,
+			user_id: data.user_id,
+		})
+
+		console.log(sendData, sendError)
+
+		const receipt = await expo.sendPushNotificationsAsync(messages)
+		console.log(receipt)
 	}
 
 	return Response.json(

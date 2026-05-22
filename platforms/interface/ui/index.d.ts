@@ -41,6 +41,8 @@ import { supabaseClient } from "./utils/supabase.ts"
 import { flyAndScale } from "./utils/transitions.ts"
 import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "./utils/connection.ts"
 
+import { Database } from "./utils/database"
+
 export {
 	Home,
 	Loading,
@@ -95,3 +97,5 @@ export {
 	ChartTile,
 	PowerButton,
 }
+
+export type { Database }
