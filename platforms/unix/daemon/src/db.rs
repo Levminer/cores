@@ -9,70 +9,80 @@ struct Row {
 pub fn seed(conn: &Connection) {
     let sql1 = "CREATE TABLE IF NOT EXISTS seconds_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
     let sql2 = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
+    let sql3 = "CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 
     conn.execute_batch(sql1).expect("Failed to create table");
     conn.execute_batch(sql2).expect("Failed to create table");
+    conn.execute_batch(sql3).expect("Failed to create table");
 }
 
 pub fn cleanup(conn: &Connection) {
     let sql1 = "DELETE FROM seconds_data WHERE id NOT IN (SELECT id FROM seconds_data ORDER BY timestamp DESC LIMIT 60);";
     let sql2 = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
+    let sql3 = "DELETE FROM data WHERE timestamp < datetime('now', '-24 hours') AND id NOT IN (SELECT id FROM data ORDER BY timestamp DESC LIMIT 120);";
 
     conn.execute_batch(sql1).expect("Failed to cleanup table");
     conn.execute_batch(sql2).expect("Failed to cleanup table");
+    conn.execute_batch(sql3).expect("Failed to cleanup table");
 }
 
-pub fn insert_seconds_data(conn: &Connection, data: &str) {
-    let sql = "INSERT INTO seconds_data (data) VALUES (?);";
+pub fn insert_data(conn: &Connection, data: &str) {
+    let sql = "INSERT INTO data (data) VALUES (?);";
 
     conn.execute(sql, params![data])
-        .expect("Failed to insert seconds data");
+        .expect("Failed to insert data");
 }
 
-pub fn insert_minutes_data(conn: &Connection, data: &str) {
-    let sql = "INSERT INTO minutes_data (data) VALUES (?);";
+pub fn select_minutes_data(conn: &Connection) -> Vec<HardwareInfo> {
+    let sql = "
+        WITH config(window_seconds) AS (SELECT ?1)
+        SELECT data
+        FROM data, config
+        WHERE id IN (
+            SELECT MIN(id)
+            FROM data, config
+            WHERE timestamp >= datetime('now', '-24 hours')
+            GROUP BY strftime('%s', timestamp) / window_seconds
+        )
+        ORDER BY timestamp ASC;
+    ";
 
-    conn.execute(sql, params![data])
-        .expect("Failed to insert minutes data");
-}
-
-pub fn select_seconds_data(conn: &Connection) -> Vec<HardwareInfo> {
-    let sql = "SELECT data FROM seconds_data ORDER BY timestamp DESC LIMIT 60;";
     let mut stmt = conn.prepare(sql).expect("Failed to prepare statement");
 
+    // 900 seconds = 15 minutes, so we get 96 data points for the last 24 hours
     let rows = stmt
-        .query_map([], |row| {
+        .query_map([900], |row| {
             Ok(Row {
                 data: row.get(0).expect("Failed to get data"),
             })
         })
-        .expect("Failed to query seconds data");
+        .expect("Failed to query minutes data");
 
-    let mut result: Vec<HardwareInfo> = rows
+    return rows
         .map(|row| {
             let row = row.expect("Failed to get row");
             serde_json::from_str::<HardwareInfo>(&row.data)
                 .expect("Failed to deserialize HardwareInfo")
         })
         .collect();
-
-    result.reverse();
-    return result;
 }
 
-pub fn select_minutes_data(conn: &Connection) -> Vec<HardwareInfo> {
-    let sql = "SELECT data FROM minutes_data ORDER BY timestamp DESC LIMIT 60;";
+pub fn select_seconds_data(conn: &Connection) -> Vec<HardwareInfo> {
+    let sql = "
+        SELECT data FROM data
+        ORDER BY timestamp DESC
+        LIMIT 60;
+    ";
+
     let mut stmt = conn.prepare(sql).expect("Failed to prepare statement");
 
-    let rows = stmt
+    let mut result: Vec<HardwareInfo> = stmt
         .query_map([], |row| {
             Ok(Row {
                 data: row.get(0).expect("Failed to get data"),
             })
         })
-        .expect("Failed to query seconds data");
-
-    let mut result: Vec<HardwareInfo> = rows
+        .expect("Failed to query seconds data")
         .map(|row| {
             let row = row.expect("Failed to get row");
             serde_json::from_str::<HardwareInfo>(&row.data)

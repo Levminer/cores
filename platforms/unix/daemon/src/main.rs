@@ -196,7 +196,7 @@ async fn main() {
                 .pool
                 .get()
                 .expect("Failed to get connection");
-            db::insert_seconds_data(
+            db::insert_data(
                 &conn,
                 &serde_json::to_string(&data.hw_info).expect("Failed to serialize HardwareInfo"),
             );
@@ -205,34 +205,6 @@ async fn main() {
                 (settings.interval as u64 * 1000) - 300,
             ))
             .await;
-        }
-    });
-
-    // Save last 60m hardware info
-    let app_state_clone = app_state.clone();
-    let mut rcv = channel_receiver.resubscribe();
-    let last_60m_hardware_info_task = tokio::spawn(async move {
-        loop {
-            match rcv.recv().await {
-                Ok(data) => {
-                    let conn = app_state_clone
-                        .pool
-                        .get()
-                        .expect("Failed to get connection");
-                    db::insert_minutes_data(
-                        &conn,
-                        &serde_json::to_string(&data).expect("Failed to serialize HardwareInfo"),
-                    );
-                }
-                Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
-                    continue;
-                }
-                Err(_) => {
-                    break;
-                }
-            }
-
-            tokio::time::sleep(std::time::Duration::from_secs(60)).await;
         }
     });
 
@@ -276,7 +248,6 @@ async fn main() {
                                 &state.pool.get().expect("Failed to get connection"),
                             )
                             .iter()
-                            .step_by(2)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
                         };
@@ -285,7 +256,6 @@ async fn main() {
                                 &state.pool.get().expect("Failed to get connection"),
                             )
                             .iter()
-                            .step_by(2)
                             .cloned()
                             .collect::<Vec<HardwareInfo>>()
                         };
@@ -527,9 +497,6 @@ async fn main() {
         _ = hw_task => {
             info!("HW stopped");
         }
-        _ = last_60m_hardware_info_task => {
-            info!("Last 60s hardware info stopped");
-        }
         _ = cleanup_task => {
             info!("Cleanup task stopped");
         }
@@ -571,14 +538,12 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
     let last60s_hardware_info = {
         db::select_seconds_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
-            .step_by(2)
             .cloned()
             .collect::<Vec<HardwareInfo>>()
     };
     let last60m_hardware_info = {
         db::select_minutes_data(&state.pool.get().expect("Failed to get connection"))
             .iter()
-            .step_by(2)
             .cloned()
             .collect::<Vec<HardwareInfo>>()
     };

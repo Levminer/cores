@@ -90,7 +90,7 @@ pub struct Settings {
 
 fn sample_settings() -> Settings {
     Settings {
-        interval: 3,
+        interval: default_value(),
         minimize_to_tray: true,
         remote_connections: false,
         connection_code: default_connection_code(),
