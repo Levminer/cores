@@ -24,47 +24,45 @@ pub fn macos_hardware_info(data: &mut Data) {
         data.hw_info.gpu.cards[0].name = soc.chip_name.clone();
         data.hw_info.system.motherboard.name = soc.mac_model.clone();
 
-        data.hw_info.gpu.cards[0].temperature.push(CoresSensor {
-            name: "SOC".to_string(),
-            value: (metrics.temp.gpu_temp_avg as f64).fmt_num(),
-            min: (metrics.temp.gpu_temp_avg as f64).fmt_num(),
-            max: (metrics.temp.gpu_temp_avg as f64).fmt_num(),
-        });
+        data.hw_info.gpu.cards[0].temperature.push(CoresSensor::new(
+            "SOC".to_string(),
+            (metrics.temp.gpu_temp_avg as f64).fmt_num(),
+        ));
 
-        data.hw_info.gpu.cards[0].power.push(CoresSensor {
-            name: "SOC".to_string(),
-            value: (metrics.gpu_power as f64).fmt_num(),
-            min: (metrics.gpu_power as f64).fmt_num(),
-            max: (metrics.gpu_power as f64).fmt_num(),
-        });
+        data.hw_info.gpu.cards[0].power.push(CoresSensor::new(
+            "SOC".to_string(),
+            (metrics.gpu_power as f64).fmt_num(),
+        ));
 
-        data.hw_info.gpu.cards[0].clock.push(CoresSensor {
-            name: "SOC".to_string(),
-            value: (metrics.gpu_usage.0 as f64).fmt_num(),
-            min: (metrics.gpu_usage.0 as f64).fmt_num(),
-            max: (metrics.gpu_usage.0 as f64).fmt_num(),
-        });
+        data.hw_info.gpu.cards[0].clock.push(CoresSensor::new(
+            "SOC".to_string(),
+            (metrics.gpu_usage.0 as f64).fmt_num(),
+        ));
 
-        data.hw_info.cpu.temperature.push(CoresSensor {
-            name: "SOC".to_string(),
-            value: (metrics.temp.cpu_temp_avg as f64).fmt_num(),
-            min: (metrics.temp.cpu_temp_avg as f64).fmt_num(),
-            max: (metrics.temp.cpu_temp_avg as f64).fmt_num(),
-        });
+        data.hw_info.cpu.temperature.push(CoresSensor::new(
+            "SOC".to_string(),
+            (metrics.temp.cpu_temp_avg as f64).fmt_num(),
+        ));
 
-        data.hw_info.cpu.power.push(CoresSensor {
-            name: "SOC".to_string(),
-            value: (metrics.cpu_power as f64).fmt_num(),
-            min: (metrics.cpu_power as f64).fmt_num(),
-            max: (metrics.cpu_power as f64).fmt_num(),
-        });
+        data.hw_info.cpu.power.push(CoresSensor::new(
+            "SOC".to_string(),
+            (metrics.cpu_power as f64).fmt_num(),
+        ));
 
-        data.hw_info.gpu.cards[0].load.push(CoresSensor {
-            name: "Load".to_string(),
-            value: (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
-            min: (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
-            max: (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
-        });
+        data.hw_info.cpu.clock.push(CoresSensor::new(
+            "P Cores".to_string(),
+            (metrics.pcpu_usage.0 as f64).fmt_num(),
+        ));
+
+        data.hw_info.cpu.clock.push(CoresSensor::new(
+            "E Cores".to_string(),
+            (metrics.ecpu_usage.0 as f64).fmt_num(),
+        ));
+
+        data.hw_info.gpu.cards[0].load.push(CoresSensor::new(
+            "Load".to_string(),
+            (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
+        ));
 
         data.hw_info.gpu.cards[0].max_load =
             (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
@@ -79,6 +77,7 @@ pub fn macos_hardware_info(data: &mut Data) {
 
             let read_bytes = metrics2.disk.read_bytes_sec;
             let write_bytes = metrics2.disk.write_bytes_sec;
+            let ssd_temp = metrics2.temperature.ssd_avg_c;
 
             if !disk.is_removable() && disk.mount_point().to_str() == Some("/") {
                 let mut primary_disk = CoresDisk {
@@ -87,7 +86,10 @@ pub fn macos_hardware_info(data: &mut Data) {
                     free_space: free_space as u64,
                     throughput_read: read_bytes as f64,
                     throughput_write: write_bytes as f64,
-                    temperature: CoresSensor::default(),
+                    temperature: CoresSensor::new(
+                        "SSD Temp".to_string(),
+                        (ssd_temp as f64).fmt_num(),
+                    ),
                     health: "N/A".to_string(),
                     data_read: 0.0,
                     data_written: 0.0,
@@ -112,15 +114,24 @@ pub fn macos_hardware_info(data: &mut Data) {
                                         .percentage_used
                                         as u64)
                                     .to_string();
-                                primary_disk.temperature.value =
-                                    json.nvme_smart_health_information_log.unwrap().temperature
-                                        as f64;
-                                primary_disk.temperature.max =
-                                    json.nvme_smart_health_information_log.unwrap().temperature
-                                        as f64;
-                                primary_disk.temperature.min =
-                                    json.nvme_smart_health_information_log.unwrap().temperature
-                                        as f64;
+
+                                primary_disk.data_read = (json
+                                    .nvme_smart_health_information_log
+                                    .unwrap()
+                                    .data_units_read
+                                    .unwrap_or(0.0)
+                                    * 512000.0
+                                    / 1_000_000_000.0)
+                                    .fmt_num();
+
+                                primary_disk.data_written = (json
+                                    .nvme_smart_health_information_log
+                                    .unwrap()
+                                    .data_units_written
+                                    .unwrap_or(0.0)
+                                    * 512000.0
+                                    / 1_000_000_000.0)
+                                    .fmt_num();
                             }
                         }
                     }
@@ -136,6 +147,8 @@ pub fn macos_hardware_info(data: &mut Data) {
         let prev_cpu_power = data.hw_info.cpu.power[0].clone();
         let prev_gpu_load = data.hw_info.gpu.cards[0].load[0].clone();
         let prev_gpu_clock = data.hw_info.gpu.cards[0].clock[0].clone();
+        let prev_cpu_p_clock = data.hw_info.cpu.clock[0].clone();
+        let prev_cpu_e_clock = data.hw_info.cpu.clock[1].clone();
 
         data.hw_info.gpu.cards[0].temperature[0] =
             compare_sensor(&prev_gpu_temp, (metrics.temp.gpu_temp_avg as f64).fmt_num());
@@ -153,10 +166,17 @@ pub fn macos_hardware_info(data: &mut Data) {
             (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
         data.hw_info.gpu.cards[0].clock[0] =
             compare_sensor(&prev_gpu_clock, (metrics.gpu_usage.0 as f64).fmt_num());
+        data.hw_info.cpu.clock[0] =
+            compare_sensor(&prev_cpu_p_clock, (metrics.pcpu_usage.0 as f64).fmt_num());
+        data.hw_info.cpu.clock[1] =
+            compare_sensor(&prev_cpu_e_clock, (metrics.ecpu_usage.0 as f64).fmt_num());
 
-        // refresh disk throughput
+        // disks
         let disk = &mut data.hw_info.system.storage.disks[0];
         disk.throughput_read = metrics2.disk.read_bytes_sec as f64;
         disk.throughput_write = metrics2.disk.write_bytes_sec as f64;
+
+        let temp = (metrics2.temperature.ssd_avg_c as f64).fmt_num();
+        disk.temperature = compare_sensor(&disk.temperature, temp);
     }
 }

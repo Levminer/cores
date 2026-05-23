@@ -158,6 +158,8 @@ pub struct SmartDevice {
 pub struct SmartInfo {
     temperature: u64,
     percentage_used: u64,
+    data_units_read: Option<f64>,
+    data_units_written: Option<f64>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -357,6 +359,15 @@ impl CoresSensor {
             max: 0.0,
         }
     }
+
+    pub fn new(name: String, value: f64) -> CoresSensor {
+        CoresSensor {
+            name,
+            value,
+            min: value,
+            max: value,
+        }
+    }
 }
 
 impl CoresGPUCard {
@@ -470,30 +481,29 @@ pub fn refresh_hardware_info(data: &mut Data) {
         data.hw_info.cpu.name = cpu.brand().to_string();
 
         if data.first_run {
-            data.hw_info.cpu.load.push(CoresSensor {
-                name: format!("Core #{}", cpu_count),
-                value: cpu.cpu_usage() as f64,
-                min: cpu.cpu_usage() as f64,
-                max: cpu.cpu_usage() as f64,
-            });
+            data.hw_info.cpu.load.push(CoresSensor::new(
+                format!("Core #{}", cpu_count),
+                cpu.cpu_usage() as f64,
+            ));
 
-            data.hw_info.cpu.clock.push(CoresSensor {
-                name: format!("Core #{}", cpu_count),
-                value: cpu.frequency() as f64,
-                min: cpu.frequency() as f64,
-                max: cpu.frequency() as f64,
-            });
+            if cfg!(target_os = "linux") {
+                data.hw_info.cpu.load.push(CoresSensor::new(
+                    format!("Core #{}", cpu_count),
+                    cpu.frequency() as f64,
+                ));
+            }
 
             cpu_count += 1;
         } else {
             let prev_load = &data.hw_info.cpu.load[cpu_count];
-            let prev_clock = &data.hw_info.cpu.clock[cpu_count];
-            let cpu_usage = cpu.cpu_usage() as f64;
-            let clock_speed = cpu.frequency() as f64;
+            let load = cpu.cpu_usage() as f64;
+            data.hw_info.cpu.load[cpu_count] = compare_sensor(prev_load, load);
 
-            data.hw_info.cpu.load[cpu_count] = compare_sensor(prev_load, cpu_usage);
-
-            data.hw_info.cpu.clock[cpu_count] = compare_sensor(prev_clock, clock_speed);
+            if cfg!(target_os = "linux") {
+                let prev_clock = &data.hw_info.cpu.clock[cpu_count];
+                let clock = cpu.frequency() as f64;
+                data.hw_info.cpu.clock[cpu_count] = compare_sensor(prev_clock, clock);
+            }
 
             cpu_count += 1;
         }
