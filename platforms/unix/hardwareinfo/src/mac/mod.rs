@@ -1,22 +1,21 @@
 use crate::{compare_sensor, CoresDisk, CoresSensor, Data, Round};
 
 #[cfg(target_os = "macos")]
-pub mod metrics;
-#[cfg(target_os = "macos")]
-pub mod sources;
-
-#[cfg(target_os = "macos")]
 pub fn macos_hardware_info(data: &mut Data) {
     use core::str;
+    use macmon::{metrics, sources};
+    use mtop::metrics::Sampler;
     use std::{process::Command, time::SystemTime};
     use sysinfo::Disks;
 
     use crate::{CoresGPUCard, SmartctlDiskInfo};
 
     let mut sampler = metrics::Sampler::new().unwrap();
+    let metrics = sampler.get_metrics(100).unwrap();
     let soc = sources::SocInfo::new().unwrap();
 
-    let metrics = sampler.get_metrics(100).unwrap();
+    let mut sampler2 = Sampler::new().unwrap();
+    let metrics2 = sampler2.sample(100).unwrap();
 
     if data.first_run {
         data.hw_info.cpu.info[0].manufacturer_name = "Apple".to_string();
@@ -67,7 +66,8 @@ pub fn macos_hardware_info(data: &mut Data) {
             max: (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
         });
 
-        data.hw_info.gpu.cards[0].max_load = (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
+        data.hw_info.gpu.cards[0].max_load =
+            (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
 
         // Disks
         let gb = 1024_f64.powi(3);
@@ -77,13 +77,16 @@ pub fn macos_hardware_info(data: &mut Data) {
             let total_space = disk.total_space() as f64 / gb;
             let name = disk.name().to_str().unwrap().to_string();
 
+            let read_bytes = metrics2.disk.read_bytes_sec;
+            let write_bytes = metrics2.disk.write_bytes_sec;
+
             if !disk.is_removable() && disk.mount_point().to_str() == Some("/") {
                 let mut primary_disk = CoresDisk {
                     name: name.clone(),
                     total_space: total_space as u64,
                     free_space: free_space as u64,
-                    throughput_read: 0.0,
-                    throughput_write: 0.0,
+                    throughput_read: read_bytes as f64,
+                    throughput_write: write_bytes as f64,
                     temperature: CoresSensor::default(),
                     health: "N/A".to_string(),
                     data_read: 0.0,
@@ -146,8 +149,14 @@ pub fn macos_hardware_info(data: &mut Data) {
             &prev_gpu_load,
             (metrics.gpu_usage.1 as f64 * 100.0).fmt_num(),
         );
-        data.hw_info.gpu.cards[0].max_load = (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
+        data.hw_info.gpu.cards[0].max_load =
+            (data.hw_info.gpu.cards[0].load[0].value as f64).fmt_num();
         data.hw_info.gpu.cards[0].clock[0] =
             compare_sensor(&prev_gpu_clock, (metrics.gpu_usage.0 as f64).fmt_num());
+
+        // refresh disk throughput
+        let disk = &mut data.hw_info.system.storage.disks[0];
+        disk.throughput_read = metrics2.disk.read_bytes_sec as f64;
+        disk.throughput_write = metrics2.disk.write_bytes_sec as f64;
     }
 }
