@@ -487,7 +487,7 @@ pub fn refresh_hardware_info(data: &mut Data) {
             ));
 
             if cfg!(target_os = "linux") {
-                data.hw_info.cpu.load.push(CoresSensor::new(
+                data.hw_info.cpu.clock.push(CoresSensor::new(
                     format!("Core #{}", cpu_count),
                     cpu.frequency() as f64,
                 ));
