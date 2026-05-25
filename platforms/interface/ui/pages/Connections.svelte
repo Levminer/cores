@@ -182,13 +182,116 @@
 					{/each}
 				</div>
 			</div>
+
+			<!-- notifications -->
+			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+				<div class="flex flex-col items-start gap-3">
+					<div class="flex items-center gap-3">
+						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+							<Bell />
+						</div>
+						<h2>Notifications</h2>
+					</div>
+					<h3>Cores can send you a push notification when certain events occur.</h3>
+				</div>
+
+				<div class="flex flex-col items-start gap-3 sm:my-5">
+					<ModularDialog
+						title={"Add event"}
+						description={"Select an event to get notified about. Make sure to allow notifications in the mobile app."}
+					>
+						{#snippet openButton()}
+							<Dialog.Trigger class="button w-full">
+								<Plus />
+								Add event
+							</Dialog.Trigger>
+						{/snippet}
+						{#snippet confirmButton()}
+							<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
+								<Plus class="h-5 w-5" />
+								Add event
+							</Dialog.Close>
+						{/snippet}
+						<div class="flex flex-col flex-wrap gap-3">
+							<div>
+								<h5>Component <span class="text-red-500">*</span></h5>
+								<ToggleGroup
+									options={[
+										{ value: "cpu", label: "CPU" },
+										{ value: "gpu", label: "GPU" },
+										{ value: "ram", label: "RAM" },
+									]}
+									bind:value={notificationComponent}
+								/>
+							</div>
+
+							<div>
+								<h5>Data <span class="text-red-500">*</span></h5>
+								<ToggleGroup
+									options={[
+										{ value: "temperature", label: "Temperature" },
+										{ value: "load", label: "Load" },
+									]}
+									bind:value={notificationData}
+								/>
+							</div>
+
+							<div>
+								<h5>Condition <span class="text-red-500">*</span></h5>
+								<ToggleGroup
+									options={[
+										{ value: "lower", label: "Lower" },
+										{ value: "higher", label: "Higher" },
+									]}
+									bind:value={notificationCondition}
+								/>
+							</div>
+
+							<div class="flex flex-row gap-3">
+								<div class="w-1/2">
+									<h5>Value <span class="text-red-500">*</span></h5>
+									<input bind:value={notificationValue} class="input mt-1 w-44" type="text" />
+								</div>
+
+								<div class="w-1/2">
+									<h5>Seconds <span class="text-red-500">*</span></h5>
+									<input bind:value={notificationSeconds} class="input mt-1 w-44" type="text" />
+								</div>
+							</div>
+
+							<div>
+								<h5>Final condition</h5>
+								<p class="transparent-900 mt-1 rounded-md p-2 font-mono">
+									When the {notificationComponent}
+									{notificationData} is {notificationCondition}
+									than {notificationValue} for {notificationSeconds}
+									seconds, send a notification.
+								</p>
+							</div>
+						</div>
+					</ModularDialog>
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>
 
 <script lang="ts">
 	import { getSettings, hardwareInfo, ModularDialog, setSettings, settings, Toggle, PowerButton } from "ui"
-	import { Clipboard, ExternalLink, MonitorSmartphone, KeyRound, Network, Plus, Power, Trash2, Earth, Server, Smartphone } from "lucide-svelte"
+	import {
+		Clipboard,
+		ExternalLink,
+		MonitorSmartphone,
+		KeyRound,
+		Network,
+		Plus,
+		Power,
+		Trash2,
+		Earth,
+		Server,
+		Smartphone,
+		Bell,
+	} from "lucide-svelte"
 	import { invoke } from "@tauri-apps/api/core"
 	import { open } from "@tauri-apps/plugin-shell"
 	import { Dialog } from "bits-ui"
@@ -196,6 +299,41 @@
 	import { addNetworkDevice, deleteNetworkDevice } from "../utils/connection.ts"
 	import { onMount } from "svelte"
 	import MobileDialog from "../components/MobileDialog.svelte"
+	import ToggleGroup from "../components/ToggleGroup.svelte"
+
+	let notificationComponent = $state("cpu")
+	let notificationData = $state("temperature")
+	let notificationCondition = $state("higher")
+	let notificationValue = $state("50")
+	let notificationSeconds = $state("10")
+
+	const createNotification = () => {
+		let json = ""
+
+		if (notificationComponent == "cpu") {
+			if (notificationData == "temperature") {
+				json = "cpu.temperature[0].value"
+			} else {
+				json = "cpu.maxLoad"
+			}
+		}
+
+		if (notificationComponent == "ram") {
+			if (notificationData == "temperature") {
+				json = "ram.temperature[0].value"
+			} else {
+				json = "ram.load[2].value"
+			}
+		}
+
+		if (notificationComponent == "gpu") {
+			if (notificationData == "temperature") {
+				json = "gpu.cards[0].temperature[0].value"
+			} else {
+				json = "gpu.cards[0].maxLoad"
+			}
+		}
+	}
 
 	onMount(async () => {
 		const { data: userData, error: userError } = await supabaseClient.auth.getUser()

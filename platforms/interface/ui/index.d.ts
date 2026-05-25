@@ -23,6 +23,7 @@ import ModularDialog from "./components/ModularDialog.svelte"
 import Progress from "./components/Progress.svelte"
 import SaveDataButton from "./components/SaveDataButton.svelte"
 import Select from "./components/Select.svelte"
+import ToggleGroup from "./components/ToggleGroup.svelte"
 import Toggle from "./components/Toggle.svelte"
 import ToggleButton from "./components/ToggleButton.svelte"
 import UpdateAlert from "./components/UpdateAlert.svelte"
@@ -65,6 +66,7 @@ export {
 	Progress,
 	SaveDataButton,
 	Select,
+	ToggleGroup,
 	Toggle,
 	ToggleButton,
 	UpdateAlert,
