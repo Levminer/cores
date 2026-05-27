@@ -245,6 +245,12 @@ declare global {
 			network: string
 			storage: string
 		}
+		notifications: {
+			json: string
+			condition: string
+			value: number
+			seconds: number
+		}[]
 	}
 
 	interface LibState {

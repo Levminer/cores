@@ -14,7 +14,7 @@ const fn default_true() -> bool {
     true
 }
 
-const fn default_connection_codes() -> Vec<ConnectionCode> {
+const fn default_vec<T>() -> Vec<T> {
     Vec::new()
 }
 
@@ -67,6 +67,14 @@ fn default_default_devices() -> DefaultDevices {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Notifications {
+    pub json: String,
+    pub condition: String,
+    pub value: u32,
+    pub seconds: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     #[serde(rename = "interval", default = "default_value")]
     pub interval: u32,
@@ -74,11 +82,11 @@ pub struct Settings {
     pub minimize_to_tray: bool,
     #[serde(rename = "remoteConnections", default = "default_false")]
     pub remote_connections: bool,
-    #[serde(rename = "connectionCodes", default = "default_connection_codes")]
+    #[serde(rename = "connectionCodes", default = "default_vec")]
     pub connection_codes: Vec<ConnectionCode>,
     #[serde(rename = "connectionURL", default = "default_connection_url")]
     pub connection_url: String,
-    #[serde(rename = "networkDevices", default = "default_connection_codes")]
+    #[serde(rename = "networkDevices", default = "default_vec")]
     pub network_devices: Vec<ConnectionCode>,
     #[serde(rename = "connectionCode", default = "default_connection_code")]
     pub connection_code: String,
@@ -86,6 +94,8 @@ pub struct Settings {
     pub user_id: String,
     #[serde(rename = "defaultDevices", default = "default_default_devices")]
     pub default_devices: DefaultDevices,
+    #[serde(rename = "notifications", default = "default_vec")]
+    pub notifications: Vec<Notifications>,
 }
 
 fn sample_settings() -> Settings {
@@ -94,11 +104,12 @@ fn sample_settings() -> Settings {
         minimize_to_tray: true,
         remote_connections: false,
         connection_code: default_connection_code(),
-        connection_codes: default_connection_codes(),
+        connection_codes: default_vec(),
         connection_url: default_connection_url(),
-        network_devices: default_connection_codes(),
+        network_devices: default_vec(),
         user_id: default_connection_code(),
         default_devices: default_default_devices(),
+        notifications: default_vec(),
     }
 }
 

@@ -21,6 +21,12 @@ const networkDevicesScheme = z.object({
 	code: z.string(),
 	mac: z.string(),
 })
+const notificationsScheme = z.object({
+	json: z.string(),
+	condition: z.string(),
+	value: z.number(),
+	seconds: z.number(),
+})
 
 const settingsScheme = z.object({
 	interval: z.number().min(1).default(3),
@@ -38,6 +44,7 @@ const settingsScheme = z.object({
 			storage: z.string().default(""),
 		})
 		.default({}),
+	notifications: notificationsScheme.array().default([]),
 })
 
 // Create store

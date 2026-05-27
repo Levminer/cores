@@ -34,6 +34,13 @@ public class DefaultDevices {
 	public string storage { get; set; } = "";
 }
 
+public class Notifications {
+	public string json { get; set; } = "";
+	public string condition { get; set; } = "";
+	public int value { get; set; } = 50;
+	public int seconds { get; set; } = 10;
+}
+
 public class DefaultSettings {
 	public int interval { get; set; } = 3;
 	public bool minimizeToTray { get; set; } = true;
@@ -43,6 +50,7 @@ public class DefaultSettings {
 	public string connectionURL { get; set; } = DefaultValues.DefaultConnectionURL();
 	public string userId { get; set; } = DefaultValues.GenerateUserId();
 	public DefaultDevices defaultDevices { get; set; } = new();
+	public List<Notifications> notifications { get; set; } = new();
 }
 
 public class Settings : DefaultSettings {
@@ -102,6 +110,7 @@ public class Settings : DefaultSettings {
 			connectionURL = settings?.connectionURL ?? defaultSettings.connectionURL;
 			userId = settings?.userId ?? defaultSettings.userId;
 			defaultDevices = settings?.defaultDevices ?? defaultSettings.defaultDevices;
+			notifications = settings?.notifications ?? defaultSettings.notifications;
 		}
 		catch (Exception e) {
 			SentrySdk.CaptureException(e);

@@ -184,94 +184,96 @@
 			</div>
 
 			<!-- notifications -->
-			<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
-				<div class="flex flex-col items-start gap-3">
-					<div class="flex items-center gap-3">
-						<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
-							<Bell />
+			{#if import.meta.env.VITE_CORES_MODE === "host"}
+				<div class="transparent-800 flex w-full flex-row flex-wrap items-center justify-between rounded-xl p-8 text-left sm:p-4">
+					<div class="flex flex-col items-start gap-3">
+						<div class="flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg p-3 sm:p-2">
+								<Bell />
+							</div>
+							<h2>Notifications</h2>
 						</div>
-						<h2>Notifications</h2>
+						<h3>Cores can send you a push notification when certain events occur.</h3>
 					</div>
-					<h3>Cores can send you a push notification when certain events occur.</h3>
-				</div>
 
-				<div class="flex flex-col items-start gap-3 sm:my-5">
-					<ModularDialog
-						title={"Add event"}
-						description={"Select an event to get notified about. Make sure to allow notifications in the mobile app."}
-					>
-						{#snippet openButton()}
-							<Dialog.Trigger class="button w-full">
-								<Plus />
-								Add event
-							</Dialog.Trigger>
-						{/snippet}
-						{#snippet confirmButton()}
-							<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
-								<Plus class="h-5 w-5" />
-								Add event
-							</Dialog.Close>
-						{/snippet}
-						<div class="flex flex-col flex-wrap gap-3">
-							<div>
-								<h5>Component <span class="text-red-500">*</span></h5>
-								<ToggleGroup
-									options={[
-										{ value: "cpu", label: "CPU" },
-										{ value: "gpu", label: "GPU" },
-										{ value: "ram", label: "RAM" },
-									]}
-									bind:value={notificationComponent}
-								/>
-							</div>
-
-							<div>
-								<h5>Data <span class="text-red-500">*</span></h5>
-								<ToggleGroup
-									options={[
-										{ value: "temperature", label: "Temperature" },
-										{ value: "load", label: "Load" },
-									]}
-									bind:value={notificationData}
-								/>
-							</div>
-
-							<div>
-								<h5>Condition <span class="text-red-500">*</span></h5>
-								<ToggleGroup
-									options={[
-										{ value: "lower", label: "Lower" },
-										{ value: "higher", label: "Higher" },
-									]}
-									bind:value={notificationCondition}
-								/>
-							</div>
-
-							<div class="flex flex-row gap-3">
-								<div class="w-1/2">
-									<h5>Value <span class="text-red-500">*</span></h5>
-									<input bind:value={notificationValue} class="input mt-1 w-44" type="text" />
+					<div class="flex flex-col items-start gap-3 sm:my-5">
+						<ModularDialog
+							title={"Add event"}
+							description={"Select an event to get notified about. Make sure to allow notifications in the mobile app."}
+						>
+							{#snippet openButton()}
+								<Dialog.Trigger class="button w-full">
+									<Plus />
+									Add event
+								</Dialog.Trigger>
+							{/snippet}
+							{#snippet confirmButton()}
+								<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
+									<Plus class="h-5 w-5" />
+									Add event
+								</Dialog.Close>
+							{/snippet}
+							<div class="flex flex-col flex-wrap gap-3">
+								<div>
+									<h5>Component <span class="text-red-500">*</span></h5>
+									<ToggleGroup
+										options={[
+											{ value: "cpu", label: "CPU" },
+											{ value: "gpu", label: "GPU" },
+											{ value: "ram", label: "RAM" },
+										]}
+										bind:value={notificationComponent}
+									/>
 								</div>
 
-								<div class="w-1/2">
-									<h5>Seconds <span class="text-red-500">*</span></h5>
-									<input bind:value={notificationSeconds} class="input mt-1 w-44" type="text" />
+								<div>
+									<h5>Data <span class="text-red-500">*</span></h5>
+									<ToggleGroup
+										options={[
+											{ value: "temperature", label: "Temperature" },
+											{ value: "load", label: "Load" },
+										]}
+										bind:value={notificationData}
+									/>
+								</div>
+
+								<div>
+									<h5>Condition <span class="text-red-500">*</span></h5>
+									<ToggleGroup
+										options={[
+											{ value: "lower", label: "Lower" },
+											{ value: "higher", label: "Higher" },
+										]}
+										bind:value={notificationCondition}
+									/>
+								</div>
+
+								<div class="flex flex-row gap-3">
+									<div class="w-1/2">
+										<h5>Value <span class="text-red-500">*</span></h5>
+										<input bind:value={notificationValue} class="input mt-1 w-44" type="text" />
+									</div>
+
+									<div class="w-1/2">
+										<h5>Seconds <span class="text-red-500">*</span></h5>
+										<input bind:value={notificationSeconds} class="input mt-1 w-44" type="text" />
+									</div>
+								</div>
+
+								<div>
+									<h5>Final condition</h5>
+									<p class="transparent-900 mt-1 rounded-md p-2 font-mono">
+										When the {notificationComponent}
+										{notificationData} is {notificationCondition}
+										than {notificationValue} for {notificationSeconds}
+										seconds, send a notification.
+									</p>
 								</div>
 							</div>
-
-							<div>
-								<h5>Final condition</h5>
-								<p class="transparent-900 mt-1 rounded-md p-2 font-mono">
-									When the {notificationComponent}
-									{notificationData} is {notificationCondition}
-									than {notificationValue} for {notificationSeconds}
-									seconds, send a notification.
-								</p>
-							</div>
-						</div>
-					</ModularDialog>
+						</ModularDialog>
+					</div>
 				</div>
-			</div>
+			{/if}
 		</div>
 	{/if}
 </div>
