@@ -173,14 +173,14 @@ public class Server {
 
 		// Send last 60s and last 60 minutes data
 		await Task.Run(async () => {
-			var secondsList = Program.Database.SelectSecondsData().Where((x, i) => (i + 1) % 2 == 0).ToList();
+			var secondsList = Program.Database.SelectSecondsData();
 
 			for (int i = 0; i < secondsList.Count; i++) {
 				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 			}
 
-			var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 2 == 0).ToList();
+			var minutesList = Program.Database.SelectMinutesData();
 			if (minutesList.Count > 0) {
 				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
 				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);

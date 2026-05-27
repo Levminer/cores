@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace service;
+
 public class RTCServer {
 	internal static EzRTCHost EzRTCHost = new(new Uri($"wss://{Program.Settings.connectionURL ?? "rtc-usw.coresmonitor.com"}/one-to-many"), Program.Settings.connectionCode, new List<RTCIceServer> { new RTCIceServer { urls = "stun:stun.cloudflare.com:3478" } });
 	internal static bool stop = false;
@@ -19,13 +20,13 @@ public class RTCServer {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 
 				if (data.readyState == RTCDataChannelState.open) {
-					var secondsList = Program.Database.SelectSecondsData().Where((x, i) => (i + 1) % 2 == 0).ToList();
+					var secondsList = Program.Database.SelectSecondsData();
 
 					for (int i = 0; i < secondsList.Count; i++) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
 					}
 
-					var minutesList = Program.Database.SelectMinutesData().Where((x, i) => (i + 1) % 2 == 0).ToList();
+					var minutesList = Program.Database.SelectMinutesData();
 					if (minutesList.Count > 0) {
 						data.send(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
 

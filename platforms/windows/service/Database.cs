@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace service;
+
 public class Database {
 	internal static SqliteConnection connection = null;
 	public void Start() {
@@ -31,6 +32,8 @@ public class Database {
 		command.ExecuteNonQuery();
 		command.CommandText = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
 		command.ExecuteNonQuery();
+		command.CommandText = "CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
+		command.ExecuteNonQuery();
 	}
 
 	public void Cleanup() {
@@ -39,12 +42,14 @@ public class Database {
 		command.ExecuteNonQuery();
 		command.CommandText = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
 		command.ExecuteNonQuery();
+		command.CommandText = "DELETE FROM data WHERE timestamp < datetime('now', '-12 hours') AND id NOT IN (SELECT id FROM data ORDER BY timestamp DESC LIMIT 120);";
+		command.ExecuteNonQuery();
 	}
 
-	public void InsertSecondsData(API data) {
+	public void InsertData(API data) {
 		try {
 			using var insertCommand = connection.CreateCommand();
-			insertCommand.CommandText = "INSERT INTO seconds_data (data) VALUES (@data);";
+			insertCommand.CommandText = "INSERT INTO data (data) VALUES (@data);";
 			var param = insertCommand.CreateParameter();
 			param.ParameterName = "@data";
 			param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
@@ -52,28 +57,13 @@ public class Database {
 			insertCommand.ExecuteNonQuery();
 		}
 		catch (Exception ex) {
-			Log.Error(ex, "Error inserting seconds data");
-		}
-	}
-
-	public void InsertMinutesData(API data) {
-		try {
-			using var insertCommand = connection.CreateCommand();
-			insertCommand.CommandText = "INSERT INTO minutes_data (data) VALUES (@data);";
-			var param = insertCommand.CreateParameter();
-			param.ParameterName = "@data";
-			param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
-			insertCommand.Parameters.Add(param);
-			insertCommand.ExecuteNonQuery();
-		}
-		catch (Exception ex) {
-			Log.Error(ex, "Error inserting minutes data");
+			Log.Error(ex, "Error inserting data");
 		}
 	}
 
 	public List<JsonNode> SelectSecondsData() {
 		using var selectCommand = connection.CreateCommand();
-		selectCommand.CommandText = "SELECT data, timestamp FROM seconds_data ORDER BY timestamp DESC LIMIT 60;";
+		selectCommand.CommandText = "SELECT data FROM data ORDER BY timestamp DESC LIMIT 60;";
 		using var reader = selectCommand.ExecuteReader();
 
 		var jsonList = new List<JsonNode>();
@@ -93,7 +83,19 @@ public class Database {
 
 	public List<JsonNode> SelectMinutesData() {
 		using var selectCommand = connection.CreateCommand();
-		selectCommand.CommandText = "SELECT data, timestamp FROM minutes_data ORDER BY timestamp DESC LIMIT 60;";
+		selectCommand.CommandText = @"
+			WITH config(window_seconds) AS (SELECT @window_seconds)
+			SELECT data
+			FROM data, config
+			WHERE id IN (
+				SELECT MIN(id)
+				FROM data, config
+				WHERE timestamp >= datetime('now', '-24 hours')
+				GROUP BY strftime('%s', timestamp) / window_seconds
+			)
+			ORDER BY timestamp ASC;
+		";
+		selectCommand.Parameters.AddWithValue("@window_seconds", 900);
 		using var reader = selectCommand.ExecuteReader();
 
 		var jsonList = new List<JsonNode>();
@@ -107,7 +109,6 @@ public class Database {
 			}
 		}
 
-		jsonList.Reverse();
 		return jsonList;
 	}
 }

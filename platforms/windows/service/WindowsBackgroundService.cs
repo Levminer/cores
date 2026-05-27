@@ -47,16 +47,6 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			}, backgroundTaskToken));
 		}
 
-		// Store last 60 minutes statistics
-		// TODO: Should take the avg. of the last 60s
-		backgroundTasks.Add(StartSupervisedTask("Database.InsertMinutesData", async token => {
-			while (!token.IsCancellationRequested) {
-				Program.Database.InsertMinutesData(HardwareInfo.API);
-
-				await Task.Delay(TimeSpan.FromSeconds(60), token);
-			}
-		}, backgroundTaskToken));
-
 		// Cleanup old data
 		backgroundTasks.Add(StartSupervisedTask("Database.Cleanup", async token => {
 			while (!token.IsCancellationRequested) {
@@ -75,7 +65,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 
 				HardwareInfo.Refresh();
 
-				Program.Database.InsertSecondsData(HardwareInfo.API);
+				Program.Database.InsertData(HardwareInfo.API);
 
 				// Wait for configured interval and account for processing time
 				await Task.Delay(TimeSpan.FromMilliseconds((Program.Settings.interval * 1000) - 300), stoppingToken);
