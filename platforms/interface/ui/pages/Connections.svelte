@@ -208,7 +208,7 @@
 								</Dialog.Trigger>
 							{/snippet}
 							{#snippet confirmButton()}
-								<Dialog.Close onclick={() => addNetworkDevice()} class="smallButton">
+								<Dialog.Close onclick={() => createNotification()} class="smallButton">
 									<Plus class="h-5 w-5" />
 									Add event
 								</Dialog.Close>
@@ -251,12 +251,12 @@
 								<div class="flex flex-row gap-3">
 									<div class="w-1/2">
 										<h5>Value <span class="text-red-500">*</span></h5>
-										<input bind:value={notificationValue} class="input mt-1 w-44" type="text" />
+										<input bind:value={notificationValue} class="input mt-1 w-44" type="number" />
 									</div>
 
 									<div class="w-1/2">
 										<h5>Seconds <span class="text-red-500">*</span></h5>
-										<input bind:value={notificationSeconds} class="input mt-1 w-44" type="text" />
+										<input bind:value={notificationSeconds} class="input mt-1 w-44" type="number" />
 									</div>
 								</div>
 
@@ -271,6 +271,35 @@
 								</div>
 							</div>
 						</ModularDialog>
+					</div>
+
+					<div class="mt-5 flex w-full flex-col gap-5">
+						{#each $settings.notifications as item, i}
+							<div class="flex w-full flex-row flex-wrap items-center justify-between gap-3">
+								<div class="flex flex-row flex-wrap gap-3">
+									<div>
+										<p class="transparent-900 mt-1 rounded-md p-2 font-mono">
+											When the {item.json}
+											is {item.condition}
+											than {item.value} for {item.seconds}
+											seconds, send a notification.
+										</p>
+									</div>
+								</div>
+
+								<div class="flex flex-row flex-wrap gap-3">
+									<button
+										class="button"
+										onclick={() => {
+											deleteNotification(i)
+										}}
+									>
+										<Trash2 />
+										Delete
+									</button>
+								</div>
+							</div>
+						{/each}
 					</div>
 				</div>
 			{/if}
@@ -335,6 +364,26 @@
 				json = "gpu.cards[0].maxLoad"
 			}
 		}
+
+		const settings = getSettings()
+
+		settings.notifications = [
+			...settings.notifications,
+			{
+				json: json,
+				condition: notificationCondition,
+				value: parseInt(notificationValue),
+				seconds: parseInt(notificationSeconds),
+			},
+		]
+
+		setSettings(settings)
+	}
+
+	const deleteNotification = (index: number) => {
+		const settings = getSettings()
+		settings.notifications.splice(index, 1)
+		setSettings(settings)
 	}
 
 	onMount(async () => {
