@@ -42,7 +42,9 @@ public class Database {
 		command.ExecuteNonQuery();
 		command.CommandText = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
 		command.ExecuteNonQuery();
-		command.CommandText = "DELETE FROM data WHERE timestamp < datetime('now', '-12 hours') AND id NOT IN (SELECT id FROM data ORDER BY timestamp DESC LIMIT 120);";
+
+		// Keep the most recent 120 entries, and also keep at least one entry per 15-minute interval for the last 24 hours, but delete entries older than 1 hour that are not needed for the 15-minute intervals
+		command.CommandText = "DELETE FROM data WHERE id NOT IN (SELECT id FROM data ORDER BY id DESC LIMIT 120) AND id NOT IN (SELECT MIN(id) FROM data WHERE timestamp >= datetime('now', '-24 hours') GROUP BY strftime('%s', timestamp) / 900) AND timestamp < datetime('now', '-1 hour');";
 		command.ExecuteNonQuery();
 	}
 

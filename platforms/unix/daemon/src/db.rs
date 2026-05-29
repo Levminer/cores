@@ -19,7 +19,8 @@ pub fn seed(conn: &Connection) {
 pub fn cleanup(conn: &Connection) {
     let sql1 = "DELETE FROM seconds_data WHERE id NOT IN (SELECT id FROM seconds_data ORDER BY timestamp DESC LIMIT 60);";
     let sql2 = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
-    let sql3 = "DELETE FROM data WHERE timestamp < datetime('now', '-24 hours') AND id NOT IN (SELECT id FROM data ORDER BY timestamp DESC LIMIT 120);";
+    // Keep the most recent 120 entries, and also keep at least one entry per 15-minute interval for the last 24 hours, but delete entries older than 1 hour that are not needed for the 15-minute intervals
+    let sql3 = "DELETE FROM data WHERE id NOT IN (SELECT id FROM data ORDER BY id DESC LIMIT 120) AND id NOT IN (SELECT MIN(id) FROM data WHERE timestamp >= datetime('now', '-24 hours') GROUP BY strftime('%s', timestamp) / 900) AND timestamp < datetime('now', '-1 hour');";
 
     conn.execute_batch(sql1).expect("Failed to cleanup table");
     conn.execute_batch(sql2).expect("Failed to cleanup table");
