@@ -15,6 +15,7 @@ RUN npm run build:web
 # --- Production Stage ---
 FROM node:22-alpine
 WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/platforms/interface/web/build ./build
 EXPOSE 3000
 CMD ["node", "build"]
