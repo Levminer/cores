@@ -8,4 +8,7 @@ export default defineConfig({
 			allow: ["../.."],
 		},
 	},
+	ssr: {
+		noExternal: ["expo-server-sdk"],
+	},
 })
