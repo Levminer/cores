@@ -7,10 +7,6 @@ using System.Text.Json.Serialization;
 
 namespace service;
 
-internal class HardwareStats {
-	public List<string> seconds = new();
-	public List<string> minutes = new();
-}
 
 [SupportedOSPlatform("Windows")]
 public class Program {
@@ -23,7 +19,6 @@ public class Program {
 		NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
 		WriteIndented = true,
 	};
-	internal static HardwareStats HardwareStats = new();
 	internal static Settings Settings = new();
 	internal static Database Database = new();
 

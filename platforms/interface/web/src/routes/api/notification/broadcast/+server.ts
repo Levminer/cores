@@ -19,11 +19,9 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		return Response.json({ message: "Title and body are required" }, { status: 400, headers })
 	}
 
-	let supabaseClient
+	const supabaseClient = createClient<Database>(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
 
-	if (apiKey == privateEnv.API_KEY) {
-		supabaseClient = createClient<Database>(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
-	} else {
+	if (apiKey != privateEnv.API_KEY) {
 		return Response.json({ message: "Unauthorized" }, { status: 401, headers })
 	}
 

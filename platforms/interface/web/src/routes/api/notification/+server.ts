@@ -2,6 +2,7 @@ import type { RequestHandler } from "./$types"
 import { Expo, type ExpoPushMessage } from "expo-server-sdk"
 import { createClient } from "@supabase/supabase-js"
 import { env } from "$env/dynamic/public"
+import { env as privateEnv } from "$env/dynamic/private"
 import type { Database } from "ui"
 
 export const POST: RequestHandler = async ({ url, request }) => {
@@ -9,28 +10,27 @@ export const POST: RequestHandler = async ({ url, request }) => {
 	headers.set("Access-Control-Allow-Origin", "*")
 
 	// get Authorization header
-	const jwt = request.headers.get("Authorization")?.replace("Bearer ", "")
+	const connection_code = request.headers.get("Authorization")?.replace("Bearer ", "")
 
 	// get title and body from request body
 	const { title, body } = await request.json()
 
-	if (!title || !body) {
-		return Response.json({ message: "Title and body are required" }, { status: 400, headers })
+	if (!title || !body || !connection_code) {
+		return Response.json({ message: "Title, body, and connection code are required" }, { status: 400, headers })
 	}
 
-	let supabaseClient
+	const supabaseClient = createClient<Database>(env.PUBLIC_SUPABASE_URL!, privateEnv.SUPABASE_SECRET_KEY!)
 
-	if (jwt) {
-		supabaseClient = createClient<Database>(env.PUBLIC_SUPABASE_URL!, env.PUBLIC_SUPABASE_ANON_KEY!, {
-			accessToken: async () => {
-				return jwt
-			},
-		})
-	} else {
-		return Response.json({ message: "Unauthorized" }, { status: 401, headers })
+	const { data: codeData, error: codeError } = await supabaseClient.from("remote_connection").select().eq("code", connection_code).limit(1).single()
+
+	console.log(codeData, codeError)
+
+	if (codeError || !codeData) {
+		return Response.json({ message: "Invalid connection code" }, { status: 400, headers })
 	}
 
-	const { data, error } = await supabaseClient.from("push_token").select().single()
+	const { data, error } = await supabaseClient.from("push_token").select().eq("user_id", codeData.user_id!).single()
+
 	const expo = new Expo()
 	const messages: ExpoPushMessage[] = []
 
