@@ -1,5 +1,7 @@
 using lib;
 using Serilog;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace service;
 
@@ -8,6 +10,7 @@ public sealed class WindowsBackgroundService : BackgroundService {
 	internal static RTCServer RTCServer = new();
 	internal static Analytics Analytics = new();
 	internal static Server Server = new();
+	private readonly Notification notificationChecker = new();
 
 	private static Task StartSupervisedTask(string taskName, Func<CancellationToken, Task> taskFactory, CancellationToken stoppingToken) {
 		return Task.Run(async () => {
@@ -69,6 +72,30 @@ public sealed class WindowsBackgroundService : BackgroundService {
 
 				// Wait for configured interval and account for processing time
 				await Task.Delay(TimeSpan.FromMilliseconds((Program.Settings.interval * 1000) - 300), stoppingToken);
+
+				// Notifications
+				if (Program.Settings.notifications.Count > 0) {
+					backgroundTasks.RemoveAll(t => t.IsCompleted);
+					notificationChecker.Prune(Program.Settings.notifications);
+
+					var hardwareJson = JsonNode.Parse(JsonSerializer.Serialize(HardwareInfo.API, Program.CompressedSerializerOptions));
+
+					for (var i = 0; i < Program.Settings.notifications.Count; i++) {
+						var notification = Program.Settings.notifications[i];
+
+						if (notificationChecker.ShouldTrigger(hardwareJson, notification)) {
+							Log.Information("Notification fired: {@notification}", notification);
+
+							// Send notification to external API
+							var title = $"Hardware notification";
+							var body = $"{notification.json} was {notification.condition} than {notification.value} for {notification.seconds} seconds.";
+
+							backgroundTasks.Add(StartSupervisedTask($"Notification.Send[{i}]", _ => {
+								return notificationChecker.SendAsync(notification, title, body);
+							}, backgroundTaskToken));
+						}
+					}
+				}
 			}
 		}
 		catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) {
