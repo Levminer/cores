@@ -10,6 +10,8 @@ namespace lib {
 	}
 
 	public class Analytics {
+		private static readonly HttpClient _httpClient = new();
+
 		public static async Task SendEvent(Settings settings) {
 			string url = "https://eu.i.posthog.com/capture/";
 
@@ -20,10 +22,9 @@ namespace lib {
 			};
 
 			try {
-				using var httpClient = new HttpClient();
 				var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-				var response = await httpClient.PostAsync(url, content);
+				var response = await _httpClient.PostAsync(url, content);
 
 				response.EnsureSuccessStatusCode();
 

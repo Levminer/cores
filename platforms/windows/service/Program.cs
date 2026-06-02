@@ -64,7 +64,7 @@ public class Program {
 
 		if (ruleExists.Contains("No rules match the specified criteria.")) {
 			var exe = Path.Join(AppContext.BaseDirectory, "CoresService.exe");
-			var res = Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
+			Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
 		}
 
 		// Load db

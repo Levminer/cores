@@ -152,23 +152,24 @@ public class Commands {
 					var macAddress = netMessage.Data;
 					var port = 9;
 
-					UdpClient client = new UdpClient() { EnableBroadcast = true };
-					client.Connect(IPAddress.Broadcast, port);
+					using (var client = new UdpClient() { EnableBroadcast = true }) {
+						client.Connect(IPAddress.Broadcast, port);
 
-					int counter = 0;
-					byte[] bytes = new byte[102];
+						int counter = 0;
+						byte[] bytes = new byte[102];
 
-					for (int x = 0; x < 6; x++) {
-						bytes[counter++] = 0xFF;
-					}
-
-					for (int macPackets = 0; macPackets < 16; macPackets++) {
-						for (int macBytes = 0; macBytes < 12; macBytes += 2) {
-							bytes[counter++] = byte.Parse(macAddress.Substring(macBytes, 2), NumberStyles.HexNumber);
+						for (int x = 0; x < 6; x++) {
+							bytes[counter++] = 0xFF;
 						}
-					}
 
-					client.Send(bytes, bytes.Length);
+						for (int macPackets = 0; macPackets < 16; macPackets++) {
+							for (int macBytes = 0; macBytes < 12; macBytes += 2) {
+								bytes[counter++] = byte.Parse(macAddress.Substring(macBytes, 2), NumberStyles.HexNumber);
+							}
+						}
+
+						client.Send(bytes, bytes.Length);
+					}
 					break;
 			}
 		}

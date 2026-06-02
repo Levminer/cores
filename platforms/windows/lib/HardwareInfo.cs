@@ -75,6 +75,8 @@ public class HardwareInfo {
 							temp.Priority = -1;
 						}
 
+						var ipProp = ni.GetIPProperties();
+
 						// Mac address
 						var mac = ni.GetPhysicalAddress().ToString();
 						temp.MACAddress = string.Join(":", Enumerable.Range(0, mac.Length)
@@ -86,12 +88,12 @@ public class HardwareInfo {
 						temp.DNS = "N/A";
 						temp.DNSV6 = "N/A";
 
-						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
-							for (int i = 0; i < ni.GetIPProperties().DnsAddresses.Count; i++) {
-								if (temp.DNS == "N/A" && ni.GetIPProperties().DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
-									temp.DNS = ni.GetIPProperties().DnsAddresses[i].ToString();
-								} else if (temp.DNSV6 == "N/A" && ni.GetIPProperties().DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
-									temp.DNSV6 = ni.GetIPProperties().DnsAddresses[i].ToString();
+						if (ipProp.DnsAddresses.Count != 0) {
+							for (int i = 0; i < ipProp.DnsAddresses.Count; i++) {
+								if (temp.DNS == "N/A" && ipProp.DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+									temp.DNS = ipProp.DnsAddresses[i].ToString();
+								} else if (temp.DNSV6 == "N/A" && ipProp.DnsAddresses[i].AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
+									temp.DNSV6 = ipProp.DnsAddresses[i].ToString();
 								}
 							}
 						}
@@ -100,12 +102,12 @@ public class HardwareInfo {
 						temp.Gateway = "N/A";
 						temp.GatewayV6 = "N/A";
 
-						if (ni.GetIPProperties().DnsAddresses.Count != 0) {
-							for (int i = 0; i < ni.GetIPProperties().GatewayAddresses.Count; i++) {
-								if (temp.Gateway == "N/A" && ni.GetIPProperties().GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
-									temp.Gateway = ni.GetIPProperties().GatewayAddresses[i].Address.ToString();
-								} else if (temp.GatewayV6 == "N/A" && ni.GetIPProperties().GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
-									temp.GatewayV6 = ni.GetIPProperties().GatewayAddresses[i].Address.ToString();
+						if (ipProp.GatewayAddresses.Count != 0) {
+							for (int i = 0; i < ipProp.GatewayAddresses.Count; i++) {
+								if (temp.Gateway == "N/A" && ipProp.GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
+									temp.Gateway = ipProp.GatewayAddresses[i].Address.ToString();
+								} else if (temp.GatewayV6 == "N/A" && ipProp.GatewayAddresses[i].Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) {
+									temp.GatewayV6 = ipProp.GatewayAddresses[i].Address.ToString();
 								}
 							}
 						}
@@ -115,7 +117,7 @@ public class HardwareInfo {
 						temp.IPAddressV6 = "N/A";
 						temp.Mask = "N/A";
 
-						foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses) {
+						foreach (UnicastIPAddressInformation ip in ipProp.UnicastAddresses) {
 							if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork) {
 								temp.IPAddress = ip.Address.ToString();
 								temp.Mask = ip.IPv4Mask.ToString();
@@ -420,8 +422,8 @@ public class HardwareInfo {
 						try {
 							API.GPU.Cards[cardIndex].Memory[0] = API.GPU.Cards[cardIndex].Memory[4];
 						}
-						catch (Exception) {
-							Log.Error("Failed to set GPU memory on Intel ARC");
+						catch (Exception ex) {
+							Log.Error(ex, "Failed to set GPU memory on Intel ARC");
 						}
 					}
 
@@ -741,8 +743,8 @@ public class HardwareInfo {
 								}
 							}
 						}
-						catch (Exception) {
-							Log.Error("Failed to calculate fan speed");
+						catch (Exception ex) {
+							Log.Error(ex, "Failed to calculate fan speed");
 						}
 					}
 				}
@@ -846,8 +848,8 @@ public class HardwareInfo {
 					// GPU info
 					API.GPU.Info = Commands.GetGPUInfo();
 				}
-				catch (Exception) {
-					Log.Error("Failed to get GPU info");
+				catch (Exception ex) {
+					Log.Error(ex, "Failed to get GPU info");
 				}
 
 				try {
@@ -857,8 +859,8 @@ public class HardwareInfo {
 					// hostname
 					API.System.OS.Hostname = System.Net.Dns.GetHostName();
 				}
-				catch (Exception) {
-					Log.Error("Failed to get OS and hostname");
+				catch (Exception ex) {
+					Log.Error(ex, "Failed to get OS and hostname");
 				}
 
 				// RAM modules

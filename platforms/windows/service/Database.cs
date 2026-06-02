@@ -19,6 +19,8 @@ public class Database {
 			// Fall back to in-memory database if the file cannot be opened
 			connection = new SqliteConnection("DataSource=:memory:");
 			connection.Open();
+
+			Log.Warning("Failed to open database file, using in-memory database instead");
 		}
 	}
 
