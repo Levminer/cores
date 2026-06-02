@@ -75,6 +75,7 @@ settings.subscribe(async (data) => {
 			}),
 			headers: {
 				"Content-Type": "application/json",
+				"Authorization": `Bearer ${data.connectionCode}`,
 			},
 		})
 	}

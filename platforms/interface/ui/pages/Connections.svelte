@@ -462,6 +462,7 @@
 				}),
 				headers: {
 					"Content-Type": "application/json",
+					"Authorization": `Bearer ${$settings.connectionCode}`,
 				},
 			})
 

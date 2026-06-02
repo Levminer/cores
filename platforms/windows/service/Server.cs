@@ -44,9 +44,32 @@ public class Server {
 		}
 	}
 
+	static bool IsAuthorized(HttpListenerContext context) {
+		var authHeader = context.Request.Headers["Authorization"];
+
+		if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)) {
+			return false;
+		}
+
+		var token = authHeader["Bearer ".Length..].Trim();
+
+		if (token == Program.Settings.connectionCode) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	static async Task ProcessRequestAsync(HttpListenerContext context, HardwareInfo hardwareInfo) {
 		if (context.Request.HttpMethod == "OPTIONS") {
 			await HandleOptionsRequest(context);
+			return;
+		}
+
+		if (context.Request.RawUrl == "/post" && !IsAuthorized(context)) {
+			context.Response.StatusCode = 401;
+			context.Response.Headers.Add("WWW-Authenticate", "Bearer");
+			context.Response.Close();
 			return;
 		}
 
@@ -82,7 +105,7 @@ public class Server {
 	static async Task HandleOptionsRequest(HttpListenerContext context) {
 		context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 		context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-		context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+		context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization");
 		context.Response.Headers.Add("Access-Control-Max-Age", "86400"); // Cache the preflight response for 24 hours
 
 		context.Response.StatusCode = 200; // Set the status code to OK
@@ -100,7 +123,15 @@ public class Server {
 		await SendResponse(context, buffer, "application/json");
 	}
 
+	private const int MaxPostBodyBytes = 1024 * 1024; // 1 MB
+
 	static async Task HandlePostRequest(HttpListenerContext context, HardwareInfo hardwareInfo) {
+		if (context.Request.ContentLength64 > MaxPostBodyBytes) {
+			context.Response.StatusCode = 413;
+			context.Response.Close();
+			return;
+		}
+
 		// Read the request body
 		using (var reader = new StreamReader(context.Request.InputStream)) {
 			string requestBody = await reader.ReadToEndAsync();
@@ -151,7 +182,7 @@ public class Server {
 	static async Task SendResponse(HttpListenerContext context, byte[] buffer, string contentType, int statusCode = 200) {
 		context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 		context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-		context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+		context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization");
 		context.Response.ContentType = contentType;
 		context.Response.ContentLength64 = buffer.Length;
 		context.Response.StatusCode = statusCode;
