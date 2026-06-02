@@ -1192,7 +1192,7 @@ dependencies = [
 
 [[package]]
 name = "cores"
-version = "0.40.0"
+version = "0.41.0"
 dependencies = [
  "directories",
  "hardwareinfo",
@@ -1217,7 +1217,7 @@ dependencies = [
 
 [[package]]
 name = "coresd"
-version = "0.40.0"
+version = "0.41.0"
 dependencies = [
  "axum",
  "axum-extra",
