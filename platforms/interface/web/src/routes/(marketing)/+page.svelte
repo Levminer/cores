@@ -56,9 +56,7 @@
 
 				<div class="flex flex-col items-center justify-center gap-5">
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div
-							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<House />
@@ -73,9 +71,7 @@
 							</div>
 						</div>
 
-						<div
-							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<ChartLine />
@@ -86,19 +82,12 @@
 								<h5>See detailed statistics about every hardware component in your system.</h5>
 							</div>
 							<div class="rounded-xl bg-black p-3">
-								<img
-									class="rounded"
-									width="500"
-									src="https://cdn.levminer.com/cores/stats.png"
-									alt="web dashboard"
-								/>
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/stats.png" alt="web dashboard" />
 							</div>
 						</div>
 					</div>
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div
-							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Feather />
@@ -110,9 +99,7 @@
 							</div>
 						</div>
 
-						<div
-							class="hover:border-cores-min w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Webhook />
@@ -141,9 +128,7 @@
 
 				<div class="flex flex-col items-center justify-center gap-5">
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div
-							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Radio />
@@ -158,9 +143,7 @@
 							</div>
 						</div>
 
-						<div
-							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Server />
@@ -176,9 +159,7 @@
 						</div>
 					</div>
 					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div
-							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Moon />
@@ -190,9 +171,7 @@
 							</div>
 						</div>
 
-						<div
-							class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in hover:border-orange-400 sm:w-full sm:p-4"
-						>
+						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
 							<div class="mb-5 flex items-center gap-3">
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<Power />
@@ -362,7 +341,7 @@
 								</a>
 							</div>
 							<div class="border-t-2 pt-6">
-								<h3 class="text-lg">System requirements: iOS 15.1 or later, Android 7.0 or later</h3>
+								<h3 class="text-lg">System requirements: iOS 17 or later, Android 8.0 or later</h3>
 							</div>
 						{:else}
 							<h3>Download and install the app with the installer.</h3>
@@ -426,7 +405,7 @@
 								<div class="flex flex-col items-end">
 									<div class="flex w-full justify-center md:justify-end">
 										<h2 class="text-center text-3xl font-semibold">
-											$7.99 <p class="text-xs text-gray-200">One time purchase</p>
+											$9.99 <p class="text-xs text-gray-200">One time purchase</p>
 										</h2>
 									</div>
 
@@ -505,12 +484,20 @@
 
 				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>How can I activate my license key?</h4>
-					<h3>First download the app, log in with your Google account and then you can activate your license key on the next screen.</h3>
+					<h3>
+						First download the app, log in with your Google or Apple account and then you can activate your license key on the next
+						screen.
+					</h3>
 				</div>
 
 				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>Does my hardware support Cores?</h4>
 					<h3>Most hardware released in the last 10 years is probably supported by Cores. You can try out the free trial for 7 days.</h3>
+				</div>
+
+				<div class="rounded-xl bg-gray-700 p-5">
+					<h4>How can I access my computer remotely?</h4>
+					<h3>Remote monitoring is powered by WebRTC and E2E encrypted. You can access you computer with a unique connection code.</h3>
 				</div>
 
 				<div class="rounded-xl bg-gray-700 p-5">

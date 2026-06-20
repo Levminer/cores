@@ -70,7 +70,7 @@
 					<div class="flex flex-col items-end">
 						<div>
 							<h2 class="text-center text-3xl font-semibold">
-								$7.99 <p class="text-xs text-gray-200">One time purchase</p>
+								$9.99 <p class="text-xs text-gray-200">One time purchase</p>
 							</h2>
 						</div>
 						<div>
