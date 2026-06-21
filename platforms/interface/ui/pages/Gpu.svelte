@@ -14,8 +14,10 @@
 						<div class="mt-5 select-text">
 							<h3>Vendor: {card.name?.split(" ")[0] ?? "N/A"}</h3>
 							<h3>Name: {card.name ?? "N/A"}</h3>
-							<h3>GPU memory: {card.memory.length > 2 ? Math.round(card.memory[2]?.value ?? 0) : "N/A"} GB</h3>
-							<h3>Driver: {$hardwareInfo.gpu.info}</h3>
+							{#if $hardwareInfo.gpu.info != "N/A"}
+								<h3>GPU memory: {card.memory.length > 2 ? Math.round(card.memory[2]?.value ?? 0) : "N/A"} GB</h3>
+								<h3>Driver: {$hardwareInfo.gpu.info}</h3>
+							{/if}
 						</div>
 					{/each}
 				{:else}
@@ -68,33 +70,35 @@
 					</ChartTile>
 
 					<!-- gpu memory usage -->
-					<ChartTile
-						title="Memory Usage"
-						item={item.name}
-						bind:minutes
-						props={{
-							id: `GPU_Memory_Usage_${i}`,
-							statistics: [
-								{
-									label: "Memory Usage",
-									color: "min",
-									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].memory)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].memory),
-								},
-							],
-							time: minutes ? "m" : "s",
-							unit: " GB",
-							min: 0,
-							timestamp: minutes
-								? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
-								: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
-						}}
-					>
-						{#snippet icon()}
-							<Memory height={24} width={24} />
-						{/snippet}
-					</ChartTile>
+					{#if item.memory.length > 0}
+						<ChartTile
+							title="Memory Usage"
+							item={item.name}
+							bind:minutes
+							props={{
+								id: `GPU_Memory_Usage_${i}`,
+								statistics: [
+									{
+										label: "Memory Usage",
+										color: "min",
+										data: minutes
+											? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].memory)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].memory),
+									},
+								],
+								time: minutes ? "m" : "s",
+								unit: " GB",
+								min: 0,
+								timestamp: minutes
+									? $hardwareStatistics.minutes.map((value) => value?.timestamp ?? new Date().toISOString())
+									: $hardwareStatistics.seconds.map((value) => value?.timestamp ?? new Date().toISOString()),
+							}}
+						>
+							{#snippet icon()}
+								<Memory height={24} width={24} />
+							{/snippet}
+						</ChartTile>
+					{/if}
 				{/each}
 			{/if}
 		</div>
@@ -162,7 +166,8 @@
 					</ChartTile>
 
 					<!-- gpu fan usage -->
-					<ChartTile
+					{#if item.fan.length > 0}
+						 <ChartTile
 						title="Fan Speed"
 						item={item.name}
 						bind:minutes
@@ -189,6 +194,7 @@
 							<Fan />
 						{/snippet}
 					</ChartTile>
+					{/if}
 
 					<!-- gpu clock speed -->
 					<ChartTile

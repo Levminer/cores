@@ -26,16 +26,16 @@
 					</div>
 					<h2>Refresh interval</h2>
 				</div>
-				<h3>How often does Cores refreshes the sensors and displays the data.</h3>
+				<h3>How often does Cores refresh the sensors and display the data.</h3>
 			</div>
 			<div class="flex flex-col items-start gap-3">
 				<Select
 					options={[
-						{ value: "1", label: "1s" },
-						{ value: "2", label: "2s" },
 						{ value: "3", label: "3s" },
 						{ value: "5", label: "5s" },
 						{ value: "15", label: "15s" },
+						{ value: "30", label: "30s" },
+						{ value: "60", label: "60s" },
 					]}
 					setting={"interval"}
 				/>

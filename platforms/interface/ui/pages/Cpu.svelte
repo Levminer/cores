@@ -12,7 +12,9 @@
 				<div class="select-text">
 					<h3>Vendor: {$hardwareInfo.cpu.info[0].manufacturerName.replaceAll("(R)", "").replaceAll("Corporation", "")}</h3>
 					<h3>Name: {$hardwareInfo.cpu.name}</h3>
-					<h3>Base speed: {($hardwareInfo.cpu.info[0].currentSpeed / 1000).toFixed(1)} GHz</h3>
+					{#if $hardwareInfo.cpu.info[0]?.currentSpeed > 0}
+						 <h3>Base speed: {($hardwareInfo.cpu.info[0].currentSpeed / 1000).toFixed(1)} GHz</h3>
+					{/if}
 					<h3>Cores/Threads: {$hardwareInfo.cpu.info[0].coreCount} C/{$hardwareInfo.cpu.info[0].threadCount} T</h3>
 				</div>
 			</div>
