@@ -61,13 +61,13 @@
 								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
 									<House />
 								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Informative home screen</h4>
+								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Customizable home screen</h4>
 							</div>
 							<div class="select-text">
-								<h5>Keep track of every component in one place.</h5>
+								<h5>Customizable tiles to display the information you need.</h5>
 							</div>
 							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/home.png" alt="web dashboard" />
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/cores_landing_home.png" alt="web dashboard" />
 							</div>
 						</div>
 
@@ -79,10 +79,10 @@
 								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Statistics</h4>
 							</div>
 							<div class="select-text">
-								<h5>See detailed statistics about every hardware component in your system.</h5>
+								<h5>Detailed statistics about every hardware component in your system.</h5>
 							</div>
 							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/stats.png" alt="web dashboard" />
+								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/cores_landing_cpu.png" alt="web dashboard" />
 							</div>
 						</div>
 					</div>
@@ -497,7 +497,7 @@
 
 				<div class="rounded-xl bg-gray-700 p-5">
 					<h4>How can I access my computer remotely?</h4>
-					<h3>Remote monitoring is powered by WebRTC and E2E encrypted. You can access you computer with a unique connection code.</h3>
+					<h3>Remote monitoring is powered by WebRTC and E2E encrypted. You can access your computer with a unique connection code.</h3>
 				</div>
 
 				<div class="rounded-xl bg-gray-700 p-5">
