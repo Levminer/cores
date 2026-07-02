@@ -22,7 +22,7 @@
 	{/if}
 
 	{#if step === "login"}
-		<div class="flex w-full">
+		<div class="flex w-full flex-col items-center justify-center">
 			<Login
 				googleLoginFn={() => {
 					login("google")
@@ -31,6 +31,15 @@
 					login("apple")
 				}}
 			/>
+
+			<button
+				class="mt-5"
+				onclick={() => {
+					takeStep("pricing")
+				}}
+			>
+				Skip
+			</button>
 		</div>
 	{/if}
 
@@ -301,6 +310,7 @@
 	import { open } from "@tauri-apps/plugin-shell"
 	import { appState } from "../stores/state.ts"
 	import { settings } from "../stores/settings.ts"
+	import { localSettings } from "../stores/localSettings.ts"
 	import { Dialog } from "bits-ui"
 	import { Home, CircleCheck, Settings, Check, ShoppingCart, Mail, MonitorSmartphone, CircleX, Globe, Smartphone } from "lucide-svelte"
 	import { onMount } from "svelte"
@@ -364,7 +374,7 @@
 		// }
 
 		// check if date is more than a week ago
-		const licenseActivated = user?.created_at ? new Date(user.created_at) : new Date()
+		const licenseActivated = user?.created_at ? new Date(user.created_at) : new Date($localSettings.trialStartDate)
 		const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
 
 		posthog.capture("trial")

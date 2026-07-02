@@ -163,7 +163,7 @@
 				try {
 					// Unix check
 					const systemInfo: SystemInfo = await invoke("system_info")
-					if (systemInfo.osName !== "Windows") {
+					if (systemInfo.osName !== "Windows" && systemInfo.osName !== "macOS") {
 						$appState.showMenu = true
 						$appState.plan = "unix"
 						goto("/home")

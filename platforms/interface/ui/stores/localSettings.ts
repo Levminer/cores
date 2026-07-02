@@ -3,6 +3,7 @@ import { writable, get } from "svelte/store"
 
 const localSettingsScheme = z.object({
 	newsDate: z.string().default("2020-01-01T10:10:10.100Z"),
+	trialStartDate: z.string().default(new Date().toISOString()),
 	colors: z
 		.object({
 			min: z.string().default("#35cbfd"),
