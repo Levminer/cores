@@ -3,7 +3,7 @@
 >
 	<div class="mb-10">
 		<h2>Login or create an account</h2>
-		<h3>Continue with your Google or Apple account to use Cores for free.</h3>
+		<h3>Continue with your Google or Apple account to monitor your device remotely.</h3>
 	</div>
 
 	<div class="flex flex-col gap-1">

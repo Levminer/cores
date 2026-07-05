@@ -47,7 +47,7 @@
 		<div class="mx-auto flex w-[50%] flex-col justify-center rounded-2xl bg-black/30 p-10 shadow-md backdrop-blur-xl sm:w-[95%]">
 			<div class="text-center">
 				<h2>Purchase Cores</h2>
-				<h3>Purchase Cores to unlock all features and support the development.</h3>
+				<h3>Purchase Cores to monitor up to 5 devices remotely.</h3>
 			</div>
 			<div class="flex w-full flex-col gap-3 rounded-xl p-8 sm:p-4">
 				<div

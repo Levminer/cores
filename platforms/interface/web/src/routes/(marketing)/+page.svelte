@@ -47,68 +47,67 @@
 
 	<div class="mx-auto mb-20 w-11/12 space-y-20 sm:w-full">
 		<div id="features" class="flex justify-center rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 py-20">
-			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
+			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-3 px-20 sm:w-full sm:px-2 md:flex-nowrap">
 				<div class="mb-10 text-center">
 					<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
 						Monitor any system with ease
 					</h2>
 				</div>
 
-				<div class="flex flex-col items-center justify-center gap-5">
-					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<House />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Customizable home screen</h4>
+				<div class="flex w-full flex-col gap-3 md:flex-row">
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<House />
 							</div>
-							<div class="select-text">
-								<h5>Customizable tiles to display the information you need.</h5>
-							</div>
-							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/cores_landing_home.png" alt="web dashboard" />
-							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Customizable home screen</h4>
 						</div>
-
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<ChartLine />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Statistics</h4>
-							</div>
-							<div class="select-text">
-								<h5>Detailed statistics about every hardware component in your system.</h5>
-							</div>
-							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/cores_landing_cpu.png" alt="web dashboard" />
-							</div>
+						<div class="select-text">
+							<h5>Customizable tiles to display the information you need.</h5>
+						</div>
+						<div class="rounded-xl bg-black p-3">
+							<img class="rounded" width="1000" src="https://cdn.levminer.com/cores/1.png" alt="home screen" />
 						</div>
 					</div>
-					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Feather />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
-							</div>
-							<div class="select-text">
-								<h5>Cores runs as a background service with minimal resource usage.</h5>
-							</div>
-						</div>
 
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Webhook />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">API Access</h4>
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<ChartLine />
 							</div>
-							<div class="select-text">
-								<h5>You can access the REST or Websocket API to build your own integration.</h5>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Detailed Statistics</h4>
+						</div>
+						<div class="select-text">
+							<h5>Detailed statistics about every hardware component in your system.</h5>
+						</div>
+						<div class="rounded-xl bg-black p-3">
+							<img class="rounded" width="1000" src="https://cdn.levminer.com/cores/2.png" alt="detailed statistics" />
+						</div>
+					</div>
+				</div>
+
+				<div class="flex w-full flex-col gap-3 md:flex-row">
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4 md:w-1/2">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Feather />
 							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Lightweight</h4>
+						</div>
+						<div class="select-text">
+							<h5>Cores runs as a background service with minimal resource usage.</h5>
+						</div>
+					</div>
+
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4 md:w-1/2">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Server />
+							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">All your devices in one place</h4>
+						</div>
+						<div class="select-text">
+							<h5>You can monitor all your devices easily from a central place.</h5>
 						</div>
 					</div>
 				</div>
@@ -116,71 +115,67 @@
 		</div>
 
 		<div id="features2" class="flex justify-center rounded-xl bg-gradient-to-r from-red-500 to-orange-500 py-20">
-			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-10 px-20 sm:w-full sm:px-2 md:flex-nowrap">
-				<div class="flex w-full flex-col items-center justify-center">
-					<!-- card 0 -->
-					<div class="mb-10 text-center">
-						<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
-							Easy Remote Access
-						</h2>
+			<div class="flex select-text flex-col flex-wrap items-center justify-between gap-3 px-20 sm:w-full sm:px-2 md:flex-nowrap">
+				<div class="mb-10 text-center">
+					<h2 class="mb-5 text-balance bg-gradient-to-r bg-clip-text text-center text-4xl font-extrabold text-white md:text-6xl">
+						Easy Remote Access
+					</h2>
+				</div>
+
+				<div class="flex w-full flex-col gap-3 md:flex-row">
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Radio />
+							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
+						</div>
+						<div class="select-text">
+							<h5>You can monitor your system from any browser. No subscriptions.</h5>
+						</div>
+						<div class="rounded-xl bg-black p-3">
+							<img class="rounded" width="1000" src="https://cdn.levminer.com/cores/3.png" alt="web dashboard" />
+						</div>
+					</div>
+
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Bell />
+							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Hardware notifications</h4>
+						</div>
+						<div class="select-text">
+							<h5>You can get notifications when your hardware is under heavy load or overheating.</h5>
+						</div>
+						<div class="rounded-xl bg-black p-3">
+							<img class="rounded" width="1000" src="https://cdn.levminer.com/cores/4.png" alt="web dashboard" />
+						</div>
 					</div>
 				</div>
 
-				<div class="flex flex-col items-center justify-center gap-5">
-					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Radio />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Easy Remote Monitoring</h4>
+				<div class="flex w-full flex-col gap-3 md:flex-row">
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4 md:w-1/2">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Moon />
 							</div>
-							<div class="select-text">
-								<h5>You can monitor your system from any browser. No subscriptions.</h5>
-							</div>
-							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/home2.png" alt="web dashboard" />
-							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Left In A Hurry?</h4>
 						</div>
-
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Server />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">All your devices in one place</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can monitor all your devices easily from a central place.</h5>
-							</div>
-							<div class="rounded-xl bg-black p-3">
-								<img class="rounded" width="500" src="https://cdn.levminer.com/cores/devices.png" alt="web dashboard" />
-							</div>
+						<div class="select-text">
+							<h5>You can shut down or put your computer to sleep remotely.</h5>
 						</div>
 					</div>
-					<div class="flex w-full flex-col gap-5 md:flex-row">
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Moon />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Left In A Hurry?</h4>
-							</div>
-							<div class="select-text">
-								<h5>You can shut down or put your computer to sleep remotely.</h5>
-							</div>
-						</div>
 
-						<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:w-full sm:p-4">
-							<div class="mb-5 flex items-center gap-3">
-								<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
-									<Power />
-								</div>
-								<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote Start</h4>
+					<div class="w-full rounded-xl border-2 border-gray-700 bg-gray-900 p-8 duration-150 ease-in sm:p-4 md:w-1/2">
+						<div class="mb-5 flex items-center gap-3">
+							<div class="transparent-900 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-r p-3 sm:p-2">
+								<Power />
 							</div>
-							<div class="select-text">
-								<h5>If you have other devices on your network, you can start them remotely with Wake On LAN.</h5>
-							</div>
+							<h4 class="bg-gradient-to-r bg-clip-text font-extrabold text-transparent">Remote Start</h4>
+						</div>
+						<div class="select-text">
+							<h5>If you have other devices on your network, you can start them remotely with Wake On LAN.</h5>
 						</div>
 					</div>
 				</div>
@@ -540,6 +535,7 @@
 		Gamepad2,
 		House,
 		TabletSmartphone,
+		Bell,
 	} from "lucide-svelte"
 	import { onDestroy, onMount } from "svelte"
 	import { Microsoft, Ubuntu, Apple } from "svelte-bootstrap-icons"
