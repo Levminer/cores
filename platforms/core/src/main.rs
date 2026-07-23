@@ -19,7 +19,19 @@ struct GlobalState {
     child: Option<CommandChild>,
 }
 
+#[cfg(target_os = "linux")]
+fn nvidia_driver_loaded() -> bool {
+    std::path::Path::new("/proc/driver/nvidia/version").exists()
+}
+
 fn main() {
+    #[cfg(target_os = "linux")]
+    if nvidia_driver_loaded() {
+        unsafe {
+            std::env::set_var("WEBKIT_DMABUF_RENDERER_FORCE_SHM", "1");
+        }
+    }
+
     let _sentry = sentry::init((
         "https://da874903dead91a5de908b045a106aca@o4506670275428352.ingest.us.sentry.io/4507476699578368",
         sentry::ClientOptions {
