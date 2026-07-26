@@ -52,8 +52,10 @@ package() {
 
     # Tauri resolves the "coresd" sidecar relative to the running executable's
     # own directory at runtime, so both binaries must live side by side.
+    local host="$(rustc -vV | sed -n 's/host: //p')"
     install -Dm755 target/release/cores "$pkgdir/usr/bin/cores"
-    install -Dm755 target/release/coresd "$pkgdir/usr/bin/coresd"
+    install -Dm755 "target/release/coresd-$host" "$pkgdir/usr/bin/coresd-$host"
+    ln -s "coresd-$host" "$pkgdir/usr/bin/coresd"
 
     # Optional systemd unit for running coresd standalone (e.g. for remote
     # monitoring without the desktop app running); not enabled by default.
