@@ -38,6 +38,10 @@ public class Server {
 				// Process the request asynchronously
 				await ProcessRequestAsync(context, hardwareInfo);
 			}
+			// The listener was stopped/disposed while awaiting a request; this is expected during shutdown.
+			catch (Exception ex) when (ex is HttpListenerException or ObjectDisposedException && !listener.IsListening) {
+				break;
+			}
 			catch (Exception ex) {
 				Log.Error(ex, "Failed to listen");
 			}
@@ -195,56 +199,55 @@ public class Server {
 	}
 
 	static async Task HandleWSRequest(WebSocket socket, HardwareInfo hardwareInfo) {
-		// Send the initial data
-		byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
-		await socket.SendAsync(new ArraySegment<byte>(initialBuffer, 0, initialBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-
 		var receiveBuffer = new ArraySegment<byte>(new byte[1024 * 4]);
 		WebSocketReceiveResult result;
-
-		// Send last 60s and last 60 minutes data
-		await Task.Run(async () => {
-			var secondsList = Program.Database.SelectSecondsData();
-
-			for (int i = 0; i < secondsList.Count; i++) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
-				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-			}
-
-			var minutesList = Program.Database.SelectMinutesData();
-			if (minutesList.Count > 0) {
-				byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
-				await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-
-				for (int i = 0; i < minutesList.Count; i++) {
-					byte[] minutesBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
-					await socket.SendAsync(new ArraySegment<byte>(minutesBuffer, 0, minutesBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-				}
-			}
-		});
-
-		// Send updated data every configured interval
-		Task sendTask = Task.Run(async () => {
-			try {
-				while (socket.State == WebSocketState.Open) {
-					byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
-					await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-					await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval));
-				}
-			}
-			catch (Exception ex) {
-				Log.Information("Failed to send data: {@errorSent}", ex);
-				connectedClients.TryRemove(socket, out _);
-			}
-		});
+		Task sendTask = Task.CompletedTask;
 
 		try {
+			// Send the initial data
+			byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+			await socket.SendAsync(new ArraySegment<byte>(initialBuffer, 0, initialBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+
+			// Send last 60s and last 60 minutes data
+			await Task.Run(async () => {
+				var secondsList = Program.Database.SelectSecondsData();
+
+				for (int i = 0; i < secondsList.Count; i++) {
+					byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "secondsData", Data = secondsList[i] }, Program.CompressedSerializerOptions));
+					await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+				}
+
+				var minutesList = Program.Database.SelectMinutesData();
+				if (minutesList.Count > 0) {
+					byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "initialMinutesData", Data = minutesList[0] }, Program.CompressedSerializerOptions));
+					await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+
+					for (int i = 0; i < minutesList.Count; i++) {
+						byte[] minutesBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = minutesList[i] }, Program.CompressedSerializerOptions));
+						await socket.SendAsync(new ArraySegment<byte>(minutesBuffer, 0, minutesBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+					}
+				}
+			});
+
+			// Send updated data every configured interval
+			sendTask = Task.Run(async () => {
+				try {
+					while (socket.State == WebSocketState.Open) {
+						byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+						await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+						await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval));
+					}
+				}
+				catch (Exception ex) {
+					Log.Information("Failed to send data: {@errorSent}", ex);
+				}
+			});
+
 			while (socket.State == WebSocketState.Open) {
 				result = await socket.ReceiveAsync(receiveBuffer, CancellationToken.None);
 
 				if (result.MessageType == WebSocketMessageType.Close) {
 					await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-					connectedClients.TryRemove(socket, out _);
 					break;
 				} else if (result.MessageType == WebSocketMessageType.Text) {
 					string receivedText = Encoding.UTF8.GetString(receiveBuffer.Array, receiveBuffer.Offset, result.Count);
@@ -253,12 +256,22 @@ public class Server {
 			}
 		}
 		catch (Exception ex) {
-			Log.Information("Failed to close WS connection: {@errorSent}", ex);
-			connectedClients.TryRemove(socket, out _);
+			// Socket aborted/disconnected (e.g. client drop or shutdown); expected, just log.
+			Log.Information("WebSocket connection closed: {@errorSent}", ex);
 		}
+		finally {
+			connectedClients.TryRemove(socket, out _);
 
-		// Wait for the send task to complete
-		await sendTask;
+			// Observe the send task so its exception is never left unobserved.
+			try {
+				await sendTask;
+			}
+			catch (Exception ex) {
+				Log.Information("Failed to send data: {@errorSent}", ex);
+			}
+
+			socket.Dispose();
+		}
 	}
 
 	static void HandleWSMessage(string message) {
