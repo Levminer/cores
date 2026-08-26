@@ -720,7 +720,7 @@ public class HardwareInfo {
 						}
 
 						try {
-							if (fanSensors[j].Value != 0 && fanControlSensors[j].Value == null) {
+							if (j < fanControlSensors.Length && fanSensors[j].Value != 0 && fanControlSensors[j].Value == null) {
 								var maxRPM = 2000;
 
 								if (j == 0) {
@@ -807,7 +807,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.Battery.Capacity.Add(data);
 						} else {
-							API.System.Battery.Capacity[j] = data;
+							API.System.Battery.Capacity.TrySetValue(j, data);
 						}
 					}
 
@@ -823,7 +823,7 @@ public class HardwareInfo {
 						if (firstRun) {
 							API.System.Battery.Level.Add(data);
 						} else {
-							API.System.Battery.Level[j] = data;
+							API.System.Battery.Level.TrySetValue(j, data);
 						}
 					}
 
@@ -892,9 +892,11 @@ public class HardwareInfo {
 			API.Timestamp = DateTime.UtcNow;
 		}
 		catch (Exception ex) {
+			Log.Error(ex, "HW Info Error");
+
+			// Only report to Sentry once to avoid spamming
 			if (errorSent == false) {
 				SentrySdk.CaptureException(ex);
-				Log.Information("HW Info Error: {@errorSent}", ex);
 				errorSent = true;
 			}
 		}
