@@ -918,7 +918,14 @@ public class HardwareUpdater : IVisitor {
 	}
 
 	public void VisitHardware(IHardware hardware) {
-		hardware.Update();
+		try {
+			hardware.Update();
+		}
+		catch (Exception ex) {
+			// LibreHardwareMonitor can throw internally (e.g. NvidiaGpu.Update), don't abort the whole traversal
+			Log.Error(ex, "Failed to update hardware {Hardware}", hardware.Name);
+		}
+
 		foreach (IHardware subHardware in hardware.SubHardware) {
 			subHardware.Accept(this);
 		}
