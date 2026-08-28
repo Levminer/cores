@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-netdev = "0.29.0"
-sysinfo = "0.37.2" # 0.39.2 - macos no mac address returned
+netdev = "0.46.0"
+sysinfo = "0.39.6"
 starship-battery = "0.11.0"
 indexmap = "2.2.6"
 nvml-wrapper = "0.10.0"

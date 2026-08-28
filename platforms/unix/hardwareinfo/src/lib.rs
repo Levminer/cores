@@ -1,7 +1,6 @@
 use indexmap::IndexMap;
 use log::{error, info};
-use netdev::ip::Ipv6Net;
-use netdev::{get_default_interface, ip::Ipv4Net, mac::MacAddr, NetworkDevice};
+use netdev::{MacAddr, NetworkDevice, get_default_interface};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
 use serde::{Deserialize, Serialize};
@@ -680,21 +679,18 @@ pub fn refresh_hardware_info(data: &mut Data) {
                         ip_address: int
                             .ipv4
                             .get(0)
-                            .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
-                            .addr
-                            .to_string(),
+                            .map(|net| net.addr().to_string())
+                            .unwrap_or_else(|| Ipv4Addr::new(0, 0, 0, 0).to_string()),
                         ip_address_v6: int
                             .ipv6
                             .get(0)
-                            .unwrap_or(&Ipv6Net::new(Ipv6Addr::UNSPECIFIED, 64))
-                            .addr
-                            .to_string(),
+                            .map(|net| net.addr().to_string())
+                            .unwrap_or_else(|| Ipv6Addr::UNSPECIFIED.to_string()),
                         mask: int
                             .ipv4
                             .get(0)
-                            .unwrap_or(&Ipv4Net::new(Ipv4Addr::new(0, 0, 0, 0), 24))
-                            .netmask()
-                            .to_string(),
+                            .map(|net| net.netmask().to_string())
+                            .unwrap_or_else(|| Ipv4Addr::new(0, 0, 0, 0).to_string()),
                         gateway: int
                             .gateway
                             .as_ref()
