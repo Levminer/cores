@@ -1,5 +1,6 @@
+use axum::body::Bytes;
 use axum::extract::connect_info::ConnectInfo;
-use axum::extract::ws::CloseFrame;
+use axum::extract::ws::{CloseFrame, Utf8Bytes};
 use axum::extract::State;
 use axum::{
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
@@ -22,7 +23,6 @@ use r2d2_sqlite::SqliteConnectionManager;
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
-use std::borrow::Cow;
 use std::fs::OpenOptions;
 use std::net::SocketAddr;
 use std::ops::ControlFlow;
@@ -523,7 +523,11 @@ async fn ws_handler(
 // One websocket connection will be spawned per client
 async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppState>) {
     // Send initial ping
-    if socket.send(Message::Ping(vec![1, 2, 3])).await.is_ok() {
+    if socket
+        .send(Message::Ping(Bytes::from_static(&[1, 2, 3])))
+        .await
+        .is_ok()
+    {
         info!("Pinged {addr}...");
     } else {
         info!("Could not send ping {addr}!");
@@ -556,7 +560,9 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
         };
 
         if sender
-            .send(Message::Text(serde_json::to_string(&network_data).unwrap()))
+            .send(Message::Text(
+                serde_json::to_string(&network_data).unwrap().into(),
+            ))
             .await
             .is_err()
         {
@@ -572,7 +578,9 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
         };
 
         if sender
-            .send(Message::Text(serde_json::to_string(&network_data).unwrap()))
+            .send(Message::Text(
+                serde_json::to_string(&network_data).unwrap().into(),
+            ))
             .await
             .is_err()
         {
@@ -600,7 +608,9 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
             };
 
             if sender
-                .send(Message::Text(serde_json::to_string(&network_data).unwrap()))
+                .send(Message::Text(
+                    serde_json::to_string(&network_data).unwrap().into(),
+                ))
                 .await
                 .is_err()
             {
@@ -616,7 +626,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
         match sender
             .send(Message::Close(Some(CloseFrame {
                 code: axum::extract::ws::close_code::NORMAL,
-                reason: Cow::from("Goodbye"),
+                reason: Utf8Bytes::from_static("Goodbye"),
             })))
             .await
         {
