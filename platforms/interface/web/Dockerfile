@@ -1,5 +1,5 @@
 # --- Build Stage ---
-FROM node:22-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:26-alpine AS builder
 WORKDIR /app
 
 # Copy root package files for workspace
@@ -9,11 +9,11 @@ COPY package.json package-lock.json ./
 COPY platforms/interface ./platforms/interface
 COPY scripts ./scripts
 
-RUN npm i
+RUN npm ci
 RUN npm run build:web
 
 # --- Production Stage ---
-FROM node:22-alpine
+FROM node:26-alpine
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/platforms/interface/web/build ./build
