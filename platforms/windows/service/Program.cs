@@ -68,9 +68,7 @@ public class Program {
 		}
 
 		// Load db
-		Database.Start();
-		Database.Seed();
-		Database.Cleanup();
+		Database.Initialize();
 
 		// Create the service
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);

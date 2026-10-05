@@ -61,8 +61,15 @@ public sealed class WindowsBackgroundService : BackgroundService {
 		// Cleanup old data
 		backgroundTasks.Add(StartSupervisedTask("Database.Cleanup", async token => {
 			while (!token.IsCancellationRequested) {
-				Program.Database.Cleanup();
-				Log.Information("Cleanup completed");
+				try {
+					Program.Database.Cleanup();
+					Log.Information("Cleanup completed");
+				}
+				catch (Exception ex) {
+					Log.Error(ex, "Database cleanup failed");
+					SentrySdk.CaptureException(ex);
+				}
+
 				await Task.Delay(TimeSpan.FromMinutes(60), token);
 			}
 		}, backgroundTaskToken));
