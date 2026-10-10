@@ -352,20 +352,15 @@ pub fn get_drive_info(path: &PathBuf) -> CoresDiskInfo {
 
                 if let Ok(json) = json {
                     if json.device.r#type == "nvme" {
-                        disk_info.health = (100
-                            - json
-                                .nvme_smart_health_information_log
-                                .unwrap()
-                                .percentage_used as u64)
-                            .to_string();
-                        disk_info.temperature.value =
-                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
-                        disk_info.temperature.max =
-                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
-                        disk_info.temperature.min =
-                            json.nvme_smart_health_information_log.unwrap().temperature as f64;
-                    } else {
-                        for attribute in json.ata_smart_attributes.unwrap().table {
+                        if let Some(log) = json.nvme_smart_health_information_log {
+                            disk_info.health =
+                                (100u64.saturating_sub(log.percentage_used as u64)).to_string();
+                            disk_info.temperature.value = log.temperature as f64;
+                            disk_info.temperature.max = log.temperature as f64;
+                            disk_info.temperature.min = log.temperature as f64;
+                        }
+                    } else if let Some(ata_smart_attributes) = json.ata_smart_attributes {
+                        for attribute in ata_smart_attributes.table {
                             if attribute.name == "Temperature_Celsius" {
                                 disk_info.temperature.value = attribute.value as f64;
                                 disk_info.temperature.max = attribute.value as f64;
