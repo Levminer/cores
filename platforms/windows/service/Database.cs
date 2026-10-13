@@ -13,11 +13,11 @@ public class Database {
 	private static readonly TimeSpan MinutesWindow = TimeSpan.FromMinutes(15);
 	private static readonly TimeSpan MinutesRetention = TimeSpan.FromHours(24);
 
-	private record Entry(DateTime Timestamp, string Data);
+	private record Entry(DateTime Timestamp, JsonElement Data);
 
 	// Accessed from the insert loop and the HTTP/WebRTC read handlers.
 	private readonly object gate = new();
-	private readonly Queue<string> seconds = new(SecondsCapacity + 1);
+	private readonly Queue<JsonElement> seconds = new(SecondsCapacity + 1);
 	private List<Entry> minutes = [];
 	private long lastWindow = -1;
 
@@ -30,8 +30,11 @@ public class Database {
 			var entries = JsonSerializer.Deserialize<List<Entry>>(File.ReadAllText(HistoryPath)) ?? [];
 			var cutoff = DateTime.UtcNow - MinutesRetention;
 
+			// Skip entries that are not a snapshot object, e.g. from a hand edited file.
+			entries = entries.Where(e => e.Timestamp >= cutoff && e.Data.ValueKind == JsonValueKind.Object).ToList();
+
 			lock (gate) {
-				minutes = entries.Where(e => e.Timestamp >= cutoff).ToList();
+				minutes = entries;
 				lastWindow = minutes.Count > 0 ? GetWindow(minutes[^1].Timestamp) : -1;
 			}
 		}
@@ -42,52 +45,58 @@ public class Database {
 	}
 
 	public void InsertData(API data) {
-		var json = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
-		var now = DateTime.UtcNow;
-		var window = GetWindow(now);
+		try {
+			var json = JsonSerializer.SerializeToElement(data, Program.CompressedSerializerOptions);
+			var now = DateTime.UtcNow;
+			var window = GetWindow(now);
 
-		lock (gate) {
-			seconds.Enqueue(json);
+			lock (gate) {
+				seconds.Enqueue(json);
 
-			if (seconds.Count > SecondsCapacity) {
-				seconds.Dequeue();
+				if (seconds.Count > SecondsCapacity) {
+					seconds.Dequeue();
+				}
+
+				// Keep the first sample of each window. Compare with != so a clock set backwards still records.
+				if (window != lastWindow) {
+					lastWindow = window;
+					minutes.Add(new Entry(now, json));
+					minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention);
+					Save();
+				}
 			}
-
-			// Keep the first sample of each window. Compare with != so a clock set backwards still records.
-			if (window != lastWindow) {
-				lastWindow = window;
-				minutes.Add(new Entry(now, json));
-				minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention);
-				Save();
-			}
+		}
+		catch (Exception ex) {
+			Log.Error(ex, "Error inserting history");
 		}
 	}
 
 	public List<JsonNode> SelectSecondsData() {
-		string[] snapshot;
+		JsonElement[] snapshot;
 
 		lock (gate) {
 			snapshot = seconds.ToArray();
 		}
 
-		return Parse(snapshot);
+		return ToNodes(snapshot);
 	}
 
 	public List<JsonNode> SelectMinutesData() {
 		var cutoff = DateTime.UtcNow - MinutesRetention;
-		string[] snapshot;
+		JsonElement[] snapshot;
 
 		lock (gate) {
-			snapshot = minutes.Where(e => e.Timestamp >= cutoff).Select(e => e.Data).ToArray();
+			snapshot = minutes.Where(e => e.Timestamp >= cutoff).OrderBy(e => e.Timestamp).Select(e => e.Data).ToArray();
 		}
 
-		return Parse(snapshot);
+		return ToNodes(snapshot);
 	}
 
 	private static long GetWindow(DateTime timestamp) => timestamp.Ticks / MinutesWindow.Ticks;
 
-	private static List<JsonNode> Parse(string[] items) {
-		return items.Select(item => JsonNode.Parse(item)).OfType<JsonNode>().ToList();
+	// Each caller gets its own nodes, the shared elements are read-only.
+	private static List<JsonNode> ToNodes(JsonElement[] items) {
+		return items.Select(item => JsonObject.Create(item)).OfType<JsonNode>().ToList();
 	}
 
 	private void Save() {

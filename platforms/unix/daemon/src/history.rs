@@ -112,19 +112,20 @@ impl History {
 
     pub fn minutes(&self) -> Vec<HardwareInfo> {
         let cutoff = now().saturating_sub(MINUTES_RETENTION);
-        let entries: Vec<serde_json::Value> = self
+        let mut entries: Vec<(u64, serde_json::Value)> = self
             .state
             .lock()
             .unwrap()
             .minutes
             .iter()
             .filter(|e| e.timestamp >= cutoff)
-            .map(|e| e.data.clone())
+            .map(|e| (e.timestamp, e.data.clone()))
             .collect();
 
+        entries.sort_by_key(|(timestamp, _)| *timestamp);
         entries
             .into_iter()
-            .filter_map(|data| serde_json::from_value(data).ok())
+            .filter_map(|(_, data)| serde_json::from_value(data).ok())
             .collect()
     }
 
