@@ -1,135 +1,123 @@
 ﻿using lib;
-using Microsoft.Data.Sqlite;
 using Serilog;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace service;
 
+// Hardware history used by the dashboard charts. The last 60 samples are kept in memory only,
+// one sample per 15 minutes is kept for 24 hours and persisted to a JSON file so it survives restarts.
+// The data is only a cache, so a missing or unreadable file just means starting with an empty history.
 public class Database {
-	internal static SqliteConnection connection = null;
+	private const int SecondsCapacity = 60;
+	private static readonly TimeSpan MinutesWindow = TimeSpan.FromMinutes(15);
+	private static readonly TimeSpan MinutesRetention = TimeSpan.FromHours(24);
 
-	// SqliteConnection is not thread-safe. Serialize every access since the connection is shared
-	// across the insert loop, cleanup task, and HTTP/WebRTC read handlers.
-	private static readonly object gate = new();
+	private record Entry(DateTime Timestamp, string Data);
 
-	public void Start() {
+	// Accessed from the insert loop and the HTTP/WebRTC read handlers.
+	private readonly object gate = new();
+	private readonly Queue<string> seconds = new(SecondsCapacity + 1);
+	private List<Entry> minutes = [];
+	private long lastWindow = -1;
+
+	private static string HistoryPath => Path.Combine(Program.Settings.GetSettingsFolder(), "history.json");
+
+	public void Load() {
+		DeleteLegacyDatabase();
+
 		try {
-			var settingsFolder = Program.Settings.GetSettingsFolder();
-			var dbPath = Path.Combine(settingsFolder, "stats.sqlite");
-			connection = new SqliteConnection($"DataSource={dbPath}");
-			connection.Open();
+			var entries = JsonSerializer.Deserialize<List<Entry>>(File.ReadAllText(HistoryPath)) ?? [];
+			var cutoff = DateTime.UtcNow - MinutesRetention;
+
+			lock (gate) {
+				minutes = entries.Where(e => e.Timestamp >= cutoff).ToList();
+				lastWindow = minutes.Count > 0 ? GetWindow(minutes[^1].Timestamp) : -1;
+			}
 		}
-		catch (Exception) {
-			// Fall back to in-memory database if the file cannot be opened
-			connection = new SqliteConnection("DataSource=:memory:");
-			connection.Open();
-
-			Log.Warning("Failed to open database file, using in-memory database instead");
-		}
-	}
-
-	public void Close() {
-		lock (gate) {
-			connection.Close();
-		}
-	}
-
-	public void Seed() {
-		lock (gate) {
-			using var command = connection.CreateCommand();
-			command.CommandText = "CREATE TABLE IF NOT EXISTS seconds_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
-			command.ExecuteNonQuery();
-			command.CommandText = "CREATE TABLE IF NOT EXISTS minutes_data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
-			command.ExecuteNonQuery();
-			command.CommandText = "CREATE TABLE IF NOT EXISTS data (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, data TEXT);";
-			command.ExecuteNonQuery();
-		}
-	}
-
-	public void Cleanup() {
-		lock (gate) {
-			using var command = connection.CreateCommand();
-			command.CommandText = "DELETE FROM seconds_data WHERE id NOT IN (SELECT id FROM seconds_data ORDER BY timestamp DESC LIMIT 60);";
-			command.ExecuteNonQuery();
-			command.CommandText = "DELETE FROM minutes_data WHERE id NOT IN (SELECT id FROM minutes_data ORDER BY timestamp DESC LIMIT 60);";
-			command.ExecuteNonQuery();
-
-			// Keep the most recent 120 entries, and also keep at least one entry per 15-minute interval for the last 24 hours, but delete entries older than 1 hour that are not needed for the 15-minute intervals
-			command.CommandText = "DELETE FROM data WHERE id NOT IN (SELECT id FROM data ORDER BY id DESC LIMIT 120) AND id NOT IN (SELECT MIN(id) FROM data WHERE timestamp >= datetime('now', '-24 hours') GROUP BY strftime('%s', timestamp) / 900) AND timestamp < datetime('now', '-1 hour');";
-			command.ExecuteNonQuery();
+		catch (FileNotFoundException) { }
+		catch (Exception ex) {
+			Log.Warning(ex, "Failed to load history, starting with an empty history");
 		}
 	}
 
 	public void InsertData(API data) {
-		try {
-			lock (gate) {
-				using var insertCommand = connection.CreateCommand();
-				insertCommand.CommandText = "INSERT INTO data (data) VALUES (@data);";
-				var param = insertCommand.CreateParameter();
-				param.ParameterName = "@data";
-				param.Value = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
-				insertCommand.Parameters.Add(param);
-				insertCommand.ExecuteNonQuery();
+		var json = JsonSerializer.Serialize(data, Program.CompressedSerializerOptions);
+		var now = DateTime.UtcNow;
+		var window = GetWindow(now);
+
+		lock (gate) {
+			seconds.Enqueue(json);
+
+			if (seconds.Count > SecondsCapacity) {
+				seconds.Dequeue();
 			}
-		}
-		catch (Exception ex) {
-			Log.Error(ex, "Error inserting data");
+
+			// Keep the first sample of each window. Compare with != so a clock set backwards still records.
+			if (window != lastWindow) {
+				lastWindow = window;
+				minutes.Add(new Entry(now, json));
+				minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention);
+				Save();
+			}
 		}
 	}
 
 	public List<JsonNode> SelectSecondsData() {
+		string[] snapshot;
+
 		lock (gate) {
-			using var selectCommand = connection.CreateCommand();
-			selectCommand.CommandText = "SELECT data FROM data ORDER BY timestamp DESC LIMIT 60;";
-			using var reader = selectCommand.ExecuteReader();
-
-			var jsonList = new List<JsonNode>();
-
-			while (reader.Read()) {
-				var jsonString = reader.GetString(0);
-				var node = JsonNode.Parse(jsonString);
-
-				if (node != null) {
-					jsonList.Add(node);
-				}
-			}
-
-			jsonList.Reverse();
-			return jsonList;
+			snapshot = seconds.ToArray();
 		}
+
+		return Parse(snapshot);
 	}
 
 	public List<JsonNode> SelectMinutesData() {
+		var cutoff = DateTime.UtcNow - MinutesRetention;
+		string[] snapshot;
+
 		lock (gate) {
-			using var selectCommand = connection.CreateCommand();
-			selectCommand.CommandText = @"
-				WITH config(window_seconds) AS (SELECT @window_seconds)
-				SELECT data
-				FROM data, config
-				WHERE id IN (
-					SELECT MIN(id)
-					FROM data, config
-					WHERE timestamp >= datetime('now', '-24 hours')
-					GROUP BY strftime('%s', timestamp) / window_seconds
-				)
-				ORDER BY timestamp ASC;
-			";
-			selectCommand.Parameters.AddWithValue("@window_seconds", 900);
-			using var reader = selectCommand.ExecuteReader();
+			snapshot = minutes.Where(e => e.Timestamp >= cutoff).Select(e => e.Data).ToArray();
+		}
 
-			var jsonList = new List<JsonNode>();
+		return Parse(snapshot);
+	}
 
-			while (reader.Read()) {
-				var jsonString = reader.GetString(0);
-				var node = JsonNode.Parse(jsonString);
+	private static long GetWindow(DateTime timestamp) => timestamp.Ticks / MinutesWindow.Ticks;
 
-				if (node != null) {
-					jsonList.Add(node);
-				}
+	private static List<JsonNode> Parse(string[] items) {
+		return items.Select(item => JsonNode.Parse(item)).OfType<JsonNode>().ToList();
+	}
+
+	private void Save() {
+		var tempPath = HistoryPath + ".tmp";
+
+		try {
+			// Write to a temp file and swap it in, so a crash mid-write never leaves a half written history.
+			using (var stream = File.Create(tempPath)) {
+				JsonSerializer.Serialize(stream, minutes);
+				stream.Flush(true);
 			}
 
-			return jsonList;
+			File.Move(tempPath, HistoryPath, true);
+		}
+		catch (Exception ex) {
+			Log.Warning(ex, "Failed to save history");
+		}
+	}
+
+	// Older versions stored history in SQLite.
+	private static void DeleteLegacyDatabase() {
+		var dbPath = Path.Combine(Program.Settings.GetSettingsFolder(), "stats.sqlite");
+
+		foreach (var path in new[] { dbPath, $"{dbPath}-journal", $"{dbPath}-wal", $"{dbPath}-shm" }) {
+			try {
+				File.Delete(path);
+			}
+			catch (Exception ex) {
+				Log.Warning(ex, "Failed to delete legacy database file {Path}", path);
+			}
 		}
 	}
 }
