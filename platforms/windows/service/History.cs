@@ -8,7 +8,7 @@ namespace service;
 // Hardware history used by the dashboard charts. The last 60 samples are kept in memory only,
 // one sample per 15 minutes is kept for 24 hours and persisted to a JSON file so it survives restarts.
 // The data is only a cache, so a missing or unreadable file just means starting with an empty history.
-public class Database {
+public class History {
 	private const int SecondsCapacity = 60;
 	private static readonly TimeSpan MinutesWindow = TimeSpan.FromMinutes(15);
 	private static readonly TimeSpan MinutesRetention = TimeSpan.FromHours(24);
