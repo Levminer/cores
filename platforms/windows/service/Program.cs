@@ -67,10 +67,8 @@ public class Program {
 			Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
 		}
 
-		// Load db
-		Database.Start();
-		Database.Seed();
-		Database.Cleanup();
+		// Load history
+		Database.Load();
 
 		// Create the service
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
