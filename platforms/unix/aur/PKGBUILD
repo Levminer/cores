@@ -10,7 +10,7 @@ depends=('webkit2gtk-4.1' 'gtk3' 'libayatana-appindicator' 'librsvg' 'hicolor-ic
 makedepends=('rust' 'cargo' 'nodejs' 'npm' 'git')
 provides=('coresd')
 # makepkg's default "lto" option injects -flto=auto into CFLAGS/CXXFLAGS;
-# that breaks the bundled C builds inside aws-lc-sys/libsqlite3-sys (their
+# that breaks the bundled C build inside aws-lc-sys (its
 # static libs come out as LTO bytecode that the final, non-LTO link step
 # can't resolve, producing undefined-symbol linker errors). The Rust side
 # already does its own LTO via the workspace's [profile.release] settings.

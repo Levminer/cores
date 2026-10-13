@@ -20,7 +20,7 @@ public class Program {
 		WriteIndented = true,
 	};
 	internal static Settings Settings = new();
-	internal static Database Database = new();
+	internal static History Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 		Log.Error(e.ExceptionObject as Exception, "App crashed with an unhandled exception");
@@ -67,10 +67,8 @@ public class Program {
 			Commands.ExecuteCommand($"netsh advfirewall firewall add rule name='CoresService' dir=in action=allow program='{exe}' enable=yes profile=private,public");
 		}
 
-		// Load db
-		Database.Start();
-		Database.Seed();
-		Database.Cleanup();
+		// Load history
+		Database.Load();
 
 		// Create the service
 		HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
