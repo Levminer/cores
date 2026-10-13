@@ -20,7 +20,7 @@ public class Program {
 		WriteIndented = true,
 	};
 	internal static Settings Settings = new();
-	internal static Database Database = new();
+	internal static History Database = new();
 
 	private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 		Log.Error(e.ExceptionObject as Exception, "App crashed with an unhandled exception");
