@@ -162,9 +162,16 @@ pub struct SmartInfo {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SmartAttributeRaw {
+    value: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SmartAttributeArray {
+    id: Option<u64>,
     name: String,
     value: u64,
+    raw: Option<SmartAttributeRaw>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

@@ -362,13 +362,28 @@ pub fn get_drive_info(path: &PathBuf) -> CoresDiskInfo {
                     } else if let Some(ata_smart_attributes) = json.ata_smart_attributes {
                         for attribute in ata_smart_attributes.table {
                             if attribute.name == "Temperature_Celsius" {
-                                disk_info.temperature.value = attribute.value as f64;
-                                disk_info.temperature.max = attribute.value as f64;
-                                disk_info.temperature.min = attribute.value as f64;
+                                // Use the raw value (real degrees C). The normalized value is an
+                                // inverted score (e.g. 67 for 33 C). The low byte of raw holds the
+                                // current temperature; higher bytes may hold min/max on some drives.
+                                let temperature = match &attribute.raw {
+                                    Some(raw) => (raw.value & 0xFF) as f64,
+                                    None => attribute.value as f64,
+                                };
+                                disk_info.temperature.value = temperature;
+                                disk_info.temperature.max = temperature;
+                                disk_info.temperature.min = temperature;
                             }
 
                             if attribute.name == "SSD_Life_Left" {
                                 disk_info.health = attribute.value.to_string();
+                            }
+
+                            // Silicon Motion SATA SSDs (e.g. TeamGroup T-FORCE) report life left as
+                            // unnamed attribute 231, where the raw value is the percent remaining.
+                            if attribute.id == Some(231) && attribute.name.starts_with("Unknown") {
+                                if let Some(raw) = &attribute.raw {
+                                    disk_info.health = (raw.value & 0xFF).min(100).to_string();
+                                }
                             }
                         }
                     }
