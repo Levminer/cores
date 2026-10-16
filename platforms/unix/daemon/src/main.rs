@@ -29,7 +29,7 @@ use std::ops::ControlFlow;
 use std::process::Command;
 use std::str::FromStr;
 use std::sync::Arc;
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
@@ -138,6 +138,7 @@ async fn main() {
 
     let mut data = Data {
         first_run: true,
+        elapsed_time: SystemTime::now(),
         sys: System::new_all(),
         network: Networks::new_with_refreshed_list(),
         hw_info: HardwareInfo::default(),

@@ -1,10 +1,12 @@
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo};
 use nvml_wrapper::Nvml;
+use std::time::SystemTime;
 use sysinfo::{Networks, System};
 
 fn main() {
     let mut data = Data {
         first_run: true,
+        elapsed_time: SystemTime::now(),
         sys: System::new_all(),
         network: Networks::new_with_refreshed_list(),
         hw_info: HardwareInfo::default(),

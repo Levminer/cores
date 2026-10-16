@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use log::{error, info};
-use netdev::{MacAddr, NetworkDevice, get_default_interface};
+use netdev::{get_default_interface, MacAddr, NetworkDevice};
 use nvml_wrapper::enum_wrappers::device::{Clock, TemperatureSensor};
 use nvml_wrapper::struct_wrappers::device::{MemoryInfo, Utilization};
 use serde::{Deserialize, Serialize};
@@ -43,6 +43,7 @@ pub struct Data {
     pub network: Networks,
     pub hw_info: HardwareInfo,
     pub first_run: bool,
+    pub elapsed_time: SystemTime,
     pub nvml: Result<Nvml, nvml_wrapper::error::NvmlError>,
     pub nvml_available: bool,
     pub interval: f64,

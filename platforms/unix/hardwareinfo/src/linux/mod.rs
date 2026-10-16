@@ -133,6 +133,15 @@ pub fn linux_hardware_info(data: &mut Data) {
         // Drives
         let mut i = 0;
 
+        // SMART data changes slowly, so only run smartctl once per minute
+        let refresh_drive_info = SystemTime::now()
+            .duration_since(data.elapsed_time)
+            .map_or(true, |time_passed| time_passed.as_secs() >= 60);
+
+        if refresh_drive_info {
+            data.elapsed_time = SystemTime::now();
+        }
+
         for path in &drive_paths {
             let d = drive::DriveData::new(path);
 
@@ -164,6 +173,14 @@ pub fn linux_hardware_info(data: &mut Data) {
                 data.hw_info.system.storage.disks[i].read_sectors =
                     d.disk_stats.get("read_sectors").unwrap_or(&0).clone();
                 data.hw_info.system.storage.disks[i].last_timestamp = SystemTime::now();
+
+                if refresh_drive_info {
+                    let drive_info = drive::get_drive_info(path);
+
+                    data.hw_info.system.storage.disks[i].temperature =
+                        compare_sensor(&prev.temperature, drive_info.temperature.value);
+                    data.hw_info.system.storage.disks[i].health = drive_info.health;
+                }
 
                 i += 1;
             }

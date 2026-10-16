@@ -325,9 +325,6 @@ pub fn get_drive_info(path: &PathBuf) -> CoresDiskInfo {
     // Define the device path as a variable
     let path_str = path.to_str().unwrap_or("").replace("/sys/block/", "/dev/");
 
-    // Construct the command string
-    let command = format!("sudo smartctl -a {} -j", path_str);
-
     // Get user id
     let user_id = getuid();
 
@@ -342,8 +339,10 @@ pub fn get_drive_info(path: &PathBuf) -> CoresDiskInfo {
     };
 
     if user_id.is_root() {
-        // Execute the command
-        let output = Command::new("sh").arg("-c").arg(&command).output();
+        // Already root, so run smartctl directly (sudo would log every call to the journal)
+        let output = Command::new("smartctl")
+            .args(["-a", &path_str, "-j"])
+            .output();
 
         // parse output JSON
         if let Ok(output) = output {
