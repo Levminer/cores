@@ -7,9 +7,10 @@
 use hardwareinfo::HardwareInfo;
 use log::warn;
 use serde::{Deserialize, Serialize};
+use serde_json::value::RawValue;
 use std::collections::VecDeque;
 use std::fs::{File, OpenOptions};
-use std::io::{BufRead, BufReader, BufWriter, ErrorKind, Write};
+use std::io::{BufWriter, ErrorKind, Write};
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -22,8 +23,9 @@ const MAX_FILE_LINES: usize = (MINUTES_RETENTION / MINUTES_WINDOW) as usize * 2;
 #[derive(Serialize, Deserialize)]
 struct Entry {
     timestamp: u64,
-    // Stored untyped so a history written by another version never fails to load as a whole.
-    data: serde_json::Value,
+    // Kept as raw JSON and sent to clients as is. Values serde can't read back (NaN is stored as null)
+    // never drop an entry, and a history written by another version never fails to load as a whole.
+    data: Box<RawValue>,
 }
 
 struct State {
@@ -43,29 +45,23 @@ impl History {
         delete_legacy_database(folder);
 
         let path = folder.join("history.jsonl");
-        let cutoff = now().saturating_sub(MINUTES_RETENTION);
+        let now = now();
         let mut minutes = Vec::new();
         let mut lines = 0;
 
-        match File::open(&path) {
-            Ok(file) => {
-                for line in BufReader::new(file).lines() {
-                    let line = match line {
-                        Ok(line) => line,
-                        Err(e) => {
-                            warn!("Failed to read history: {}", e);
-                            break;
-                        }
-                    };
-
-                    if line.trim().is_empty() {
+        match std::fs::read(&path) {
+            // Split the raw bytes, a line cut off by a crash may not even be valid UTF-8
+            Ok(bytes) => {
+                for line in bytes.split(|b| *b == b'\n') {
+                    if line.trim_ascii().is_empty() {
                         continue;
                     }
 
                     lines += 1;
 
-                    if let Ok(entry) = serde_json::from_str::<Entry>(&line) {
-                        if entry.timestamp >= cutoff {
+                    // Skip entries that are not a snapshot object, e.g. from a hand edited file.
+                    if let Ok(entry) = serde_json::from_slice::<Entry>(line) {
+                        if is_current(entry.timestamp, now) && entry.data.get().starts_with('{') {
                             minutes.push(entry);
                         }
                     }
@@ -110,7 +106,7 @@ impl History {
 
         // Keep the first sample of each window. Compare with != so a clock set backwards still records.
         if state.last_window != Some(window) {
-            let value = match serde_json::to_value(data) {
+            let value = match serde_json::value::to_raw_value(data) {
                 Ok(value) => value,
                 Err(e) => {
                     warn!("Failed to serialize history entry: {}", e);
@@ -123,8 +119,7 @@ impl History {
                 timestamp: now,
                 data: value,
             });
-            let cutoff = now.saturating_sub(MINUTES_RETENTION);
-            state.minutes.retain(|e| e.timestamp >= cutoff);
+            state.minutes.retain(|e| is_current(e.timestamp, now));
 
             if state.file_lines >= MAX_FILE_LINES {
                 compact(&self.path, &mut state);
@@ -138,23 +133,20 @@ impl History {
         self.state.lock().unwrap().seconds.iter().cloned().collect()
     }
 
-    pub fn minutes(&self) -> Vec<HardwareInfo> {
-        let cutoff = now().saturating_sub(MINUTES_RETENTION);
-        let mut entries: Vec<(u64, serde_json::Value)> = self
+    pub fn minutes(&self) -> Vec<Box<RawValue>> {
+        let now = now();
+        let mut entries: Vec<(u64, Box<RawValue>)> = self
             .state
             .lock()
             .unwrap()
             .minutes
             .iter()
-            .filter(|e| e.timestamp >= cutoff)
+            .filter(|e| is_current(e.timestamp, now))
             .map(|e| (e.timestamp, e.data.clone()))
             .collect();
 
         entries.sort_by_key(|(timestamp, _)| *timestamp);
-        entries
-            .into_iter()
-            .filter_map(|(_, data)| serde_json::from_value(data).ok())
-            .collect()
+        entries.into_iter().map(|(_, data)| data).collect()
     }
 
     // Identifies the newest minutes entry, read it before minutes() so a new entry is never missed.
@@ -163,18 +155,14 @@ impl History {
     }
 
     // Returns the newest minutes entry if one was added after the given window.
-    pub fn minutes_since(&self, window: Option<u64>) -> Option<(Option<u64>, HardwareInfo)> {
-        let (latest, data) = {
-            let state = self.state.lock().unwrap();
+    pub fn minutes_since(&self, window: Option<u64>) -> Option<(Option<u64>, Box<RawValue>)> {
+        let state = self.state.lock().unwrap();
 
-            if state.last_window == window {
-                return None;
-            }
+        if state.last_window == window {
+            return None;
+        }
 
-            (state.last_window, state.minutes.last()?.data.clone())
-        };
-
-        serde_json::from_value(data).ok().map(|data| (latest, data))
+        Some((state.last_window, state.minutes.last()?.data.clone()))
     }
 
     pub fn latest(&self) -> Option<HardwareInfo> {
@@ -232,6 +220,11 @@ fn to_line(entry: &Entry) -> std::io::Result<Vec<u8>> {
     let mut line = serde_json::to_vec(entry)?;
     line.push(b'\n');
     Ok(line)
+}
+
+// Drops entries older than the retention, and entries from the future left behind by a clock that was set ahead.
+fn is_current(timestamp: u64, now: u64) -> bool {
+    timestamp >= now.saturating_sub(MINUTES_RETENTION) && timestamp <= now
 }
 
 fn now() -> u64 {

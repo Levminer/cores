@@ -34,7 +34,8 @@ public class History {
 		var lines = 0;
 
 		try {
-			var cutoff = DateTime.UtcNow - MinutesRetention;
+			var now = DateTime.UtcNow;
+			var cutoff = now - MinutesRetention;
 
 			foreach (var line in File.ReadLines(HistoryPath)) {
 				if (string.IsNullOrWhiteSpace(line)) {
@@ -45,7 +46,7 @@ public class History {
 
 				var entry = ParseEntry(line);
 
-				if (entry != null && entry.Timestamp >= cutoff) {
+				if (entry != null && entry.Timestamp >= cutoff && entry.Timestamp <= now) {
 					entries.Add(entry);
 				}
 			}
@@ -86,7 +87,8 @@ public class History {
 
 					lastWindow = window;
 					minutes.Add(entry);
-					minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention);
+					// Also drop entries from the future, left behind by a clock that was set ahead
+					minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention || e.Timestamp > now);
 
 					if (fileLines >= MaxFileLines) {
 						Compact();
@@ -113,11 +115,12 @@ public class History {
 	}
 
 	public List<JsonNode> SelectMinutesData() {
-		var cutoff = DateTime.UtcNow - MinutesRetention;
+		var now = DateTime.UtcNow;
+		var cutoff = now - MinutesRetention;
 		JsonElement[] snapshot;
 
 		lock (gate) {
-			snapshot = minutes.Where(e => e.Timestamp >= cutoff).OrderBy(e => e.Timestamp).Select(e => e.Data).ToArray();
+			snapshot = minutes.Where(e => e.Timestamp >= cutoff && e.Timestamp <= now).OrderBy(e => e.Timestamp).Select(e => e.Data).ToArray();
 		}
 
 		return ToNodes(snapshot);

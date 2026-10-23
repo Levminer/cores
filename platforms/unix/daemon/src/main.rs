@@ -20,6 +20,7 @@ use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, Sy
 use history::History;
 use log::{error, info, warn, LevelFilter};
 use serde::{Deserialize, Serialize};
+use serde_json::value::RawValue;
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
 use std::fs::OpenOptions;
 use std::net::SocketAddr;
@@ -260,7 +261,7 @@ async fn main() {
 
                         // Send 60m data
                         for hw_info in last60m_hardware_info {
-                            let network_data = GenericMessage::<HardwareInfo> {
+                            let network_data = GenericMessage::<Box<RawValue>> {
                                 r#type: "minutesData".to_string(),
                                 data: hw_info.clone(),
                             };
@@ -306,7 +307,7 @@ async fn main() {
                             {
                                 minutes_window = window;
 
-                                let network_data = GenericMessage::<HardwareInfo> {
+                                let network_data = GenericMessage::<Box<RawValue>> {
                                     r#type: "minutesData".to_string(),
                                     data: hw_info,
                                 };
@@ -525,7 +526,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
 
     // Send last 60m hardware info
     for hw_info in last60m_hardware_info {
-        let network_data = GenericMessage::<HardwareInfo> {
+        let network_data = GenericMessage::<Box<RawValue>> {
             r#type: "minutesData".to_string(),
             data: hw_info.clone(),
         };
@@ -574,7 +575,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
             if let Some((window, hw_info)) = state.history.minutes_since(minutes_window) {
                 minutes_window = window;
 
-                let network_data = GenericMessage::<HardwareInfo> {
+                let network_data = GenericMessage::<Box<RawValue>> {
                     r#type: "minutesData".to_string(),
                     data: hw_info,
                 };

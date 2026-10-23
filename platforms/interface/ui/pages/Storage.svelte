@@ -60,14 +60,14 @@
 									{
 										label: `Read speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.storage[i].throughputRead)
-											: $hardwareStatistics.seconds.map((value) => value.storage[i].throughputRead),
+											? $hardwareStatistics.minutes.map((value) => value.storage[i]?.throughputRead ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.storage[i]?.throughputRead ?? null),
 									},
 									{
 										label: `Write speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.storage[i].throughputWrite)
-											: $hardwareStatistics.seconds.map((value) => value.storage[i].throughputWrite),
+											? $hardwareStatistics.minutes.map((value) => value.storage[i]?.throughputWrite ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.storage[i]?.throughputWrite ?? null),
 									},
 								],
 								unit: " MB/s",
@@ -97,22 +97,22 @@
 											label: `Max Temperature`,
 											color: "max",
 											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.max)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.max),
+												? $hardwareStatistics.minutes.map((value) => value.storage[i]?.temperature.max ?? null)
+												: $hardwareStatistics.seconds.map((value) => value.storage[i]?.temperature.max ?? null),
 										},
 										{
 											label: `Current Temperature`,
 											color: "current",
 											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.value)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.value),
+												? $hardwareStatistics.minutes.map((value) => value.storage[i]?.temperature.value ?? null)
+												: $hardwareStatistics.seconds.map((value) => value.storage[i]?.temperature.value ?? null),
 										},
 										{
 											label: `Min Temperature`,
 											color: "min",
 											data: minutes
-												? $hardwareStatistics.minutes.map((value) => value.storage[i].temperature.min)
-												: $hardwareStatistics.seconds.map((value) => value.storage[i].temperature.min),
+												? $hardwareStatistics.minutes.map((value) => value.storage[i]?.temperature.min ?? null)
+												: $hardwareStatistics.seconds.map((value) => value.storage[i]?.temperature.min ?? null),
 										},
 									],
 									unit: " °C",
