@@ -208,6 +208,9 @@ public class Server {
 			byte[] initialBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "initialData", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 			await socket.SendAsync(new ArraySegment<byte>(initialBuffer, 0, initialBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
 
+			// Read before the history so a minutes entry added in between is sent again rather than missed
+			var minutesWindow = Program.Database.SelectMinutesWindow();
+
 			// Send last 60s and last 60 minutes data
 			await Task.Run(async () => {
 				var secondsList = Program.Database.SelectSecondsData();
@@ -235,6 +238,15 @@ public class Server {
 					while (socket.State == WebSocketState.Open) {
 						byte[] buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
 						await socket.SendAsync(new ArraySegment<byte>(buffer, 0, buffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+
+						// Send new minutes data as soon as it is recorded
+						if (Program.Database.SelectMinutesDataSince(minutesWindow) is { } latest) {
+							minutesWindow = latest.Window;
+
+							byte[] minutesBuffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = latest.Data }, Program.CompressedSerializerOptions));
+							await socket.SendAsync(new ArraySegment<byte>(minutesBuffer, 0, minutesBuffer.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+						}
+
 						await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval));
 					}
 				}

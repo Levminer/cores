@@ -37,7 +37,7 @@ import { settings, getSettings, setSettings, initializeSettings } from "./stores
 import { state, appState, getState, setState } from "./stores/state.ts"
 import { localSettings, getLocalSettings, setLocalSettings } from "./stores/localSettings.ts"
 
-import { generateMinutesData, generateSecondsData } from "./utils/stats.ts"
+import { appendMinutesData, generateSecondsData } from "./utils/stats.ts"
 import { supabaseClient } from "./utils/supabase.ts"
 import { flyAndScale } from "./utils/transitions.ts"
 import { addConnectionCode, deleteConnectionCode, editConnectionCode } from "./utils/connection.ts"
@@ -84,7 +84,7 @@ export {
 	appState,
 	getState,
 	setState,
-	generateMinutesData,
+	appendMinutesData,
 	generateSecondsData,
 	supabaseClient,
 	flyAndScale,

@@ -217,6 +217,9 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
+                        // Read before the history so a minutes entry added in between is sent again rather than missed
+                        let mut minutes_window = state.history.minutes_window();
+
                         // Get every third element from the last 60s and 60m hardware info
                         let last60s_hardware_info = state.history.seconds();
                         let last60m_hardware_info = state.history.minutes();
@@ -296,6 +299,27 @@ async fn main() {
                                 info!("Failed to send data to client");
                                 break;
                             };
+
+                            // Send new minutes data as soon as it is recorded
+                            if let Some((window, hw_info)) =
+                                state.history.minutes_since(minutes_window)
+                            {
+                                minutes_window = window;
+
+                                let network_data = GenericMessage::<HardwareInfo> {
+                                    r#type: "minutesData".to_string(),
+                                    data: hw_info,
+                                };
+
+                                if dc
+                                    .send_text(serde_json::to_string(&network_data).unwrap())
+                                    .await
+                                    .is_err()
+                                {
+                                    info!("Failed to send minutesData to client");
+                                    break;
+                                };
+                            }
 
                             tokio::time::sleep(std::time::Duration::from_secs(
                                 state.settings.interval as u64,
@@ -474,6 +498,9 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
     // Split socket into sender and receiver
     let (mut sender, mut receiver) = socket.split();
 
+    // Read before the history so a minutes entry added in between is sent again rather than missed
+    let mut minutes_window = state.history.minutes_window();
+
     // Get every third element from the last 60s and 60m hardware info
     let last60s_hardware_info = state.history.seconds();
     let last60m_hardware_info = state.history.minutes();
@@ -541,6 +568,26 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
                 .is_err()
             {
                 break;
+            }
+
+            // Send new minutes data as soon as it is recorded
+            if let Some((window, hw_info)) = state.history.minutes_since(minutes_window) {
+                minutes_window = window;
+
+                let network_data = GenericMessage::<HardwareInfo> {
+                    r#type: "minutesData".to_string(),
+                    data: hw_info,
+                };
+
+                if sender
+                    .send(Message::Text(
+                        serde_json::to_string(&network_data).unwrap().into(),
+                    ))
+                    .await
+                    .is_err()
+                {
+                    break;
+                }
             }
 
             tokio::time::sleep(std::time::Duration::from_secs(

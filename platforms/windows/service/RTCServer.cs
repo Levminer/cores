@@ -60,8 +60,16 @@ public class RTCServer {
 				websocketClient.Send(message);
 			};
 
+			var minutesWindow = Program.Database.SelectMinutesWindow();
+
 			while (!stop) {
 				EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<API>() { Type = "data", Data = hardwareInfo.API }, Program.CompressedSerializerOptions));
+
+				// Send new minutes data as soon as it is recorded, clients skip entries they already have
+				if (Program.Database.SelectMinutesDataSince(minutesWindow) is { } latest) {
+					minutesWindow = latest.Window;
+					EzRTCHost.sendMessageToAll(JsonSerializer.Serialize(new GenericMessage<JsonNode>() { Type = "minutesData", Data = latest.Data }, Program.CompressedSerializerOptions));
+				}
 
 				await Task.Delay(TimeSpan.FromSeconds(Program.Settings.interval));
 			}
