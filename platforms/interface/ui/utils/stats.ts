@@ -106,9 +106,6 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 // The server records one minutes point per 15 minutes and keeps them for 24 hours
 const MINUTES_RETENTION = 24 * 60 * 60 * 1000
 
-// Older services don't push minutes data live, clients record a live snapshot when none arrived for this long
-export const MINUTES_FALLBACK_INTERVAL = 17 * 60 * 1000
-
 // The server resends its whole history on every connect and can push a new point in between.
 // Skip points the list already has, keep the list sorted by time and drop points older than 24 hours.
 export const appendMinutesData = (minutes: Stats[], input: HardwareInfo): Stats[] => {

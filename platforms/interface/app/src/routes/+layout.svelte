@@ -42,7 +42,6 @@
 		settings,
 		supabaseClient,
 		appendMinutesData,
-		MINUTES_FALLBACK_INTERVAL,
 		setHardwareStatistics,
 	} from "ui"
 	import { invoke } from "@tauri-apps/api/core"
@@ -80,17 +79,6 @@
 			const connectToWSServer = () => {
 				ws = new WebSocket("ws://localhost:5390/ws")
 
-				let lastMinutesData = Date.now()
-
-				const addMinutesData = (input: HardwareInfo) => {
-					lastMinutesData = Date.now()
-
-					setHardwareStatistics({
-						seconds: $hardwareStatistics.seconds,
-						minutes: appendMinutesData($hardwareStatistics.minutes, input),
-					})
-				}
-
 				ws.onopen = () => {
 					console.log("Local WS Connection established")
 				}
@@ -107,11 +95,6 @@
 
 						if (WSData.type == "data") {
 							updateHardwareStats(WSData.data)
-
-							// Older services don't push minutes data live, record a snapshot instead when none arrived for a window
-							if (Date.now() - lastMinutesData > MINUTES_FALLBACK_INTERVAL) {
-								addMinutesData({ ...WSData.data, timestamp: WSData.data.timestamp ?? new Date().toISOString() })
-							}
 						}
 					}
 
@@ -121,7 +104,10 @@
 
 					// initialMinutesData repeats the first minutesData point, so it is ignored
 					if (WSData.type == "minutesData") {
-						addMinutesData(WSData.data)
+						setHardwareStatistics({
+							seconds: $hardwareStatistics.seconds,
+							minutes: appendMinutesData($hardwareStatistics.minutes, WSData.data),
+						})
 					}
 				}
 
