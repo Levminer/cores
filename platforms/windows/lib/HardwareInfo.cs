@@ -44,6 +44,9 @@ public class HardwareInfo {
 	}
 
 	public void GetInfo() {
+		// utc time, set even if the refresh below fails so every sample gets its own timestamp
+		API.Timestamp = DateTime.UtcNow;
+
 		try {
 			var computerHardware = computer.Hardware;
 
@@ -888,8 +891,6 @@ public class HardwareInfo {
 			}
 
 			firstRun = false;
-			// utc time
-			API.Timestamp = DateTime.UtcNow;
 		}
 		catch (Exception ex) {
 			Log.Error(ex, "HW Info Error");

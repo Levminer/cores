@@ -169,13 +169,14 @@ async fn main() {
             data.network.refresh(true);
             refresh_hardware_info(&mut data);
 
+            // Record history first so clients woken by this data also get a new minutes entry
+            app_state_clone.history.insert(&data.hw_info);
+
             // Send hardware info, ignore if queue is lagged (receivers can't keep up)
             if let Err(err) = channel_sender.send(data.hw_info.clone()) {
                 error!("Failed to send hardware info: {}", err);
                 continue;
             }
-
-            app_state_clone.history.insert(&data.hw_info);
 
             tokio::time::sleep(std::time::Duration::from_millis(
                 (settings.interval as u64 * 1000) - 300,

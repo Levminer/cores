@@ -2,6 +2,8 @@
 // one sample per 15 minutes is kept for 24 hours and persisted so it survives restarts.
 // The file has one JSON entry per line, new entries are appended. Old entries are only removed by
 // rewriting the file on startup and once it holds about twice the retention.
+// Entries with a timestamp in the future are kept but not sent. The clock may be behind (e.g. right after boot)
+// rather than the entries wrong, so they show up once the clock catches up.
 // The data is only a cache, so a missing or unreadable file just means starting with an empty history.
 
 use hardwareinfo::HardwareInfo;
@@ -61,7 +63,7 @@ impl History {
 
                     // Skip entries that are not a snapshot object, e.g. from a hand edited file.
                     if let Ok(entry) = serde_json::from_slice::<Entry>(line) {
-                        if is_current(entry.timestamp, now) && entry.data.get().starts_with('{') {
+                        if !is_expired(entry.timestamp, now) && entry.data.get().starts_with('{') {
                             minutes.push(entry);
                         }
                     }
@@ -104,8 +106,13 @@ impl History {
             state.seconds.pop_front();
         }
 
-        // Keep the first sample of each window. Compare with != so a clock set backwards still records.
-        if state.last_window != Some(window) {
+        // Keep the first sample of each window, at most one entry per window even if the clock moves back and forth.
+        if state.last_window != Some(window)
+            && !state
+                .minutes
+                .iter()
+                .any(|e| e.timestamp / MINUTES_WINDOW == window)
+        {
             let value = match serde_json::value::to_raw_value(data) {
                 Ok(value) => value,
                 Err(e) => {
@@ -119,7 +126,7 @@ impl History {
                 timestamp: now,
                 data: value,
             });
-            state.minutes.retain(|e| is_current(e.timestamp, now));
+            state.minutes.retain(|e| !is_expired(e.timestamp, now));
 
             if state.file_lines >= MAX_FILE_LINES {
                 compact(&self.path, &mut state);
@@ -141,7 +148,7 @@ impl History {
             .unwrap()
             .minutes
             .iter()
-            .filter(|e| is_current(e.timestamp, now))
+            .filter(|e| !is_expired(e.timestamp, now) && e.timestamp <= now)
             .map(|e| (e.timestamp, e.data.clone()))
             .collect();
 
@@ -222,9 +229,8 @@ fn to_line(entry: &Entry) -> std::io::Result<Vec<u8>> {
     Ok(line)
 }
 
-// Drops entries older than the retention, and entries from the future left behind by a clock that was set ahead.
-fn is_current(timestamp: u64, now: u64) -> bool {
-    timestamp >= now.saturating_sub(MINUTES_RETENTION) && timestamp <= now
+fn is_expired(timestamp: u64, now: u64) -> bool {
+    timestamp < now.saturating_sub(MINUTES_RETENTION)
 }
 
 fn now() -> u64 {

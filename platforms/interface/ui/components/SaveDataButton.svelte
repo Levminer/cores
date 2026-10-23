@@ -49,8 +49,9 @@
 			id: string
 			statistics: {
 				label: string
-				data: number[]
+				data: (number | null)[]
 			}[]
+			timestamp?: string[]
 		}
 	}
 
@@ -70,7 +71,9 @@
 		const dataLength = props.statistics[0].data.length
 
 		for (let i = 0; i < dataLength; i++) {
-			const timestamp = new Date(Date.now() - $settings.interval * 1000 * (dataLength - 1 - i))
+			// Use the time of the point when the chart has one, otherwise estimate it from the interval
+			const time = Date.parse(props.timestamp?.[i] ?? "")
+			const timestamp = new Date(Number.isNaN(time) ? Date.now() - $settings.interval * 1000 * (dataLength - 1 - i) : time)
 			const row = [timestamp.toISOString(), ...props.statistics.map((stat) => stat.data[i])]
 			csvRows.push(row.join(","))
 		}

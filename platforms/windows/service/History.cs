@@ -9,6 +9,8 @@ namespace service;
 // one sample per 15 minutes is kept for 24 hours and persisted so it survives restarts.
 // The file has one JSON entry per line, new entries are appended. Old entries are only removed by
 // rewriting the file on startup and once it holds about twice the retention.
+// Entries with a timestamp in the future are kept but not sent. The clock may be behind (e.g. right after boot)
+// rather than the entries wrong, so they show up once the clock catches up.
 // The data is only a cache, so a missing or unreadable file just means starting with an empty history.
 public class History {
 	private const int SecondsCapacity = 60;
@@ -34,8 +36,7 @@ public class History {
 		var lines = 0;
 
 		try {
-			var now = DateTime.UtcNow;
-			var cutoff = now - MinutesRetention;
+			var cutoff = DateTime.UtcNow - MinutesRetention;
 
 			foreach (var line in File.ReadLines(HistoryPath)) {
 				if (string.IsNullOrWhiteSpace(line)) {
@@ -46,7 +47,7 @@ public class History {
 
 				var entry = ParseEntry(line);
 
-				if (entry != null && entry.Timestamp >= cutoff && entry.Timestamp <= now) {
+				if (entry != null && entry.Timestamp >= cutoff) {
 					entries.Add(entry);
 				}
 			}
@@ -81,14 +82,13 @@ public class History {
 					seconds.Dequeue();
 				}
 
-				// Keep the first sample of each window. Compare with != so a clock set backwards still records.
-				if (window != lastWindow) {
+				// Keep the first sample of each window, at most one entry per window even if the clock moves back and forth.
+				if (window != lastWindow && !minutes.Any(e => GetWindow(e.Timestamp) == window)) {
 					var entry = new Entry(now, json);
 
 					lastWindow = window;
 					minutes.Add(entry);
-					// Also drop entries from the future, left behind by a clock that was set ahead
-					minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention || e.Timestamp > now);
+					minutes.RemoveAll(e => e.Timestamp < now - MinutesRetention);
 
 					if (fileLines >= MaxFileLines) {
 						Compact();

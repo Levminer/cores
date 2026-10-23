@@ -12,6 +12,7 @@
 					props={{
 						id: props.id,
 						statistics: props.statistics,
+						timestamp: props.timestamp,
 					}}
 				/>
 			{/if}
@@ -43,7 +44,7 @@
 			id: string
 			statistics: {
 				label: string
-				data: number[]
+				data: (number | null)[]
 				fill?: boolean
 				color?: "min" | "max" | "current" | "yellow" | "orange"
 			}[]

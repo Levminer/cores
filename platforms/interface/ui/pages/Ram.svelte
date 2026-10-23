@@ -102,22 +102,22 @@
 										label: "Max Temperature",
 										color: "max",
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.max ?? 0)
-											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.max ?? 0),
+											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.max ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.max ?? null),
 									},
 									{
 										label: "Current Temperature",
 										color: "current",
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.value ?? 0)
-											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.value ?? 0),
+											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.value ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.value ?? null),
 									},
 									{
 										label: "Min Temperature",
 										color: "min",
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.min ?? 0)
-											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.min ?? 0),
+											? $hardwareStatistics.minutes.map((value) => value.ram.temperature?.min ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.ram.temperature?.min ?? null),
 									},
 								],
 								unit: " °C",

@@ -106,19 +106,27 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 // The server records one minutes point per 15 minutes and keeps them for 24 hours
 const MINUTES_RETENTION = 24 * 60 * 60 * 1000
 
-// The server resends its whole history on every connect and can push a new point in between.
-// Skip points the list already has, keep the list sorted by time and drop points older than 24 hours.
+// The server sends its history oldest first on every connect, and after that only its newest point.
+// So points the list holds that are newer than an incoming one are no longer on the server (e.g. its clock was corrected),
+// those are dropped. Points the list already has are skipped and points older than 24 hours are dropped.
 export const appendMinutesData = (minutes: Stats[], input: HardwareInfo): Stats[] => {
 	const point = generateSecondsData(input)
 	const time = Date.parse(point.timestamp ?? "")
 
-	if (Number.isNaN(time) || minutes.some((item) => Date.parse(item.timestamp ?? "") === time)) {
+	if (Number.isNaN(time)) {
 		return minutes
 	}
 
 	const cutoff = Date.now() - MINUTES_RETENTION
+	const kept = minutes.filter((item) => {
+		const itemTime = Date.parse(item.timestamp ?? "")
+		return itemTime >= cutoff && itemTime <= time
+	})
+	const exists = kept.some((item) => Date.parse(item.timestamp ?? "") === time)
 
-	return [...minutes, point]
-		.filter((item) => Date.parse(item.timestamp ?? "") >= cutoff)
-		.sort((a, b) => Date.parse(a.timestamp!) - Date.parse(b.timestamp!))
+	if (exists && kept.length === minutes.length) {
+		return minutes
+	}
+
+	return exists ? kept : [...kept, point]
 }
