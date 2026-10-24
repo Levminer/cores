@@ -460,9 +460,9 @@
 	}
 
 	const activate = async () => {
-		const { data, error } = await supabaseClient.auth.getUser()
+		const { data, error } = await supabaseClient.auth.getSession()
 
-		if (error) {
+		if (error || !data.session) {
 			alert("Failed to get user data, please log in.")
 			return location.reload()
 		}
@@ -472,9 +472,10 @@
 		}
 
 		if (key !== "") {
-			const url = `https://act.coresmonitor.com?license_key=${key}&user_id=${data.user.id}`
+			const url = `https://www.coresmonitor.com/api/activate?license_key=${encodeURIComponent(key)}`
 			const options = {
 				method: "GET",
+				headers: { Authorization: `Bearer ${data.session.access_token}` },
 			}
 
 			try {
