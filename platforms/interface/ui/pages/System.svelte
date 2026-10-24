@@ -53,20 +53,20 @@
 									{
 										label: `Max Speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.max)
-											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.max),
+											? $hardwareStatistics.minutes.map((value) => value.fan[i]?.speed.max ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i]?.speed.max ?? null),
 									},
 									{
 										label: `Current Speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.value)
-											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.value),
+											? $hardwareStatistics.minutes.map((value) => value.fan[i]?.speed.value ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i]?.speed.value ?? null),
 									},
 									{
 										label: `Min Speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.fan[i].speed.min)
-											: $hardwareStatistics.seconds.map((value) => value.fan[i].speed.min),
+											? $hardwareStatistics.minutes.map((value) => value.fan[i]?.speed.min ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i]?.speed.min ?? null),
 									},
 								],
 								unit: " RPM",
@@ -96,8 +96,8 @@
 										color: "min",
 										fill: true,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.fan[i].control.value)
-											: $hardwareStatistics.seconds.map((value) => value.fan[i].control.value),
+											? $hardwareStatistics.minutes.map((value) => value.fan[i]?.control.value ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.fan[i]?.control.value ?? null),
 									},
 								],
 								unit: "%",

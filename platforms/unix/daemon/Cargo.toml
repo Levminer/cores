@@ -17,13 +17,10 @@ tokio-tungstenite = "0.30"
 tower = { version = "0.5", features = ["util"] }
 tower-http = { version = "0.7.0", features = ["fs", "trace", "cors"] }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde_json = { version = "1", features = ["raw_value"] }
 hardwareinfo = { path = "../hardwareinfo" }
 simplelog = "0.12"
 log = "0.4"
 ezrtc = "0.12.0"
 wol-rs = "1"
 clap = { version = "4.5.23", features = ["derive"] }
-rusqlite = { version = "0.40.0", features = ["bundled"] }
-r2d2_sqlite = "0.35.0"
-r2d2 = "0.8.10"

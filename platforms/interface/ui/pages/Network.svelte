@@ -62,14 +62,14 @@
 									{
 										label: `Download Speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.network[i].throughputDownload)
-											: $hardwareStatistics.seconds.map((value) => value.network[i].throughputDownload),
+											? $hardwareStatistics.minutes.map((value) => value.network[i]?.throughputDownload ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.network[i]?.throughputDownload ?? null),
 									},
 									{
 										label: `Upload Speed`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.network[i].throughputUpload)
-											: $hardwareStatistics.seconds.map((value) => value.network[i].throughputUpload),
+											? $hardwareStatistics.minutes.map((value) => value.network[i]?.throughputUpload ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.network[i]?.throughputUpload ?? null),
 									},
 								],
 								unit: " MB/s",
@@ -97,14 +97,14 @@
 									{
 										label: `Downloaded data`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.network[i].downloadedData)
-											: $hardwareStatistics.seconds.map((value) => value.network[i].downloadedData),
+											? $hardwareStatistics.minutes.map((value) => value.network[i]?.downloadedData ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.network[i]?.downloadedData ?? null),
 									},
 									{
 										label: `Uploaded data`,
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.network[i].uploadedData)
-											: $hardwareStatistics.seconds.map((value) => value.network[i].uploadedData),
+											? $hardwareStatistics.minutes.map((value) => value.network[i]?.uploadedData ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.network[i]?.uploadedData ?? null),
 									},
 								],
 								unit: " GB",

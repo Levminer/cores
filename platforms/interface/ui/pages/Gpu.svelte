@@ -39,22 +39,22 @@
 									label: "Max Temperature",
 									color: "max",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].temperature.max)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].temperature.max),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.temperature.max ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.temperature.max ?? null),
 								},
 								{
 									label: "Current Temperature",
 									color: "current",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].temperature.value)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].temperature.value),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.temperature.value ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.temperature.value ?? null),
 								},
 								{
 									label: "Min Temperature",
 									color: "min",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].temperature.min)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].temperature.min),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.temperature.min ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.temperature.min ?? null),
 								},
 							],
 							time: minutes ? "m" : "s",
@@ -82,8 +82,8 @@
 										label: "Memory Usage",
 										color: "min",
 										data: minutes
-											? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].memory)
-											: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].memory),
+											? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.memory ?? null)
+											: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.memory ?? null),
 									},
 								],
 								time: minutes ? "m" : "s",
@@ -119,8 +119,8 @@
 									color: "min",
 									fill: true,
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].load)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].load),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.load ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.load ?? null),
 								},
 							],
 							time: minutes ? "m" : "s",
@@ -149,8 +149,8 @@
 									label: "Power Usage",
 									color: "yellow",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].power)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].power),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.power ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.power ?? null),
 								},
 							],
 							time: minutes ? "m" : "s",
@@ -178,8 +178,8 @@
 									label: "Fan Speed",
 									color: "min",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].fan)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].fan),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.fan ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.fan ?? null),
 								},
 							],
 							time: minutes ? "m" : "s",
@@ -207,20 +207,20 @@
 								{
 									label: "Max Clock Speed",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.max)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.max),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.clock.max ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.clock.max ?? null),
 								},
 								{
 									label: "Current Clock Speed",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.value)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.value),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.clock.value ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.clock.value ?? null),
 								},
 								{
 									label: "Min Clock Speed",
 									data: minutes
-										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i].clock.min)
-										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i].clock.min),
+										? $hardwareStatistics.minutes.map((value) => value.gpu.cards[i]?.clock.min ?? null)
+										: $hardwareStatistics.seconds.map((value) => value.gpu.cards[i]?.clock.min ?? null),
 								},
 							],
 							time: minutes ? "m" : "s",

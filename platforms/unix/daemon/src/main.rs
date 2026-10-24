@@ -17,11 +17,10 @@ use ezrtc::{RTCDataChannel, RTCDataChannelState, RTCIceServer};
 use futures::{sink::SinkExt, stream::StreamExt};
 use hardwareinfo::settings::{get_settings, get_settings_path, Settings};
 use hardwareinfo::{refresh_hardware_info, Data, HardwareInfo, Networks, Nvml, System};
+use history::History;
 use log::{error, info, warn, LevelFilter};
-use r2d2;
-use r2d2_sqlite::SqliteConnectionManager;
-use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
+use serde_json::value::RawValue;
 use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
 use std::fs::OpenOptions;
 use std::net::SocketAddr;
@@ -29,14 +28,14 @@ use std::ops::ControlFlow;
 use std::process::Command;
 use std::str::FromStr;
 use std::sync::Arc;
-use std::time::{Duration, SystemTime};
+use std::time::SystemTime;
 use tower_http::{
     cors::{Any, CorsLayer},
     trace::{DefaultMakeSpan, TraceLayer},
 };
 use wol::{send_wol, MacAddr};
 
-mod db;
+mod history;
 mod service;
 
 #[derive(Serialize, Deserialize)]
@@ -48,7 +47,7 @@ pub struct GenericMessage<T> {
 pub struct AppState {
     hardware_info_receiver: tokio::sync::broadcast::Receiver<HardwareInfo>,
     settings: Settings,
-    pool: r2d2::Pool<SqliteConnectionManager>,
+    history: History,
 }
 
 /// Modern hardware monitor with remote monitoring.
@@ -113,25 +112,8 @@ async fn main() {
     let settings = get_settings();
     info!("Connection code: {:?}", settings.connection_code);
 
-    // Init database
-    let folder = get_settings_path().join("Cores");
-    let connection_manager = match Connection::open(folder.join("stats.sqlite")) {
-        Ok(conn) => {
-            conn.close().expect("Failed to close database connection");
-            SqliteConnectionManager::file(folder.join("stats.sqlite"))
-        }
-        Err(_) => {
-            warn!("Failed to open file database, using memory database");
-            SqliteConnectionManager::memory()
-        }
-    };
-
-    let pool = r2d2::Pool::builder()
-        .max_size(10)
-        .build(connection_manager)
-        .expect("Failed to create connection pool");
-    db::seed(&pool.get().expect("Failed to get connection"));
-    db::cleanup(&pool.get().expect("Failed to get connection"));
+    // Load history
+    let history = History::load(&get_settings_path().join("Cores"));
 
     // Hardware info channel
     let (channel_sender, channel_receiver) = tokio::sync::broadcast::channel(10);
@@ -150,7 +132,7 @@ async fn main() {
     let app_state = Arc::new(AppState {
         hardware_info_receiver: channel_receiver.resubscribe(),
         settings: settings.clone(),
-        pool,
+        history,
     });
 
     // Setup HTTP server routes
@@ -187,20 +169,14 @@ async fn main() {
             data.network.refresh(true);
             refresh_hardware_info(&mut data);
 
+            // Record history first so clients woken by this data also get a new minutes entry
+            app_state_clone.history.insert(&data.hw_info);
+
             // Send hardware info, ignore if queue is lagged (receivers can't keep up)
             if let Err(err) = channel_sender.send(data.hw_info.clone()) {
                 error!("Failed to send hardware info: {}", err);
                 continue;
             }
-
-            let conn = app_state_clone
-                .pool
-                .get()
-                .expect("Failed to get connection");
-            db::insert_data(
-                &conn,
-                &serde_json::to_string(&data.hw_info).expect("Failed to serialize HardwareInfo"),
-            );
 
             tokio::time::sleep(std::time::Duration::from_millis(
                 (settings.interval as u64 * 1000) - 300,
@@ -243,23 +219,12 @@ async fn main() {
 
                 tokio::spawn(async move {
                     if dc.ready_state() == RTCDataChannelState::Open {
+                        // Read before the history so a minutes entry added in between is sent again rather than missed
+                        let mut minutes_window = state.history.minutes_window();
+
                         // Get every third element from the last 60s and 60m hardware info
-                        let last60s_hardware_info = {
-                            db::select_seconds_data(
-                                &state.pool.get().expect("Failed to get connection"),
-                            )
-                            .iter()
-                            .cloned()
-                            .collect::<Vec<HardwareInfo>>()
-                        };
-                        let last60m_hardware_info = {
-                            db::select_minutes_data(
-                                &state.pool.get().expect("Failed to get connection"),
-                            )
-                            .iter()
-                            .cloned()
-                            .collect::<Vec<HardwareInfo>>()
-                        };
+                        let last60s_hardware_info = state.history.seconds();
+                        let last60m_hardware_info = state.history.minutes();
 
                         // Send initial data
                         let network_data = GenericMessage::<HardwareInfo> {
@@ -297,7 +262,7 @@ async fn main() {
 
                         // Send 60m data
                         for hw_info in last60m_hardware_info {
-                            let network_data = GenericMessage::<HardwareInfo> {
+                            let network_data = GenericMessage::<Box<RawValue>> {
                                 r#type: "minutesData".to_string(),
                                 data: hw_info.clone(),
                             };
@@ -336,6 +301,27 @@ async fn main() {
                                 info!("Failed to send data to client");
                                 break;
                             };
+
+                            // Send new minutes data as soon as it is recorded
+                            if let Some((window, hw_info)) =
+                                state.history.minutes_since(minutes_window)
+                            {
+                                minutes_window = window;
+
+                                let network_data = GenericMessage::<Box<RawValue>> {
+                                    r#type: "minutesData".to_string(),
+                                    data: hw_info,
+                                };
+
+                                if dc
+                                    .send_text(serde_json::to_string(&network_data).unwrap())
+                                    .await
+                                    .is_err()
+                                {
+                                    info!("Failed to send minutesData to client");
+                                    break;
+                                };
+                            }
 
                             tokio::time::sleep(std::time::Duration::from_secs(
                                 state.settings.interval as u64,
@@ -413,15 +399,7 @@ async fn main() {
             fn handle_keep_alive(&self, handle: &mut WSHost, user_id: UserId) {
                 let state = self.state.clone();
 
-                let hw_info = {
-                    let last_60s_data = db::select_seconds_data(
-                        &state.pool.get().expect("Failed to get connection"),
-                    );
-                    last_60s_data
-                        .into_iter()
-                        .last()
-                        .unwrap_or(HardwareInfo::default())
-                };
+                let hw_info = state.history.latest().unwrap_or(HardwareInfo::default());
 
                 let cpu_usage = hw_info.cpu.max_load;
                 let gpu_usage = if let Some(gpu) = hw_info.gpu.cards.get(0) {
@@ -473,20 +451,6 @@ async fn main() {
         std::future::pending::<()>().await;
     });
 
-    let app_state_clone = app_state.clone();
-    let cleanup_task = tokio::spawn(async move {
-        loop {
-            let conn = app_state_clone
-                .pool
-                .get()
-                .expect("Failed to get connection");
-            db::cleanup(&conn);
-
-            info!("Cleanup completed");
-            tokio::time::sleep(Duration::from_secs(60 * 60)).await;
-        }
-    });
-
     // Start tasks
     tokio::select! {
         _ = server_task => {
@@ -497,9 +461,6 @@ async fn main() {
         }
         _ = hw_task => {
             info!("HW stopped");
-        }
-        _ = cleanup_task => {
-            info!("Cleanup task stopped");
         }
     };
 
@@ -539,19 +500,12 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
     // Split socket into sender and receiver
     let (mut sender, mut receiver) = socket.split();
 
+    // Read before the history so a minutes entry added in between is sent again rather than missed
+    let mut minutes_window = state.history.minutes_window();
+
     // Get every third element from the last 60s and 60m hardware info
-    let last60s_hardware_info = {
-        db::select_seconds_data(&state.pool.get().expect("Failed to get connection"))
-            .iter()
-            .cloned()
-            .collect::<Vec<HardwareInfo>>()
-    };
-    let last60m_hardware_info = {
-        db::select_minutes_data(&state.pool.get().expect("Failed to get connection"))
-            .iter()
-            .cloned()
-            .collect::<Vec<HardwareInfo>>()
-    };
+    let last60s_hardware_info = state.history.seconds();
+    let last60m_hardware_info = state.history.minutes();
 
     // Send last 60s hardware info
     for hw_info in last60s_hardware_info {
@@ -573,7 +527,7 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
 
     // Send last 60m hardware info
     for hw_info in last60m_hardware_info {
-        let network_data = GenericMessage::<HardwareInfo> {
+        let network_data = GenericMessage::<Box<RawValue>> {
             r#type: "minutesData".to_string(),
             data: hw_info.clone(),
         };
@@ -616,6 +570,26 @@ async fn handle_socket(mut socket: WebSocket, addr: SocketAddr, state: Arc<AppSt
                 .is_err()
             {
                 break;
+            }
+
+            // Send new minutes data as soon as it is recorded
+            if let Some((window, hw_info)) = state.history.minutes_since(minutes_window) {
+                minutes_window = window;
+
+                let network_data = GenericMessage::<Box<RawValue>> {
+                    r#type: "minutesData".to_string(),
+                    data: hw_info,
+                };
+
+                if sender
+                    .send(Message::Text(
+                        serde_json::to_string(&network_data).unwrap().into(),
+                    ))
+                    .await
+                    .is_err()
+                {
+                    break;
+                }
             }
 
             tokio::time::sleep(std::time::Duration::from_secs(

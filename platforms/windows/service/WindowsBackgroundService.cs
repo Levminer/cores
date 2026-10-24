@@ -58,15 +58,6 @@ public sealed class WindowsBackgroundService : BackgroundService {
 			}, backgroundTaskToken));
 		}
 
-		// Cleanup old data
-		backgroundTasks.Add(StartSupervisedTask("Database.Cleanup", async token => {
-			while (!token.IsCancellationRequested) {
-				Program.Database.Cleanup();
-				Log.Information("Cleanup completed");
-				await Task.Delay(TimeSpan.FromMinutes(60), token);
-			}
-		}, backgroundTaskToken));
-
 		try {
 			while (!stoppingToken.IsCancellationRequested) {
 				var faultedTask = backgroundTasks.FirstOrDefault(task => task.IsFaulted);
@@ -120,7 +111,6 @@ public sealed class WindowsBackgroundService : BackgroundService {
 
 			RunShutdownStep(nameof(RTCServer), RTCServer.Stop);
 			RunShutdownStep(nameof(Server), Server.Stop);
-			RunShutdownStep(nameof(Database), Program.Database.Close);
 			RunShutdownStep(nameof(HardwareInfo), HardwareInfo.Stop);
 
 			try {
