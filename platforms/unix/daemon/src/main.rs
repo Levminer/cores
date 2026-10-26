@@ -36,6 +36,7 @@ use tower_http::{
 use wol::{send_wol, MacAddr};
 
 mod history;
+mod notification;
 mod service;
 
 #[derive(Serialize, Deserialize)]
@@ -162,6 +163,8 @@ async fn main() {
     // Refresh hardware info every specified interval
     let app_state_clone = app_state.clone();
     let hw_task = tokio::spawn(async move {
+        let mut notifier = notification::Notifier::new();
+
         loop {
             data.sys.refresh_all();
             std::thread::sleep(hardwareinfo::MINIMUM_CPU_UPDATE_INTERVAL);
@@ -171,6 +174,8 @@ async fn main() {
 
             // Record history first so clients woken by this data also get a new minutes entry
             app_state_clone.history.insert(&data.hw_info);
+
+            notifier.check(&data.hw_info, &app_state_clone.settings);
 
             // Send hardware info, ignore if queue is lagged (receivers can't keep up)
             if let Err(err) = channel_sender.send(data.hw_info.clone()) {
