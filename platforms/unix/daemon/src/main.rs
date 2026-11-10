@@ -378,18 +378,7 @@ async fn main() {
                             }
                         }
                         "wol" => {
-                            let formatted_mac = format_mac_address(&message.data);
-                            let mac_addr = MacAddr::from_str(&formatted_mac);
-
-                            match mac_addr {
-                                Ok(mac) => {
-                                    send_wol(mac, None, None).expect("Failed to send WOL packet");
-                                    info!("Sending WOL packet to: {:?}", mac);
-                                }
-                                Err(e) => {
-                                    warn!("Failed to parse MAC address: {:?}", e);
-                                }
-                            }
+                            send_wol_packet(&message.data);
                         }
                         _ => {
                             warn!("Unknown message type: {:?}", message.r#type);
@@ -673,6 +662,30 @@ fn process_message(msg: Message, who: SocketAddr) -> ControlFlow<(), ()> {
         }
     }
     ControlFlow::Continue(())
+}
+
+// Send a Wake-on-LAN packet to a MAC address without separators, returns false if it could not be sent
+fn send_wol_packet(mac: &str) -> bool {
+    let formatted_mac = format_mac_address(mac);
+
+    let mac_addr = match MacAddr::from_str(&formatted_mac) {
+        Ok(mac_addr) => mac_addr,
+        Err(e) => {
+            warn!("Failed to parse MAC address: {:?}", e);
+            return false;
+        }
+    };
+
+    match send_wol(mac_addr, None, None) {
+        Ok(_) => {
+            info!("Sent WOL packet to: {:?}", mac_addr);
+            true
+        }
+        Err(e) => {
+            warn!("Failed to send WOL packet to {:?}: {}", mac_addr, e);
+            false
+        }
+    }
 }
 
 fn format_mac_address(mac: &str) -> String {
