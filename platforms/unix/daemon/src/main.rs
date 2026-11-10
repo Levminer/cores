@@ -459,6 +459,9 @@ async fn main() {
     };
 
     error!("Daemon stopped");
+
+    // None of the tasks are supposed to end, exit with an error so the service manager restarts the daemon
+    std::process::exit(1);
 }
 
 async fn handle_root_request() -> impl IntoResponse {
