@@ -196,7 +196,7 @@
 				<Thermometer />
 			{/snippet}
 			{#snippet description()}
-				Avg. temperature: {Math.round($hardwareInfo.cpu.temperature.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.temperature.length)} °C
+				Avg. temperature: {Math.round(averageSensors($hardwareInfo.cpu.temperature))} °C
 			{/snippet}
 			<MeterChart
 				readings={$hardwareInfo.cpu.temperature}
@@ -210,9 +210,7 @@
 				<Clock />
 			{/snippet}
 			{#snippet description()}
-				Avg. clock speed: {(
-					Math.round($hardwareInfo.cpu.clock.reduce((a, b) => a + b.value, 0) / $hardwareInfo.cpu.clock.length) / 1000
-				).toFixed(1)} GHz
+				Avg. clock speed: {(Math.round(averageSensors($hardwareInfo.cpu.clock)) / 1000).toFixed(1)} GHz
 			{/snippet}
 			<MeterChart
 				readings={$hardwareInfo.cpu.clock}
@@ -226,7 +224,7 @@
 				<Plug />
 			{/snippet}
 			{#snippet description()}
-				Power usage: {$hardwareInfo.cpu.power.reduce((a, b) => a + b.value, 0)} W
+				Power usage: {cpuPowerUsage($hardwareInfo.cpu.power)} W
 			{/snippet}
 			<MeterChart
 				readings={$hardwareInfo.cpu.power.filter((power) => power.value !== 0)}
@@ -596,7 +594,7 @@
 {/snippet}
 
 <script lang="ts">
-	import { GaugeChart, hardwareInfo, MeterChart, NewsAlert, Progress, settings, appState, ModularDialog } from "ui"
+	import { GaugeChart, hardwareInfo, MeterChart, NewsAlert, Progress, settings, appState, ModularDialog, averageSensors, cpuPowerUsage } from "ui"
 	import {
 		Gauge,
 		CircuitBoard,

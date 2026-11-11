@@ -43,6 +43,11 @@ public class HardwareInfo {
 		GetInfo();
 	}
 
+	// An empty setting means no default device is selected, and every id contains ""
+	private static bool IsDefaultDevice(string id, string setting) {
+		return !string.IsNullOrEmpty(setting) && id.Contains(setting);
+	}
+
 	public void GetInfo() {
 		// utc time, set even if the refresh below fails so every sample gets its own timestamp
 		API.Timestamp = DateTime.UtcNow;
@@ -74,7 +79,7 @@ public class HardwareInfo {
 							temp.Priority = 2;
 						}
 
-						if (temp.Id.Contains(settings.defaultDevices.network)) {
+						if (IsDefaultDevice(temp.Id, settings.defaultDevices.network)) {
 							temp.Priority = -1;
 						}
 
@@ -345,7 +350,7 @@ public class HardwareInfo {
 							data.Priority = 0;
 						}
 
-						if (data.Id.Contains(settings.defaultDevices.gpu)) {
+						if (IsDefaultDevice(data.Id, settings.defaultDevices.gpu)) {
 							data.Priority = -1;
 						}
 
@@ -527,7 +532,7 @@ public class HardwareInfo {
 								data.Priority = 0;
 							}
 
-							if (data.Id.Contains(settings.defaultDevices.storage)) {
+							if (IsDefaultDevice(data.Id, settings.defaultDevices.storage)) {
 								data.Priority = -1;
 							}
 						}

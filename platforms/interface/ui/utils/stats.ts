@@ -1,21 +1,37 @@
+// Average of a sensor field, 0 when there are no sensors
+export const averageSensors = (sensors: Sensor[], field: "value" | "min" | "max" = "value"): number => {
+	if (sensors.length === 0) {
+		return 0
+	}
+
+	return sensors.reduce((a, b) => a + (b[field] ?? 0), 0) / sensors.length
+}
+
+// The package sensor already includes the cores, graphics and memory sensors, so they are only summed if it's missing
+export const cpuPowerUsage = (sensors: Sensor[]): number => {
+	const cpuPackage = sensors.find((sensor) => sensor.name?.includes("Package"))
+
+	return cpuPackage ? cpuPackage.value : sensors.reduce((a, b) => a + b.value, 0)
+}
+
 export const generateSecondsData = (input: HardwareInfo): Stats => {
 	return {
 		cpu: {
 			temperature: {
-				value: Math.round(input.cpu.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
-				min: Math.round(input.cpu.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
-				max: Math.round(input.cpu.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.cpu.temperature.length),
+				value: Math.round(averageSensors(input.cpu.temperature, "value")),
+				min: Math.round(averageSensors(input.cpu.temperature, "min")),
+				max: Math.round(averageSensors(input.cpu.temperature, "max")),
 			},
 
 			clock: {
-				value: Math.round(input.cpu.clock.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.cpu.clock.length),
-				min: Math.round(input.cpu.clock.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.cpu.clock.length),
-				max: Math.round(input.cpu.clock.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.cpu.clock.length),
+				value: Math.round(averageSensors(input.cpu.clock, "value")),
+				min: Math.round(averageSensors(input.cpu.clock, "min")),
+				max: Math.round(averageSensors(input.cpu.clock, "max")),
 			},
 
 			load: Math.round(input.cpu.maxLoad),
-			power: Math.round(input.cpu.power.reduce((a, b) => a + b.value, 0)),
-			voltage: parseFloat((input.cpu.voltage.reduce((a, b) => a + b.value, 0) / input.cpu.clock.length).toFixed(2)),
+			power: Math.round(cpuPowerUsage(input.cpu.power)),
+			voltage: parseFloat(averageSensors(input.cpu.voltage).toFixed(2)),
 		},
 
 		ram: {
@@ -24,15 +40,9 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 			temperature:
 				input.ram.temperature && input.ram.temperature.length > 0
 					? {
-							value: Math.round(
-								input.ram.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
-							),
-							min: Math.round(
-								input.ram.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
-							),
-							max: Math.round(
-								input.ram.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / input.ram.temperature.length,
-							),
+							value: Math.round(averageSensors(input.ram.temperature, "value")),
+							min: Math.round(averageSensors(input.ram.temperature, "min")),
+							max: Math.round(averageSensors(input.ram.temperature, "max")),
 						}
 					: undefined,
 		},
@@ -42,9 +52,9 @@ export const generateSecondsData = (input: HardwareInfo): Stats => {
 				input.gpu.cards?.map((card) => {
 					return {
 						temperature: {
-							value: Math.round(card.temperature.map((sensor) => sensor.value).reduce((a, b) => a + b, 0) / card.temperature.length),
-							min: Math.round(card.temperature.map((sensor) => sensor.min).reduce((a, b) => a + b, 0) / card.temperature.length),
-							max: Math.round(card.temperature.map((sensor) => sensor.max).reduce((a, b) => a + b, 0) / card.temperature.length),
+							value: Math.round(averageSensors(card.temperature, "value")),
+							min: Math.round(averageSensors(card.temperature, "min")),
+							max: Math.round(averageSensors(card.temperature, "max")),
 						},
 
 						clock: {

@@ -439,7 +439,12 @@ pub fn refresh_hardware_info(data: &mut Data) {
     let total_swap = (data.sys.total_swap() as f64 / gb).fmt_num2();
     let used_swap = (data.sys.used_swap() as f64 / gb).fmt_num2();
     let ram_used = ((used_memory / total_memory) * 100.0).fmt_num2();
-    let swap_used = ((used_swap / total_swap) * 100.0).fmt_num2();
+    // There may be no swap at all
+    let swap_used = if total_swap > 0.0 {
+        ((used_swap / total_swap) * 100.0).fmt_num2()
+    } else {
+        0.0
+    };
     let memory_available = (total_memory - used_memory).fmt_num2();
     let virtual_memory_available = (total_swap - used_swap).fmt_num2();
 
