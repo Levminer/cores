@@ -1,5 +1,5 @@
-use log::debug;
-use std::{sync::LazyLock, time::SystemTime};
+use log::{debug, warn};
+use std::{path::PathBuf, sync::LazyLock, time::SystemTime};
 
 use crate::{compare_sensor, CoresDisk, CoresRAMInfo, CoresSensor, Data, Round};
 
@@ -44,10 +44,17 @@ pub fn linux_hardware_info(data: &mut Data) {
 
         // CPU
         let logical_cpus = data.sys.cpus().len();
-        let cpu_info = cpu::cpu_info().unwrap();
 
-        data.hw_info.cpu.info[0].current_speed =
-            cpu_info.max_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
+        // lscpu is missing on minimal systems
+        let max_speed = match cpu::cpu_info() {
+            Ok(cpu_info) => cpu_info.max_speed,
+            Err(e) => {
+                warn!("Failed to get CPU info: {}", e);
+                None
+            }
+        };
+
+        data.hw_info.cpu.info[0].current_speed = max_speed.unwrap_or(1.0) / 1000.0 / 1000.0;
 
         data.hw_info.cpu.name.contains("Intel").then(|| {
             data.hw_info.cpu.info[0].manufacturer_name = "Intel".to_string();
@@ -65,36 +72,6 @@ pub fn linux_hardware_info(data: &mut Data) {
                 min: temp as f64,
                 max: temp as f64,
             });
-        }
-
-        for path in &drive_paths {
-            let d = drive::DriveData::new(path);
-
-            if !d.is_virtual {
-                let inner = &d.inner;
-
-                let drive_space = drive::get_free_space(path);
-                let drive_info = drive::get_drive_info(path);
-                let drive_size = inner.clone().capacity().unwrap_or(1) / 1000 / 1000 / 1000;
-
-                data.hw_info.system.storage.disks.push(CoresDisk {
-                    name: inner
-                        .clone()
-                        .model
-                        .unwrap_or(format!("{} GB drive", drive_size)),
-                    total_space: drive_size,
-                    free_space: drive_space,
-                    throughput_read: 0.0,
-                    throughput_write: 0.0,
-                    data_read: 0.0,
-                    data_written: 0.0,
-                    temperature: drive_info.temperature,
-                    health: drive_info.health,
-                    read_sectors: d.disk_stats.get("read_sectors").unwrap_or(&0).clone(),
-                    write_sectors: d.disk_stats.get("write_sectors").unwrap_or(&0).clone(),
-                    last_timestamp: SystemTime::now(),
-                });
-            }
         }
 
         // System
@@ -129,61 +106,103 @@ pub fn linux_hardware_info(data: &mut Data) {
                 data.hw_info.cpu.temperature[0] = compare_sensor(&prev_temp, temp as f64);
             }
         }
+    }
 
-        // Drives
-        let mut i = 0;
+    // Drives
+    // SMART data changes slowly, so only run smartctl once per minute
+    let refresh_drive_info = SystemTime::now()
+        .duration_since(data.elapsed_time)
+        .map_or(true, |time_passed| time_passed.as_secs() >= 60);
 
-        // SMART data changes slowly, so only run smartctl once per minute
-        let refresh_drive_info = SystemTime::now()
-            .duration_since(data.elapsed_time)
-            .map_or(true, |time_passed| time_passed.as_secs() >= 60);
+    if refresh_drive_info {
+        data.elapsed_time = SystemTime::now();
+    }
+
+    let disks = &mut data.hw_info.system.storage.disks;
+    let mut present_drives = Vec::new();
+
+    for path in &drive_paths {
+        let d = drive::DriveData::new(path);
+
+        if d.is_virtual {
+            continue;
+        }
+
+        present_drives.push(d.inner.block_device.clone());
+
+        // Drives are matched by name, they can be plugged in or removed while running
+        let Some(disk) = disks
+            .iter_mut()
+            .find(|disk| disk.block_device == d.inner.block_device)
+        else {
+            disks.push(new_disk(path, &d));
+            continue;
+        };
+
+        // The drive was removed while it was being read
+        let (Some(&write_sectors), Some(&read_sectors)) = (
+            d.disk_stats.get("write_sectors"),
+            d.disk_stats.get("read_sectors"),
+        ) else {
+            continue;
+        };
+
+        let time_passed = SystemTime::now()
+            .duration_since(disk.last_timestamp)
+            .map_or(1.0f64, |timestamp| timestamp.as_secs_f64());
+
+        let delta_write_sectors = write_sectors.saturating_sub(disk.write_sectors);
+        let delta_read_sectors = read_sectors.saturating_sub(disk.read_sectors);
+        let write_speed = (delta_write_sectors * SECTOR_SIZE) as f64 / time_passed;
+        let read_speed = (delta_read_sectors * SECTOR_SIZE) as f64 / time_passed;
+        let total_written = (write_sectors * SECTOR_SIZE) as f64 / 1_000_000_000.0;
+        let total_read = (read_sectors * SECTOR_SIZE) as f64 / 1_000_000_000.0;
+
+        disk.throughput_write = write_speed;
+        disk.throughput_read = read_speed;
+        disk.data_read = total_read.fmt_num();
+        disk.data_written = total_written.fmt_num();
+
+        disk.write_sectors = write_sectors;
+        disk.read_sectors = read_sectors;
+        disk.last_timestamp = SystemTime::now();
 
         if refresh_drive_info {
-            data.elapsed_time = SystemTime::now();
+            let drive_info = drive::get_drive_info(path);
+
+            disk.temperature = compare_sensor(&disk.temperature, drive_info.temperature.value);
+            disk.health = drive_info.health;
         }
+    }
 
-        for path in &drive_paths {
-            let d = drive::DriveData::new(path);
+    // Keep the list if the drives could not be listed at all
+    if !drive_paths.is_empty() {
+        disks.retain(|disk| present_drives.contains(&disk.block_device));
+    }
+}
 
-            if !d.is_virtual {
-                let inner = &d.inner;
-                let prev = &data.hw_info.system.storage.disks[i].clone();
+fn new_disk(path: &PathBuf, d: &drive::DriveData) -> CoresDisk {
+    let drive_space = drive::get_free_space(path);
+    let drive_info = drive::get_drive_info(path);
+    let drive_size = d.inner.capacity().unwrap_or(1) / 1000 / 1000 / 1000;
 
-                let time_passed = SystemTime::now()
-                    .duration_since(prev.last_timestamp)
-                    .map_or(1.0f64, |timestamp| timestamp.as_secs_f64());
-
-                let old_inner = inner.clone().sys_stats().unwrap();
-                let write_sectors = old_inner.get("write_sectors").unwrap_or(&0);
-                let read_sectors = old_inner.get("read_sectors").unwrap_or(&0);
-                let delta_write_sectors = write_sectors.saturating_sub(prev.write_sectors);
-                let delta_read_sectors = read_sectors.saturating_sub(prev.read_sectors);
-                let write_speed = (delta_write_sectors * SECTOR_SIZE) as f64 / time_passed;
-                let read_speed = (delta_read_sectors * SECTOR_SIZE) as f64 / time_passed;
-                let total_written = (write_sectors * SECTOR_SIZE) as f64 / 1_000_000_000.0;
-                let total_read = (read_sectors * SECTOR_SIZE) as f64 / 1_000_000_000.0;
-
-                data.hw_info.system.storage.disks[i].throughput_write = write_speed;
-                data.hw_info.system.storage.disks[i].throughput_read = read_speed;
-                data.hw_info.system.storage.disks[i].data_read = total_read.fmt_num();
-                data.hw_info.system.storage.disks[i].data_written = total_written.fmt_num();
-
-                data.hw_info.system.storage.disks[i].write_sectors =
-                    d.disk_stats.get("write_sectors").unwrap_or(&0).clone();
-                data.hw_info.system.storage.disks[i].read_sectors =
-                    d.disk_stats.get("read_sectors").unwrap_or(&0).clone();
-                data.hw_info.system.storage.disks[i].last_timestamp = SystemTime::now();
-
-                if refresh_drive_info {
-                    let drive_info = drive::get_drive_info(path);
-
-                    data.hw_info.system.storage.disks[i].temperature =
-                        compare_sensor(&prev.temperature, drive_info.temperature.value);
-                    data.hw_info.system.storage.disks[i].health = drive_info.health;
-                }
-
-                i += 1;
-            }
-        }
+    CoresDisk {
+        name: d
+            .inner
+            .model
+            .clone()
+            .unwrap_or(format!("{} GB drive", drive_size)),
+        total_space: drive_size,
+        free_space: drive_space,
+        throughput_read: 0.0,
+        throughput_write: 0.0,
+        data_read: 0.0,
+        data_written: 0.0,
+        temperature: drive_info.temperature,
+        health: drive_info.health,
+        read_sectors: d.disk_stats.get("read_sectors").copied().unwrap_or(0),
+        write_sectors: d.disk_stats.get("write_sectors").copied().unwrap_or(0),
+        last_timestamp: SystemTime::now(),
+        block_device: d.inner.block_device.clone(),
     }
 }

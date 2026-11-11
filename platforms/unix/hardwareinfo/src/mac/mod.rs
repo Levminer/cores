@@ -96,6 +96,7 @@ pub fn macos_hardware_info(data: &mut Data) {
                     read_sectors: 0,
                     write_sectors: 0,
                     last_timestamp: SystemTime::now(),
+                    block_device: String::new(),
                 };
 
                 let command = format!("smartctl -a disk0 -j");

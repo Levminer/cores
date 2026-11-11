@@ -147,6 +147,9 @@ pub struct CoresDisk {
     pub read_sectors: usize,
     pub write_sectors: usize,
     pub last_timestamp: SystemTime,
+    // Kernel name of the drive like `nvme0n1`, used to find it again on the next refresh
+    #[serde(skip)]
+    pub block_device: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -680,7 +683,8 @@ pub fn refresh_hardware_info(data: &mut Data) {
     // Network info
     match get_default_interface() {
         Ok(int) => {
-            if data.first_run {
+            // The default interface can be missing on startup and show up once the network connects
+            if data.hw_info.system.network.interfaces.is_empty() {
                 data.hw_info
                     .system
                     .network
@@ -740,21 +744,20 @@ pub fn refresh_hardware_info(data: &mut Data) {
                     });
             }
 
-            for (_interface_name, net_data) in data.network.iter() {
-                if net_data.mac_address().to_string()
-                    == data.hw_info.system.network.interfaces[0].mac_address
-                {
-                    let download_data = (net_data.total_received() as f64 / gb).fmt_num();
-                    let upload_data = (net_data.total_transmitted() as f64 / gb).fmt_num();
+            if let Some(interface) = data.hw_info.system.network.interfaces.first_mut() {
+                for (_interface_name, net_data) in data.network.iter() {
+                    if net_data.mac_address().to_string() == interface.mac_address {
+                        let download_data = (net_data.total_received() as f64 / gb).fmt_num();
+                        let upload_data = (net_data.total_transmitted() as f64 / gb).fmt_num();
 
-                    let throughput_download = net_data.received() as f64 / data.interval;
-                    let throughput_upload = net_data.transmitted() as f64 / data.interval;
+                        let throughput_download = net_data.received() as f64 / data.interval;
+                        let throughput_upload = net_data.transmitted() as f64 / data.interval;
 
-                    data.hw_info.system.network.interfaces[0].download_data = download_data;
-                    data.hw_info.system.network.interfaces[0].upload_data = upload_data;
-                    data.hw_info.system.network.interfaces[0].throughput_download =
-                        throughput_download;
-                    data.hw_info.system.network.interfaces[0].throughput_upload = throughput_upload;
+                        interface.download_data = download_data;
+                        interface.upload_data = upload_data;
+                        interface.throughput_download = throughput_download;
+                        interface.throughput_upload = throughput_upload;
+                    }
                 }
             }
         }
