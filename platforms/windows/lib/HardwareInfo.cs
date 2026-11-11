@@ -1,5 +1,6 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using Serilog;
+using System.Management;
 using System.Net.NetworkInformation;
 
 namespace lib;
@@ -48,6 +49,19 @@ public class HardwareInfo {
 		return !string.IsNullOrEmpty(setting) && id.Contains(setting);
 	}
 
+	// Ids of physical adapters in NetworkInterface.Id format, null if the lookup fails
+	private static HashSet<string>? GetHardwareInterfaceIds() {
+		try {
+			using var searcher = new ManagementObjectSearcher(@"root\StandardCimv2", "SELECT DeviceID FROM MSFT_NetAdapter WHERE HardwareInterface = TRUE");
+			using var results = searcher.Get();
+
+			return results.Cast<ManagementObject>().Select(x => (string)x["DeviceID"]).ToHashSet(StringComparer.OrdinalIgnoreCase);
+		} catch (Exception ex) {
+			Log.Warning(ex, "Failed to query network adapters, showing all network interfaces");
+			return null;
+		}
+	}
+
 	public void GetInfo() {
 		// utc time, set even if the refresh below fails so every sample gets its own timestamp
 		API.Timestamp = DateTime.UtcNow;
@@ -60,9 +74,12 @@ public class HardwareInfo {
 			}
 
 			if (firstRun || DateTime.Now.Subtract(lastRun).TotalSeconds > 60) {
-				// Network interfaces
+				// Network interfaces, skipping filter drivers and virtual adapters
+				var hardwareInterfaces = GetHardwareInterfaceIds();
+				var interfaces = new List<NetInterface>();
+
 				foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces()) {
-					if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) {
+					if ((ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet) && (hardwareInterfaces == null || hardwareInterfaces.Contains(ni.Id))) {
 						var temp = new NetInterface {
 							Name = ni.Name,
 							Id = new Identifier("nic", ni.Id).ToString(),
@@ -70,14 +87,8 @@ public class HardwareInfo {
 							Speed = (ni.Speed / 1000 / 1000).ToString(),
 						};
 
-						// Priority
-						if (!temp.Description.Contains("Virtual") && temp.Name.Contains("Ethernet")) {
-							temp.Priority = 0;
-						} else if (!temp.Description.Contains("Virtual") && (temp.Name.Contains("WiFi") || temp.Name.Contains("Wi-Fi"))) {
-							temp.Priority = 1;
-						} else {
-							temp.Priority = 2;
-						}
+						// Priority, ethernet first, then wifi
+						temp.Priority = ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet ? 0 : 1;
 
 						if (IsDefaultDevice(temp.Id, settings.defaultDevices.network)) {
 							temp.Priority = -1;
@@ -136,22 +147,12 @@ public class HardwareInfo {
 							}
 						}
 
-						if (!temp.Name.Contains("Local Area Connection*")) {
-							if (firstRun) {
-								API.System.Network.Interfaces.Add(temp);
-							} else {
-								var nicId = API.System.Network.Interfaces.FindIndex(x => x.Id == temp.Id);
-								if (nicId != -1) {
-									API.System.Network.Interfaces[nicId] = temp;
-								} else {
-									API.System.Network.Interfaces.Add(temp);
-								}
-							}
-						}
+						interfaces.Add(temp);
 					}
-
-					API.System.Network.Interfaces = API.System.Network.Interfaces.OrderBy(item => item.Priority).ToList();
 				}
+
+				// Rebuilt on every refresh so removed adapters disappear
+				API.System.Network.Interfaces = interfaces.OrderBy(item => item.Priority).ToList();
 			}
 
 			// RAM
