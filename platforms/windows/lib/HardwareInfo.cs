@@ -44,6 +44,11 @@ public class HardwareInfo {
 		GetInfo();
 	}
 
+	// LibreHardwareMonitor reports Data sensors in bytes, the API exposes them in GB
+	private static float BytesToGigabytes(float? bytes) {
+		return (float)Math.Round((bytes ?? 0) / (1024f * 1024f * 1024f), 1);
+	}
+
 	// An empty setting means no default device is selected, and every id contains ""
 	private static bool IsDefaultDevice(string id, string setting) {
 		return !string.IsNullOrEmpty(setting) && id.Contains(setting);
@@ -165,11 +170,13 @@ public class HardwareInfo {
 				var sensor = allMemorySensors;
 
 				if (sensor[j].SensorType == SensorType.Load || sensor[j].SensorType == SensorType.Data) {
+					var isData = sensor[j].SensorType == SensorType.Data;
+
 					var data = new Sensor {
 						Name = sensor[j].Name,
-						Value = (float)Math.Round(sensor[j].Value ?? 0, 1),
-						Min = (float)Math.Round(sensor[j].Min ?? 0, 1),
-						Max = (float)Math.Round(sensor[j].Max ?? 0, 1),
+						Value = isData ? BytesToGigabytes(sensor[j].Value) : (float)Math.Round(sensor[j].Value ?? 0, 1),
+						Min = isData ? BytesToGigabytes(sensor[j].Min) : (float)Math.Round(sensor[j].Min ?? 0, 1),
+						Max = isData ? BytesToGigabytes(sensor[j].Max) : (float)Math.Round(sensor[j].Max ?? 0, 1),
 					};
 
 					// RAM load
@@ -330,7 +337,7 @@ public class HardwareInfo {
 				if (hardware.HardwareType.ToString().Contains("Gpu")) {
 					var temperatureSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Temperature).ToArray();
 					var fanSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Fan).ToArray();
-					var memorySensors = hardware.Sensors.Where(x => x.SensorType == SensorType.SmallData).ToArray();
+					var memorySensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Data).ToArray();
 					var powerSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Power).ToArray();
 					var clockSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Clock).ToArray();
 					var loadSensors = hardware.Sensors.Where(x => x.SensorType == SensorType.Load && x.Name.StartsWith("D3D")).ToArray();
@@ -416,9 +423,9 @@ public class HardwareInfo {
 							if (memorySensors[j].Name == API.GPU.Cards[cardIndex].Memory[k].Name) {
 								var data = new Sensor {
 									Name = memorySensors[j].Name,
-									Value = (float)Math.Round(memorySensors[j].Value / 1024 ?? 0, 1),
-									Min = (float)Math.Round(memorySensors[j].Min / 1024 ?? 0, 1),
-									Max = (float)Math.Round(memorySensors[j].Max / 1024 ?? 0, 1),
+									Value = BytesToGigabytes(memorySensors[j].Value),
+									Min = BytesToGigabytes(memorySensors[j].Min),
+									Max = BytesToGigabytes(memorySensors[j].Max),
 								};
 
 								API.GPU.Cards[cardIndex].Memory.TrySetValue(k, data);
@@ -620,11 +627,11 @@ public class HardwareInfo {
 							for (int k = 0; k < API.System.Storage.Disks.Count; k++) {
 								if (API.System.Storage.Disks[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Read")) {
-										API.System.Storage.Disks[k].DataRead = (float)Math.Round(sensor[j].Value ?? 0, 1);
+										API.System.Storage.Disks[k].DataRead = BytesToGigabytes(sensor[j].Value);
 									}
 
 									if (sensor[j].Name.Contains("Written")) {
-										API.System.Storage.Disks[k].DataWritten = (float)Math.Round(sensor[j].Value ?? 0, 1);
+										API.System.Storage.Disks[k].DataWritten = BytesToGigabytes(sensor[j].Value);
 									}
 								}
 							}
@@ -786,11 +793,11 @@ public class HardwareInfo {
 							for (int k = 0; k < API.System.Network.Interfaces.Count; k++) {
 								if (API.System.Network.Interfaces[k].Id == computerHardware[i].Identifier.ToString()) {
 									if (sensor[j].Name.Contains("Download")) {
-										API.System.Network.Interfaces[k].DownloadData = (float)Math.Round(sensor[j].Value ?? 0, 1);
+										API.System.Network.Interfaces[k].DownloadData = BytesToGigabytes(sensor[j].Value);
 									}
 
 									if (sensor[j].Name.Contains("Upload")) {
-										API.System.Network.Interfaces[k].UploadData = (float)Math.Round(sensor[j].Value ?? 0, 1);
+										API.System.Network.Interfaces[k].UploadData = BytesToGigabytes(sensor[j].Value);
 									}
 								}
 							}
